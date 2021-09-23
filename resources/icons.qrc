@@ -1,0 +1,17 @@
+<RCC>
+  <qresource prefix="volume">
+    <file>img/max_volume.png</file>
+  </qresource>
+  <qresource prefix="menu">
+    <file>img/plus.png</file>
+    <file>img/search.png</file>
+    <file>img/book.png</file>
+    <file>img/dir.png</file>
+    <file>img/menu.png</file>
+    <file>img/settings.png</file>
+    <file>img/star.png</file>
+  </qresource>
+  <qresource prefix="owerlay">
+    <file>img/owerlay.png</file>
+  </qresource>
+</RCC>
