@@ -8,10 +8,10 @@
 #'./ABPlayer/config.py' - Line 71 (Occurrences: 23):     Исправляет в случае ошибок.
 #'./ABPlayer/config.py' - Line 72 (Occurrences: 18):     :returns: Данные конфигурации.
 #'./ABPlayer/config.py' - Line 96 (Occurrences: 47):     Добавляет данные конфигурации в переменные окружения.
-'./ABPlayer/logger.py' - Line 8 (Occurrences: 34): try:  # Удаление настроек логгера по умолчанию
-'./ABPlayer/logger.py' - Line 48 (Occurrences: 5): logger.level("TRACE", color="<lk>")  # TRACE - синий
-'./ABPlayer/logger.py' - Line 49 (Occurrences: 5): logger.level("DEBUG", color="<w>")  # DEBUG - белый
-'./ABPlayer/logger.py' - Line 50 (Occurrences: 9): logger.level("INFO", color="<c><bold>")  # INFO - бирюзовый
+#'./ABPlayer/logger.py' - Line 8 (Occurrences: 34): try:  # Удаление настроек логгера по умолчанию
+#'./ABPlayer/logger.py' - Line 48 (Occurrences: 5): logger.level("TRACE", color="<lk>")  # TRACE - синий
+#'./ABPlayer/logger.py' - Line 49 (Occurrences: 5): logger.level("DEBUG", color="<w>")  # DEBUG - белый
+#'./ABPlayer/logger.py' - Line 50 (Occurrences: 9): logger.level("INFO", color="<c><bold>")  # INFO - бирюзовый
 './ABPlayer/main_window.py' - Line 11 (Occurrences: 28):     Создает главное окно приложения.
 './ABPlayer/main_window.py' - Line 12 (Occurrences: 13):     :returns: Экземпляр окна.
 './ABPlayer/main_window.py' - Line 41 (Occurrences: 27):     # Добавляем обработчики событий

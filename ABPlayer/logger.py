@@ -5,7 +5,7 @@ import sys
 from loguru import logger
 
 
-try:  # Удаление настроек логгера по умолчанию
+try:  # Removing default logger settings
     logger.remove(0)
 except ValueError:
     pass
@@ -45,6 +45,6 @@ if DEBUG_PATH := os.environ.get("DEBUG_PATH"):
         level=LOGGING_LEVEL,
     )
 
-logger.level("TRACE", color="<lk>")  # TRACE - синий
-logger.level("DEBUG", color="<w>")  # DEBUG - белый
-logger.level("INFO", color="<c><bold>")  # INFO - бирюзовый
+logger.level("TRACE", color="<lk>")  # TRACE - blue
+logger.level("DEBUG", color="<w>")  # DEBUG - white
+logger.level("INFO", color="<c><bold>")  # INFO - cyan
