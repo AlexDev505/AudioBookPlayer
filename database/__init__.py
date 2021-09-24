@@ -1,1 +1,1 @@
-from .tables import Books, Book, BookItems, BookItem
+from .tables.books import Books, Book, BookItems, BookItem

@@ -1,31 +1,11 @@
+import json
 import typing as ty
-
-from selenium import webdriver
 
 from database import Book, BookItems, BookItem
 from .base import Driver
-import json
 
 
-class AKniga(Driver):
-    @property
-    def driver(self) -> ty.Union[ty.Type[webdriver.Chrome], ty.Type[webdriver.Firefox]]:
-        return webdriver.Chrome
-
-    @property
-    def driver_path(self) -> str:
-        return r"drivers\chromedriver"
-
-    @property
-    def driver_options(
-        self,
-    ) -> ty.Union[webdriver.ChromeOptions, webdriver.FirefoxOptions]:
-        options = webdriver.ChromeOptions()
-        options.add_argument("headless")
-        options.add_argument("disable-gpu")
-        options.add_experimental_option("excludeSwitches", ["enable-logging"])
-        return options
-
+class AKnigaDriver(Driver):
     def get_book(self, url: str) -> Book:
         page = self.get_page(url)
 
@@ -56,6 +36,7 @@ class AKniga(Driver):
                 BookItem(
                     file_url=f"{data['srv']}/b/{bid}/{data['key']}/"
                     f"{str(item['file']).rjust(2, '0')}. {data['title']}.mp3",
+                    file_index=item["file"],
                     title=item["title"],
                     start_time=item["time_from_start"],
                     end_time=item["time_finish"],
@@ -65,6 +46,36 @@ class AKniga(Driver):
         page.quit()
 
         return Book(author, name, url, preview, self.driver_name, items)
+
+    def get_book_series(self, url: str) -> ty.List[Book]:
+        page = self.get_page(url)
+
+        books = [
+            Book(
+                url=book.get_attribute("href"),
+                name=book.find_elements_by_css_selector(".caption")[0].get_attribute(
+                    "innerHTML"
+                ),
+            )
+            for book in page.find_elements_by_css_selector(
+                ".content__main__book--item--series-list > a"
+            )
+        ]
+
+        # Книга может быть одной из серии
+        if not len(books):
+            books = [
+                Book(
+                    url=url,
+                    name=page.find_elements_by_css_selector(".caption__article-main")[
+                        0
+                    ].text,
+                )
+            ]
+
+        page.quit()
+
+        return books
 
     @property
     def site_url(self):
