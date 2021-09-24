@@ -14,6 +14,7 @@ class BookItem:
     """
 
     file_url: str  # Ссылка на файл, для скачивания
+    file_index: int  # Номер файла(Нумерация с единицы)
     title: str  # Название главы
     start_time: int  # Время (в секундах), когда начинается глава
     end_time: int  # Время (в секундах), когда заканчивается глава
@@ -42,7 +43,7 @@ class Book:
     url: str = None  # Ссылка на книгу
     preview: str = None  # Ссылка на превью(обложку) книги
     driver: str = None  # Драйвер, с которым работает сайт
-    items: BookItems = field(default_factory=BookItems)  # Список глав
+    items: BookItems[BookItem] = field(default_factory=BookItems)  # Список глав
 
 
 class Books(Table, Book):
