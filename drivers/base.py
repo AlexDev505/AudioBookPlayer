@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import sys
 import typing as ty
 from abc import ABC, abstractmethod
 from pathlib import Path
@@ -9,24 +10,37 @@ import eyed3
 import requests
 from selenium import webdriver
 
-# Относится к супер фиче, описанной ниже
-# from pydub import AudioSegment
-# os.environ["PATH"] += os.pathsep + "drivers/ffmpeg/bin"
-
 if ty.TYPE_CHECKING:
     from database import Book, BookItem
 
 
-def prepare_file_metadata(file_path: str, book: Book, item: BookItem, item_index: int):
+def prepare_file_metadata(
+    file_path: ty.Union[str, Path],
+    book: Book,
+    item_index: int,
+    item: BookItem = None,
+) -> None:
+    """
+    Изменяет метаданные аудио файла.
+    :param file_path: Путь к аудио файлу.
+    :param book: Игстанс книги.
+    :param item_index: Порядковый номер файла.
+    :param item: Инстанс главы(optional)
+    """
     file = eyed3.load(file_path)
     file.initTag()
-    file.tag.title = item.title
+    file.tag.title = item.title if item else f"{book.author} - {book.name}"
     file.tag.artist = book.author
     file.tag.track_num = item_index + 1
     file.tag.save()
 
 
 class DownloadProcessHandler:
+    """
+    Обработчик процесса скачивания.
+    Визуализирует процесс скачивания книги в пользовательском интерфейсе.
+    """
+
     def __init__(self):
         self.total_size: int = ...
         self.done_size: int = ...
@@ -40,7 +54,12 @@ class DownloadProcessHandler:
         self.move_progress()
 
     def move_progress(self):
-        pass
+        # Временный код
+        sys.stdout.write(
+            f"\r{self.done_size}/{self.total_size}\t"
+            f"{round(self.done_size / (self.total_size / 100), 2)} %"
+        )
+        sys.stdout.flush()
 
 
 class Driver(ABC):
@@ -80,12 +99,24 @@ class Driver(ABC):
         """
 
     def download_book(
-        self, book: Book, progress_handler: DownloadProcessHandler = None
-    ):
+        self,
+        book: Book,
+        process_handler: DownloadProcessHandler = None,
+    ) -> None:
+        """
+        Метод, скачивающий аудио файлы книги.
+        :param book: Инстанс книги.
+        :param process_handler: Обработчик процесса скачивания.
+        """
         item: BookItem
 
-        urls = []
-        total_size = 0
+        # Папка с книгой
+        dir_path = os.path.join(os.environ["dir_with_books"], book.author, book.name)
+        urls = []  # Ссылки на файлы
+        merged = False  # Если True, то в 1-ом файле присутствует несколько глав
+        total_size = 0  # Общий размер книги(в битах)
+
+        # Устанавливаем значение флага `merged` и определяем общий размер
         for item in book.items:
             if (url := item.file_url) not in urls:
                 urls.append(url)
@@ -95,45 +126,51 @@ class Driver(ABC):
                     )
                 ) is not None:
                     total_size += int(content_length)
+            else:
+                merged = True
 
-        if progress_handler:
-            progress_handler.init(total_size)
+        if process_handler:
+            process_handler.init(total_size)
 
-        dir_path = os.path.join(os.environ["dir_with_books"], book.author, book.name)
-        for i, url in enumerate(urls):
-            file_path = Path(os.path.join(dir_path, f".{i + 1}"))
-            if not file_path.exists():
-                file_path.parent.mkdir(parents=True, exist_ok=True)
+        if merged:
+            for i, url in enumerate(urls):
+                file_path = Path(
+                    os.path.join(
+                        dir_path,
+                        f"{str(i + 1).rjust(2, '0')}. {book.author} - {book.name}.mp3",
+                    )
+                )
+                self._download_file(file_path, url, process_handler)
+                prepare_file_metadata(file_path, book, i)
+        else:
+            for i, item in enumerate(book.items):
+                file_path = Path(os.path.join(dir_path, item.title + ".mp3"))
+                self._download_file(file_path, item.file_url, process_handler)
+                prepare_file_metadata(file_path, book, i, item)
 
-            with open(file_path, "wb") as file:
-                resp = requests.get(str(url), stream=True)
-                if resp.headers.get("content-length") is None:
-                    file.write(resp.content)
-                else:
-                    for data in resp.iter_content(chunk_size=5120):
-                        progress_handler.progress(len(data))
-                        file.write(data)
+    @staticmethod
+    def _download_file(
+        file_path: Path,
+        url: str,
+        process_handler: DownloadProcessHandler,
+    ) -> None:
+        """
+        Метод, скачивающий аудио файл.
+        :param file_path: Путь для сохранения.
+        :param url: Ссылка на файл.
+        :param process_handler: Обработчик процесса скачивания.
+        """
+        if not file_path.exists():
+            file_path.parent.mkdir(parents=True, exist_ok=True)
 
-        # Супер фича, которая жрет 1.5к озу, работает 100 миллионов лет, но работает.
-        # Пусть побудет здесь, может быть я придумаю, что с этим делать...
-        # Если коротко, эта штука разделяет аудио файл на главы.
-        # for i, item in enumerate(book.items):
-        #     file_path = os.path.join(
-        #         dir_path, f"{book.author} - {book.name}. {item.title}.mp3"
-        #     )
-        #     if not item.end_time:
-        #         os.rename(
-        #             os.path.join(dir_path, f".{item.file_index}"),
-        #             file_path,
-        #         )
-        #     else:
-        #         chapter = AudioSegment.from_mp3(
-        #             os.path.join(dir_path, f".{item.file_index}")
-        #         )
-        #         chapter = chapter[item.start_time * 1000 : (item.end_time - 1) * 1000]
-        #         chapter.export(file_path)
-        #
-        #     prepare_file_metadata(file_path, book, item, i)
+        with open(file_path, "wb") as file:
+            resp = requests.get(str(url), stream=True)
+            if resp.headers.get("content-length") is None:
+                file.write(resp.content)
+            else:
+                for data in resp.iter_content(chunk_size=5120):
+                    process_handler.progress(len(data))
+                    file.write(data)
 
     @property
     def driver(self) -> ty.Union[ty.Type[webdriver.Chrome], ty.Type[webdriver.Firefox]]:
