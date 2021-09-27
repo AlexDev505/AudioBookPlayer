@@ -1,17 +1,26 @@
 <RCC>
   <qresource prefix="volume">
-    <file>img/max_volume.png</file>
+    <file>low_lolume.svg</file>
+    <file>medium_volume.svg</file>
+    <file>mute.svg</file>
+    <file>volume.svg</file>
   </qresource>
   <qresource prefix="menu">
-    <file>img/plus.png</file>
-    <file>img/search.png</file>
-    <file>img/book.png</file>
-    <file>img/dir.png</file>
-    <file>img/menu.png</file>
-    <file>img/settings.png</file>
-    <file>img/star.png</file>
+    <file>book.svg</file>
+    <file>folder.svg</file>
+    <file>hide_menu.svg</file>
+    <file>menu.svg</file>
+    <file>search.svg</file>
+    <file>settings.svg</file>
+    <file>star.svg</file>
   </qresource>
-  <qresource prefix="owerlay">
-    <file>img/owerlay.png</file>
+  <qresource prefix="other">
+    <file>dash.svg</file>
+    <file>overlay.svg</file>
+    <file>pause.svg</file>
+    <file>play.svg</file>
+    <file>square.svg</file>
+    <file>watch.svg</file>
+    <file>x.svg</file>
   </qresource>
 </RCC>
