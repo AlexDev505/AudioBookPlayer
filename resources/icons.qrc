@@ -8,13 +8,16 @@
   <qresource prefix="menu">
     <file>book.svg</file>
     <file>folder.svg</file>
-    <file>hide_menu.svg</file>
     <file>menu.svg</file>
     <file>search.svg</file>
     <file>settings.svg</file>
     <file>star.svg</file>
   </qresource>
   <qresource prefix="other">
+    <file>plus.svg</file>
+    <file>angle_left.svg</file>
+    <file>angle_right.svg</file>
+    <file>filter.svg</file>
     <file>dash.svg</file>
     <file>overlay.svg</file>
     <file>pause.svg</file>
