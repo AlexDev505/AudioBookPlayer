@@ -14,9 +14,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class UiBook(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(380, 430)
+        Form.resize(200, 250)
         Form.setMinimumSize(QtCore.QSize(200, 250))
-        Form.setMaximumSize(QtCore.QSize(380, 430))
+        Form.setMaximumSize(QtCore.QSize(200, 250))
         Form.setStyleSheet(
             "background-color: rgb(26, 25, 39);\n" "color: rgb(255, 255, 255);"
         )
@@ -35,14 +35,14 @@ class UiBook(object):
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.frame)
         self.verticalLayout_2.setContentsMargins(10, 10, 10, -1)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.label = QtWidgets.QLabel(self.frame)
-        self.label.setMinimumSize(QtCore.QSize(150, 150))
-        self.label.setStyleSheet(
+        self.preview = QtWidgets.QLabel(self.frame)
+        self.preview.setMinimumSize(QtCore.QSize(150, 150))
+        self.preview.setStyleSheet(
             "background-color: rgb(171, 171, 171);\n" "border-radius: 5px"
         )
-        self.label.setText("")
-        self.label.setObjectName("label")
-        self.verticalLayout_2.addWidget(self.label)
+        self.preview.setText("")
+        self.preview.setObjectName("preview")
+        self.verticalLayout_2.addWidget(self.preview)
         self.frame_2 = QtWidgets.QFrame(self.frame)
         self.frame_2.setMaximumSize(QtCore.QSize(16777215, 60))
         self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -52,15 +52,15 @@ class UiBook(object):
         self.verticalLayout.setContentsMargins(10, 0, 10, 10)
         self.verticalLayout.setSpacing(6)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.label_2 = QtWidgets.QLabel(self.frame_2)
+        self.name = QtWidgets.QLabel(self.frame_2)
         font = QtGui.QFont()
         font.setPointSize(13)
-        self.label_2.setFont(font)
-        self.label_2.setObjectName("label_2")
-        self.verticalLayout.addWidget(self.label_2)
-        self.label_3 = QtWidgets.QLabel(self.frame_2)
-        self.label_3.setObjectName("label_3")
-        self.verticalLayout.addWidget(self.label_3)
+        self.name.setFont(font)
+        self.name.setObjectName("name")
+        self.verticalLayout.addWidget(self.name)
+        self.author = QtWidgets.QLabel(self.frame_2)
+        self.author.setObjectName("author")
+        self.verticalLayout.addWidget(self.author)
         self.verticalLayout_2.addWidget(self.frame_2)
         self.horizontalLayout.addWidget(self.frame)
 
@@ -70,5 +70,5 @@ class UiBook(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.label_2.setText(_translate("Form", "TextLabel"))
-        self.label_3.setText(_translate("Form", "TextLabel"))
+        self.name.setText(_translate("Form", "TextLabel"))
+        self.author.setText(_translate("Form", "TextLabel"))
