@@ -6,6 +6,7 @@ from PyQt5.QtCore import QPropertyAnimation, QEasingCurve
 from PyQt5.QtGui import QIcon, QPixmap
 
 if ty.TYPE_CHECKING:
+    from PyQt5.QtWidgets import QPushButton
     from main import Window
 
 
@@ -31,3 +32,12 @@ def toggleMenu(main_window: Window) -> None:
 
     main_window.menuBtn.__dict__["_last_icon"] = main_window.menuBtn.icon()
     main_window.menuBtn.setIcon(last_icon)
+
+
+def menuButtonHandler(main_window: Window, button: QPushButton) -> None:
+    if button == main_window.libraryBtn:
+        main_window.stackedWidget.setCurrentWidget(main_window.libraryPage)
+    elif button == main_window.addBookBtn:
+        main_window.stackedWidget.setCurrentWidget(main_window.addBookPage)
+    elif button == main_window.settingsBtn:
+        main_window.stackedWidget.setCurrentWidget(main_window.settingsPage)

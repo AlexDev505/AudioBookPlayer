@@ -364,6 +364,9 @@ class UiMainWindow(object):
         self.libraryBtn.setIcon(icon4)
         self.libraryBtn.setIconSize(QtCore.QSize(25, 25))
         self.libraryBtn.setObjectName("libraryBtn")
+        self.menuButtons = QtWidgets.QButtonGroup(MainWindow)
+        self.menuButtons.setObjectName("menuButtons")
+        self.menuButtons.addButton(self.libraryBtn)
         self.verticalLayout_2.addWidget(self.libraryBtn)
         self.addBookBtn = QtWidgets.QPushButton(self.btnGroupFrame)
         font = QtGui.QFont()
@@ -379,6 +382,7 @@ class UiMainWindow(object):
         self.addBookBtn.setIcon(icon5)
         self.addBookBtn.setIconSize(QtCore.QSize(25, 25))
         self.addBookBtn.setObjectName("addBookBtn")
+        self.menuButtons.addButton(self.addBookBtn)
         self.verticalLayout_2.addWidget(self.addBookBtn)
         self.verticalLayout.addWidget(self.btnGroupFrame)
         spacerItem = QtWidgets.QSpacerItem(
@@ -419,6 +423,7 @@ class UiMainWindow(object):
         self.settingsBtn.setIcon(icon7)
         self.settingsBtn.setIconSize(QtCore.QSize(25, 25))
         self.settingsBtn.setObjectName("settingsBtn")
+        self.menuButtons.addButton(self.settingsBtn)
         self.verticalLayout_5.addWidget(self.settingsBtn)
         self.verticalLayout.addWidget(self.btnGroupFrame_2)
         self.horizontalLayout_3.addWidget(self.menuFrame)
@@ -736,7 +741,7 @@ class UiMainWindow(object):
         self.allBooksContainer.setWidgetResizable(True)
         self.allBooksContainer.setObjectName("allBooksContainer")
         self.allBooksLayout = QtWidgets.QWidget()
-        self.allBooksLayout.setGeometry(QtCore.QRect(0, 0, 83, 480))
+        self.allBooksLayout.setGeometry(QtCore.QRect(0, 0, 677, 480))
         self.allBooksLayout.setObjectName("allBooksLayout")
         self.verticalLayout_10 = QtWidgets.QVBoxLayout(self.allBooksLayout)
         self.verticalLayout_10.setObjectName("verticalLayout_10")
@@ -1250,7 +1255,7 @@ class UiMainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(3)
+        self.stackedWidget.setCurrentIndex(0)
         self.library.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 

@@ -35,10 +35,18 @@ class Window(QtWidgets.QMainWindow, UiMainWindow):
         )
         self.minimizeAppBtn.clicked.connect(self.showMinimized)
 
-        self.logo.mousePressEvent = lambda e: window_geometry.mousePressEvent(self, e)
-        self.logo.mouseMoveEvent = lambda e: window_geometry.mouseMoveEvent(self, e)
+        self.logo.mousePressEvent = lambda e: window_geometry.dragZonePressEvent(
+            self, e
+        )
+        self.logo.mouseMoveEvent = lambda e: window_geometry.dragZoneMoveEvent(self, e)
+        self.logo.mouseReleaseEvent = lambda e: window_geometry.dragZoneReleaseEvent(
+            self, e
+        )
 
         self.menuBtn.clicked.connect(lambda e: menu.toggleMenu(self))
+        self.menuButtons.buttonClicked.connect(
+            lambda btn: menu.menuButtonHandler(self, btn)
+        )
 
     def eventFilter(self, obj: QObject, event: QEvent) -> bool:
         window_geometry.mouseEvent(self, event)
