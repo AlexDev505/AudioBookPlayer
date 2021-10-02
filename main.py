@@ -5,7 +5,7 @@ import os
 import sys
 import time
 import typing as ty
-from ui_functions import window_geometry
+from ui_functions import window_geometry, menu
 
 from PyQt5 import QtWidgets, QtGui, QtCore
 
@@ -37,6 +37,8 @@ class Window(QtWidgets.QMainWindow, UiMainWindow):
 
         self.logo.mousePressEvent = lambda e: window_geometry.mousePressEvent(self, e)
         self.logo.mouseMoveEvent = lambda e: window_geometry.mouseMoveEvent(self, e)
+
+        self.menuBtn.clicked.connect(lambda e: menu.toggleMenu(self))
 
     def eventFilter(self, obj: QObject, event: QEvent) -> bool:
         window_geometry.mouseEvent(self, event)
