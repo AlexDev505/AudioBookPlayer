@@ -20,7 +20,7 @@ def toggleMenu(main_window: Window) -> None:
         200 if width == 65 else 65
     )  # Конечная ширина меню 200-открытое 65-закрытое
 
-    main_window.menuBtn.setDisabled(True)
+    main_window.menuBtn.setDisabled(True)  # отключаем кнопку на время анимации
     main_window.animation = QPropertyAnimation(main_window.menuFrame, b"minimumWidth")
     main_window.animation.setDuration(250)
     main_window.animation.setStartValue(width)
@@ -29,8 +29,9 @@ def toggleMenu(main_window: Window) -> None:
     main_window.animation.start()
     main_window.animation.finished.connect(
         lambda: main_window.menuBtn.setDisabled(False)
-    )
+    )  # Включаем кнопку по завершению анимации
 
+    # Изменяем иконку кнопки
     last_icon = main_window.menuBtn.__dict__.get("_last_icon")
     if not last_icon:
         last_icon = QIcon()
@@ -41,6 +42,12 @@ def toggleMenu(main_window: Window) -> None:
 
 
 def menuButtonHandler(main_window: Window, button: QPushButton) -> None:
+    """
+    Обработчик кнопок меню.
+    Открывает соответствующие страницы.
+    :param main_window: Инстанс окна.
+    :param button: Нажатая кнопка.
+    """
     if button == main_window.libraryBtn:
         main_window.stackedWidget.setCurrentWidget(main_window.libraryPage)
     elif button == main_window.addBookBtn:
