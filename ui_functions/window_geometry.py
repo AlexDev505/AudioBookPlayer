@@ -8,23 +8,26 @@ if ty.TYPE_CHECKING:
     from main import Window
 
 
-def mousePressEvent(main_window: Window, event: QEvent) -> None:
+def dragZonePressEvent(main_window: Window, event: QEvent) -> None:
     """
     Обрабатывает нажатие на виджет, отвечающий за перемещение окна.
     :param main_window: Инстанс окна.
     :param event:
     """
     if event.button() == Qt.LeftButton:
-        main_window.__dict__["_last_mouse_pos"] = event.globalPos()
+        main_window.__dict__["_drag_pos"] = event.globalPos()
 
 
-def mouseMoveEvent(main_window: Window, event: QEvent) -> None:
+def dragZoneMoveEvent(main_window: Window, event: QEvent) -> None:
     """
     Обрабатывает движение мыши по виджету, отвечающему за перемещение окна.
     :param main_window: Инстанс окна.
     :param event:
     """
-    if main_window.cursor().shape() == Qt.ArrowCursor:
+    if (
+        main_window.__dict__.get("_drag_pos") is not None
+        and main_window.cursor().shape() == Qt.ArrowCursor
+    ):
         if main_window.isFullScreen():  # Выходим их полноэкранного режима
             screen_width = main_window.width()  # Ширина экрана
             toggleFullScreen(main_window)
@@ -41,11 +44,19 @@ def mouseMoveEvent(main_window: Window, event: QEvent) -> None:
             )
 
         main_window.move(
-            main_window.pos()
-            + event.globalPos()
-            - main_window.__dict__["_last_mouse_pos"]
+            main_window.pos() + event.globalPos() - main_window.__dict__["_drag_pos"]
         )
-        main_window.__dict__["_last_mouse_pos"] = event.globalPos()
+        main_window.__dict__["_drag_pos"] = event.globalPos()
+
+
+def dragZoneReleaseEvent(main_window: Window, event: QEvent) -> None:
+    """
+    Обрабатывает отпускание кнопки мыши на виджете, отвечающем за перемещение окна.
+    :param main_window: Инстанс окна.
+    :param event:
+    """
+    if event.button() == Qt.LeftButton:
+        del main_window.__dict__["_drag_pos"]
 
 
 def mouseEvent(main_window: Window, event: QEvent) -> None:
@@ -58,12 +69,11 @@ def mouseEvent(main_window: Window, event: QEvent) -> None:
         return
 
     if event.type() == QEvent.HoverMove:  # Движение мыши по окну
-        if not main_window.__dict__.get("_is_pressed"):
+        if main_window.__dict__.get("_start_cursor_pos") is None:
             _check_position(main_window, event)
 
     if event.type() == QEvent.MouseButtonPress:  # Нажатие
         if event.button() == Qt.LeftButton:
-            main_window.__dict__["_is_pressed"] = True
             main_window.__dict__["_start_cursor_pos"] = main_window.mapToGlobal(
                 event.pos()
             )
@@ -71,11 +81,11 @@ def mouseEvent(main_window: Window, event: QEvent) -> None:
 
     elif event.type() == QEvent.MouseButtonRelease:  # Отпускание
         if event.button() == Qt.LeftButton:
-            main_window.__dict__["_is_pressed"] = False
+            del main_window.__dict__["_start_cursor_pos"]
             _check_position(main_window, event)
 
     elif event.type() == QEvent.MouseMove:  # Движение с зажатой кнопкой мыши
-        if main_window.__dict__.get("_is_pressed"):
+        if main_window.__dict__.get("_start_cursor_pos") is not None:
             if main_window.cursor().shape() in [Qt.SizeFDiagCursor]:
                 _resize_window(main_window, event)
 

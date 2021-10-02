@@ -573,6 +573,9 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                  <height>25</height>
                 </size>
                </property>
+               <attribute name="buttonGroup">
+                <string notr="true">menuButtons</string>
+               </attribute>
               </widget>
              </item>
              <item>
@@ -598,6 +601,9 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                  <height>25</height>
                 </size>
                </property>
+               <attribute name="buttonGroup">
+                <string notr="true">menuButtons</string>
+               </attribute>
               </widget>
              </item>
             </layout>
@@ -679,6 +685,9 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                  <height>25</height>
                 </size>
                </property>
+               <attribute name="buttonGroup">
+                <string notr="true">menuButtons</string>
+               </attribute>
               </widget>
              </item>
             </layout>
@@ -741,7 +750,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
              <item>
               <widget class="QStackedWidget" name="stackedWidget">
                <property name="currentIndex">
-                <number>3</number>
+                <number>0</number>
                </property>
                <widget class="QWidget" name="libraryPage">
                 <layout class="QHBoxLayout" name="horizontalLayout_21">
@@ -1358,7 +1367,7 @@ QPushButton:pressed {
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>83</width>
+                                   <width>677</width>
                                    <height>480</height>
                                   </rect>
                                  </property>
@@ -2635,4 +2644,7 @@ QPushButton:pressed {
   <include location="resources/icons.qrc"/>
  </resources>
  <connections/>
+ <buttongroups>
+  <buttongroup name="menuButtons"/>
+ </buttongroups>
 </ui>
