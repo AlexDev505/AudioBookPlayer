@@ -56,7 +56,7 @@ def dragZoneReleaseEvent(main_window: Window, event: QEvent) -> None:
     :param event:
     """
     if event.button() == Qt.LeftButton:
-        del main_window.__dict__["_drag_pos"]
+        main_window.__dict__["_drag_pos"] = None
 
 
 def mouseEvent(main_window: Window, event: QEvent) -> None:
@@ -81,7 +81,7 @@ def mouseEvent(main_window: Window, event: QEvent) -> None:
 
     elif event.type() == QEvent.MouseButtonRelease:  # Отпускание
         if event.button() == Qt.LeftButton:
-            del main_window.__dict__["_start_cursor_pos"]
+            main_window.__dict__["_start_cursor_pos"] = None
             _check_position(main_window, event)
 
     elif event.type() == QEvent.MouseMove:  # Движение с зажатой кнопкой мыши
