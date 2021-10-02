@@ -11,8 +11,14 @@ if ty.TYPE_CHECKING:
 
 
 def toggleMenu(main_window: Window) -> None:
-    width = main_window.menuFrame.width()
-    end_value = 200 if width == 65 else 65
+    """
+    Открывает/закрывает меню.
+    :param main_window: Инстанс окна.
+    """
+    width = main_window.menuFrame.width()  # Ширина меню сейчас
+    end_value = (
+        200 if width == 65 else 65
+    )  # Конечная ширина меню 200-открытое 65-закрытое
 
     main_window.menuBtn.setDisabled(True)
     main_window.animation = QPropertyAnimation(main_window.menuFrame, b"minimumWidth")
