@@ -5,7 +5,7 @@ import os
 import sys
 import time
 import typing as ty
-from ui_functions import window_geometry, menu
+from ui_functions import library, menu, window_geometry
 
 from PyQt5 import QtWidgets, QtGui, QtCore
 
@@ -29,6 +29,7 @@ class Window(QtWidgets.QMainWindow, UiMainWindow):
         self.setupSignals()
 
     def setupSignals(self):
+        # APPLICATION
         self.closeAppBtn.clicked.connect(self.close)
         self.fullscreenAppBtn.clicked.connect(
             lambda: window_geometry.toggleFullScreen(self)
@@ -43,9 +44,15 @@ class Window(QtWidgets.QMainWindow, UiMainWindow):
             self, e
         )
 
+        # MENU
         self.menuBtn.clicked.connect(lambda e: menu.toggleMenu(self))
         self.menuButtons.buttonClicked.connect(
             lambda btn: menu.menuButtonHandler(self, btn)
+        )
+
+        # LIBRARY
+        self.toggleBooksFilterPanelBtn.clicked.connect(
+            lambda *e: library.toggleFiltersPanel(self)
         )
 
     def eventFilter(self, obj: QObject, event: QEvent) -> bool:

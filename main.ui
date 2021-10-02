@@ -803,7 +803,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                       </property>
                       <property name="maximumSize">
                        <size>
-                        <width>225</width>
+                        <width>25</width>
                         <height>16777215</height>
                        </size>
                       </property>
@@ -866,6 +866,18 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                        </item>
                        <item>
                         <widget class="QFrame" name="libraryFiltersFrame">
+                         <property name="minimumSize">
+                          <size>
+                           <width>200</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>0</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
                          <property name="frameShape">
                           <enum>QFrame::StyledPanel</enum>
                          </property>
@@ -1482,8 +1494,8 @@ border-radius:10px;</string>
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>83</width>
-                                   <height>324</height>
+                                   <width>685</width>
+                                   <height>469</height>
                                   </rect>
                                  </property>
                                  <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -1551,7 +1563,7 @@ border-radius:10px;</string>
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>83</width>
+                                   <width>677</width>
                                    <height>480</height>
                                   </rect>
                                  </property>
