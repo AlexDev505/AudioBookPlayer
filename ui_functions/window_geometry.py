@@ -8,19 +8,18 @@ if ty.TYPE_CHECKING:
     from main import Window
 
 
-def mousePressEvent(main_window: Window, frame: ty.Any, event: QEvent) -> None:
+def mousePressEvent(main_window: Window, event: QEvent) -> None:
     if event.button() == Qt.LeftButton:
-        if not main_window.__dict__.get("_is_pressed"):
-            frame.__dict__["_mouse_pos"] = event.globalPos()
+        main_window.__dict__["_mouse_pos"] = event.globalPos()
 
 
-def mouseMoveEvent(main_window: Window, frame: ty.Any, event: QEvent) -> None:
+def mouseMoveEvent(main_window: Window, event: QEvent) -> None:
     if main_window.cursor().shape() == Qt.ArrowCursor:
         if main_window.isFullScreen():
             screen_width = main_window.width()
-            main_window.showNormal()
-
+            toggleFullScreen(main_window)
             geometry = main_window.geometry()
+
             main_window.setGeometry(
                 event.globalPos().x()
                 - (geometry.width() * event.globalPos().x() / screen_width),
@@ -30,9 +29,9 @@ def mouseMoveEvent(main_window: Window, frame: ty.Any, event: QEvent) -> None:
             )
 
         main_window.move(
-            main_window.pos() + event.globalPos() - frame.__dict__["_mouse_pos"]
+            main_window.pos() + event.globalPos() - main_window.__dict__["_mouse_pos"]
         )
-        frame.__dict__["_mouse_pos"] = event.globalPos()
+        main_window.__dict__["_mouse_pos"] = event.globalPos()
 
 
 def mouseEvent(main_window: Window, event: QEvent) -> None:
@@ -86,5 +85,7 @@ def _resize_window(main_window: Window, event: QEvent) -> None:
 def toggleFullScreen(main_window: Window) -> None:
     if not main_window.isFullScreen():
         main_window.showFullScreen()
+        main_window.resizeWidgetFrame.hide()
     else:
         main_window.showNormal()
+        main_window.resizeWidgetFrame.show()

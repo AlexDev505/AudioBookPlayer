@@ -21,9 +21,11 @@ class Window(QtWidgets.QMainWindow, UiMainWindow):
         super(Window, self).__init__()
         self.setupUi(self)
 
-        # self.setup_signals()
-        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.setWindowFlags(
+            QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowMinimizeButtonHint
+        )
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+
         self.setupSignals()
 
     def setupSignals(self):
@@ -31,13 +33,10 @@ class Window(QtWidgets.QMainWindow, UiMainWindow):
         self.fullscreenAppBtn.clicked.connect(
             lambda: window_geometry.toggleFullScreen(self)
         )
+        self.minimizeAppBtn.clicked.connect(self.showMinimized)
 
-        self.logo.mousePressEvent = lambda e: window_geometry.mousePressEvent(
-            self, self.logo, e
-        )
-        self.logo.mouseMoveEvent = lambda e: window_geometry.mouseMoveEvent(
-            self, self.logo, e
-        )
+        self.logo.mousePressEvent = lambda e: window_geometry.mousePressEvent(self, e)
+        self.logo.mouseMoveEvent = lambda e: window_geometry.mouseMoveEvent(self, e)
 
     def eventFilter(self, obj: QObject, event: QEvent) -> bool:
         window_geometry.mouseEvent(self, event)
