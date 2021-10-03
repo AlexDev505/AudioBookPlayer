@@ -660,6 +660,9 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                  <height>25</height>
                 </size>
                </property>
+               <attribute name="buttonGroup">
+                <string notr="true">menuButtons</string>
+               </attribute>
               </widget>
              </item>
              <item>
@@ -1494,8 +1497,8 @@ border-radius:10px;</string>
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>685</width>
-                                   <height>469</height>
+                                   <width>83</width>
+                                   <height>324</height>
                                   </rect>
                                  </property>
                                  <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -1563,7 +1566,7 @@ border-radius:10px;</string>
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>677</width>
+                                   <width>83</width>
                                    <height>480</height>
                                   </rect>
                                  </property>
