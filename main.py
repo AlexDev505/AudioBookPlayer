@@ -5,7 +5,13 @@ import os
 import sys
 import time
 import typing as ty
-from ui_functions import library, menu, window_geometry
+from ui_functions import (
+    control_panel,
+    library,
+    menu,
+    sliders,
+    window_geometry,
+)
 
 from PyQt5 import QtWidgets, QtGui, QtCore
 
@@ -47,12 +53,33 @@ class Window(QtWidgets.QMainWindow, UiMainWindow):
         # MENU
         self.menuBtn.clicked.connect(lambda e: menu.toggleMenu(self))
         self.menuButtons.buttonClicked.connect(
-            lambda btn: menu.menuButtonHandler(self, btn)
+            lambda btn: menu.buttonsHandler(self, btn)
         )
 
         # LIBRARY
         self.toggleBooksFilterPanelBtn.clicked.connect(
             lambda *e: library.toggleFiltersPanel(self)
+        )
+
+        # CONTROL PANEL
+        self.controlPanelButtons.buttonClicked.connect(
+            lambda btn: control_panel.buttonsHandler(self, btn)
+        )
+
+        self.volumeSlider.valueChanged.connect(
+            lambda value: control_panel.volumeSliderHandler(self, value)
+        )
+        oldVolumeSliderMousePressEvent = self.volumeSlider.mousePressEvent
+        self.volumeSlider.mousePressEvent = lambda e: sliders.mousePressEvent(
+            e, self.volumeSlider, oldVolumeSliderMousePressEvent
+        )
+
+        self.speedSlider.valueChanged.connect(
+            lambda value: control_panel.speedSliderHandler(self, value)
+        )
+        oldSpeedSliderMousePressEvent = self.speedSlider.mousePressEvent
+        self.speedSlider.mousePressEvent = lambda e: sliders.mousePressEvent(
+            e, self.speedSlider, oldSpeedSliderMousePressEvent
         )
 
     def eventFilter(self, obj: QObject, event: QEvent) -> bool:

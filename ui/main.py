@@ -99,7 +99,7 @@ class UiMainWindow(object):
             "QSlider::handle:horizontal {\n"
             "    background: rgb(142, 146, 151);\n"
             "    border: 0px;\n"
-            "    width: 8px;\n"
+            "    width: 5px;\n"
             "    margin-top: 0px;\n"
             "    margin-bottom: 0px;\n"
             "    border-radius: 1px;\n"
@@ -796,7 +796,7 @@ class UiMainWindow(object):
         self.inProgressBooksContainer.setWidgetResizable(True)
         self.inProgressBooksContainer.setObjectName("inProgressBooksContainer")
         self.inProgressBooksLayout = QtWidgets.QWidget()
-        self.inProgressBooksLayout.setGeometry(QtCore.QRect(0, 0, 83, 324))
+        self.inProgressBooksLayout.setGeometry(QtCore.QRect(0, 0, 685, 469))
         self.inProgressBooksLayout.setObjectName("inProgressBooksLayout")
         self.verticalLayout_11 = QtWidgets.QVBoxLayout(self.inProgressBooksLayout)
         self.verticalLayout_11.setObjectName("verticalLayout_11")
@@ -830,7 +830,7 @@ class UiMainWindow(object):
         self.listenedBooksContainer.setWidgetResizable(True)
         self.listenedBooksContainer.setObjectName("listenedBooksContainer")
         self.listenedBooksLayout = QtWidgets.QWidget()
-        self.listenedBooksLayout.setGeometry(QtCore.QRect(0, 0, 83, 480))
+        self.listenedBooksLayout.setGeometry(QtCore.QRect(0, 0, 677, 480))
         self.listenedBooksLayout.setObjectName("listenedBooksLayout")
         self.verticalLayout_13 = QtWidgets.QVBoxLayout(self.listenedBooksLayout)
         self.verticalLayout_13.setObjectName("verticalLayout_13")
@@ -1106,6 +1106,9 @@ class UiMainWindow(object):
         self.playPauseBtn.setIcon(icon11)
         self.playPauseBtn.setIconSize(QtCore.QSize(40, 40))
         self.playPauseBtn.setObjectName("playPauseBtn")
+        self.controlPanelButtons = QtWidgets.QButtonGroup(MainWindow)
+        self.controlPanelButtons.setObjectName("controlPanelButtons")
+        self.controlPanelButtons.addButton(self.playPauseBtn)
         self.horizontalLayout_7.addWidget(self.playPauseBtn)
         spacerItem11 = QtWidgets.QSpacerItem(
             674, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
@@ -1145,8 +1148,10 @@ class UiMainWindow(object):
         self.speedBtn.setIcon(icon12)
         self.speedBtn.setIconSize(QtCore.QSize(28, 28))
         self.speedBtn.setObjectName("speedBtn")
+        self.controlPanelButtons.addButton(self.speedBtn)
         self.horizontalLayout_11.addWidget(self.speedBtn)
         self.speedFrame = QtWidgets.QFrame(self.speedBox)
+        self.speedFrame.setMinimumSize(QtCore.QSize(0, 0))
         self.speedFrame.setMaximumSize(QtCore.QSize(0, 16777215))
         self.speedFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.speedFrame.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -1190,6 +1195,7 @@ class UiMainWindow(object):
         self.volumeBtn.setIcon(icon13)
         self.volumeBtn.setIconSize(QtCore.QSize(28, 28))
         self.volumeBtn.setObjectName("volumeBtn")
+        self.controlPanelButtons.addButton(self.volumeBtn)
         self.horizontalLayout_10.addWidget(self.volumeBtn)
         self.volumeFrame = QtWidgets.QFrame(self.volumeBox)
         self.volumeFrame.setMaximumSize(QtCore.QSize(0, 16777215))
@@ -1230,6 +1236,7 @@ class UiMainWindow(object):
         self.overlayBtn.setIcon(icon14)
         self.overlayBtn.setIconSize(QtCore.QSize(28, 28))
         self.overlayBtn.setObjectName("overlayBtn")
+        self.controlPanelButtons.addButton(self.overlayBtn)
         self.horizontalLayout_8.addWidget(self.overlayBtn)
         self.horizontalLayout_7.addWidget(self.toolsFrame)
         self.resizeWidgetFrame = QtWidgets.QFrame(self.controlPanel)

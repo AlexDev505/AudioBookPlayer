@@ -43,7 +43,7 @@ def toggleMenu(main_window: Window) -> None:
     main_window.menuBtn.setIcon(last_icon)
 
 
-def menuButtonHandler(main_window: Window, button: QPushButton) -> None:
+def buttonsHandler(main_window: Window, button: QPushButton) -> None:
     """
     Обработчик кнопок меню.
     Открывает соответствующие страницы.

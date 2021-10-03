@@ -1,6 +1,6 @@
 <RCC>
   <qresource prefix="volume">
-    <file>low_lolume.svg</file>
+    <file>low_volume.svg</file>
     <file>medium_volume.svg</file>
     <file>mute.svg</file>
     <file>volume.svg</file>
