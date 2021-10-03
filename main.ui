@@ -97,7 +97,7 @@ QSlider::add-page:horizontal {
 QSlider::handle:horizontal {
 	background: rgb(142, 146, 151);
 	border: 0px;
-    width: 8px;
+    width: 5px;
     margin-top: 0px;
     margin-bottom: 0px;
 	border-radius: 1px;
@@ -1497,8 +1497,8 @@ border-radius:10px;</string>
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>83</width>
-                                   <height>324</height>
+                                   <width>685</width>
+                                   <height>469</height>
                                   </rect>
                                  </property>
                                  <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -1566,7 +1566,7 @@ border-radius:10px;</string>
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>83</width>
+                                   <width>677</width>
                                    <height>480</height>
                                   </rect>
                                  </property>
@@ -2239,6 +2239,9 @@ QPushButton:pressed {
                  <height>40</height>
                 </size>
                </property>
+               <attribute name="buttonGroup">
+                <string notr="true">controlPanelButtons</string>
+               </attribute>
               </widget>
              </item>
              <item>
@@ -2341,10 +2344,19 @@ QPushButton:pressed {
                        <height>28</height>
                       </size>
                      </property>
+                     <attribute name="buttonGroup">
+                      <string notr="true">controlPanelButtons</string>
+                     </attribute>
                     </widget>
                    </item>
                    <item>
                     <widget class="QFrame" name="speedFrame">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>0</height>
+                      </size>
+                     </property>
                      <property name="maximumSize">
                       <size>
                        <width>0</width>
@@ -2468,6 +2480,9 @@ QPushButton:pressed {
                        <height>28</height>
                       </size>
                      </property>
+                     <attribute name="buttonGroup">
+                      <string notr="true">controlPanelButtons</string>
+                     </attribute>
                     </widget>
                    </item>
                    <item>
@@ -2576,6 +2591,9 @@ QPushButton:pressed {
                     <height>28</height>
                    </size>
                   </property>
+                  <attribute name="buttonGroup">
+                   <string notr="true">controlPanelButtons</string>
+                  </attribute>
                  </widget>
                 </item>
                </layout>
@@ -2661,5 +2679,6 @@ QPushButton:pressed {
  <connections/>
  <buttongroups>
   <buttongroup name="menuButtons"/>
+  <buttongroup name="controlPanelButtons"/>
  </buttongroups>
 </ui>
