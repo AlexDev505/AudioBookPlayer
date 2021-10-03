@@ -2,6 +2,5 @@ venv/
 .idea/
 __pycache__/
 build/
-drivers/ffmpeg/
 books/
 database.sqlite

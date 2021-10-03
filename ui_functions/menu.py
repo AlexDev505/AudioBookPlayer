@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import typing as ty
 
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve
@@ -16,11 +17,10 @@ def toggleMenu(main_window: Window) -> None:
     :param main_window: Инстанс окна.
     """
     width = main_window.menuFrame.width()  # Ширина меню сейчас
-    end_value = (
-        200 if width == 65 else 65
-    )  # Конечная ширина меню 200-открытое 65-закрытое
+    # Конечная ширина меню 200-открытое 65-закрытое
+    end_value = 200 if width == 65 else 65
 
-    main_window.menuBtn.setDisabled(True)  # отключаем кнопку на время анимации
+    main_window.menuBtn.setDisabled(True)  # Отключаем кнопку на время анимации
     main_window.menu_animation = QPropertyAnimation(
         main_window.menuFrame, b"minimumWidth"
     )
@@ -56,3 +56,5 @@ def menuButtonHandler(main_window: Window, button: QPushButton) -> None:
         main_window.stackedWidget.setCurrentWidget(main_window.addBookPage)
     elif button == main_window.settingsBtn:
         main_window.stackedWidget.setCurrentWidget(main_window.settingsPage)
+    elif button == main_window.dirWithBooksBtn:
+        os.startfile(os.environ["dir_with_books"])
