@@ -31,7 +31,7 @@ def toggleSpeedSlider(main_window: Window) -> None:
         toggleVolumeSlider(main_window)
     width = main_window.speedFrame.width()  # Ширина виджета сейчас
     # Конечная ширина виджета 110-открытое 65-закрытое
-    end_value = 110 if width == 0 else 0
+    end_value = 120 if width == 0 else 0
 
     main_window.speedBtn.setDisabled(True)  # Отключаем кнопку на время анимации
     main_window.speed_frame_animation = QPropertyAnimation(
@@ -56,7 +56,7 @@ def toggleVolumeSlider(main_window: Window) -> None:
         toggleSpeedSlider(main_window)
     width = main_window.volumeFrame.width()  # Ширина виджета сейчас
     # Конечная ширина виджета 110-открытое 65-закрытое
-    end_value = 110 if width == 0 else 0
+    end_value = 120 if width == 0 else 0
 
     main_window.volumeBtn.setDisabled(True)  # Отключаем кнопку на время анимации
     main_window.volume_frame_animation = QPropertyAnimation(
@@ -108,4 +108,10 @@ def speedSliderHandler(main_window: Window, value: int) -> None:
     :param main_window: Инстанс окна.
     :param value: Новое значение.
     """
-    main_window.speedLabel.setText(f"{value} %")
+    if value == 50:
+        value = 1
+    else:
+        value -= 50
+        value *= 2
+    value = value // 5 * 5
+    main_window.speedLabel.setText(f"{'+' if abs(value) == value else ''}{value} %")
