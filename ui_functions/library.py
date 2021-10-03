@@ -23,15 +23,15 @@ def toggleFiltersPanel(main_window: Window) -> None:
     if end_value == 225:
         main_window.libraryFiltersFrame.show()
 
-    main_window.animation = QPropertyAnimation(
+    main_window.filters_menu_animation = QPropertyAnimation(
         main_window.libraryFiltersPanel, b"minimumWidth"
     )
-    main_window.animation.setDuration(500)
-    main_window.animation.setStartValue(width)
-    main_window.animation.setEndValue(end_value)
-    main_window.animation.setEasingCurve(QEasingCurve.InOutQuart)
-    main_window.animation.start()
-    main_window.animation.finished.connect(
+    main_window.filters_menu_animation.setDuration(500)
+    main_window.filters_menu_animation.setStartValue(width)
+    main_window.filters_menu_animation.setEndValue(end_value)
+    main_window.filters_menu_animation.setEasingCurve(QEasingCurve.InOutQuart)
+    main_window.filters_menu_animation.start()
+    main_window.filters_menu_animation.finished.connect(
         animation_finished
     )  # Включаем кнопку по завершению анимации
 

@@ -21,13 +21,15 @@ def toggleMenu(main_window: Window) -> None:
     )  # Конечная ширина меню 200-открытое 65-закрытое
 
     main_window.menuBtn.setDisabled(True)  # отключаем кнопку на время анимации
-    main_window.animation = QPropertyAnimation(main_window.menuFrame, b"minimumWidth")
-    main_window.animation.setDuration(250)
-    main_window.animation.setStartValue(width)
-    main_window.animation.setEndValue(end_value)
-    main_window.animation.setEasingCurve(QEasingCurve.InOutQuart)
-    main_window.animation.start()
-    main_window.animation.finished.connect(
+    main_window.menu_animation = QPropertyAnimation(
+        main_window.menuFrame, b"minimumWidth"
+    )
+    main_window.menu_animation.setDuration(250)
+    main_window.menu_animation.setStartValue(width)
+    main_window.menu_animation.setEndValue(end_value)
+    main_window.menu_animation.setEasingCurve(QEasingCurve.InOutQuart)
+    main_window.menu_animation.start()
+    main_window.menu_animation.finished.connect(
         lambda: main_window.menuBtn.setDisabled(False)
     )  # Включаем кнопку по завершению анимации
 
