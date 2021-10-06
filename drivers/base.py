@@ -63,6 +63,11 @@ class DownloadProcessHandler:
 
 
 class Driver(ABC):
+    drivers: ty.List[ty.Type[Driver]] = []
+
+    def __init_subclass__(cls, **kwargs):
+        Driver.drivers.append(cls)
+
     def get_driver(self):
         """
         :returns: Драйвер, для работы с браузером.

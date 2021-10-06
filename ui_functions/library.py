@@ -6,10 +6,10 @@ from PyQt5.QtCore import QPropertyAnimation, QEasingCurve
 from PyQt5.QtGui import QIcon, QPixmap
 
 if ty.TYPE_CHECKING:
-    from main import Window
+    from main_window import MainWindow
 
 
-def toggleFiltersPanel(main_window: Window) -> None:
+def toggleFiltersPanel(main_window: MainWindow) -> None:
     """
     Открывает/закрывает меню фильтров.
     :param main_window: Инстанс окна.

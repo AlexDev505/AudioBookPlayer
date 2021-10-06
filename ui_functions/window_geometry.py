@@ -5,35 +5,36 @@ import typing as ty
 from PyQt5.QtCore import Qt, QEvent, QRect, QPoint
 
 if ty.TYPE_CHECKING:
-    from main import Window
+    from main_window import MainWindow
+    from PyQt5.QtWidgets import QMainWindow
 
 
-def dragZonePressEvent(main_window: Window, event: QEvent) -> None:
+def dragZonePressEvent(window: QMainWindow, event: QEvent) -> None:
     """
     Обрабатывает нажатие на виджет, отвечающий за перемещение окна.
-    :param main_window: Инстанс окна.
+    :param window: Инстанс окна.
     :param event:
     """
     if event.button() == Qt.LeftButton:
-        main_window.__dict__["_drag_pos"] = event.globalPos()
+        window.__dict__["_drag_pos"] = event.globalPos()
 
 
-def dragZoneMoveEvent(main_window: Window, event: QEvent) -> None:
+def dragZoneMoveEvent(window: QMainWindow, event: QEvent) -> None:
     """
     Обрабатывает движение мыши по виджету, отвечающему за перемещение окна.
-    :param main_window: Инстанс окна.
+    :param window: Инстанс окна.
     :param event:
     """
     if (
-        main_window.__dict__.get("_drag_pos") is not None
-        and main_window.cursor().shape() == Qt.ArrowCursor
+        window.__dict__.get("_drag_pos") is not None
+        and window.cursor().shape() == Qt.ArrowCursor
     ):
-        if main_window.isFullScreen():  # Выходим их полноэкранного режима
-            screen_width = main_window.width()  # Ширина экрана
-            toggleFullScreen(main_window)
-            geometry = main_window.geometry()  # Размеры и положение окна
+        if window.isFullScreen():  # Выходим их полноэкранного режима
+            screen_width = window.width()  # Ширина экрана
+            toggleFullScreen(window)
+            geometry = window.geometry()  # Размеры и положение окна
 
-            main_window.setGeometry(
+            window.setGeometry(
                 (
                     event.globalPos().x()
                     - (geometry.width() * event.globalPos().x() / screen_width)
@@ -43,95 +44,89 @@ def dragZoneMoveEvent(main_window: Window, event: QEvent) -> None:
                 geometry.height(),
             )
 
-        main_window.move(
-            main_window.pos() + event.globalPos() - main_window.__dict__["_drag_pos"]
-        )
-        main_window.__dict__["_drag_pos"] = event.globalPos()
+        window.move(window.pos() + event.globalPos() - window.__dict__["_drag_pos"])
+        window.__dict__["_drag_pos"] = event.globalPos()
 
 
-def dragZoneReleaseEvent(main_window: Window, event: QEvent) -> None:
+def dragZoneReleaseEvent(window: QMainWindow, event: QEvent) -> None:
     """
     Обрабатывает отпускание кнопки мыши на виджете, отвечающем за перемещение окна.
-    :param main_window: Инстанс окна.
+    :param window: Инстанс окна.
     :param event:
     """
     if event.button() == Qt.LeftButton:
-        main_window.__dict__["_drag_pos"] = None
+        window.__dict__["_drag_pos"] = None
 
 
-def mouseEvent(main_window: Window, event: QEvent) -> None:
+def mouseEvent(window: QMainWindow, event: QEvent) -> None:
     """
     Обрабатывает события мыши, для реализации изменения размера окна.
-    :param main_window: Инстанс окна.
+    :param window: Инстанс окна.
     :param event:
     """
-    if main_window.isFullScreen():
+    if window.isFullScreen():
         return
 
     if event.type() == QEvent.HoverMove:  # Движение мыши по окну
-        if main_window.__dict__.get("_start_cursor_pos") is None:
-            _check_position(main_window, event)
+        if window.__dict__.get("_start_cursor_pos") is None:
+            _check_position(window, event)
 
     if event.type() == QEvent.MouseButtonPress:  # Нажатие
         if event.button() == Qt.LeftButton:
-            main_window.__dict__["_start_cursor_pos"] = main_window.mapToGlobal(
-                event.pos()
-            )
-            main_window.__dict__["_start_window_geometry"] = main_window.geometry()
+            window.__dict__["_start_cursor_pos"] = window.mapToGlobal(event.pos())
+            window.__dict__["_start_window_geometry"] = window.geometry()
 
     elif event.type() == QEvent.MouseButtonRelease:  # Отпускание
         if event.button() == Qt.LeftButton:
-            main_window.__dict__["_start_cursor_pos"] = None
-            _check_position(main_window, event)
+            window.__dict__["_start_cursor_pos"] = None
+            _check_position(window, event)
 
     elif event.type() == QEvent.MouseMove:  # Движение с зажатой кнопкой мыши
-        if main_window.__dict__.get("_start_cursor_pos") is not None:
-            if main_window.cursor().shape() in [Qt.SizeFDiagCursor]:
-                _resize_window(main_window, event)
+        if window.__dict__.get("_start_cursor_pos") is not None:
+            if window.cursor().shape() in [Qt.SizeFDiagCursor]:
+                _resize_window(window, event)
 
 
-def _check_position(main_window: Window, event: QEvent) -> None:
+def _check_position(window: QMainWindow, event: QEvent) -> None:
     """
     Проверяет положение мыши.
     Устанавливает определённый курсор, при наведении на край и обратно.
-    :param main_window: Инстанс окна.
+    :param window: Инстанс окна.
     :param event:
     """
-    rect = main_window.rect()
+    rect = window.rect()
     bottom_right = rect.bottomRight()
 
     if event.pos() in QRect(
         QPoint(bottom_right.x(), bottom_right.y()),
         QPoint(bottom_right.x() - 10, bottom_right.y() - 10),
     ):
-        main_window.setCursor(Qt.SizeFDiagCursor)
+        window.setCursor(Qt.SizeFDiagCursor)
     else:  # Обычный курсор
-        main_window.setCursor(Qt.ArrowCursor)
+        window.setCursor(Qt.ArrowCursor)
 
 
-def _resize_window(main_window: Window, event: QEvent) -> None:
+def _resize_window(window: QMainWindow, event: QEvent) -> None:
     """
     Изменяет размер окна.
-    :param main_window: Инстанс окна.
+    :param window: Инстанс окна.
     :param event:
     """
-    geometry = main_window.__dict__["_start_window_geometry"]
-    last = (
-        main_window.mapToGlobal(event.pos()) - main_window.__dict__["_start_cursor_pos"]
-    )
+    geometry = window.__dict__["_start_window_geometry"]
+    last = window.mapToGlobal(event.pos()) - window.__dict__["_start_cursor_pos"]
     new_width = geometry.width() + last.x()
     new_height = geometry.height() + last.y()
-    main_window.setGeometry(geometry.x(), geometry.y(), new_width, new_height)
+    window.setGeometry(geometry.x(), geometry.y(), new_width, new_height)
 
 
-def toggleFullScreen(main_window: Window) -> None:
+def toggleFullScreen(window: QMainWindow) -> None:
     """
     Активирует/выключает полноэкранный режим.
-    :param main_window: Инстанс окна.
+    :param window: Инстанс окна.
     """
-    if not main_window.isFullScreen():
-        main_window.showFullScreen()
-        main_window.resizeWidgetFrame.hide()
+    if not window.isFullScreen():
+        window.showFullScreen()
+        window.resizeWidgetFrame.hide()
     else:
-        main_window.showNormal()
-        main_window.resizeWidgetFrame.show()
+        window.showNormal()
+        window.resizeWidgetFrame.show()

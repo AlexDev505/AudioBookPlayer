@@ -5,10 +5,10 @@ from drivers.base import DownloadProcessHandler
 from database import Books
 import os
 
-drv = AKnigaDriver()
+drv = KnigaVUhe()
 
-book = drv.get_book("https://akniga.org/bogomazov-sergey-revolyuciya")
+book = drv.get_book("https://knigavuhe.org/book/podnjatie-urovnja-v-odinochku-20/")
 
 drv.download_book(book, DownloadProcessHandler())
-books = Books(os.environ["DB_PATH"])
-books.insert(**vars(book))
+# books = Books(os.environ["DB_PATH"])
+# books.insert(**vars(book))

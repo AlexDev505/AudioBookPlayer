@@ -177,7 +177,7 @@ class UiMainWindow(object):
             "#content, #stackedWidget, #libraryPage, #addBookPage, #searchResultPage, #settingsPage {\n"
             "    background-color: rgb(32, 34, 37);\n"
             "}\n"
-            "#libraryPageContent, #addBookPageContent, #searchResultPageContent, #settingsPageContent {\n"
+            "#libraryPageContent, #addBookPageContent, #noSearchResultPage, #settingsPageContent {\n"
             "    background-color: rgb(54, 57, 63);\n"
             "    border-top-left-radius: 15px;\n"
             "}\n"
@@ -1002,6 +1002,7 @@ class UiMainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.noSearchResultReasonLabel.setFont(font)
+        self.noSearchResultReasonLabel.setText("")
         self.noSearchResultReasonLabel.setObjectName("noSearchResultReasonLabel")
         self.verticalLayout_18.addWidget(self.noSearchResultReasonLabel)
         spacerItem8 = QtWidgets.QSpacerItem(
@@ -1165,6 +1166,7 @@ class UiMainWindow(object):
         self.speedSlider.setMaximumSize(QtCore.QSize(80, 35))
         self.speedSlider.setStyleSheet("")
         self.speedSlider.setMaximum(100)
+        self.speedSlider.setSingleStep(10)
         self.speedSlider.setProperty("value", 50)
         self.speedSlider.setOrientation(QtCore.Qt.Horizontal)
         self.speedSlider.setObjectName("speedSlider")
@@ -1265,7 +1267,7 @@ class UiMainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(2)
         self.library.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -1303,7 +1305,6 @@ class UiMainWindow(object):
         self.searchNewBookLineEdit.setPlaceholderText(
             _translate("MainWindow", "Введите название книги или вставьте ссылку")
         )
-        self.noSearchResultReasonLabel.setText(_translate("MainWindow", "текст"))
         self.bookNameLabel.setText(_translate("MainWindow", "Название"))
         self.bookAuthorLabel.setText(_translate("MainWindow", "Автор"))
         self.speedBtn.setToolTip(_translate("MainWindow", "Скорость воспроизведения"))
