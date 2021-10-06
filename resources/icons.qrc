@@ -14,6 +14,8 @@
     <file>star.svg</file>
   </qresource>
   <qresource prefix="other">
+    <file>loading_app.gif</file>
+    <file>loading.gif</file>
     <file>resize_bottom_right.svg</file>
     <file>angle_down.svg</file>
     <file>sort_down.svg</file>

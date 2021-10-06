@@ -172,10 +172,10 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 }
 
 /*  CONTENT */
-#content, #stackedWidget, #libraryPage, #addBookPage, #searchResultPage, #settingsPage {
+#content, #stackedWidget, #libraryPage, #bookPage, #addBookPage, #noSearchResultPage, #settingsPage {
 	background-color: rgb(32, 34, 37);
 }
-#libraryPageContent, #addBookPageContent, #searchResultPageContent, #settingsPageContent {
+#libraryPageContent, #bookPageContent, #addBookPageContent, #noSearchResultPageContent, #settingsPageContent {
 	background-color: rgb(54, 57, 63);
 	border-top-left-radius: 15px;
 }
@@ -753,7 +753,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
              <item>
               <widget class="QStackedWidget" name="stackedWidget">
                <property name="currentIndex">
-                <number>0</number>
+                <number>1</number>
                </property>
                <widget class="QWidget" name="libraryPage">
                 <layout class="QHBoxLayout" name="horizontalLayout_21">
@@ -1650,6 +1650,35 @@ border-radius:10px;</string>
                  </item>
                 </layout>
                </widget>
+               <widget class="QWidget" name="bookPage">
+                <layout class="QHBoxLayout" name="horizontalLayout_26">
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QFrame" name="bookPageContent">
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
                <widget class="QWidget" name="addBookPage">
                 <layout class="QHBoxLayout" name="horizontalLayout_14">
                  <property name="spacing">
@@ -1954,7 +1983,7 @@ QPushButton:pressed {
                          </font>
                         </property>
                         <property name="text">
-                         <string>текст</string>
+                         <string/>
                         </property>
                        </widget>
                       </item>
@@ -2404,6 +2433,9 @@ QPushButton:pressed {
                         </property>
                         <property name="maximum">
                          <number>100</number>
+                        </property>
+                        <property name="singleStep">
+                         <number>10</number>
                         </property>
                         <property name="value">
                          <number>50</number>

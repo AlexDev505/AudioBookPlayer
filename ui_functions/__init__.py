@@ -1,3 +1,4 @@
+from . import add_book_page
 from . import control_panel
 from . import library
 from . import menu

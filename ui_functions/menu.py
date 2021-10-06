@@ -8,10 +8,10 @@ from PyQt5.QtGui import QIcon, QPixmap
 
 if ty.TYPE_CHECKING:
     from PyQt5.QtWidgets import QPushButton
-    from main import Window
+    from main_window import MainWindow
 
 
-def toggleMenu(main_window: Window) -> None:
+def toggleMenu(main_window: MainWindow) -> None:
     """
     Открывает/закрывает меню.
     :param main_window: Инстанс окна.
@@ -43,7 +43,7 @@ def toggleMenu(main_window: Window) -> None:
     main_window.menuBtn.setIcon(last_icon)
 
 
-def buttonsHandler(main_window: Window, button: QPushButton) -> None:
+def buttonsHandler(main_window: MainWindow, button: QPushButton) -> None:
     """
     Обработчик кнопок меню.
     Открывает соответствующие страницы.

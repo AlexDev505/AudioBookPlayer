@@ -7,10 +7,10 @@ from PyQt5.QtGui import QIcon, QPixmap
 
 if ty.TYPE_CHECKING:
     from PyQt5.QtWidgets import QPushButton
-    from main import Window
+    from main_window import MainWindow
 
 
-def buttonsHandler(main_window: Window, button: QPushButton) -> None:
+def buttonsHandler(main_window: MainWindow, button: QPushButton) -> None:
     """
     Обработчик кнопок панели управления.
     :param main_window: Инстанс окна.
@@ -22,7 +22,7 @@ def buttonsHandler(main_window: Window, button: QPushButton) -> None:
         toggleVolumeSlider(main_window)
 
 
-def toggleSpeedSlider(main_window: Window) -> None:
+def toggleSpeedSlider(main_window: MainWindow) -> None:
     """
     Показывает/скрывает регулятор скорости.
     :param main_window: Инстанс окна.
@@ -47,7 +47,7 @@ def toggleSpeedSlider(main_window: Window) -> None:
     )  # Включаем кнопку по завершению анимации
 
 
-def toggleVolumeSlider(main_window: Window) -> None:
+def toggleVolumeSlider(main_window: MainWindow) -> None:
     """
     Показывает/скрывает регулятор громкости.
     :param main_window: Инстанс окна.
@@ -72,7 +72,7 @@ def toggleVolumeSlider(main_window: Window) -> None:
     )  # Включаем кнопку по завершению анимации
 
 
-def volumeSliderHandler(main_window: Window, value: int) -> None:
+def volumeSliderHandler(main_window: MainWindow, value: int) -> None:
     """
     Обработчик изменений значения слайдера громкости.
     :param main_window: Инстанс окна.
@@ -102,16 +102,17 @@ def volumeSliderHandler(main_window: Window, value: int) -> None:
         main_window.volumeBtn.setIcon(volume_icon)
 
 
-def speedSliderHandler(main_window: Window, value: int) -> None:
+def speedSliderHandler(main_window: MainWindow, value: int) -> None:
     """
     Обработчик изменений значения слайдера скорости.
     :param main_window: Инстанс окна.
     :param value: Новое значение.
     """
-    if value == 50:
-        value = 1
-    else:
-        value -= 50
-        value *= 2
+    value -= 50
+    value *= 2
     value = value // 5 * 5
-    main_window.speedLabel.setText(f"{'+' if abs(value) == value else ''}{value} %")
+
+    if value == 0:
+        main_window.speedLabel.setText("1x")
+    else:
+        main_window.speedLabel.setText(f"{'+' if abs(value) == value else ''}{value} %")
