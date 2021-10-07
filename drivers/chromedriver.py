@@ -21,9 +21,15 @@ if ty.TYPE_CHECKING:
     from PyQt5.QtCore import pyqtSignal
 
 
-def check_version(binary, required_version):
+def check_version(driver_path: str, required_version: str) -> bool:
+    """
+    Проверяет соответствие версий установленного браузера и драйвера.
+    :param driver_path: Путь к драйверу.
+    :param required_version: Версия браузера.
+    :return:
+    """
     try:
-        version = subprocess.check_output([binary, "-v"])
+        version = subprocess.check_output([driver_path, "-v"])
         version = re.match(r".*?([\d.]+).*?", version.decode("utf-8"))[1]
         if version == required_version:
             return True
@@ -32,9 +38,10 @@ def check_version(binary, required_version):
     return False
 
 
-def get_chrome_version():
+def get_chrome_version() -> str:
     """
     :return: Версия установленного браузера Chrome.
+    :raise: IndexError.
     """
     process = subprocess.Popen(
         [
@@ -52,7 +59,7 @@ def get_chrome_version():
     return version
 
 
-def get_matched_chromedriver_version(version):
+def get_matched_chromedriver_version(version: str) -> str:
     """
     :param version: Версия браузера Chrome.
     :return: Версия chromedriver.
@@ -64,18 +71,22 @@ def get_matched_chromedriver_version(version):
             return k.text.split("/")[0]
 
 
-def download_chromedriver(signal: pyqtSignal(bool, str) = None):
+def download_chromedriver(signal: pyqtSignal(bool, str) = None) -> str:
     """
-    Downloads, unzips and installs chromedriver.
-    If a chromedriver binary is found in PATH it will be copied, otherwise downloaded.
+    Скачивает, распаковывает и устанавливает chromedriver.
+    Если двоичный файл chromedriver найден в PATH, он будет скопирован,
+    в противном случае он будет загружен.
     :param signal: Инстанс сигнала, для обратной связи.
     :return: Путь к chromedriver.
+    :raises: "Not available version", "download error"
     """
     chrome_version = get_chrome_version()
     chromedriver_version = get_matched_chromedriver_version(chrome_version)
     if not chromedriver_version:
         raise FileNotFoundError("Not available version")
+    # Директория, где хранится драйвер
     chromedriver_dir = os.path.abspath(os.path.dirname(__file__))
+    # Путь к драйверу
     chromedriver_filepath = os.path.join(chromedriver_dir, "chromedriver.exe")
     if not os.path.isfile(chromedriver_filepath) or not check_version(
         chromedriver_filepath, chromedriver_version
@@ -83,23 +94,24 @@ def download_chromedriver(signal: pyqtSignal(bool, str) = None):
         if signal:
             signal.emit("Скачивание драйвера", None)
         if not os.path.isdir(chromedriver_dir):
+            # Создаём директорию, в которой будет храниться драйвер
             os.mkdir(chromedriver_dir)
         url = (
             f"https://chromedriver.storage.googleapis.com/"
             f"{chromedriver_version}/chromedriver_win32.zip"
-        )
-        response = urllib.request.urlopen(url)
+        )  # Ссылка на архив с нужным драйвером
+        response = urllib.request.urlopen(url)  # Скачивание
         if response.getcode() != 200:
-            raise urllib.error.URLError("err")
+            raise urllib.error.URLError("download error")
         archive = BytesIO(response.read())
-        with zipfile.ZipFile(archive) as zip_file:
+        with zipfile.ZipFile(archive) as zip_file:  # Разархивация
             zip_file.extract("chromedriver.exe", chromedriver_dir)
     if not os.access(chromedriver_filepath, os.X_OK):
         os.chmod(chromedriver_filepath, 0o744)
     return chromedriver_filepath
 
 
-def install(signal: pyqtSignal(bool, str) = None):
+def install(signal: pyqtSignal(bool, str) = None) -> None:
     """
     Добавляет каталог двоичного файла chromedriver к PATH.
     :param signal: Инстанс сигнала, для обратной связи.
