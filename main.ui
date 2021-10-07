@@ -172,10 +172,10 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 }
 
 /*  CONTENT */
-#content, #stackedWidget, #libraryPage, #bookPage, #addBookPage, #noSearchResultPage, #settingsPage {
+#content, #stackedWidget, #libraryPage, #bookPage, #addBookPage, #infoPage, #settingsPage {
 	background-color: rgb(32, 34, 37);
 }
-#libraryPageContent, #bookPageContent, #addBookPageContent, #noSearchResultPageContent, #settingsPageContent {
+#libraryPageContent, #bookPageContent, #addBookPageContent, #infoPageContent, #settingsPageContent {
 	background-color: rgb(54, 57, 63);
 	border-top-left-radius: 15px;
 }
@@ -753,7 +753,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
              <item>
               <widget class="QStackedWidget" name="stackedWidget">
                <property name="currentIndex">
-                <number>1</number>
+                <number>3</number>
                </property>
                <widget class="QWidget" name="libraryPage">
                 <layout class="QHBoxLayout" name="horizontalLayout_21">
@@ -1915,7 +1915,7 @@ QPushButton:pressed {
                  </item>
                 </layout>
                </widget>
-               <widget class="QWidget" name="noSearchResultPage">
+               <widget class="QWidget" name="infoPage">
                 <layout class="QHBoxLayout" name="horizontalLayout_24">
                  <property name="spacing">
                   <number>0</number>
@@ -1933,7 +1933,7 @@ QPushButton:pressed {
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QFrame" name="noSearchResultPageContent">
+                  <widget class="QFrame" name="infoPageContent">
                    <property name="frameShape">
                     <enum>QFrame::StyledPanel</enum>
                    </property>
@@ -1973,7 +1973,7 @@ QPushButton:pressed {
                        </spacer>
                       </item>
                       <item>
-                       <widget class="QLabel" name="noSearchResultReasonLabel">
+                       <widget class="QLabel" name="infoPageLabel">
                         <property name="font">
                          <font>
                           <family>Arial</family>
@@ -1981,6 +1981,27 @@ QPushButton:pressed {
                           <weight>75</weight>
                           <bold>true</bold>
                          </font>
+                        </property>
+                        <property name="text">
+                         <string/>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="infoPageBtn">
+                        <property name="font">
+                         <font>
+                          <family>Arial</family>
+                          <pointsize>12</pointsize>
+                          <weight>75</weight>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">padding: 10px;
+background-color: rgb(47, 49, 54);
+border: 1px solid #292B2F;
+border-radius: 5px; </string>
                         </property>
                         <property name="text">
                          <string/>
@@ -2710,7 +2731,7 @@ QPushButton:pressed {
  </resources>
  <connections/>
  <buttongroups>
-  <buttongroup name="menuButtons"/>
   <buttongroup name="controlPanelButtons"/>
+  <buttongroup name="menuButtons"/>
  </buttongroups>
 </ui>

@@ -174,10 +174,10 @@ class UiMainWindow(object):
             "}\n"
             "\n"
             "/*  CONTENT */\n"
-            "#content, #stackedWidget, #libraryPage, #addBookPage, #searchResultPage, #settingsPage {\n"
+            "#content, #stackedWidget, #libraryPage, #bookPage, #addBookPage, #infoPage, #settingsPage {\n"
             "    background-color: rgb(32, 34, 37);\n"
             "}\n"
-            "#libraryPageContent, #addBookPageContent, #noSearchResultPage, #settingsPageContent {\n"
+            "#libraryPageContent, #bookPageContent, #addBookPageContent, #infoPageContent, #settingsPageContent {\n"
             "    background-color: rgb(54, 57, 63);\n"
             "    border-top-left-radius: 15px;\n"
             "}\n"
@@ -796,7 +796,7 @@ class UiMainWindow(object):
         self.inProgressBooksContainer.setWidgetResizable(True)
         self.inProgressBooksContainer.setObjectName("inProgressBooksContainer")
         self.inProgressBooksLayout = QtWidgets.QWidget()
-        self.inProgressBooksLayout.setGeometry(QtCore.QRect(0, 0, 685, 469))
+        self.inProgressBooksLayout.setGeometry(QtCore.QRect(0, 0, 83, 324))
         self.inProgressBooksLayout.setObjectName("inProgressBooksLayout")
         self.verticalLayout_11 = QtWidgets.QVBoxLayout(self.inProgressBooksLayout)
         self.verticalLayout_11.setObjectName("verticalLayout_11")
@@ -830,7 +830,7 @@ class UiMainWindow(object):
         self.listenedBooksContainer.setWidgetResizable(True)
         self.listenedBooksContainer.setObjectName("listenedBooksContainer")
         self.listenedBooksLayout = QtWidgets.QWidget()
-        self.listenedBooksLayout.setGeometry(QtCore.QRect(0, 0, 677, 480))
+        self.listenedBooksLayout.setGeometry(QtCore.QRect(0, 0, 83, 480))
         self.listenedBooksLayout.setObjectName("listenedBooksLayout")
         self.verticalLayout_13 = QtWidgets.QVBoxLayout(self.listenedBooksLayout)
         self.verticalLayout_13.setObjectName("verticalLayout_13")
@@ -869,6 +869,18 @@ class UiMainWindow(object):
         self.horizontalLayout_19.addWidget(self.libraryBox)
         self.horizontalLayout_21.addWidget(self.libraryPageContent)
         self.stackedWidget.addWidget(self.libraryPage)
+        self.bookPage = QtWidgets.QWidget()
+        self.bookPage.setObjectName("bookPage")
+        self.horizontalLayout_26 = QtWidgets.QHBoxLayout(self.bookPage)
+        self.horizontalLayout_26.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_26.setSpacing(0)
+        self.horizontalLayout_26.setObjectName("horizontalLayout_26")
+        self.bookPageContent = QtWidgets.QFrame(self.bookPage)
+        self.bookPageContent.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.bookPageContent.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.bookPageContent.setObjectName("bookPageContent")
+        self.horizontalLayout_26.addWidget(self.bookPageContent)
+        self.stackedWidget.addWidget(self.bookPage)
         self.addBookPage = QtWidgets.QWidget()
         self.addBookPage.setObjectName("addBookPage")
         self.horizontalLayout_14 = QtWidgets.QHBoxLayout(self.addBookPage)
@@ -971,17 +983,17 @@ class UiMainWindow(object):
         self.horizontalLayout_23.addItem(spacerItem5)
         self.horizontalLayout_14.addWidget(self.addBookPageContent)
         self.stackedWidget.addWidget(self.addBookPage)
-        self.noSearchResultPage = QtWidgets.QWidget()
-        self.noSearchResultPage.setObjectName("noSearchResultPage")
-        self.horizontalLayout_24 = QtWidgets.QHBoxLayout(self.noSearchResultPage)
+        self.infoPage = QtWidgets.QWidget()
+        self.infoPage.setObjectName("infoPage")
+        self.horizontalLayout_24 = QtWidgets.QHBoxLayout(self.infoPage)
         self.horizontalLayout_24.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_24.setSpacing(0)
         self.horizontalLayout_24.setObjectName("horizontalLayout_24")
-        self.noSearchResultPageContent = QtWidgets.QFrame(self.noSearchResultPage)
-        self.noSearchResultPageContent.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.noSearchResultPageContent.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.noSearchResultPageContent.setObjectName("noSearchResultPageContent")
-        self.horizontalLayout_25 = QtWidgets.QHBoxLayout(self.noSearchResultPageContent)
+        self.infoPageContent = QtWidgets.QFrame(self.infoPage)
+        self.infoPageContent.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.infoPageContent.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.infoPageContent.setObjectName("infoPageContent")
+        self.horizontalLayout_25 = QtWidgets.QHBoxLayout(self.infoPageContent)
         self.horizontalLayout_25.setObjectName("horizontalLayout_25")
         spacerItem6 = QtWidgets.QSpacerItem(
             408, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum
@@ -993,18 +1005,32 @@ class UiMainWindow(object):
             20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
         )
         self.verticalLayout_18.addItem(spacerItem7)
-        self.noSearchResultReasonLabel = QtWidgets.QLabel(
-            self.noSearchResultPageContent
-        )
+        self.infoPageLabel = QtWidgets.QLabel(self.infoPageContent)
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(20)
         font.setBold(True)
         font.setWeight(75)
-        self.noSearchResultReasonLabel.setFont(font)
-        self.noSearchResultReasonLabel.setText("")
-        self.noSearchResultReasonLabel.setObjectName("noSearchResultReasonLabel")
-        self.verticalLayout_18.addWidget(self.noSearchResultReasonLabel)
+        self.infoPageLabel.setFont(font)
+        self.infoPageLabel.setText("")
+        self.infoPageLabel.setObjectName("infoPageLabel")
+        self.verticalLayout_18.addWidget(self.infoPageLabel)
+        self.infoPageBtn = QtWidgets.QPushButton(self.infoPageContent)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.infoPageBtn.setFont(font)
+        self.infoPageBtn.setStyleSheet(
+            "padding: 10px;\n"
+            "background-color: rgb(47, 49, 54);\n"
+            "border: 1px solid #292B2F;\n"
+            "border-radius: 5px; "
+        )
+        self.infoPageBtn.setText("")
+        self.infoPageBtn.setObjectName("infoPageBtn")
+        self.verticalLayout_18.addWidget(self.infoPageBtn)
         spacerItem8 = QtWidgets.QSpacerItem(
             20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
         )
@@ -1014,8 +1040,8 @@ class UiMainWindow(object):
             407, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum
         )
         self.horizontalLayout_25.addItem(spacerItem9)
-        self.horizontalLayout_24.addWidget(self.noSearchResultPageContent)
-        self.stackedWidget.addWidget(self.noSearchResultPage)
+        self.horizontalLayout_24.addWidget(self.infoPageContent)
+        self.stackedWidget.addWidget(self.infoPage)
         self.settingsPage = QtWidgets.QWidget()
         self.settingsPage.setObjectName("settingsPage")
         self.horizontalLayout_20 = QtWidgets.QHBoxLayout(self.settingsPage)
@@ -1267,7 +1293,7 @@ class UiMainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(2)
+        self.stackedWidget.setCurrentIndex(0)
         self.library.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
