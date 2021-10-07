@@ -4,4 +4,4 @@ __pycache__/
 build/
 books/
 database.sqlite
-drivers/chromedriver.exe
+ABPlayer/drivers/chromedriver.exe

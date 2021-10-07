@@ -11,4 +11,4 @@ for key, value in config.items():
 del config_file, config
 
 # os.environ['APP_DIR'] = os.path.join(os.environ["LOCALAPPDATA"], 'AudioBookPlayer')
-os.environ["APP_DIR"] = ""
+os.environ["APP_DIR"] = "../"
