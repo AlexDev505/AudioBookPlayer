@@ -12,7 +12,14 @@ import requests
 
 
 class StartAppWindow(QtWidgets.QMainWindow, UiStartApp):
+    """
+    Окно загрузки.
+    Обновляет драйвер.
+    """
+
     finished = QtCore.pyqtSignal(object)
+    # Уведомляет о завершении загрузки.
+    # :param: ty.Union[ty.Type[DriverError], None]
 
     def __init__(self):
         super(StartAppWindow, self).__init__()
@@ -29,12 +36,13 @@ class StartAppWindow(QtWidgets.QMainWindow, UiStartApp):
 
         self.setupSignals()
 
+        # Создаём новый поток для обновления
         self.thread = QtCore.QThread()
         self.worker = Worker()
         self.worker.moveToThread(self.thread)
         self.thread.started.connect(self.worker.run)
         self.worker.status.connect(self.workerChangeStatusHandler)
-        self.worker.finished.connect(lambda: self.finished.emit(True))
+        self.worker.finished.connect(lambda: self.finished.emit(None))
         self.thread.start()
 
     def setupSignals(self):
@@ -50,15 +58,23 @@ class StartAppWindow(QtWidgets.QMainWindow, UiStartApp):
 
     @QtCore.pyqtSlot(str, object)
     def workerChangeStatusHandler(
-        self, text: str, err: ty.Union[ty.Any, ty.Type[DriverError]]
-    ):
+        self, text: str, err: ty.Union[ty.Type[DriverError], None]
+    ) -> None:
+        """
+        Обрабатывает изменения статуса загрузки.
+        :param text: Сообщение.
+        :param err: Ошибка.
+        """
         self.setStatus(text)
 
         if isclass(err) and issubclass(err, DriverError):
-            self.finished.emit(err)
+            self.finished.emit(err)  # Оповещаем о конце загрузки
             self.thread.quit()
 
-    def setStatus(self, text: str):
+    def setStatus(self, text: str) -> None:
+        """
+        Изменяет текст статуса.
+        """
         self.status.setText(text)
         self.status.setAlignment(QtCore.Qt.AlignCenter)
 
@@ -67,19 +83,24 @@ class Worker(QtCore.QObject):
     status = QtCore.pyqtSignal(str, object)
     finished = QtCore.pyqtSignal(bool)
 
-    def run(self):
+    def run(self) -> None:
+        """
+        Процесс, обновления драйвера.
+        Выполняется в отдельном потоке.
+        """
         self.status.emit("Проверка наличия соединения", None)
         try:
             requests.get("https://www.google.com/", timeout=5)
-        except Exception:
+        except Exception:  # Нет интернет соединения
             self.status.emit("ConnectionError", ConnectionFail)
             return
 
-        self.status.emit("Проверка наличия браузера", None)
         try:
+            self.status.emit("Проверка наличия браузера", None)
             chromedriver.get_chrome_version()
+            self.status.emit("Проверка обновлений драйвера", None)
             chromedriver.install(signal=self.status)
-            self.finished.emit(True)
+            self.finished.emit(True)  # Оповещаем о конце загрузки
         except IndexError:
             self.status.emit("Chrome Not found", ChromeNotFound)
         except Exception as err:
