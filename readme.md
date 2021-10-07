@@ -1,4 +1,4 @@
-# AudioBook Player [![](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/AlexDev-py/AudioBookPlayer/blob/master/LICENSE)
+# AudioBook Player [![Python 3.8+](https://badgen.net/badge/Python/3.8+/blue)](https://www.python.org/downloads/) [![License: MIT](https://badgen.net/badge/License/MIT/blue)](https://github.com/AlexDev-py/AudioBookPlayer/blob/master/LICENSE) [![Platform: Windows](https://badgen.net/badge/Platform/windows/blue?icon=windows)]()
 
 
 Вы можете скачать исходники проекта с помощью git.
