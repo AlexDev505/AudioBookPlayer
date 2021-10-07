@@ -1,13 +1,19 @@
 from __future__ import annotations
 
+from inspect import isclass
+
 from PyQt5 import QtWidgets, QtGui, QtCore
 
+from drivers import chromedriver
+from drivers.exceptions import *
 from ui.start_app import UiStartApp
 from ui_functions import window_geometry
-from drivers import chromedriver
+import requests
 
 
 class StartAppWindow(QtWidgets.QMainWindow, UiStartApp):
+    finished = QtCore.pyqtSignal(object)
+
     def __init__(self):
         super(StartAppWindow, self).__init__()
         self.setupUi(self)
@@ -28,6 +34,7 @@ class StartAppWindow(QtWidgets.QMainWindow, UiStartApp):
         self.worker.moveToThread(self.thread)
         self.thread.started.connect(self.worker.run)
         self.worker.status.connect(self.workerChangeStatusHandler)
+        self.worker.finished.connect(lambda: self.finished.emit(True))
         self.thread.start()
 
     def setupSignals(self):
@@ -41,9 +48,15 @@ class StartAppWindow(QtWidgets.QMainWindow, UiStartApp):
             lambda e: window_geometry.dragZoneReleaseEvent(self, e)
         )
 
-    @QtCore.pyqtSlot(bool, str)
-    def workerChangeStatusHandler(self, ok: bool, text: str):
+    @QtCore.pyqtSlot(str, object)
+    def workerChangeStatusHandler(
+        self, text: str, err: ty.Union[ty.Any, ty.Type[DriverError]]
+    ):
         self.setStatus(text)
+
+        if isclass(err) and issubclass(err, DriverError):
+            self.finished.emit(err)
+            self.thread.quit()
 
     def setStatus(self, text: str):
         self.status.setText(text)
@@ -51,17 +64,26 @@ class StartAppWindow(QtWidgets.QMainWindow, UiStartApp):
 
 
 class Worker(QtCore.QObject):
-    status = QtCore.pyqtSignal(bool, str)
+    status = QtCore.pyqtSignal(str, object)
+    finished = QtCore.pyqtSignal(bool)
 
     def run(self):
-        self.status.emit(True, "Проверка наличия браузера")
+        self.status.emit("Проверка наличия соединения", None)
+        try:
+            requests.get("https://www.google.com/", timeout=5)
+        except Exception:
+            self.status.emit("ConnectionError", ConnectionFail)
+            return
 
+        self.status.emit("Проверка наличия браузера", None)
         try:
             chromedriver.get_chrome_version()
-        except IndexError:
-            self.status.emit(False, "")
-
-        try:
             chromedriver.install(signal=self.status)
-        except Exception as e:
-            self.status.emit(False, str(e))
+            self.finished.emit(True)
+        except IndexError:
+            self.status.emit("Chrome Not found", ChromeNotFound)
+        except Exception as err:
+            if str(err) == "Not available version":
+                self.status.emit(str(err), NotAvailableVersion)
+            elif str(err) == "Downloading fail":
+                self.status.emit(str(err), DownloadingFail)

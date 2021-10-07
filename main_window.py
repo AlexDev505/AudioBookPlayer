@@ -16,6 +16,7 @@ from ui_functions import (
 
 if ty.TYPE_CHECKING:
     from PyQt5.QtCore import QObject, QEvent
+    from PyQt5.QtGui import QMovie
 
 
 class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
@@ -80,6 +81,25 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
 
         # ADD BOOK PAGE
         self.searchNewBookBtn.clicked.connect(lambda e: add_book_page.search(self))
+
+    def openInfoPage(
+        self,
+        text: str = "",
+        movie: QMovie = None,
+        btn_text: str = "",
+        btn_function: ty.Callable = None,
+    ):
+        self.infoPageLabel.setMovie(movie)
+        self.infoPageLabel.setText(text)
+        if movie:
+            movie.start()
+        self.infoPageBtn.setText(btn_text)
+        if btn_function:
+            self.infoPageBtn.clicked.connect(lambda: btn_function())
+            self.infoPageBtn.show()
+        else:
+            self.infoPageBtn.hide()
+        self.stackedWidget.setCurrentWidget(self.infoPage)
 
     def eventFilter(self, obj: QObject, event: QEvent) -> bool:
         window_geometry.mouseEvent(self, event)

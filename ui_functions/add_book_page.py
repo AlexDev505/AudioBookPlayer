@@ -17,18 +17,19 @@ def search(main_window: MainWindow) -> None:
         main_window.searchNewBookLineEdit.setFocus()
         return
 
-    main_window.stackedWidget.setCurrentWidget(main_window.noSearchResultPage)
-    _start_loading_animation(main_window)
+    main_window.openInfoPage(movie=_loading_animation(main_window))
 
     if not any(url.startswith(drv().site_url) for drv in drivers):
-        main_window.noSearchResultReasonLabel.setMovie(None)
-        main_window.noSearchResultReasonLabel.setText(
-            "Драйвер для данного сайта не найден"
+        main_window.openInfoPage(
+            text="Драйвер для данного сайта не найден",
+            btn_text="Вернуться",
+            btn_function=lambda: main_window.stackedWidget.setCurrentWidget(
+                main_window.addBookPage
+            ),
         )
 
 
-def _start_loading_animation(main_window: MainWindow) -> None:
+def _loading_animation(main_window: MainWindow) -> QMovie:
     main_window.movie = QMovie(":/other/loading.gif")
     main_window.movie.setScaledSize(QSize(50, 50))
-    main_window.noSearchResultReasonLabel.setMovie(main_window.movie)
-    main_window.movie.start()
+    return main_window.movie

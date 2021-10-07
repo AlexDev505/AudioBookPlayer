@@ -10,11 +10,11 @@ from __future__ import annotations
 import os
 import re
 import subprocess
+import typing as ty
 import urllib.error
 import urllib.request
 import xml.etree.ElementTree as elemTree
 import zipfile
-import typing as ty
 from io import BytesIO
 
 if ty.TYPE_CHECKING:
@@ -74,26 +74,23 @@ def download_chromedriver(signal: pyqtSignal(bool, str) = None):
     chrome_version = get_chrome_version()
     chromedriver_version = get_matched_chromedriver_version(chrome_version)
     if not chromedriver_version:
-        raise FileNotFoundError("Не найден драйвер для вашей версии Chrome")
+        raise FileNotFoundError("Not available version")
     chromedriver_dir = os.path.abspath(os.path.dirname(__file__))
     chromedriver_filepath = os.path.join(chromedriver_dir, "chromedriver.exe")
     if not os.path.isfile(chromedriver_filepath) or not check_version(
         chromedriver_filepath, chromedriver_version
     ):
         if signal:
-            signal.emit(True, "Скачивание драйвера")
+            signal.emit("Скачивание драйвера", None)
         if not os.path.isdir(chromedriver_dir):
             os.mkdir(chromedriver_dir)
         url = (
             f"https://chromedriver.storage.googleapis.com/"
             f"{chromedriver_version}/chromedriver_win32.zip"
         )
-        try:
-            response = urllib.request.urlopen(url)
-            if response.getcode() != 200:
-                raise urllib.error.URLError("Not Found")
-        except urllib.error.URLError:
-            raise RuntimeError(f"Ошибка при скачивании драйвера {url}")
+        response = urllib.request.urlopen(url)
+        if response.getcode() != 200:
+            raise urllib.error.URLError("err")
         archive = BytesIO(response.read())
         with zipfile.ZipFile(archive) as zip_file:
             zip_file.extract("chromedriver.exe", chromedriver_dir)
@@ -109,8 +106,8 @@ def install(signal: pyqtSignal(bool, str) = None):
     """
     chromedriver_filepath = download_chromedriver(signal)
     if not chromedriver_filepath:
-        raise SystemError("Невозможно скачать драйвер")
-    signal.emit(True, "Установка драйвера")
+        raise SystemError("Downloading fail")
+    signal.emit("Установка драйвера", None)
     chromedriver_dir = os.path.dirname(chromedriver_filepath)
     if "PATH" not in os.environ:
         os.environ["PATH"] = chromedriver_dir
