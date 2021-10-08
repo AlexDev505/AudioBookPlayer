@@ -119,7 +119,8 @@ def install(signal: pyqtSignal(bool, str) = None) -> None:
     chromedriver_filepath = download_chromedriver(signal)
     if not chromedriver_filepath:
         raise SystemError("Downloading fail")
-    signal.emit("Установка драйвера", None)
+    if signal:
+        signal.emit("Установка драйвера", None)
     chromedriver_dir = os.path.dirname(chromedriver_filepath)
     if "PATH" not in os.environ:
         os.environ["PATH"] = chromedriver_dir
