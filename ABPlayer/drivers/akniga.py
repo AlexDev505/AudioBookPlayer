@@ -29,6 +29,18 @@ class AKnigaDriver(Driver):
 
         author = data["author"]
         name = data["titleonly"]
+        description = page.find_elements_by_css_selector(
+            "div.description__article-main"
+        )[0].text
+        duration = " ".join(
+            [
+                obj.text
+                for obj in page.find_elements_by_css_selector(
+                    "span[class*='book-duration-'] > span"
+                )
+            ]
+        ).strip()
+        reader = page.find_elements_by_css_selector("a.link__reader span")[0].text
         preview = data["preview"]
         items = BookItems()
         for item in data["items"]:
@@ -45,7 +57,17 @@ class AKnigaDriver(Driver):
 
         page.quit()
 
-        return Book(author, name, url, preview, self.driver_name, items)
+        return Book(
+            author=author,
+            name=name,
+            description=description,
+            reader=reader,
+            duration=duration,
+            url=url,
+            preview=preview,
+            driver=self.driver_name,
+            items=items,
+        )
 
     def get_book_series(self, url: str) -> ty.List[Book]:
         page = self.get_page(url)

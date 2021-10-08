@@ -50,6 +50,24 @@ class KnigaVUhe(Driver):
         author = page.find_elements_by_css_selector("span.book_title_elem > span > a")[
             0
         ].text.strip()
+        description = page.find_elements_by_css_selector("div.book_description")[
+            0
+        ].text.strip()
+        reader = ""
+        elements = page.find_elements_by_css_selector("span.book_title_elem")
+        for element in elements:
+            children = element.find_elements_by_css_selector("*")
+            if children:
+                if children[0].text == "читает":
+                    reader = children[1].text
+        duration = ""
+        elements = page.find_elements_by_css_selector("div.book_blue_block > div")
+        for element in elements:
+            info = element.find_elements_by_css_selector("span.book_info_label")
+            if info:
+                if info[0].text == "Время звучания:":
+                    duration = element.text.replace("Время звучания:", "").strip()
+
         preview = page.find_elements_by_css_selector("div.book_cover > img")[
             0
         ].get_attribute("src")
@@ -67,7 +85,17 @@ class KnigaVUhe(Driver):
 
         page.quit()
 
-        return Book(author, name, url, preview, self.driver_name, items)
+        return Book(
+            author=author,
+            name=name,
+            description=description,
+            reader=reader,
+            duration=duration,
+            url=url,
+            preview=preview,
+            driver=self.driver_name,
+            items=items,
+        )
 
     @property
     def site_url(self):

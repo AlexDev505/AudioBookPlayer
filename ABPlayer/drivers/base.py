@@ -72,9 +72,7 @@ class Driver(ABC):
         """
         :returns: Драйвер, для работы с браузером.
         """
-        return self.driver(
-            executable_path=self.driver_path, options=self.driver_options
-        )
+        return self.driver(options=self.driver_options)
 
     def get_page(self, url: str):
         """
@@ -183,13 +181,6 @@ class Driver(ABC):
         :returns: Нужный драйвер браузера.
         """
         return webdriver.Chrome
-
-    @property
-    def driver_path(self) -> str:
-        """
-        :returns: Путь к драйверу браузера.
-        """
-        return r"drivers\chromedriver"
 
     @property
     def driver_options(
