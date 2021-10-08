@@ -2,9 +2,10 @@ from __future__ import annotations
 
 import typing as ty
 from dataclasses import dataclass, field
+from ast import literal_eval
 
 from sqlite3_api import Table
-from sqlite3_api.field_types import List
+from sqlite3_api.field_types import List, FieldType
 
 from database.tools import replace_quotes
 
@@ -37,17 +38,51 @@ class BookItems(List):
         super(BookItems, self).__init__(BookItem(**item) for item in items)
 
 
+class Status(FieldType):
+    """
+    Статус книги.
+    """
+
+    new = "new"  # Новая книга
+    started = "started"  # Начал слушать
+    finished = "finished"  # Закончил слушать
+
+    @classmethod
+    def converter(cls, obj: bytes) -> str:
+        return obj.decode("utf-8")
+
+
+@dataclass
+class StopFlag(FieldType):
+    """
+    Отметка, на которой пользователь остановил прослушивание.
+    """
+
+    item: int = 0  # Глава
+    time: int = 0  # Секунда
+
+    def __repr__(self):
+        return str(vars(self))
+
+    @classmethod
+    def converter(cls, obj: bytes) -> StopFlag:
+        return cls(**literal_eval(obj.decode("utf-8")))
+
+
 @dataclass
 class Book:
     """
     Класс, описывающий, как книги, хранятся в базе данных.
     """
 
-    author: str = None
-    name: str = None
-    url: str = None  # Ссылка на книгу
-    preview: str = None  # Ссылка на превью(обложку) книги
-    driver: str = None  # Драйвер, с которым работает сайт
+    author: str = ""
+    name: str = ""
+    description: str = ""  # Описание
+    reader: str = ""  # Чтец
+    duration: str = ""  # Длительность
+    url: str = ""  # Ссылка на книгу
+    preview: str = ""  # Ссылка на превью(обложку) книги
+    driver: str = ""  # Драйвер, с которым работает сайт
     items: BookItems[BookItem] = field(default_factory=BookItems)  # Список глав
 
     def __post_init__(self):
@@ -59,3 +94,6 @@ class Books(Table, Book):
     """
     Класс, для взаимодействия с базой данных.
     """
+
+    status: Status = Status.new
+    stop_flag: StopFlag = StopFlag()

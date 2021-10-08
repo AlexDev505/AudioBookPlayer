@@ -11,9 +11,16 @@
     <file>menu.svg</file>
     <file>search.svg</file>
     <file>settings.svg</file>
-    <file>star.svg</file>
   </qresource>
   <qresource prefix="other">
+    <file>double_angle_left.svg</file>
+    <file>double_angle_right.svg</file>
+    <file>check.svg</file>
+    <file>download.svg</file>
+    <file>hdd.svg</file>
+    <file>star.svg</file>
+    <file>star_fill.svg</file>
+    <file>trash.svg</file>
     <file>loading_app.gif</file>
     <file>loading.gif</file>
     <file>resize_bottom_right.svg</file>

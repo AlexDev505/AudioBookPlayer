@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class UiMainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1127, 670)
+        MainWindow.resize(1191, 746)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setStyleSheet(
             "QWidget {\n"
@@ -190,6 +190,22 @@ class UiMainWindow(object):
             "    background-color: rgb(47, 49, 54);\n"
             "    border-top-left-radius: 15px;\n"
             "    text-align: left;\n"
+            "}\n"
+            "/* BOOK PAGE CONTENT */\n"
+            "#playerContent, #playerPage, #needDownloadingPage, #downloadingPage {\n"
+            "    background-color: rgb(54, 57, 63);\n"
+            "}\n"
+            "#needDownloadingPage, #downloadingPage{\n"
+            "    border: 2px solid rgb(64, 68, 75);\n"
+            "    border-radius: 3px;\n"
+            "}\n"
+            "#bookPageContent #bookItems {\n"
+            "    background-color: rgb(54, 57, 63);\n"
+            "    border: 2px solid rgb(64, 68, 75);\n"
+            "    border-radius: 3px;\n"
+            "}\n"
+            "#bookPageContent #bookItemsLayout {\n"
+            "    background-color: rgb(54, 57, 63);\n"
             "}\n"
             "\n"
             "/* LIBRARY FILTERS PANEL */\n"
@@ -796,7 +812,7 @@ class UiMainWindow(object):
         self.inProgressBooksContainer.setWidgetResizable(True)
         self.inProgressBooksContainer.setObjectName("inProgressBooksContainer")
         self.inProgressBooksLayout = QtWidgets.QWidget()
-        self.inProgressBooksLayout.setGeometry(QtCore.QRect(0, 0, 83, 324))
+        self.inProgressBooksLayout.setGeometry(QtCore.QRect(0, 0, 685, 469))
         self.inProgressBooksLayout.setObjectName("inProgressBooksLayout")
         self.verticalLayout_11 = QtWidgets.QVBoxLayout(self.inProgressBooksLayout)
         self.verticalLayout_11.setObjectName("verticalLayout_11")
@@ -876,9 +892,408 @@ class UiMainWindow(object):
         self.horizontalLayout_26.setSpacing(0)
         self.horizontalLayout_26.setObjectName("horizontalLayout_26")
         self.bookPageContent = QtWidgets.QFrame(self.bookPage)
+        self.bookPageContent.setStyleSheet("")
         self.bookPageContent.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.bookPageContent.setFrameShadow(QtWidgets.QFrame.Raised)
         self.bookPageContent.setObjectName("bookPageContent")
+        self.verticalLayout_22 = QtWidgets.QVBoxLayout(self.bookPageContent)
+        self.verticalLayout_22.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_22.setSpacing(0)
+        self.verticalLayout_22.setObjectName("verticalLayout_22")
+        self.horizontalLayout_29 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_29.setObjectName("horizontalLayout_29")
+        self.titleFrame = QtWidgets.QFrame(self.bookPageContent)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Preferred
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.titleFrame.sizePolicy().hasHeightForWidth())
+        self.titleFrame.setSizePolicy(sizePolicy)
+        self.titleFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.titleFrame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.titleFrame.setObjectName("titleFrame")
+        self.verticalLayout_20 = QtWidgets.QVBoxLayout(self.titleFrame)
+        self.verticalLayout_20.setObjectName("verticalLayout_20")
+        self.titleLabel = QtWidgets.QLabel(self.titleFrame)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(18)
+        font.setBold(True)
+        font.setWeight(75)
+        self.titleLabel.setFont(font)
+        self.titleLabel.setObjectName("titleLabel")
+        self.verticalLayout_20.addWidget(self.titleLabel)
+        self.progressFrame = QtWidgets.QFrame(self.titleFrame)
+        self.progressFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.progressFrame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.progressFrame.setObjectName("progressFrame")
+        self.horizontalLayout_27 = QtWidgets.QHBoxLayout(self.progressFrame)
+        self.horizontalLayout_27.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_27.setSpacing(4)
+        self.horizontalLayout_27.setObjectName("horizontalLayout_27")
+        self.progressLabel = QtWidgets.QLabel(self.progressFrame)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(10)
+        self.progressLabel.setFont(font)
+        self.progressLabel.setObjectName("progressLabel")
+        self.horizontalLayout_27.addWidget(self.progressLabel)
+        self.progressToolsBtn = QtWidgets.QPushButton(self.progressFrame)
+        self.progressToolsBtn.setMinimumSize(QtCore.QSize(20, 20))
+        self.progressToolsBtn.setMaximumSize(QtCore.QSize(20, 20))
+        self.progressToolsBtn.setStyleSheet("margin-bottom: -4px")
+        self.progressToolsBtn.setText("")
+        icon11 = QtGui.QIcon()
+        icon11.addPixmap(
+            QtGui.QPixmap(":/other/check.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
+        )
+        self.progressToolsBtn.setIcon(icon11)
+        self.progressToolsBtn.setIconSize(QtCore.QSize(12, 12))
+        self.progressToolsBtn.setObjectName("progressToolsBtn")
+        self.horizontalLayout_27.addWidget(self.progressToolsBtn)
+        spacerItem2 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
+        self.horizontalLayout_27.addItem(spacerItem2)
+        self.verticalLayout_20.addWidget(self.progressFrame)
+        self.horizontalLayout_29.addWidget(self.titleFrame)
+        spacerItem3 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
+        self.horizontalLayout_29.addItem(spacerItem3)
+        self.bookPageBtnsFrame = QtWidgets.QFrame(self.bookPageContent)
+        self.bookPageBtnsFrame.setStyleSheet(
+            "QPushButton:hover {\n"
+            "    background-color: rgb(50, 53, 59);\n"
+            "}\n"
+            "QPushButton:pressed {\n"
+            "    margin-bottom: -1px;\n"
+            "}"
+        )
+        self.bookPageBtnsFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.bookPageBtnsFrame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.bookPageBtnsFrame.setObjectName("bookPageBtnsFrame")
+        self.horizontalLayout_28 = QtWidgets.QHBoxLayout(self.bookPageBtnsFrame)
+        self.horizontalLayout_28.setObjectName("horizontalLayout_28")
+        self.toggleFavoriteBtn = QtWidgets.QPushButton(self.bookPageBtnsFrame)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.toggleFavoriteBtn.sizePolicy().hasHeightForWidth()
+        )
+        self.toggleFavoriteBtn.setSizePolicy(sizePolicy)
+        self.toggleFavoriteBtn.setMinimumSize(QtCore.QSize(45, 45))
+        self.toggleFavoriteBtn.setMaximumSize(QtCore.QSize(45, 45))
+        self.toggleFavoriteBtn.setText("")
+        icon12 = QtGui.QIcon()
+        icon12.addPixmap(
+            QtGui.QPixmap(":/other/star.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
+        )
+        self.toggleFavoriteBtn.setIcon(icon12)
+        self.toggleFavoriteBtn.setIconSize(QtCore.QSize(40, 40))
+        self.toggleFavoriteBtn.setObjectName("toggleFavoriteBtn")
+        self.horizontalLayout_28.addWidget(self.toggleFavoriteBtn)
+        self.saveBtn = QtWidgets.QPushButton(self.bookPageBtnsFrame)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.saveBtn.sizePolicy().hasHeightForWidth())
+        self.saveBtn.setSizePolicy(sizePolicy)
+        self.saveBtn.setMinimumSize(QtCore.QSize(45, 45))
+        self.saveBtn.setMaximumSize(QtCore.QSize(45, 45))
+        self.saveBtn.setText("")
+        icon13 = QtGui.QIcon()
+        icon13.addPixmap(
+            QtGui.QPixmap(":/other/download.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
+        )
+        self.saveBtn.setIcon(icon13)
+        self.saveBtn.setIconSize(QtCore.QSize(40, 40))
+        self.saveBtn.setObjectName("saveBtn")
+        self.horizontalLayout_28.addWidget(self.saveBtn)
+        self.deleteBtn = QtWidgets.QPushButton(self.bookPageBtnsFrame)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.deleteBtn.sizePolicy().hasHeightForWidth())
+        self.deleteBtn.setSizePolicy(sizePolicy)
+        self.deleteBtn.setMinimumSize(QtCore.QSize(45, 45))
+        self.deleteBtn.setMaximumSize(QtCore.QSize(45, 45))
+        self.deleteBtn.setText("")
+        icon14 = QtGui.QIcon()
+        icon14.addPixmap(
+            QtGui.QPixmap(":/other/trash.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
+        )
+        self.deleteBtn.setIcon(icon14)
+        self.deleteBtn.setIconSize(QtCore.QSize(40, 40))
+        self.deleteBtn.setObjectName("deleteBtn")
+        self.horizontalLayout_28.addWidget(self.deleteBtn)
+        self.changeDriverBtn_2 = QtWidgets.QPushButton(self.bookPageBtnsFrame)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.changeDriverBtn_2.sizePolicy().hasHeightForWidth()
+        )
+        self.changeDriverBtn_2.setSizePolicy(sizePolicy)
+        self.changeDriverBtn_2.setMinimumSize(QtCore.QSize(45, 45))
+        self.changeDriverBtn_2.setMaximumSize(QtCore.QSize(45, 45))
+        self.changeDriverBtn_2.setText("")
+        icon15 = QtGui.QIcon()
+        icon15.addPixmap(
+            QtGui.QPixmap(":/other/hdd.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
+        )
+        self.changeDriverBtn_2.setIcon(icon15)
+        self.changeDriverBtn_2.setIconSize(QtCore.QSize(40, 40))
+        self.changeDriverBtn_2.setObjectName("changeDriverBtn_2")
+        self.horizontalLayout_28.addWidget(self.changeDriverBtn_2)
+        self.horizontalLayout_29.addWidget(self.bookPageBtnsFrame)
+        self.verticalLayout_22.addLayout(self.horizontalLayout_29)
+        self.horizontalLayout_31 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_31.setContentsMargins(10, 10, 30, 10)
+        self.horizontalLayout_31.setSpacing(30)
+        self.horizontalLayout_31.setObjectName("horizontalLayout_31")
+        self.bookCoverLg = QtWidgets.QLabel(self.bookPageContent)
+        self.bookCoverLg.setMinimumSize(QtCore.QSize(230, 230))
+        self.bookCoverLg.setMaximumSize(QtCore.QSize(230, 230))
+        self.bookCoverLg.setStyleSheet("background-color: rgb(130, 130, 130);")
+        self.bookCoverLg.setText("")
+        self.bookCoverLg.setObjectName("bookCoverLg")
+        self.horizontalLayout_31.addWidget(self.bookCoverLg)
+        self.playerContent = QtWidgets.QStackedWidget(self.bookPageContent)
+        self.playerContent.setMinimumSize(QtCore.QSize(230, 230))
+        self.playerContent.setMaximumSize(QtCore.QSize(16777215, 230))
+        self.playerContent.setObjectName("playerContent")
+        self.playerPage = QtWidgets.QWidget()
+        self.playerPage.setObjectName("playerPage")
+        self.verticalLayout_21 = QtWidgets.QVBoxLayout(self.playerPage)
+        self.verticalLayout_21.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_21.setSpacing(5)
+        self.verticalLayout_21.setObjectName("verticalLayout_21")
+        self.playerBtns = QtWidgets.QFrame(self.playerPage)
+        self.playerBtns.setStyleSheet(
+            "QPushButton {\n"
+            "    background-color: rgb(64, 68, 75);\n"
+            "    padding: 5px 3px 5px 3px;\n"
+            "}\n"
+            "QPushButton:hover {\n"
+            "    background-color: rgb(58, 62, 68);\n"
+            "}\n"
+            "QPushButton:pressed {\n"
+            "    margin-bottom: -1px;\n"
+            "}"
+        )
+        self.playerBtns.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.playerBtns.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.playerBtns.setObjectName("playerBtns")
+        self.horizontalLayout_30 = QtWidgets.QHBoxLayout(self.playerBtns)
+        self.horizontalLayout_30.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_30.setObjectName("horizontalLayout_30")
+        self.pastBtn = QtWidgets.QPushButton(self.playerBtns)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Fixed
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pastBtn.sizePolicy().hasHeightForWidth())
+        self.pastBtn.setSizePolicy(sizePolicy)
+        self.pastBtn.setMinimumSize(QtCore.QSize(0, 45))
+        self.pastBtn.setMaximumSize(QtCore.QSize(16777215, 45))
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.pastBtn.setFont(font)
+        icon16 = QtGui.QIcon()
+        icon16.addPixmap(
+            QtGui.QPixmap(":/other/double_angle_left.svg"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
+        self.pastBtn.setIcon(icon16)
+        self.pastBtn.setIconSize(QtCore.QSize(30, 30))
+        self.pastBtn.setObjectName("pastBtn")
+        self.horizontalLayout_30.addWidget(self.pastBtn)
+        self.playPauseBntLg = QtWidgets.QPushButton(self.playerBtns)
+        self.playPauseBntLg.setMinimumSize(QtCore.QSize(0, 45))
+        self.playPauseBntLg.setMaximumSize(QtCore.QSize(16777215, 45))
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.playPauseBntLg.setFont(font)
+        self.playPauseBntLg.setText("")
+        icon17 = QtGui.QIcon()
+        icon17.addPixmap(
+            QtGui.QPixmap(":/other/play.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
+        )
+        self.playPauseBntLg.setIcon(icon17)
+        self.playPauseBntLg.setIconSize(QtCore.QSize(30, 30))
+        self.playPauseBntLg.setObjectName("playPauseBntLg")
+        self.horizontalLayout_30.addWidget(self.playPauseBntLg)
+        self.futureBtn = QtWidgets.QPushButton(self.playerBtns)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Fixed
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.futureBtn.sizePolicy().hasHeightForWidth())
+        self.futureBtn.setSizePolicy(sizePolicy)
+        self.futureBtn.setMinimumSize(QtCore.QSize(0, 45))
+        self.futureBtn.setMaximumSize(QtCore.QSize(16777215, 45))
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.futureBtn.setFont(font)
+        self.futureBtn.setLayoutDirection(QtCore.Qt.RightToLeft)
+        icon18 = QtGui.QIcon()
+        icon18.addPixmap(
+            QtGui.QPixmap(":/other/double_angle_right.svg"),
+            QtGui.QIcon.Normal,
+            QtGui.QIcon.Off,
+        )
+        self.futureBtn.setIcon(icon18)
+        self.futureBtn.setIconSize(QtCore.QSize(30, 30))
+        self.futureBtn.setObjectName("futureBtn")
+        self.horizontalLayout_30.addWidget(self.futureBtn)
+        self.verticalLayout_21.addWidget(self.playerBtns)
+        self.bookItems = QtWidgets.QScrollArea(self.playerPage)
+        self.bookItems.setWidgetResizable(True)
+        self.bookItems.setObjectName("bookItems")
+        self.bookItemsLayout = QtWidgets.QWidget()
+        self.bookItemsLayout.setGeometry(QtCore.QRect(0, 0, 687, 176))
+        self.bookItemsLayout.setObjectName("bookItemsLayout")
+        self.bookItems.setWidget(self.bookItemsLayout)
+        self.verticalLayout_21.addWidget(self.bookItems)
+        self.playerContent.addWidget(self.playerPage)
+        self.needDownloadingPage = QtWidgets.QWidget()
+        self.needDownloadingPage.setObjectName("needDownloadingPage")
+        self.horizontalLayout_33 = QtWidgets.QHBoxLayout(self.needDownloadingPage)
+        self.horizontalLayout_33.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_33.setSpacing(0)
+        self.horizontalLayout_33.setObjectName("horizontalLayout_33")
+        spacerItem4 = QtWidgets.QSpacerItem(
+            138, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
+        self.horizontalLayout_33.addItem(spacerItem4)
+        self.verticalLayout_23 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_23.setSpacing(10)
+        self.verticalLayout_23.setObjectName("verticalLayout_23")
+        spacerItem5 = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
+        self.verticalLayout_23.addItem(spacerItem5)
+        self.label_6 = QtWidgets.QLabel(self.needDownloadingPage)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_6.setFont(font)
+        self.label_6.setObjectName("label_6")
+        self.verticalLayout_23.addWidget(self.label_6)
+        self.horizontalLayout_32 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_32.setObjectName("horizontalLayout_32")
+        spacerItem6 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
+        self.horizontalLayout_32.addItem(spacerItem6)
+        self.downloadBookBtn = QtWidgets.QPushButton(self.needDownloadingPage)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(9)
+        font.setBold(True)
+        font.setWeight(75)
+        self.downloadBookBtn.setFont(font)
+        self.downloadBookBtn.setStyleSheet(
+            "QPushButton {\n"
+            "    padding: 10px;\n"
+            "    background-color: rgb(47, 49, 54);\n"
+            "    border: 1px solid #292B2F;\n"
+            "    border-radius: 5px; \n"
+            "}\n"
+            "QPushButton:hover {\n"
+            "    border-color: rgb(47, 49, 54);\n"
+            "}\n"
+            "QPushButton:pressed {\n"
+            "    margin-bottom: -1px;\n"
+            "}"
+        )
+        self.downloadBookBtn.setObjectName("downloadBookBtn")
+        self.horizontalLayout_32.addWidget(self.downloadBookBtn)
+        spacerItem7 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
+        self.horizontalLayout_32.addItem(spacerItem7)
+        self.verticalLayout_23.addLayout(self.horizontalLayout_32)
+        spacerItem8 = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
+        self.verticalLayout_23.addItem(spacerItem8)
+        self.horizontalLayout_33.addLayout(self.verticalLayout_23)
+        spacerItem9 = QtWidgets.QSpacerItem(
+            137, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
+        self.horizontalLayout_33.addItem(spacerItem9)
+        self.playerContent.addWidget(self.needDownloadingPage)
+        self.downloadingPage = QtWidgets.QWidget()
+        self.downloadingPage.setObjectName("downloadingPage")
+        self.horizontalLayout_34 = QtWidgets.QHBoxLayout(self.downloadingPage)
+        self.horizontalLayout_34.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_34.setObjectName("horizontalLayout_34")
+        spacerItem10 = QtWidgets.QSpacerItem(
+            194, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum
+        )
+        self.horizontalLayout_34.addItem(spacerItem10)
+        self.verticalLayout_24 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_24.setObjectName("verticalLayout_24")
+        spacerItem11 = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
+        self.verticalLayout_24.addItem(spacerItem11)
+        self.label_7 = QtWidgets.QLabel(self.downloadingPage)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_7.setFont(font)
+        self.label_7.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_7.setObjectName("label_7")
+        self.verticalLayout_24.addWidget(self.label_7)
+        self.downloadingProgressBarLg = QtWidgets.QProgressBar(self.downloadingPage)
+        self.downloadingProgressBarLg.setProperty("value", 24)
+        self.downloadingProgressBarLg.setObjectName("downloadingProgressBarLg")
+        self.verticalLayout_24.addWidget(self.downloadingProgressBarLg)
+        spacerItem12 = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
+        self.verticalLayout_24.addItem(spacerItem12)
+        self.horizontalLayout_34.addLayout(self.verticalLayout_24)
+        spacerItem13 = QtWidgets.QSpacerItem(
+            193, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum
+        )
+        self.horizontalLayout_34.addItem(spacerItem13)
+        self.playerContent.addWidget(self.downloadingPage)
+        self.horizontalLayout_31.addWidget(self.playerContent)
+        self.verticalLayout_22.addLayout(self.horizontalLayout_31)
+        spacerItem14 = QtWidgets.QSpacerItem(
+            20, 281, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
+        self.verticalLayout_22.addItem(spacerItem14)
         self.horizontalLayout_26.addWidget(self.bookPageContent)
         self.stackedWidget.addWidget(self.bookPage)
         self.addBookPage = QtWidgets.QWidget()
@@ -893,10 +1308,10 @@ class UiMainWindow(object):
         self.addBookPageContent.setObjectName("addBookPageContent")
         self.horizontalLayout_23 = QtWidgets.QHBoxLayout(self.addBookPageContent)
         self.horizontalLayout_23.setObjectName("horizontalLayout_23")
-        spacerItem2 = QtWidgets.QSpacerItem(
+        spacerItem15 = QtWidgets.QSpacerItem(
             268, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum
         )
-        self.horizontalLayout_23.addItem(spacerItem2)
+        self.horizontalLayout_23.addItem(spacerItem15)
         self.searchForm = QtWidgets.QFrame(self.addBookPageContent)
         self.searchForm.setMinimumSize(QtCore.QSize(350, 0))
         self.searchForm.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -904,10 +1319,10 @@ class UiMainWindow(object):
         self.searchForm.setObjectName("searchForm")
         self.verticalLayout_17 = QtWidgets.QVBoxLayout(self.searchForm)
         self.verticalLayout_17.setObjectName("verticalLayout_17")
-        spacerItem3 = QtWidgets.QSpacerItem(
+        spacerItem16 = QtWidgets.QSpacerItem(
             20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
         )
-        self.verticalLayout_17.addItem(spacerItem3)
+        self.verticalLayout_17.addItem(spacerItem16)
         self.label_4 = QtWidgets.QLabel(self.searchForm)
         font = QtGui.QFont()
         font.setFamily("Arial")
@@ -972,15 +1387,15 @@ class UiMainWindow(object):
         self.searchNewBookBtn.setObjectName("searchNewBookBtn")
         self.horizontalLayout_22.addWidget(self.searchNewBookBtn)
         self.verticalLayout_17.addWidget(self.searchField_2)
-        spacerItem4 = QtWidgets.QSpacerItem(
+        spacerItem17 = QtWidgets.QSpacerItem(
             20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
         )
-        self.verticalLayout_17.addItem(spacerItem4)
+        self.verticalLayout_17.addItem(spacerItem17)
         self.horizontalLayout_23.addWidget(self.searchForm)
-        spacerItem5 = QtWidgets.QSpacerItem(
+        spacerItem18 = QtWidgets.QSpacerItem(
             267, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum
         )
-        self.horizontalLayout_23.addItem(spacerItem5)
+        self.horizontalLayout_23.addItem(spacerItem18)
         self.horizontalLayout_14.addWidget(self.addBookPageContent)
         self.stackedWidget.addWidget(self.addBookPage)
         self.infoPage = QtWidgets.QWidget()
@@ -995,16 +1410,16 @@ class UiMainWindow(object):
         self.infoPageContent.setObjectName("infoPageContent")
         self.horizontalLayout_25 = QtWidgets.QHBoxLayout(self.infoPageContent)
         self.horizontalLayout_25.setObjectName("horizontalLayout_25")
-        spacerItem6 = QtWidgets.QSpacerItem(
+        spacerItem19 = QtWidgets.QSpacerItem(
             408, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum
         )
-        self.horizontalLayout_25.addItem(spacerItem6)
+        self.horizontalLayout_25.addItem(spacerItem19)
         self.verticalLayout_18 = QtWidgets.QVBoxLayout()
         self.verticalLayout_18.setObjectName("verticalLayout_18")
-        spacerItem7 = QtWidgets.QSpacerItem(
+        spacerItem20 = QtWidgets.QSpacerItem(
             20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
         )
-        self.verticalLayout_18.addItem(spacerItem7)
+        self.verticalLayout_18.addItem(spacerItem20)
         self.infoPageLabel = QtWidgets.QLabel(self.infoPageContent)
         font = QtGui.QFont()
         font.setFamily("Arial")
@@ -1031,15 +1446,15 @@ class UiMainWindow(object):
         self.infoPageBtn.setText("")
         self.infoPageBtn.setObjectName("infoPageBtn")
         self.verticalLayout_18.addWidget(self.infoPageBtn)
-        spacerItem8 = QtWidgets.QSpacerItem(
+        spacerItem21 = QtWidgets.QSpacerItem(
             20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
         )
-        self.verticalLayout_18.addItem(spacerItem8)
+        self.verticalLayout_18.addItem(spacerItem21)
         self.horizontalLayout_25.addLayout(self.verticalLayout_18)
-        spacerItem9 = QtWidgets.QSpacerItem(
+        spacerItem22 = QtWidgets.QSpacerItem(
             407, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum
         )
-        self.horizontalLayout_25.addItem(spacerItem9)
+        self.horizontalLayout_25.addItem(spacerItem22)
         self.horizontalLayout_24.addWidget(self.infoPageContent)
         self.stackedWidget.addWidget(self.infoPage)
         self.settingsPage = QtWidgets.QWidget()
@@ -1111,10 +1526,10 @@ class UiMainWindow(object):
         self.bookAuthorLabel.setFont(font)
         self.bookAuthorLabel.setObjectName("bookAuthorLabel")
         self.verticalLayout_6.addWidget(self.bookAuthorLabel)
-        spacerItem10 = QtWidgets.QSpacerItem(
+        spacerItem23 = QtWidgets.QSpacerItem(
             20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
         )
-        self.verticalLayout_6.addItem(spacerItem10)
+        self.verticalLayout_6.addItem(spacerItem23)
         self.horizontalLayout_6.addWidget(self.bookTitle)
         self.horizontalLayout_7.addWidget(self.bookPreview)
         self.playPauseBtn = QtWidgets.QPushButton(self.controlPanel)
@@ -1126,21 +1541,17 @@ class UiMainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.playPauseBtn.setFont(font)
-        icon11 = QtGui.QIcon()
-        icon11.addPixmap(
-            QtGui.QPixmap(":/other/play.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
-        )
-        self.playPauseBtn.setIcon(icon11)
+        self.playPauseBtn.setIcon(icon17)
         self.playPauseBtn.setIconSize(QtCore.QSize(40, 40))
         self.playPauseBtn.setObjectName("playPauseBtn")
         self.controlPanelButtons = QtWidgets.QButtonGroup(MainWindow)
         self.controlPanelButtons.setObjectName("controlPanelButtons")
         self.controlPanelButtons.addButton(self.playPauseBtn)
         self.horizontalLayout_7.addWidget(self.playPauseBtn)
-        spacerItem11 = QtWidgets.QSpacerItem(
+        spacerItem24 = QtWidgets.QSpacerItem(
             674, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
         )
-        self.horizontalLayout_7.addItem(spacerItem11)
+        self.horizontalLayout_7.addItem(spacerItem24)
         self.toolsFrame = QtWidgets.QFrame(self.controlPanel)
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred
@@ -1168,11 +1579,11 @@ class UiMainWindow(object):
         self.speedBtn.setMinimumSize(QtCore.QSize(40, 40))
         self.speedBtn.setMaximumSize(QtCore.QSize(40, 40))
         self.speedBtn.setText("")
-        icon12 = QtGui.QIcon()
-        icon12.addPixmap(
+        icon19 = QtGui.QIcon()
+        icon19.addPixmap(
             QtGui.QPixmap(":/other/watch.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.speedBtn.setIcon(icon12)
+        self.speedBtn.setIcon(icon19)
         self.speedBtn.setIconSize(QtCore.QSize(28, 28))
         self.speedBtn.setObjectName("speedBtn")
         self.controlPanelButtons.addButton(self.speedBtn)
@@ -1214,13 +1625,13 @@ class UiMainWindow(object):
         self.volumeBtn.setMinimumSize(QtCore.QSize(40, 40))
         self.volumeBtn.setMaximumSize(QtCore.QSize(40, 40))
         self.volumeBtn.setText("")
-        icon13 = QtGui.QIcon()
-        icon13.addPixmap(
+        icon20 = QtGui.QIcon()
+        icon20.addPixmap(
             QtGui.QPixmap(":/volume/medium_volume.svg"),
             QtGui.QIcon.Normal,
             QtGui.QIcon.Off,
         )
-        self.volumeBtn.setIcon(icon13)
+        self.volumeBtn.setIcon(icon20)
         self.volumeBtn.setIconSize(QtCore.QSize(28, 28))
         self.volumeBtn.setObjectName("volumeBtn")
         self.controlPanelButtons.addButton(self.volumeBtn)
@@ -1257,11 +1668,11 @@ class UiMainWindow(object):
         font.setWeight(75)
         self.overlayBtn.setFont(font)
         self.overlayBtn.setText("")
-        icon14 = QtGui.QIcon()
-        icon14.addPixmap(
+        icon21 = QtGui.QIcon()
+        icon21.addPixmap(
             QtGui.QPixmap(":/other/overlay.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.overlayBtn.setIcon(icon14)
+        self.overlayBtn.setIcon(icon21)
         self.overlayBtn.setIconSize(QtCore.QSize(28, 28))
         self.overlayBtn.setObjectName("overlayBtn")
         self.controlPanelButtons.addButton(self.overlayBtn)
@@ -1275,10 +1686,10 @@ class UiMainWindow(object):
         self.verticalLayout_19.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_19.setSpacing(0)
         self.verticalLayout_19.setObjectName("verticalLayout_19")
-        spacerItem12 = QtWidgets.QSpacerItem(
+        spacerItem25 = QtWidgets.QSpacerItem(
             20, 32, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
         )
-        self.verticalLayout_19.addItem(spacerItem12)
+        self.verticalLayout_19.addItem(spacerItem25)
         self.label_5 = QtWidgets.QLabel(self.resizeWidgetFrame)
         self.label_5.setMinimumSize(QtCore.QSize(30, 30))
         self.label_5.setMaximumSize(QtCore.QSize(30, 30))
@@ -1293,8 +1704,9 @@ class UiMainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(0)
-        self.library.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(1)
+        self.library.setCurrentIndex(1)
+        self.playerContent.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -1327,6 +1739,26 @@ class UiMainWindow(object):
             self.library.indexOf(self.listenedBooksPage),
             _translate("MainWindow", "Прослушанные"),
         )
+        self.titleLabel.setText(_translate("MainWindow", "Автор - Название"))
+        self.progressLabel.setText(_translate("MainWindow", "0% прослушано"))
+        self.progressToolsBtn.setToolTip(
+            _translate("MainWindow", "Отметить как прослушанное")
+        )
+        self.toggleFavoriteBtn.setToolTip(
+            _translate("MainWindow", "Добавить в избранное")
+        )
+        self.saveBtn.setToolTip(_translate("MainWindow", "Скачать книгу"))
+        self.deleteBtn.setToolTip(_translate("MainWindow", "Удалить книгу"))
+        self.changeDriverBtn_2.setToolTip(_translate("MainWindow", "Изменить источник"))
+        self.pastBtn.setToolTip(_translate("MainWindow", "Вернуться на 15 секунд"))
+        self.pastBtn.setText(_translate("MainWindow", "15 c"))
+        self.futureBtn.setToolTip(_translate("MainWindow", "Вперед на 15 секунд"))
+        self.futureBtn.setText(_translate("MainWindow", "15 c"))
+        self.label_6.setText(
+            _translate("MainWindow", "Для прослушивания книги, необходимо скачать её")
+        )
+        self.downloadBookBtn.setText(_translate("MainWindow", "Скачать аудиокнигу"))
+        self.label_7.setText(_translate("MainWindow", "Скачивание книги"))
         self.label_4.setText(_translate("MainWindow", "Поиск книги"))
         self.searchNewBookLineEdit.setPlaceholderText(
             _translate("MainWindow", "Введите название книги или вставьте ссылку")
@@ -1334,7 +1766,7 @@ class UiMainWindow(object):
         self.bookNameLabel.setText(_translate("MainWindow", "Название"))
         self.bookAuthorLabel.setText(_translate("MainWindow", "Автор"))
         self.speedBtn.setToolTip(_translate("MainWindow", "Скорость воспроизведения"))
-        self.speedLabel.setText(_translate("MainWindow", "50%"))
+        self.speedLabel.setText(_translate("MainWindow", "1x"))
         self.volumeBtn.setToolTip(_translate("MainWindow", "Громкость"))
         self.volumeLabel.setText(_translate("MainWindow", "50%"))
         self.overlayBtn.setToolTip(_translate("MainWindow", "Открыть поверх всех окон"))
