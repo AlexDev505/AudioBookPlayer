@@ -29,9 +29,11 @@ class AKnigaDriver(Driver):
 
         author = data["author"]
         name = data["titleonly"]
-        description = page.find_elements_by_css_selector(
-            "div.description__article-main"
-        )[0].text
+        description = (
+            page.find_elements_by_css_selector("div.description__article-main")[0]
+            .text.replace("ОПИСАНИЕ", "")
+            .strip()
+        )
         duration = " ".join(
             [
                 obj.text
@@ -41,7 +43,9 @@ class AKnigaDriver(Driver):
             ]
         ).strip()
         reader = page.find_elements_by_css_selector("a.link__reader span")[0].text
-        preview = data["preview"]
+        preview = page.find_elements_by_css_selector("div.book--cover img")[
+            0
+        ].get_attribute("src")
         items = BookItems()
         for item in data["items"]:
             items.append(

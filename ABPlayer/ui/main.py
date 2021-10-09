@@ -14,11 +14,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class UiMainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1191, 746)
+        MainWindow.resize(1170, 716)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setStyleSheet(
             "QWidget {\n"
-            "    color: rgb(142, 146, 151);\n"
+            "    color: rgb(215, 214, 217)\n"
             "}\n"
             "\n"
             "/* QFrame */\n"
@@ -29,6 +29,7 @@ class UiMainWindow(object):
             "/*  BUTTONS */\n"
             "QPushButton {\n"
             "    background-color: rgba(0, 0, 0, 0);\n"
+            "    color: rgb(142, 146, 151);\n"
             "    border-radius: 5px;    \n"
             "    border: none;\n"
             "}\n"
@@ -161,6 +162,9 @@ class UiMainWindow(object):
             "#topFrame {\n"
             "    background-color: rgb(32, 34, 37);\n"
             "}\n"
+            "#logo {\n"
+            "    color: rgb(142, 146, 151);\n"
+            "}\n"
             "\n"
             "/*  MENU */\n"
             "#menuFrame {\n"
@@ -204,7 +208,7 @@ class UiMainWindow(object):
             "    border: 2px solid rgb(64, 68, 75);\n"
             "    border-radius: 3px;\n"
             "}\n"
-            "#bookPageContent #bookItemsLayout {\n"
+            "#bookPageContent #bookItemsLayout, #description {\n"
             "    background-color: rgb(54, 57, 63);\n"
             "}\n"
             "\n"
@@ -760,7 +764,7 @@ class UiMainWindow(object):
         self.allBooksContainer.setWidgetResizable(True)
         self.allBooksContainer.setObjectName("allBooksContainer")
         self.allBooksLayout = QtWidgets.QWidget()
-        self.allBooksLayout.setGeometry(QtCore.QRect(0, 0, 677, 480))
+        self.allBooksLayout.setGeometry(QtCore.QRect(0, 0, 749, 545))
         self.allBooksLayout.setObjectName("allBooksLayout")
         self.verticalLayout_10 = QtWidgets.QVBoxLayout(self.allBooksLayout)
         self.verticalLayout_10.setObjectName("verticalLayout_10")
@@ -812,7 +816,7 @@ class UiMainWindow(object):
         self.inProgressBooksContainer.setWidgetResizable(True)
         self.inProgressBooksContainer.setObjectName("inProgressBooksContainer")
         self.inProgressBooksLayout = QtWidgets.QWidget()
-        self.inProgressBooksLayout.setGeometry(QtCore.QRect(0, 0, 685, 469))
+        self.inProgressBooksLayout.setGeometry(QtCore.QRect(0, 0, 749, 545))
         self.inProgressBooksLayout.setObjectName("inProgressBooksLayout")
         self.verticalLayout_11 = QtWidgets.QVBoxLayout(self.inProgressBooksLayout)
         self.verticalLayout_11.setObjectName("verticalLayout_11")
@@ -846,7 +850,7 @@ class UiMainWindow(object):
         self.listenedBooksContainer.setWidgetResizable(True)
         self.listenedBooksContainer.setObjectName("listenedBooksContainer")
         self.listenedBooksLayout = QtWidgets.QWidget()
-        self.listenedBooksLayout.setGeometry(QtCore.QRect(0, 0, 83, 480))
+        self.listenedBooksLayout.setGeometry(QtCore.QRect(0, 0, 749, 545))
         self.listenedBooksLayout.setObjectName("listenedBooksLayout")
         self.verticalLayout_13 = QtWidgets.QVBoxLayout(self.listenedBooksLayout)
         self.verticalLayout_13.setObjectName("verticalLayout_13")
@@ -896,10 +900,10 @@ class UiMainWindow(object):
         self.bookPageContent.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.bookPageContent.setFrameShadow(QtWidgets.QFrame.Raised)
         self.bookPageContent.setObjectName("bookPageContent")
-        self.verticalLayout_22 = QtWidgets.QVBoxLayout(self.bookPageContent)
-        self.verticalLayout_22.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout_22.setSpacing(0)
-        self.verticalLayout_22.setObjectName("verticalLayout_22")
+        self.verticalLayout_30 = QtWidgets.QVBoxLayout(self.bookPageContent)
+        self.verticalLayout_30.setContentsMargins(10, 10, 0, 0)
+        self.verticalLayout_30.setSpacing(10)
+        self.verticalLayout_30.setObjectName("verticalLayout_30")
         self.horizontalLayout_29 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_29.setObjectName("horizontalLayout_29")
         self.titleFrame = QtWidgets.QFrame(self.bookPageContent)
@@ -994,7 +998,7 @@ class UiMainWindow(object):
             QtGui.QPixmap(":/other/star.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
         self.toggleFavoriteBtn.setIcon(icon12)
-        self.toggleFavoriteBtn.setIconSize(QtCore.QSize(40, 40))
+        self.toggleFavoriteBtn.setIconSize(QtCore.QSize(30, 30))
         self.toggleFavoriteBtn.setObjectName("toggleFavoriteBtn")
         self.horizontalLayout_28.addWidget(self.toggleFavoriteBtn)
         self.saveBtn = QtWidgets.QPushButton(self.bookPageBtnsFrame)
@@ -1013,7 +1017,7 @@ class UiMainWindow(object):
             QtGui.QPixmap(":/other/download.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
         self.saveBtn.setIcon(icon13)
-        self.saveBtn.setIconSize(QtCore.QSize(40, 40))
+        self.saveBtn.setIconSize(QtCore.QSize(30, 30))
         self.saveBtn.setObjectName("saveBtn")
         self.horizontalLayout_28.addWidget(self.saveBtn)
         self.deleteBtn = QtWidgets.QPushButton(self.bookPageBtnsFrame)
@@ -1032,44 +1036,55 @@ class UiMainWindow(object):
             QtGui.QPixmap(":/other/trash.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
         self.deleteBtn.setIcon(icon14)
-        self.deleteBtn.setIconSize(QtCore.QSize(40, 40))
+        self.deleteBtn.setIconSize(QtCore.QSize(30, 30))
         self.deleteBtn.setObjectName("deleteBtn")
         self.horizontalLayout_28.addWidget(self.deleteBtn)
-        self.changeDriverBtn_2 = QtWidgets.QPushButton(self.bookPageBtnsFrame)
+        self.changeDriverBtn = QtWidgets.QPushButton(self.bookPageBtnsFrame)
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
         )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(
-            self.changeDriverBtn_2.sizePolicy().hasHeightForWidth()
+            self.changeDriverBtn.sizePolicy().hasHeightForWidth()
         )
-        self.changeDriverBtn_2.setSizePolicy(sizePolicy)
-        self.changeDriverBtn_2.setMinimumSize(QtCore.QSize(45, 45))
-        self.changeDriverBtn_2.setMaximumSize(QtCore.QSize(45, 45))
-        self.changeDriverBtn_2.setText("")
+        self.changeDriverBtn.setSizePolicy(sizePolicy)
+        self.changeDriverBtn.setMinimumSize(QtCore.QSize(45, 45))
+        self.changeDriverBtn.setMaximumSize(QtCore.QSize(45, 45))
+        self.changeDriverBtn.setText("")
         icon15 = QtGui.QIcon()
         icon15.addPixmap(
             QtGui.QPixmap(":/other/hdd.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.changeDriverBtn_2.setIcon(icon15)
-        self.changeDriverBtn_2.setIconSize(QtCore.QSize(40, 40))
-        self.changeDriverBtn_2.setObjectName("changeDriverBtn_2")
-        self.horizontalLayout_28.addWidget(self.changeDriverBtn_2)
+        self.changeDriverBtn.setIcon(icon15)
+        self.changeDriverBtn.setIconSize(QtCore.QSize(30, 30))
+        self.changeDriverBtn.setObjectName("changeDriverBtn")
+        self.horizontalLayout_28.addWidget(self.changeDriverBtn)
         self.horizontalLayout_29.addWidget(self.bookPageBtnsFrame)
-        self.verticalLayout_22.addLayout(self.horizontalLayout_29)
-        self.horizontalLayout_31 = QtWidgets.QHBoxLayout()
+        self.verticalLayout_30.addLayout(self.horizontalLayout_29)
+        self.playerFrame = QtWidgets.QFrame(self.bookPageContent)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.playerFrame.sizePolicy().hasHeightForWidth())
+        self.playerFrame.setSizePolicy(sizePolicy)
+        self.playerFrame.setObjectName("playerFrame")
+        self.horizontalLayout_31 = QtWidgets.QHBoxLayout(self.playerFrame)
+        self.horizontalLayout_31.setSizeConstraint(QtWidgets.QLayout.SetMaximumSize)
         self.horizontalLayout_31.setContentsMargins(10, 10, 30, 10)
         self.horizontalLayout_31.setSpacing(30)
         self.horizontalLayout_31.setObjectName("horizontalLayout_31")
-        self.bookCoverLg = QtWidgets.QLabel(self.bookPageContent)
+        self.bookCoverLg = QtWidgets.QLabel(self.playerFrame)
         self.bookCoverLg.setMinimumSize(QtCore.QSize(230, 230))
         self.bookCoverLg.setMaximumSize(QtCore.QSize(230, 230))
-        self.bookCoverLg.setStyleSheet("background-color: rgb(130, 130, 130);")
+        self.bookCoverLg.setStyleSheet("")
         self.bookCoverLg.setText("")
+        self.bookCoverLg.setAlignment(QtCore.Qt.AlignCenter)
         self.bookCoverLg.setObjectName("bookCoverLg")
         self.horizontalLayout_31.addWidget(self.bookCoverLg)
-        self.playerContent = QtWidgets.QStackedWidget(self.bookPageContent)
+        self.playerContent = QtWidgets.QStackedWidget(self.playerFrame)
         self.playerContent.setMinimumSize(QtCore.QSize(230, 230))
         self.playerContent.setMaximumSize(QtCore.QSize(16777215, 230))
         self.playerContent.setObjectName("playerContent")
@@ -1174,7 +1189,7 @@ class UiMainWindow(object):
         self.bookItems.setWidgetResizable(True)
         self.bookItems.setObjectName("bookItems")
         self.bookItemsLayout = QtWidgets.QWidget()
-        self.bookItemsLayout.setGeometry(QtCore.QRect(0, 0, 687, 176))
+        self.bookItemsLayout.setGeometry(QtCore.QRect(0, 0, 656, 176))
         self.bookItemsLayout.setObjectName("bookItemsLayout")
         self.bookItems.setWidget(self.bookItemsLayout)
         self.verticalLayout_21.addWidget(self.bookItems)
@@ -1289,11 +1304,199 @@ class UiMainWindow(object):
         self.horizontalLayout_34.addItem(spacerItem13)
         self.playerContent.addWidget(self.downloadingPage)
         self.horizontalLayout_31.addWidget(self.playerContent)
-        self.verticalLayout_22.addLayout(self.horizontalLayout_31)
-        spacerItem14 = QtWidgets.QSpacerItem(
-            20, 281, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        self.verticalLayout_30.addWidget(self.playerFrame)
+        self.descriptionFrame = QtWidgets.QFrame(self.bookPageContent)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.MinimumExpanding
         )
-        self.verticalLayout_22.addItem(spacerItem14)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.descriptionFrame.sizePolicy().hasHeightForWidth()
+        )
+        self.descriptionFrame.setSizePolicy(sizePolicy)
+        self.descriptionFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.descriptionFrame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.descriptionFrame.setObjectName("descriptionFrame")
+        self.verticalLayout_29 = QtWidgets.QVBoxLayout(self.descriptionFrame)
+        self.verticalLayout_29.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_29.setSpacing(20)
+        self.verticalLayout_29.setObjectName("verticalLayout_29")
+        self.aboutBookFrame = QtWidgets.QFrame(self.descriptionFrame)
+        self.aboutBookFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.aboutBookFrame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.aboutBookFrame.setObjectName("aboutBookFrame")
+        self.horizontalLayout_35 = QtWidgets.QHBoxLayout(self.aboutBookFrame)
+        self.horizontalLayout_35.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_35.setSpacing(40)
+        self.horizontalLayout_35.setObjectName("horizontalLayout_35")
+        self.frame_41 = QtWidgets.QFrame(self.aboutBookFrame)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Preferred
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frame_41.sizePolicy().hasHeightForWidth())
+        self.frame_41.setSizePolicy(sizePolicy)
+        self.frame_41.setObjectName("frame_41")
+        self.verticalLayout_26 = QtWidgets.QVBoxLayout(self.frame_41)
+        self.verticalLayout_26.setObjectName("verticalLayout_26")
+        self.label_10 = QtWidgets.QLabel(self.frame_41)
+        font = QtGui.QFont()
+        font.setFamily("Arial Black")
+        font.setPointSize(11)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_10.setFont(font)
+        self.label_10.setObjectName("label_10")
+        self.verticalLayout_26.addWidget(self.label_10)
+        self.authorLabel = QtWidgets.QLabel(self.frame_41)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(12)
+        font.setBold(False)
+        font.setWeight(50)
+        self.authorLabel.setFont(font)
+        self.authorLabel.setStyleSheet("padding-left: 2px;")
+        self.authorLabel.setObjectName("authorLabel")
+        self.verticalLayout_26.addWidget(self.authorLabel)
+        self.horizontalLayout_35.addWidget(self.frame_41)
+        self.frame_31 = QtWidgets.QFrame(self.aboutBookFrame)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Preferred
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frame_31.sizePolicy().hasHeightForWidth())
+        self.frame_31.setSizePolicy(sizePolicy)
+        self.frame_31.setObjectName("frame_31")
+        self.verticalLayout_27 = QtWidgets.QVBoxLayout(self.frame_31)
+        self.verticalLayout_27.setObjectName("verticalLayout_27")
+        self.label_11 = QtWidgets.QLabel(self.frame_31)
+        font = QtGui.QFont()
+        font.setFamily("Arial Black")
+        font.setPointSize(11)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_11.setFont(font)
+        self.label_11.setObjectName("label_11")
+        self.verticalLayout_27.addWidget(self.label_11)
+        self.nameLabel = QtWidgets.QLabel(self.frame_31)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(12)
+        font.setBold(False)
+        font.setWeight(50)
+        self.nameLabel.setFont(font)
+        self.nameLabel.setStyleSheet("padding-left: 2px;")
+        self.nameLabel.setObjectName("nameLabel")
+        self.verticalLayout_27.addWidget(self.nameLabel)
+        self.horizontalLayout_35.addWidget(self.frame_31)
+        self.frame1 = QtWidgets.QFrame(self.aboutBookFrame)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Preferred
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frame1.sizePolicy().hasHeightForWidth())
+        self.frame1.setSizePolicy(sizePolicy)
+        self.frame1.setObjectName("frame1")
+        self.verticalLayout_22 = QtWidgets.QVBoxLayout(self.frame1)
+        self.verticalLayout_22.setObjectName("verticalLayout_22")
+        self.label_8 = QtWidgets.QLabel(self.frame1)
+        font = QtGui.QFont()
+        font.setFamily("Arial Black")
+        font.setPointSize(11)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_8.setFont(font)
+        self.label_8.setObjectName("label_8")
+        self.verticalLayout_22.addWidget(self.label_8)
+        self.readerLabel = QtWidgets.QLabel(self.frame1)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(12)
+        font.setBold(False)
+        font.setWeight(50)
+        self.readerLabel.setFont(font)
+        self.readerLabel.setStyleSheet("padding-left: 2px;")
+        self.readerLabel.setObjectName("readerLabel")
+        self.verticalLayout_22.addWidget(self.readerLabel)
+        self.horizontalLayout_35.addWidget(self.frame1)
+        self.frame_21 = QtWidgets.QFrame(self.aboutBookFrame)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Preferred
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frame_21.sizePolicy().hasHeightForWidth())
+        self.frame_21.setSizePolicy(sizePolicy)
+        self.frame_21.setObjectName("frame_21")
+        self.verticalLayout_25 = QtWidgets.QVBoxLayout(self.frame_21)
+        self.verticalLayout_25.setObjectName("verticalLayout_25")
+        self.label_9 = QtWidgets.QLabel(self.frame_21)
+        font = QtGui.QFont()
+        font.setFamily("Arial Black")
+        font.setPointSize(11)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_9.setFont(font)
+        self.label_9.setObjectName("label_9")
+        self.verticalLayout_25.addWidget(self.label_9)
+        self.durationLabel = QtWidgets.QLabel(self.frame_21)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(12)
+        font.setBold(False)
+        font.setWeight(50)
+        self.durationLabel.setFont(font)
+        self.durationLabel.setStyleSheet("padding-left: 2px;")
+        self.durationLabel.setObjectName("durationLabel")
+        self.verticalLayout_25.addWidget(self.durationLabel)
+        self.horizontalLayout_35.addWidget(self.frame_21)
+        spacerItem14 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
+        self.horizontalLayout_35.addItem(spacerItem14)
+        self.verticalLayout_29.addWidget(self.aboutBookFrame)
+        self.verticalLayout_28 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_28.setContentsMargins(10, -1, -1, -1)
+        self.verticalLayout_28.setSpacing(2)
+        self.verticalLayout_28.setObjectName("verticalLayout_28")
+        self.label_12 = QtWidgets.QLabel(self.descriptionFrame)
+        font = QtGui.QFont()
+        font.setFamily("Arial Black")
+        font.setPointSize(11)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_12.setFont(font)
+        self.label_12.setObjectName("label_12")
+        self.verticalLayout_28.addWidget(self.label_12)
+        self.description = QtWidgets.QTextEdit(self.descriptionFrame)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.description.sizePolicy().hasHeightForWidth())
+        self.description.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(12)
+        font.setBold(False)
+        font.setWeight(50)
+        self.description.setFont(font)
+        self.description.setStyleSheet("border: none;\n" "padding: 0px;")
+        self.description.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.description.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.description.setSizeAdjustPolicy(
+            QtWidgets.QAbstractScrollArea.AdjustToContents
+        )
+        self.description.setTextInteractionFlags(QtCore.Qt.TextSelectableByMouse)
+        self.description.setObjectName("description")
+        self.verticalLayout_28.addWidget(self.description)
+        self.verticalLayout_29.addLayout(self.verticalLayout_28)
+        self.verticalLayout_30.addWidget(self.descriptionFrame)
         self.horizontalLayout_26.addWidget(self.bookPageContent)
         self.stackedWidget.addWidget(self.bookPage)
         self.addBookPage = QtWidgets.QWidget()
@@ -1749,7 +1952,7 @@ class UiMainWindow(object):
         )
         self.saveBtn.setToolTip(_translate("MainWindow", "Скачать книгу"))
         self.deleteBtn.setToolTip(_translate("MainWindow", "Удалить книгу"))
-        self.changeDriverBtn_2.setToolTip(_translate("MainWindow", "Изменить источник"))
+        self.changeDriverBtn.setToolTip(_translate("MainWindow", "Изменить источник"))
         self.pastBtn.setToolTip(_translate("MainWindow", "Вернуться на 15 секунд"))
         self.pastBtn.setText(_translate("MainWindow", "15 c"))
         self.futureBtn.setToolTip(_translate("MainWindow", "Вперед на 15 секунд"))
@@ -1759,6 +1962,26 @@ class UiMainWindow(object):
         )
         self.downloadBookBtn.setText(_translate("MainWindow", "Скачать аудиокнигу"))
         self.label_7.setText(_translate("MainWindow", "Скачивание книги"))
+        self.label_10.setText(_translate("MainWindow", "Автор"))
+        self.authorLabel.setText(_translate("MainWindow", "author"))
+        self.label_11.setText(_translate("MainWindow", "Серия"))
+        self.nameLabel.setText(_translate("MainWindow", "name"))
+        self.label_8.setText(_translate("MainWindow", "Читает"))
+        self.readerLabel.setText(_translate("MainWindow", "reader"))
+        self.label_9.setText(_translate("MainWindow", "Длительность"))
+        self.durationLabel.setText(_translate("MainWindow", "duration"))
+        self.label_12.setText(_translate("MainWindow", "Описание"))
+        self.description.setMarkdown(_translate("MainWindow", "description\n" "\n" ""))
+        self.description.setHtml(
+            _translate(
+                "MainWindow",
+                '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">\n'
+                '<html><head><meta name="qrichtext" content="1" /><style type="text/css">\n'
+                "p, li { white-space: pre-wrap; }\n"
+                "</style></head><body style=\" font-family:'Arial'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+                '<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">description</p></body></html>',
+            )
+        )
         self.label_4.setText(_translate("MainWindow", "Поиск книги"))
         self.searchNewBookLineEdit.setPlaceholderText(
             _translate("MainWindow", "Введите название книги или вставьте ссылку")
