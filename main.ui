@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1191</width>
-    <height>746</height>
+    <width>1170</width>
+    <height>716</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <property name="styleSheet">
     <string notr="true">QWidget {
-	color: rgb(142, 146, 151);
+	color: rgb(215, 214, 217)
 }
 
 /* QFrame */
@@ -27,6 +27,7 @@ QFrame {
 /*  BUTTONS */
 QPushButton {
 	background-color: rgba(0, 0, 0, 0);
+	color: rgb(142, 146, 151);
 	border-radius: 5px;	
 	border: none;
 }
@@ -159,6 +160,9 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 #topFrame {
 	background-color: rgb(32, 34, 37);
 }
+#logo {
+	color: rgb(142, 146, 151);
+}
 
 /*  MENU */
 #menuFrame {
@@ -202,7 +206,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 	border: 2px solid rgb(64, 68, 75);
 	border-radius: 3px;
 }
-#bookPageContent #bookItemsLayout {
+#bookPageContent #bookItemsLayout, #description {
 	background-color: rgb(54, 57, 63);
 }
 
@@ -1398,8 +1402,8 @@ QPushButton:pressed {
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>677</width>
-                                   <height>480</height>
+                                   <width>749</width>
+                                   <height>545</height>
                                   </rect>
                                  </property>
                                  <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -1513,8 +1517,8 @@ border-radius:10px;</string>
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>685</width>
-                                   <height>469</height>
+                                   <width>749</width>
+                                   <height>545</height>
                                   </rect>
                                  </property>
                                  <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -1582,8 +1586,8 @@ border-radius:10px;</string>
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>83</width>
-                                   <height>480</height>
+                                   <width>749</width>
+                                   <height>545</height>
                                   </rect>
                                  </property>
                                  <layout class="QVBoxLayout" name="verticalLayout_13">
@@ -1694,15 +1698,15 @@ border-radius:10px;</string>
                    <property name="frameShadow">
                     <enum>QFrame::Raised</enum>
                    </property>
-                   <layout class="QVBoxLayout" name="verticalLayout_22">
+                   <layout class="QVBoxLayout" name="verticalLayout_30">
                     <property name="spacing">
-                     <number>0</number>
+                     <number>10</number>
                     </property>
                     <property name="leftMargin">
-                     <number>0</number>
+                     <number>10</number>
                     </property>
                     <property name="topMargin">
-                     <number>0</number>
+                     <number>10</number>
                     </property>
                     <property name="rightMargin">
                      <number>0</number>
@@ -1978,7 +1982,7 @@ QPushButton:pressed {
                           </widget>
                          </item>
                          <item>
-                          <widget class="QPushButton" name="changeDriverBtn_2">
+                          <widget class="QPushButton" name="changeDriverBtn">
                            <property name="sizePolicy">
                             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                              <horstretch>0</horstretch>
@@ -2021,82 +2025,95 @@ QPushButton:pressed {
                      </layout>
                     </item>
                     <item>
-                     <layout class="QHBoxLayout" name="horizontalLayout_31">
-                      <property name="spacing">
-                       <number>30</number>
+                     <widget class="QFrame" name="playerFrame">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
                       </property>
-                      <property name="leftMargin">
-                       <number>10</number>
-                      </property>
-                      <property name="topMargin">
-                       <number>10</number>
-                      </property>
-                      <property name="rightMargin">
-                       <number>30</number>
-                      </property>
-                      <property name="bottomMargin">
-                       <number>10</number>
-                      </property>
-                      <item>
-                       <widget class="QLabel" name="bookCoverLg">
-                        <property name="minimumSize">
-                         <size>
-                          <width>230</width>
-                          <height>230</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>230</width>
-                          <height>230</height>
-                         </size>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">background-color: rgb(130, 130, 130);</string>
-                        </property>
-                        <property name="text">
-                         <string/>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QStackedWidget" name="playerContent">
-                        <property name="minimumSize">
-                         <size>
-                          <width>230</width>
-                          <height>230</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>16777215</width>
-                          <height>230</height>
-                         </size>
-                        </property>
-                        <property name="currentIndex">
-                         <number>0</number>
-                        </property>
-                        <widget class="QWidget" name="playerPage">
-                         <layout class="QVBoxLayout" name="verticalLayout_21">
-                          <property name="spacing">
-                           <number>5</number>
-                          </property>
-                          <property name="leftMargin">
-                           <number>0</number>
-                          </property>
-                          <property name="topMargin">
-                           <number>0</number>
-                          </property>
-                          <property name="rightMargin">
-                           <number>0</number>
-                          </property>
-                          <property name="bottomMargin">
-                           <number>0</number>
-                          </property>
-                          <item>
-                           <widget class="QFrame" name="playerBtns">
-                            <property name="styleSheet">
-                             <string notr="true">QPushButton {
+                      <layout class="QHBoxLayout" name="horizontalLayout_31">
+                       <property name="spacing">
+                        <number>30</number>
+                       </property>
+                       <property name="sizeConstraint">
+                        <enum>QLayout::SetMaximumSize</enum>
+                       </property>
+                       <property name="leftMargin">
+                        <number>10</number>
+                       </property>
+                       <property name="topMargin">
+                        <number>10</number>
+                       </property>
+                       <property name="rightMargin">
+                        <number>30</number>
+                       </property>
+                       <property name="bottomMargin">
+                        <number>10</number>
+                       </property>
+                       <item>
+                        <widget class="QLabel" name="bookCoverLg">
+                         <property name="minimumSize">
+                          <size>
+                           <width>230</width>
+                           <height>230</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>230</width>
+                           <height>230</height>
+                          </size>
+                         </property>
+                         <property name="styleSheet">
+                          <string notr="true"/>
+                         </property>
+                         <property name="text">
+                          <string/>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QStackedWidget" name="playerContent">
+                         <property name="minimumSize">
+                          <size>
+                           <width>230</width>
+                           <height>230</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>230</height>
+                          </size>
+                         </property>
+                         <property name="currentIndex">
+                          <number>0</number>
+                         </property>
+                         <widget class="QWidget" name="playerPage">
+                          <layout class="QVBoxLayout" name="verticalLayout_21">
+                           <property name="spacing">
+                            <number>5</number>
+                           </property>
+                           <property name="leftMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="topMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="rightMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="bottomMargin">
+                            <number>0</number>
+                           </property>
+                           <item>
+                            <widget class="QFrame" name="playerBtns">
+                             <property name="styleSheet">
+                              <string notr="true">QPushButton {
 	background-color: rgb(64, 68, 75);
 	padding: 5px 3px 5px 3px;
 }
@@ -2106,270 +2123,270 @@ QPushButton:hover {
 QPushButton:pressed {
 	margin-bottom: -1px;
 }</string>
-                            </property>
-                            <property name="frameShape">
-                             <enum>QFrame::StyledPanel</enum>
-                            </property>
-                            <property name="frameShadow">
-                             <enum>QFrame::Raised</enum>
-                            </property>
-                            <layout class="QHBoxLayout" name="horizontalLayout_30">
-                             <property name="leftMargin">
-                              <number>0</number>
                              </property>
-                             <property name="topMargin">
-                              <number>0</number>
+                             <property name="frameShape">
+                              <enum>QFrame::StyledPanel</enum>
                              </property>
-                             <property name="rightMargin">
-                              <number>0</number>
+                             <property name="frameShadow">
+                              <enum>QFrame::Raised</enum>
                              </property>
-                             <property name="bottomMargin">
-                              <number>0</number>
-                             </property>
-                             <item>
-                              <widget class="QPushButton" name="pastBtn">
-                               <property name="sizePolicy">
-                                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                                 <horstretch>0</horstretch>
-                                 <verstretch>0</verstretch>
-                                </sizepolicy>
-                               </property>
-                               <property name="minimumSize">
-                                <size>
-                                 <width>0</width>
-                                 <height>45</height>
-                                </size>
-                               </property>
-                               <property name="maximumSize">
-                                <size>
-                                 <width>16777215</width>
-                                 <height>45</height>
-                                </size>
-                               </property>
-                               <property name="font">
-                                <font>
-                                 <family>Arial</family>
-                                 <pointsize>12</pointsize>
-                                 <weight>75</weight>
-                                 <bold>true</bold>
-                                </font>
-                               </property>
-                               <property name="toolTip">
-                                <string>Вернуться на 15 секунд</string>
-                               </property>
-                               <property name="text">
-                                <string>15 c</string>
-                               </property>
-                               <property name="icon">
-                                <iconset resource="resources/icons.qrc">
-                                 <normaloff>:/other/double_angle_left.svg</normaloff>:/other/double_angle_left.svg</iconset>
-                               </property>
-                               <property name="iconSize">
-                                <size>
-                                 <width>30</width>
-                                 <height>30</height>
-                                </size>
-                               </property>
-                              </widget>
-                             </item>
-                             <item>
-                              <widget class="QPushButton" name="playPauseBntLg">
-                               <property name="minimumSize">
-                                <size>
-                                 <width>0</width>
-                                 <height>45</height>
-                                </size>
-                               </property>
-                               <property name="maximumSize">
-                                <size>
-                                 <width>16777215</width>
-                                 <height>45</height>
-                                </size>
-                               </property>
-                               <property name="font">
-                                <font>
-                                 <family>Arial</family>
-                                 <pointsize>12</pointsize>
-                                 <weight>75</weight>
-                                 <bold>true</bold>
-                                </font>
-                               </property>
-                               <property name="text">
-                                <string/>
-                               </property>
-                               <property name="icon">
-                                <iconset resource="resources/icons.qrc">
-                                 <normaloff>:/other/play.svg</normaloff>:/other/play.svg</iconset>
-                               </property>
-                               <property name="iconSize">
-                                <size>
-                                 <width>30</width>
-                                 <height>30</height>
-                                </size>
-                               </property>
-                              </widget>
-                             </item>
-                             <item>
-                              <widget class="QPushButton" name="futureBtn">
-                               <property name="sizePolicy">
-                                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                                 <horstretch>0</horstretch>
-                                 <verstretch>0</verstretch>
-                                </sizepolicy>
-                               </property>
-                               <property name="minimumSize">
-                                <size>
-                                 <width>0</width>
-                                 <height>45</height>
-                                </size>
-                               </property>
-                               <property name="maximumSize">
-                                <size>
-                                 <width>16777215</width>
-                                 <height>45</height>
-                                </size>
-                               </property>
-                               <property name="font">
-                                <font>
-                                 <family>Arial</family>
-                                 <pointsize>12</pointsize>
-                                 <weight>75</weight>
-                                 <bold>true</bold>
-                                </font>
-                               </property>
-                               <property name="toolTip">
-                                <string>Вперед на 15 секунд</string>
-                               </property>
-                               <property name="layoutDirection">
-                                <enum>Qt::RightToLeft</enum>
-                               </property>
-                               <property name="text">
-                                <string>15 c</string>
-                               </property>
-                               <property name="icon">
-                                <iconset resource="resources/icons.qrc">
-                                 <normaloff>:/other/double_angle_right.svg</normaloff>:/other/double_angle_right.svg</iconset>
-                               </property>
-                               <property name="iconSize">
-                                <size>
-                                 <width>30</width>
-                                 <height>30</height>
-                                </size>
-                               </property>
-                              </widget>
-                             </item>
-                            </layout>
-                           </widget>
-                          </item>
-                          <item>
-                           <widget class="QScrollArea" name="bookItems">
-                            <property name="widgetResizable">
-                             <bool>true</bool>
-                            </property>
-                            <widget class="QWidget" name="bookItemsLayout">
-                             <property name="geometry">
-                              <rect>
-                               <x>0</x>
-                               <y>0</y>
-                               <width>687</width>
-                               <height>176</height>
-                              </rect>
-                             </property>
-                            </widget>
-                           </widget>
-                          </item>
-                         </layout>
-                        </widget>
-                        <widget class="QWidget" name="needDownloadingPage">
-                         <layout class="QHBoxLayout" name="horizontalLayout_33">
-                          <property name="spacing">
-                           <number>0</number>
-                          </property>
-                          <property name="leftMargin">
-                           <number>0</number>
-                          </property>
-                          <property name="topMargin">
-                           <number>0</number>
-                          </property>
-                          <property name="rightMargin">
-                           <number>0</number>
-                          </property>
-                          <property name="bottomMargin">
-                           <number>0</number>
-                          </property>
-                          <item>
-                           <spacer name="horizontalSpacer_10">
-                            <property name="orientation">
-                             <enum>Qt::Horizontal</enum>
-                            </property>
-                            <property name="sizeHint" stdset="0">
-                             <size>
-                              <width>138</width>
-                              <height>20</height>
-                             </size>
-                            </property>
-                           </spacer>
-                          </item>
-                          <item>
-                           <layout class="QVBoxLayout" name="verticalLayout_23">
-                            <property name="spacing">
-                             <number>10</number>
-                            </property>
-                            <item>
-                             <spacer name="verticalSpacer_10">
-                              <property name="orientation">
-                               <enum>Qt::Vertical</enum>
+                             <layout class="QHBoxLayout" name="horizontalLayout_30">
+                              <property name="leftMargin">
+                               <number>0</number>
                               </property>
-                              <property name="sizeHint" stdset="0">
-                               <size>
-                                <width>20</width>
-                                <height>40</height>
-                               </size>
+                              <property name="topMargin">
+                               <number>0</number>
                               </property>
-                             </spacer>
-                            </item>
-                            <item>
-                             <widget class="QLabel" name="label_6">
-                              <property name="font">
-                               <font>
-                                <family>Arial</family>
-                                <pointsize>12</pointsize>
-                                <weight>75</weight>
-                                <bold>true</bold>
-                               </font>
+                              <property name="rightMargin">
+                               <number>0</number>
                               </property>
-                              <property name="text">
-                               <string>Для прослушивания книги, необходимо скачать её</string>
+                              <property name="bottomMargin">
+                               <number>0</number>
                               </property>
-                             </widget>
-                            </item>
-                            <item>
-                             <layout class="QHBoxLayout" name="horizontalLayout_32">
                               <item>
-                               <spacer name="horizontalSpacer_8">
-                                <property name="orientation">
-                                 <enum>Qt::Horizontal</enum>
+                               <widget class="QPushButton" name="pastBtn">
+                                <property name="sizePolicy">
+                                 <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                                  <horstretch>0</horstretch>
+                                  <verstretch>0</verstretch>
+                                 </sizepolicy>
                                 </property>
-                                <property name="sizeHint" stdset="0">
+                                <property name="minimumSize">
                                  <size>
-                                  <width>40</width>
-                                  <height>20</height>
+                                  <width>0</width>
+                                  <height>45</height>
                                  </size>
                                 </property>
-                               </spacer>
-                              </item>
-                              <item>
-                               <widget class="QPushButton" name="downloadBookBtn">
+                                <property name="maximumSize">
+                                 <size>
+                                  <width>16777215</width>
+                                  <height>45</height>
+                                 </size>
+                                </property>
                                 <property name="font">
                                  <font>
                                   <family>Arial</family>
-                                  <pointsize>9</pointsize>
+                                  <pointsize>12</pointsize>
                                   <weight>75</weight>
                                   <bold>true</bold>
                                  </font>
                                 </property>
-                                <property name="styleSheet">
-                                 <string notr="true">QPushButton {
+                                <property name="toolTip">
+                                 <string>Вернуться на 15 секунд</string>
+                                </property>
+                                <property name="text">
+                                 <string>15 c</string>
+                                </property>
+                                <property name="icon">
+                                 <iconset resource="resources/icons.qrc">
+                                  <normaloff>:/other/double_angle_left.svg</normaloff>:/other/double_angle_left.svg</iconset>
+                                </property>
+                                <property name="iconSize">
+                                 <size>
+                                  <width>30</width>
+                                  <height>30</height>
+                                 </size>
+                                </property>
+                               </widget>
+                              </item>
+                              <item>
+                               <widget class="QPushButton" name="playPauseBntLg">
+                                <property name="minimumSize">
+                                 <size>
+                                  <width>0</width>
+                                  <height>45</height>
+                                 </size>
+                                </property>
+                                <property name="maximumSize">
+                                 <size>
+                                  <width>16777215</width>
+                                  <height>45</height>
+                                 </size>
+                                </property>
+                                <property name="font">
+                                 <font>
+                                  <family>Arial</family>
+                                  <pointsize>12</pointsize>
+                                  <weight>75</weight>
+                                  <bold>true</bold>
+                                 </font>
+                                </property>
+                                <property name="text">
+                                 <string/>
+                                </property>
+                                <property name="icon">
+                                 <iconset resource="resources/icons.qrc">
+                                  <normaloff>:/other/play.svg</normaloff>:/other/play.svg</iconset>
+                                </property>
+                                <property name="iconSize">
+                                 <size>
+                                  <width>30</width>
+                                  <height>30</height>
+                                 </size>
+                                </property>
+                               </widget>
+                              </item>
+                              <item>
+                               <widget class="QPushButton" name="futureBtn">
+                                <property name="sizePolicy">
+                                 <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                                  <horstretch>0</horstretch>
+                                  <verstretch>0</verstretch>
+                                 </sizepolicy>
+                                </property>
+                                <property name="minimumSize">
+                                 <size>
+                                  <width>0</width>
+                                  <height>45</height>
+                                 </size>
+                                </property>
+                                <property name="maximumSize">
+                                 <size>
+                                  <width>16777215</width>
+                                  <height>45</height>
+                                 </size>
+                                </property>
+                                <property name="font">
+                                 <font>
+                                  <family>Arial</family>
+                                  <pointsize>12</pointsize>
+                                  <weight>75</weight>
+                                  <bold>true</bold>
+                                 </font>
+                                </property>
+                                <property name="toolTip">
+                                 <string>Вперед на 15 секунд</string>
+                                </property>
+                                <property name="layoutDirection">
+                                 <enum>Qt::RightToLeft</enum>
+                                </property>
+                                <property name="text">
+                                 <string>15 c</string>
+                                </property>
+                                <property name="icon">
+                                 <iconset resource="resources/icons.qrc">
+                                  <normaloff>:/other/double_angle_right.svg</normaloff>:/other/double_angle_right.svg</iconset>
+                                </property>
+                                <property name="iconSize">
+                                 <size>
+                                  <width>30</width>
+                                  <height>30</height>
+                                 </size>
+                                </property>
+                               </widget>
+                              </item>
+                             </layout>
+                            </widget>
+                           </item>
+                           <item>
+                            <widget class="QScrollArea" name="bookItems">
+                             <property name="widgetResizable">
+                              <bool>true</bool>
+                             </property>
+                             <widget class="QWidget" name="bookItemsLayout">
+                              <property name="geometry">
+                               <rect>
+                                <x>0</x>
+                                <y>0</y>
+                                <width>656</width>
+                                <height>176</height>
+                               </rect>
+                              </property>
+                             </widget>
+                            </widget>
+                           </item>
+                          </layout>
+                         </widget>
+                         <widget class="QWidget" name="needDownloadingPage">
+                          <layout class="QHBoxLayout" name="horizontalLayout_33">
+                           <property name="spacing">
+                            <number>0</number>
+                           </property>
+                           <property name="leftMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="topMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="rightMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="bottomMargin">
+                            <number>0</number>
+                           </property>
+                           <item>
+                            <spacer name="horizontalSpacer_10">
+                             <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                             </property>
+                             <property name="sizeHint" stdset="0">
+                              <size>
+                               <width>138</width>
+                               <height>20</height>
+                              </size>
+                             </property>
+                            </spacer>
+                           </item>
+                           <item>
+                            <layout class="QVBoxLayout" name="verticalLayout_23">
+                             <property name="spacing">
+                              <number>10</number>
+                             </property>
+                             <item>
+                              <spacer name="verticalSpacer_10">
+                               <property name="orientation">
+                                <enum>Qt::Vertical</enum>
+                               </property>
+                               <property name="sizeHint" stdset="0">
+                                <size>
+                                 <width>20</width>
+                                 <height>40</height>
+                                </size>
+                               </property>
+                              </spacer>
+                             </item>
+                             <item>
+                              <widget class="QLabel" name="label_6">
+                               <property name="font">
+                                <font>
+                                 <family>Arial</family>
+                                 <pointsize>12</pointsize>
+                                 <weight>75</weight>
+                                 <bold>true</bold>
+                                </font>
+                               </property>
+                               <property name="text">
+                                <string>Для прослушивания книги, необходимо скачать её</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <layout class="QHBoxLayout" name="horizontalLayout_32">
+                               <item>
+                                <spacer name="horizontalSpacer_8">
+                                 <property name="orientation">
+                                  <enum>Qt::Horizontal</enum>
+                                 </property>
+                                 <property name="sizeHint" stdset="0">
+                                  <size>
+                                   <width>40</width>
+                                   <height>20</height>
+                                  </size>
+                                 </property>
+                                </spacer>
+                               </item>
+                               <item>
+                                <widget class="QPushButton" name="downloadBookBtn">
+                                 <property name="font">
+                                  <font>
+                                   <family>Arial</family>
+                                   <pointsize>9</pointsize>
+                                   <weight>75</weight>
+                                   <bold>true</bold>
+                                  </font>
+                                 </property>
+                                 <property name="styleSheet">
+                                  <string notr="true">QPushButton {
 	padding: 10px;
 	background-color: rgb(47, 49, 54);
 	border: 1px solid #292B2F;
@@ -2381,59 +2398,207 @@ QPushButton:hover {
 QPushButton:pressed {
 	margin-bottom: -1px;
 }</string>
-                                </property>
-                                <property name="text">
-                                 <string>Скачать аудиокнигу</string>
-                                </property>
-                               </widget>
-                              </item>
-                              <item>
-                               <spacer name="horizontalSpacer_9">
-                                <property name="orientation">
-                                 <enum>Qt::Horizontal</enum>
-                                </property>
-                                <property name="sizeHint" stdset="0">
-                                 <size>
-                                  <width>40</width>
-                                  <height>20</height>
-                                 </size>
-                                </property>
-                               </spacer>
-                              </item>
-                             </layout>
-                            </item>
-                            <item>
-                             <spacer name="verticalSpacer_11">
-                              <property name="orientation">
-                               <enum>Qt::Vertical</enum>
-                              </property>
-                              <property name="sizeHint" stdset="0">
-                               <size>
-                                <width>20</width>
-                                <height>40</height>
-                               </size>
-                              </property>
-                             </spacer>
-                            </item>
-                           </layout>
-                          </item>
-                          <item>
-                           <spacer name="horizontalSpacer_11">
-                            <property name="orientation">
-                             <enum>Qt::Horizontal</enum>
-                            </property>
-                            <property name="sizeHint" stdset="0">
-                             <size>
-                              <width>137</width>
-                              <height>20</height>
-                             </size>
-                            </property>
-                           </spacer>
-                          </item>
-                         </layout>
+                                 </property>
+                                 <property name="text">
+                                  <string>Скачать аудиокнигу</string>
+                                 </property>
+                                </widget>
+                               </item>
+                               <item>
+                                <spacer name="horizontalSpacer_9">
+                                 <property name="orientation">
+                                  <enum>Qt::Horizontal</enum>
+                                 </property>
+                                 <property name="sizeHint" stdset="0">
+                                  <size>
+                                   <width>40</width>
+                                   <height>20</height>
+                                  </size>
+                                 </property>
+                                </spacer>
+                               </item>
+                              </layout>
+                             </item>
+                             <item>
+                              <spacer name="verticalSpacer_11">
+                               <property name="orientation">
+                                <enum>Qt::Vertical</enum>
+                               </property>
+                               <property name="sizeHint" stdset="0">
+                                <size>
+                                 <width>20</width>
+                                 <height>40</height>
+                                </size>
+                               </property>
+                              </spacer>
+                             </item>
+                            </layout>
+                           </item>
+                           <item>
+                            <spacer name="horizontalSpacer_11">
+                             <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                             </property>
+                             <property name="sizeHint" stdset="0">
+                              <size>
+                               <width>137</width>
+                               <height>20</height>
+                              </size>
+                             </property>
+                            </spacer>
+                           </item>
+                          </layout>
+                         </widget>
+                         <widget class="QWidget" name="downloadingPage">
+                          <layout class="QHBoxLayout" name="horizontalLayout_34">
+                           <property name="leftMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="topMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="rightMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="bottomMargin">
+                            <number>0</number>
+                           </property>
+                           <item>
+                            <spacer name="horizontalSpacer_15">
+                             <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                             </property>
+                             <property name="sizeType">
+                              <enum>QSizePolicy::Preferred</enum>
+                             </property>
+                             <property name="sizeHint" stdset="0">
+                              <size>
+                               <width>194</width>
+                               <height>20</height>
+                              </size>
+                             </property>
+                            </spacer>
+                           </item>
+                           <item>
+                            <layout class="QVBoxLayout" name="verticalLayout_24">
+                             <item>
+                              <spacer name="verticalSpacer_12">
+                               <property name="orientation">
+                                <enum>Qt::Vertical</enum>
+                               </property>
+                               <property name="sizeHint" stdset="0">
+                                <size>
+                                 <width>20</width>
+                                 <height>40</height>
+                                </size>
+                               </property>
+                              </spacer>
+                             </item>
+                             <item>
+                              <widget class="QLabel" name="label_7">
+                               <property name="font">
+                                <font>
+                                 <family>Arial</family>
+                                 <pointsize>12</pointsize>
+                                 <weight>75</weight>
+                                 <bold>true</bold>
+                                </font>
+                               </property>
+                               <property name="text">
+                                <string>Скачивание книги</string>
+                               </property>
+                               <property name="alignment">
+                                <set>Qt::AlignCenter</set>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QProgressBar" name="downloadingProgressBarLg">
+                               <property name="value">
+                                <number>24</number>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <spacer name="verticalSpacer_13">
+                               <property name="orientation">
+                                <enum>Qt::Vertical</enum>
+                               </property>
+                               <property name="sizeHint" stdset="0">
+                                <size>
+                                 <width>20</width>
+                                 <height>40</height>
+                                </size>
+                               </property>
+                              </spacer>
+                             </item>
+                            </layout>
+                           </item>
+                           <item>
+                            <spacer name="horizontalSpacer_12">
+                             <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                             </property>
+                             <property name="sizeType">
+                              <enum>QSizePolicy::Preferred</enum>
+                             </property>
+                             <property name="sizeHint" stdset="0">
+                              <size>
+                               <width>193</width>
+                               <height>20</height>
+                              </size>
+                             </property>
+                            </spacer>
+                           </item>
+                          </layout>
+                         </widget>
                         </widget>
-                        <widget class="QWidget" name="downloadingPage">
-                         <layout class="QHBoxLayout" name="horizontalLayout_34">
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QFrame" name="descriptionFrame">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="frameShape">
+                       <enum>QFrame::StyledPanel</enum>
+                      </property>
+                      <property name="frameShadow">
+                       <enum>QFrame::Raised</enum>
+                      </property>
+                      <layout class="QVBoxLayout" name="verticalLayout_29">
+                       <property name="spacing">
+                        <number>20</number>
+                       </property>
+                       <property name="leftMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="topMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="rightMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="bottomMargin">
+                        <number>0</number>
+                       </property>
+                       <item>
+                        <widget class="QFrame" name="aboutBookFrame">
+                         <property name="frameShape">
+                          <enum>QFrame::StyledPanel</enum>
+                         </property>
+                         <property name="frameShadow">
+                          <enum>QFrame::Raised</enum>
+                         </property>
+                         <layout class="QHBoxLayout" name="horizontalLayout_35">
+                          <property name="spacing">
+                           <number>40</number>
+                          </property>
                           <property name="leftMargin">
                            <number>0</number>
                           </property>
@@ -2447,87 +2612,196 @@ QPushButton:pressed {
                            <number>0</number>
                           </property>
                           <item>
-                           <spacer name="horizontalSpacer_15">
+                           <widget class="QFrame" name="frame_4">
+                            <property name="sizePolicy">
+                             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                              <horstretch>0</horstretch>
+                              <verstretch>0</verstretch>
+                             </sizepolicy>
+                            </property>
+                            <layout class="QVBoxLayout" name="verticalLayout_26">
+                             <item>
+                              <widget class="QLabel" name="label_10">
+                               <property name="font">
+                                <font>
+                                 <family>Arial Black</family>
+                                 <pointsize>11</pointsize>
+                                 <weight>75</weight>
+                                 <bold>true</bold>
+                                </font>
+                               </property>
+                               <property name="text">
+                                <string>Автор</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QLabel" name="authorLabel">
+                               <property name="font">
+                                <font>
+                                 <family>Arial</family>
+                                 <pointsize>12</pointsize>
+                                 <weight>50</weight>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">padding-left: 2px;</string>
+                               </property>
+                               <property name="text">
+                                <string>author</string>
+                               </property>
+                              </widget>
+                             </item>
+                            </layout>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QFrame" name="frame_3">
+                            <property name="sizePolicy">
+                             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                              <horstretch>0</horstretch>
+                              <verstretch>0</verstretch>
+                             </sizepolicy>
+                            </property>
+                            <layout class="QVBoxLayout" name="verticalLayout_27">
+                             <item>
+                              <widget class="QLabel" name="label_11">
+                               <property name="font">
+                                <font>
+                                 <family>Arial Black</family>
+                                 <pointsize>11</pointsize>
+                                 <weight>75</weight>
+                                 <bold>true</bold>
+                                </font>
+                               </property>
+                               <property name="text">
+                                <string>Серия</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QLabel" name="nameLabel">
+                               <property name="font">
+                                <font>
+                                 <family>Arial</family>
+                                 <pointsize>12</pointsize>
+                                 <weight>50</weight>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">padding-left: 2px;</string>
+                               </property>
+                               <property name="text">
+                                <string>name</string>
+                               </property>
+                              </widget>
+                             </item>
+                            </layout>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QFrame" name="frame">
+                            <property name="sizePolicy">
+                             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                              <horstretch>0</horstretch>
+                              <verstretch>0</verstretch>
+                             </sizepolicy>
+                            </property>
+                            <layout class="QVBoxLayout" name="verticalLayout_22">
+                             <item>
+                              <widget class="QLabel" name="label_8">
+                               <property name="font">
+                                <font>
+                                 <family>Arial Black</family>
+                                 <pointsize>11</pointsize>
+                                 <weight>75</weight>
+                                 <bold>true</bold>
+                                </font>
+                               </property>
+                               <property name="text">
+                                <string>Читает</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QLabel" name="readerLabel">
+                               <property name="font">
+                                <font>
+                                 <family>Arial</family>
+                                 <pointsize>12</pointsize>
+                                 <weight>50</weight>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">padding-left: 2px;</string>
+                               </property>
+                               <property name="text">
+                                <string>reader</string>
+                               </property>
+                              </widget>
+                             </item>
+                            </layout>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QFrame" name="frame_2">
+                            <property name="sizePolicy">
+                             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                              <horstretch>0</horstretch>
+                              <verstretch>0</verstretch>
+                             </sizepolicy>
+                            </property>
+                            <layout class="QVBoxLayout" name="verticalLayout_25">
+                             <item>
+                              <widget class="QLabel" name="label_9">
+                               <property name="font">
+                                <font>
+                                 <family>Arial Black</family>
+                                 <pointsize>11</pointsize>
+                                 <weight>75</weight>
+                                 <bold>true</bold>
+                                </font>
+                               </property>
+                               <property name="text">
+                                <string>Длительность</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QLabel" name="durationLabel">
+                               <property name="font">
+                                <font>
+                                 <family>Arial</family>
+                                 <pointsize>12</pointsize>
+                                 <weight>50</weight>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">padding-left: 2px;</string>
+                               </property>
+                               <property name="text">
+                                <string>duration</string>
+                               </property>
+                              </widget>
+                             </item>
+                            </layout>
+                           </widget>
+                          </item>
+                          <item>
+                           <spacer name="horizontalSpacer_13">
                             <property name="orientation">
                              <enum>Qt::Horizontal</enum>
                             </property>
                             <property name="sizeType">
-                             <enum>QSizePolicy::Preferred</enum>
+                             <enum>QSizePolicy::Expanding</enum>
                             </property>
                             <property name="sizeHint" stdset="0">
                              <size>
-                              <width>194</width>
-                              <height>20</height>
-                             </size>
-                            </property>
-                           </spacer>
-                          </item>
-                          <item>
-                           <layout class="QVBoxLayout" name="verticalLayout_24">
-                            <item>
-                             <spacer name="verticalSpacer_12">
-                              <property name="orientation">
-                               <enum>Qt::Vertical</enum>
-                              </property>
-                              <property name="sizeHint" stdset="0">
-                               <size>
-                                <width>20</width>
-                                <height>40</height>
-                               </size>
-                              </property>
-                             </spacer>
-                            </item>
-                            <item>
-                             <widget class="QLabel" name="label_7">
-                              <property name="font">
-                               <font>
-                                <family>Arial</family>
-                                <pointsize>12</pointsize>
-                                <weight>75</weight>
-                                <bold>true</bold>
-                               </font>
-                              </property>
-                              <property name="text">
-                               <string>Скачивание книги</string>
-                              </property>
-                              <property name="alignment">
-                               <set>Qt::AlignCenter</set>
-                              </property>
-                             </widget>
-                            </item>
-                            <item>
-                             <widget class="QProgressBar" name="downloadingProgressBarLg">
-                              <property name="value">
-                               <number>24</number>
-                              </property>
-                             </widget>
-                            </item>
-                            <item>
-                             <spacer name="verticalSpacer_13">
-                              <property name="orientation">
-                               <enum>Qt::Vertical</enum>
-                              </property>
-                              <property name="sizeHint" stdset="0">
-                               <size>
-                                <width>20</width>
-                                <height>40</height>
-                               </size>
-                              </property>
-                             </spacer>
-                            </item>
-                           </layout>
-                          </item>
-                          <item>
-                           <spacer name="horizontalSpacer_12">
-                            <property name="orientation">
-                             <enum>Qt::Horizontal</enum>
-                            </property>
-                            <property name="sizeType">
-                             <enum>QSizePolicy::Preferred</enum>
-                            </property>
-                            <property name="sizeHint" stdset="0">
-                             <size>
-                              <width>193</width>
+                              <width>40</width>
                               <height>20</height>
                              </size>
                             </property>
@@ -2535,22 +2809,80 @@ QPushButton:pressed {
                           </item>
                          </layout>
                         </widget>
-                       </widget>
-                      </item>
-                     </layout>
-                    </item>
-                    <item>
-                     <spacer name="verticalSpacer_9">
-                      <property name="orientation">
-                       <enum>Qt::Vertical</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>20</width>
-                        <height>281</height>
-                       </size>
-                      </property>
-                     </spacer>
+                       </item>
+                       <item>
+                        <layout class="QVBoxLayout" name="verticalLayout_28">
+                         <property name="spacing">
+                          <number>2</number>
+                         </property>
+                         <property name="leftMargin">
+                          <number>10</number>
+                         </property>
+                         <item>
+                          <widget class="QLabel" name="label_12">
+                           <property name="font">
+                            <font>
+                             <family>Arial Black</family>
+                             <pointsize>11</pointsize>
+                             <weight>75</weight>
+                             <bold>true</bold>
+                            </font>
+                           </property>
+                           <property name="text">
+                            <string>Описание</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QTextEdit" name="description">
+                           <property name="sizePolicy">
+                            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                             <horstretch>0</horstretch>
+                             <verstretch>0</verstretch>
+                            </sizepolicy>
+                           </property>
+                           <property name="font">
+                            <font>
+                             <family>Arial</family>
+                             <pointsize>12</pointsize>
+                             <weight>50</weight>
+                             <bold>false</bold>
+                            </font>
+                           </property>
+                           <property name="styleSheet">
+                            <string notr="true">border: none;
+padding: 0px;</string>
+                           </property>
+                           <property name="verticalScrollBarPolicy">
+                            <enum>Qt::ScrollBarAlwaysOff</enum>
+                           </property>
+                           <property name="horizontalScrollBarPolicy">
+                            <enum>Qt::ScrollBarAlwaysOff</enum>
+                           </property>
+                           <property name="sizeAdjustPolicy">
+                            <enum>QAbstractScrollArea::AdjustToContents</enum>
+                           </property>
+                           <property name="markdown">
+                            <string>description
+
+</string>
+                           </property>
+                           <property name="html">
+                            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;description&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                           </property>
+                           <property name="textInteractionFlags">
+                            <set>Qt::TextSelectableByMouse</set>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </item>
+                      </layout>
+                     </widget>
                     </item>
                    </layout>
                   </widget>

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import typing as ty
 
 from PyQt5 import QtWidgets, QtCore
@@ -7,16 +8,19 @@ from PyQt5 import QtWidgets, QtCore
 from ui import UiMainWindow
 from ui_functions import (
     add_book_page,
+    book_page,
     control_panel,
     library,
     menu,
     sliders,
     window_geometry,
 )
+from database import Books
 
 if ty.TYPE_CHECKING:
     from PyQt5.QtCore import QObject, QEvent
     from PyQt5.QtGui import QMovie
+    from database import Book
 
 
 class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
@@ -100,6 +104,28 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         else:
             self.infoPageBtn.hide()
         self.stackedWidget.setCurrentWidget(self.infoPage)
+
+    def openBookPage(self, book: Book):
+        self.titleLabel.setText(f"{book.author} - {book.name}")
+        book_data = Books(os.environ["DB_PATH"]).filter(
+            author=book.author, name=book.name
+        )
+        if not book_data:
+            self.toggleFavoriteBtn.hide()
+            self.deleteBtn.hide()
+            self.changeDriverBtn.hide()
+            self.playerContent.setCurrentWidget(self.needDownloadingPage)
+        else:
+            book = book_data
+
+        self.authorLabel.setText(book.author)
+        self.nameLabel.setText(book.name)
+        self.readerLabel.setText(book.reader)
+        self.durationLabel.setText(book.duration)
+        self.description.setText(book.description)
+
+        book_page.download_preview(self, book)
+        self.stackedWidget.setCurrentWidget(self.bookPage)
 
     def eventFilter(self, obj: QObject, event: QEvent) -> bool:
         window_geometry.mouseEvent(self, event)
