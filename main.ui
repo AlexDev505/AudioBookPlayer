@@ -2600,7 +2600,7 @@ QPushButton:pressed {
                            <number>40</number>
                           </property>
                           <property name="leftMargin">
-                           <number>0</number>
+                           <number>2</number>
                           </property>
                           <property name="topMargin">
                            <number>0</number>
@@ -2646,7 +2646,7 @@ QPushButton:pressed {
                                 </font>
                                </property>
                                <property name="styleSheet">
-                                <string notr="true">padding-left: 2px;</string>
+                                <string notr="true"/>
                                </property>
                                <property name="text">
                                 <string>author</string>
@@ -2691,7 +2691,7 @@ QPushButton:pressed {
                                 </font>
                                </property>
                                <property name="styleSheet">
-                                <string notr="true">padding-left: 2px;</string>
+                                <string notr="true"/>
                                </property>
                                <property name="text">
                                 <string>name</string>
@@ -2736,7 +2736,7 @@ QPushButton:pressed {
                                 </font>
                                </property>
                                <property name="styleSheet">
-                                <string notr="true">padding-left: 2px;</string>
+                                <string notr="true"/>
                                </property>
                                <property name="text">
                                 <string>reader</string>
@@ -2781,7 +2781,7 @@ QPushButton:pressed {
                                 </font>
                                </property>
                                <property name="styleSheet">
-                                <string notr="true">padding-left: 2px;</string>
+                                <string notr="true"/>
                                </property>
                                <property name="text">
                                 <string>duration</string>
@@ -2816,7 +2816,7 @@ QPushButton:pressed {
                           <number>2</number>
                          </property>
                          <property name="leftMargin">
-                          <number>10</number>
+                          <number>5</number>
                          </property>
                          <item>
                           <widget class="QLabel" name="label_12">
@@ -2827,6 +2827,9 @@ QPushButton:pressed {
                              <weight>75</weight>
                              <bold>true</bold>
                             </font>
+                           </property>
+                           <property name="styleSheet">
+                            <string notr="true">padding-left: 1px;</string>
                            </property>
                            <property name="text">
                             <string>Описание</string>
@@ -2850,8 +2853,10 @@ QPushButton:pressed {
                             </font>
                            </property>
                            <property name="styleSheet">
-                            <string notr="true">border: none;
-padding: 0px;</string>
+                            <string notr="true">QTextEdit, QTextEdit * {
+	border: none;
+	margin-left: 3px;
+}</string>
                            </property>
                            <property name="verticalScrollBarPolicy">
                             <enum>Qt::ScrollBarAlwaysOff</enum>
