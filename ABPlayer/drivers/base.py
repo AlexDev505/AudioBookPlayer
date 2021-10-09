@@ -172,7 +172,8 @@ class Driver(ABC):
                 file.write(resp.content)
             else:
                 for data in resp.iter_content(chunk_size=5120):
-                    process_handler.progress(len(data))
+                    if process_handler:
+                        process_handler.progress(len(data))
                     file.write(data)
 
     @property

@@ -35,6 +35,9 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
 
         self.setupSignals()
 
+        self.downloading = False  # Идёт ли процесс скачивания
+        self.book: Book = ...
+
     def setupSignals(self):
         # APPLICATION
         self.closeAppBtn.clicked.connect(self.close)
@@ -86,6 +89,12 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         # ADD BOOK PAGE
         self.searchNewBookBtn.clicked.connect(lambda e: add_book_page.search(self))
 
+        # BOOK PAGE
+        self.saveBtn.clicked.connect(lambda e: book_page.download_book(self, self.book))
+        self.downloadBookBtn.clicked.connect(
+            lambda e: book_page.download_book(self, self.book)
+        )
+
     def openInfoPage(
         self,
         text: str = "",
@@ -114,8 +123,14 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
             self.toggleFavoriteBtn.hide()
             self.deleteBtn.hide()
             self.changeDriverBtn.hide()
+            self.saveBtn.show()
             self.playerContent.setCurrentWidget(self.needDownloadingPage)
         else:
+            self.toggleFavoriteBtn.show()
+            self.deleteBtn.show()
+            self.changeDriverBtn.show()
+            self.saveBtn.hide()
+            self.playerContent.setCurrentWidget(self.playerPage)
             book = book_data
 
         self.authorLabel.setText(book.author)
@@ -126,6 +141,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
 
         book_page.download_preview(self, book)
         self.stackedWidget.setCurrentWidget(self.bookPage)
+        self.book = book
 
     def eventFilter(self, obj: QObject, event: QEvent) -> bool:
         window_geometry.mouseEvent(self, event)
