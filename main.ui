@@ -154,6 +154,17 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 	background: rgb(46, 51, 56);
 	border-radius: 4px;
 }
+/* PROGRESS BAR */
+QProgressBar {
+	background-color: rgb(64, 68, 75);
+	border: none;
+	border-radius: 5px;
+	color: black;
+}
+QProgressBar::chunk {
+	background-color: rgb(142, 146, 151);
+	border-radius :5px;
+}      
 
 
 /* TOP FRAME */
@@ -773,7 +784,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
              <item>
               <widget class="QStackedWidget" name="stackedWidget">
                <property name="currentIndex">
-                <number>1</number>
+                <number>0</number>
                </property>
                <widget class="QWidget" name="libraryPage">
                 <layout class="QHBoxLayout" name="horizontalLayout_21">
@@ -1402,8 +1413,8 @@ QPushButton:pressed {
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>749</width>
-                                   <height>545</height>
+                                   <width>728</width>
+                                   <height>515</height>
                                   </rect>
                                  </property>
                                  <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -1517,8 +1528,8 @@ border-radius:10px;</string>
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>749</width>
-                                   <height>545</height>
+                                   <width>728</width>
+                                   <height>515</height>
                                   </rect>
                                  </property>
                                  <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -1586,8 +1597,8 @@ border-radius:10px;</string>
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>749</width>
-                                   <height>545</height>
+                                   <width>728</width>
+                                   <height>515</height>
                                   </rect>
                                  </property>
                                  <layout class="QVBoxLayout" name="verticalLayout_13">
@@ -2080,7 +2091,7 @@ QPushButton:pressed {
                         <widget class="QStackedWidget" name="playerContent">
                          <property name="minimumSize">
                           <size>
-                           <width>230</width>
+                           <width>500</width>
                            <height>230</height>
                           </size>
                          </property>
@@ -2514,8 +2525,17 @@ QPushButton:pressed {
                              </item>
                              <item>
                               <widget class="QProgressBar" name="downloadingProgressBarLg">
+                               <property name="minimumSize">
+                                <size>
+                                 <width>400</width>
+                                 <height>30</height>
+                                </size>
+                               </property>
                                <property name="value">
                                 <number>24</number>
+                               </property>
+                               <property name="alignment">
+                                <set>Qt::AlignCenter</set>
                                </property>
                               </widget>
                              </item>
@@ -2582,7 +2602,7 @@ QPushButton:pressed {
                         <number>0</number>
                        </property>
                        <property name="rightMargin">
-                        <number>0</number>
+                        <number>20</number>
                        </property>
                        <property name="bottomMargin">
                         <number>0</number>
@@ -3315,7 +3335,7 @@ border-radius: 5px; </string>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_7">
              <property name="spacing">
-              <number>5</number>
+              <number>0</number>
              </property>
              <property name="leftMargin">
               <number>5</number>
@@ -3862,6 +3882,61 @@ border-radius: 5px; </string>
                   <attribute name="buttonGroup">
                    <string notr="true">controlPanelButtons</string>
                   </attribute>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QFrame" name="pbFrame">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>0</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::StyledPanel</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_31">
+                <property name="spacing">
+                 <number>0</number>
+                </property>
+                <property name="leftMargin">
+                 <number>30</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>5</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QProgressBar" name="downloadingProgressBar">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>35</height>
+                   </size>
+                  </property>
+                  <property name="value">
+                   <number>24</number>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
                  </widget>
                 </item>
                </layout>

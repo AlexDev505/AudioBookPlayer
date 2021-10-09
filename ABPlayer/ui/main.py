@@ -156,6 +156,17 @@ class UiMainWindow(object):
             "    background: rgb(46, 51, 56);\n"
             "    border-radius: 4px;\n"
             "}\n"
+            "/* PROGRESS BAR */\n"
+            "QProgressBar {\n"
+            "    background-color: rgb(64, 68, 75);\n"
+            "    border: none;\n"
+            "    border-radius: 5px;\n"
+            "    color: black;\n"
+            "}\n"
+            "QProgressBar::chunk {\n"
+            "    background-color: rgb(142, 146, 151);\n"
+            "    border-radius :5px;\n"
+            "}      \n"
             "\n"
             "\n"
             "/* TOP FRAME */\n"
@@ -816,7 +827,7 @@ class UiMainWindow(object):
         self.inProgressBooksContainer.setWidgetResizable(True)
         self.inProgressBooksContainer.setObjectName("inProgressBooksContainer")
         self.inProgressBooksLayout = QtWidgets.QWidget()
-        self.inProgressBooksLayout.setGeometry(QtCore.QRect(0, 0, 749, 545))
+        self.inProgressBooksLayout.setGeometry(QtCore.QRect(0, 0, 728, 515))
         self.inProgressBooksLayout.setObjectName("inProgressBooksLayout")
         self.verticalLayout_11 = QtWidgets.QVBoxLayout(self.inProgressBooksLayout)
         self.verticalLayout_11.setObjectName("verticalLayout_11")
@@ -1085,7 +1096,7 @@ class UiMainWindow(object):
         self.bookCoverLg.setObjectName("bookCoverLg")
         self.horizontalLayout_31.addWidget(self.bookCoverLg)
         self.playerContent = QtWidgets.QStackedWidget(self.playerFrame)
-        self.playerContent.setMinimumSize(QtCore.QSize(230, 230))
+        self.playerContent.setMinimumSize(QtCore.QSize(500, 230))
         self.playerContent.setMaximumSize(QtCore.QSize(16777215, 230))
         self.playerContent.setObjectName("playerContent")
         self.playerPage = QtWidgets.QWidget()
@@ -1290,7 +1301,9 @@ class UiMainWindow(object):
         self.label_7.setObjectName("label_7")
         self.verticalLayout_24.addWidget(self.label_7)
         self.downloadingProgressBarLg = QtWidgets.QProgressBar(self.downloadingPage)
+        self.downloadingProgressBarLg.setMinimumSize(QtCore.QSize(400, 30))
         self.downloadingProgressBarLg.setProperty("value", 24)
+        self.downloadingProgressBarLg.setAlignment(QtCore.Qt.AlignCenter)
         self.downloadingProgressBarLg.setObjectName("downloadingProgressBarLg")
         self.verticalLayout_24.addWidget(self.downloadingProgressBarLg)
         spacerItem12 = QtWidgets.QSpacerItem(
@@ -1319,7 +1332,7 @@ class UiMainWindow(object):
         self.descriptionFrame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.descriptionFrame.setObjectName("descriptionFrame")
         self.verticalLayout_29 = QtWidgets.QVBoxLayout(self.descriptionFrame)
-        self.verticalLayout_29.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_29.setContentsMargins(0, 0, 20, 0)
         self.verticalLayout_29.setSpacing(20)
         self.verticalLayout_29.setObjectName("verticalLayout_29")
         self.aboutBookFrame = QtWidgets.QFrame(self.descriptionFrame)
@@ -1688,7 +1701,7 @@ class UiMainWindow(object):
         self.controlPanel.setObjectName("controlPanel")
         self.horizontalLayout_7 = QtWidgets.QHBoxLayout(self.controlPanel)
         self.horizontalLayout_7.setContentsMargins(5, 5, 5, 5)
-        self.horizontalLayout_7.setSpacing(5)
+        self.horizontalLayout_7.setSpacing(0)
         self.horizontalLayout_7.setObjectName("horizontalLayout_7")
         self.bookPreview = QtWidgets.QFrame(self.controlPanel)
         self.bookPreview.setMinimumSize(QtCore.QSize(150, 60))
@@ -1887,6 +1900,23 @@ class UiMainWindow(object):
         self.controlPanelButtons.addButton(self.overlayBtn)
         self.horizontalLayout_8.addWidget(self.overlayBtn)
         self.horizontalLayout_7.addWidget(self.toolsFrame)
+        self.pbFrame = QtWidgets.QFrame(self.controlPanel)
+        self.pbFrame.setMinimumSize(QtCore.QSize(0, 0))
+        self.pbFrame.setMaximumSize(QtCore.QSize(0, 16777215))
+        self.pbFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.pbFrame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.pbFrame.setObjectName("pbFrame")
+        self.verticalLayout_31 = QtWidgets.QVBoxLayout(self.pbFrame)
+        self.verticalLayout_31.setContentsMargins(30, 0, 5, 0)
+        self.verticalLayout_31.setSpacing(0)
+        self.verticalLayout_31.setObjectName("verticalLayout_31")
+        self.downloadingProgressBar = QtWidgets.QProgressBar(self.pbFrame)
+        self.downloadingProgressBar.setMinimumSize(QtCore.QSize(0, 35))
+        self.downloadingProgressBar.setProperty("value", 24)
+        self.downloadingProgressBar.setAlignment(QtCore.Qt.AlignCenter)
+        self.downloadingProgressBar.setObjectName("downloadingProgressBar")
+        self.verticalLayout_31.addWidget(self.downloadingProgressBar)
+        self.horizontalLayout_7.addWidget(self.pbFrame)
         self.resizeWidgetFrame = QtWidgets.QFrame(self.controlPanel)
         self.resizeWidgetFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.resizeWidgetFrame.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -1913,7 +1943,7 @@ class UiMainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(0)
         self.library.setCurrentIndex(1)
         self.playerContent.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
