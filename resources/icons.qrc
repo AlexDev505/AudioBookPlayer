@@ -13,6 +13,9 @@
     <file>settings.svg</file>
   </qresource>
   <qresource prefix="other">
+    <file>clock.svg</file>
+    <file>mic.svg</file>
+    <file>person.svg</file>
     <file>double_angle_left.svg</file>
     <file>double_angle_right.svg</file>
     <file>check.svg</file>

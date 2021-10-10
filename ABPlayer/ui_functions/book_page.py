@@ -21,6 +21,7 @@ from database import Books
 
 if ty.TYPE_CHECKING:
     from PyQt5 import QtCore
+    from PyQt5.QtWidgets import QLabel
     from main_window import MainWindow
     from database import Book
 
@@ -43,9 +44,18 @@ class DownloadPreviewWorker(QObject):
     finished: QtCore.pyqtSignal = pyqtSignal(object)
     failed: QtCore.pyqtSignal = pyqtSignal()
 
-    def __init__(self, main_window: MainWindow, book: Book):
+    def __init__(
+        self,
+        main_window: ty.Any,
+        cover_label: QLabel,
+        size: ty.Tuple[int, int],
+        book: Book,
+    ):
         super(DownloadPreviewWorker, self).__init__()
-        self.main_window, self.book = main_window, book
+        self.main_window = main_window
+        self.cover_label = cover_label
+        self.size = size
+        self.book = book
         self.finished.connect(lambda pixmap: self.finish(pixmap))
         self.failed.connect(self.fail)
 
@@ -61,7 +71,6 @@ class DownloadPreviewWorker(QObject):
                 data = urllib.request.urlopen(self.book.preview, context=context).read()
                 pixmap = QPixmap()
                 pixmap.loadFromData(data)
-                pixmap = pixmap.scaled(230, 230, Qt.KeepAspectRatio)
                 Cache.set(self.book.preview, pixmap)
             self.finished.emit(pixmap)
         except Exception:
@@ -69,24 +78,29 @@ class DownloadPreviewWorker(QObject):
 
     def finish(self, pixmap: QPixmap):
         self.main_window.download_cover_thread.quit()
-        self.main_window.bookCoverLg.setMovie(None)
-        self.main_window.bookCoverLg.setPixmap(pixmap)
+        self.cover_label.setMovie(None)
         if os.path.isdir(self.book.dir_path):
             pixmap.save(os.path.join(self.book.dir_path, "cover.jpg"), "jpeg")
+        pixmap = pixmap.scaled(*self.size, Qt.KeepAspectRatio)
+        self.cover_label.setPixmap(pixmap)
 
     def fail(self):
         self.main_window.download_cover_thread.quit()
-        self.main_window.bookCoverLg.hide()
+        self.cover_label.hide()
 
 
-def download_preview(main_window: MainWindow, book: Book) -> None:
-    main_window.bookCoverLg.show()
+def download_preview(
+    main_window: ty.Any, cover_label: QLabel, size: ty.Tuple[int, int], book: Book
+) -> None:
+    cover_label.show()
     main_window.loading_cover_movie = QMovie(":/other/loading.gif")
     main_window.loading_cover_movie.setScaledSize(QSize(50, 50))
-    main_window.bookCoverLg.setMovie(main_window.loading_cover_movie)
+    cover_label.setMovie(main_window.loading_cover_movie)
     main_window.loading_cover_movie.start()
     main_window.download_cover_thread = QThread()
-    main_window.download_cover_worker = DownloadPreviewWorker(main_window, book)
+    main_window.download_cover_worker = DownloadPreviewWorker(
+        main_window, cover_label, size, book
+    )
     main_window.download_cover_worker.moveToThread(main_window.download_cover_thread)
     main_window.download_cover_thread.started.connect(
         main_window.download_cover_worker.run
