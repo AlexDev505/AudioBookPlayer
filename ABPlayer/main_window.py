@@ -5,7 +5,7 @@ import typing as ty
 
 from PyQt5 import QtWidgets, QtCore, QtGui
 
-from ui import UiMainWindow
+from ui import UiMainWindow, UiBook
 from ui_functions import (
     add_book_page,
     book_page,
@@ -16,11 +16,13 @@ from ui_functions import (
     window_geometry,
 )
 from database import Books
+from database.tables.books import Status
 
 if ty.TYPE_CHECKING:
     from PyQt5.QtCore import QObject, QEvent
     from PyQt5.QtGui import QMovie
     from database import Book
+    from database.tables.books import BookItem
 
 
 class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
@@ -37,6 +39,8 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
 
         self.downloading = False  # Идёт ли процесс скачивания
         self.book: Book = ...
+
+        self.openLibraryPage()
 
     def setupSignals(self):
         # APPLICATION
@@ -140,7 +144,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         self.description.setText(book.description)
 
         if not book_data:
-            book_page.download_preview(self, book)
+            book_page.download_preview(self, self.bookCoverLg, (230, 230), book)
         else:
             cover_path = os.path.join(book.dir_path, "cover.jpg")
             if os.path.isfile(cover_path):
@@ -148,10 +152,143 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
                 pixmap.load(cover_path)
                 self.bookCoverLg.setPixmap(pixmap)
             else:
-                book_page.download_preview(self, book)
+                book_page.download_preview(self, self.bookCoverLg, (230, 230), book)
 
         self.stackedWidget.setCurrentWidget(self.bookPage)
         self.book = book
+
+    def openLibraryPage(self):
+        books: ty.List[Books] = Books(os.environ["DB_PATH"]).filter(return_list=True)
+
+        for layout in [
+            self.allBooksLayout,
+            self.inProgressBooksLayout,
+            self.listenedBooksLayout,
+        ]:
+            for children in layout.children():
+                if not isinstance(children, QtWidgets.QVBoxLayout):
+                    children.hide()
+                    children.deleteLater()
+            for i in reversed(range(layout.layout().count())):
+                item = layout.layout().itemAt(i)
+                if isinstance(item, QtWidgets.QSpacerItem):
+                    layout.layout().removeItem(item)
+
+        sizes = []
+        for book in books:
+            bookWidget = self._initBookWidget(self.allBooksLayout, book)
+            sizes.append(
+                bookWidget.titleLabel.sizeHint().width()
+                + bookWidget.btnsFtame.sizeHint().width()
+                + 300
+            )
+            if book.status == Status.started:
+                self._initBookWidget(self.inProgressBooksLayout, book)
+            elif book.status == Status.finished:
+                self._initBookWidget(self.listenedBooksLayout, book)
+
+        if not len(books):
+            self.allBooksContainer.hide()
+            self.allBooksPageNothing.show()
+            if self.libraryFiltersPanel.width() != 25:
+                self.toggleBooksFilterPanelBtn.click()
+        else:
+            self.allBooksContainer.show()
+            self.allBooksPageNothing.hide()
+            allBooksContainerSpacer = QtWidgets.QSpacerItem(
+                40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+            )
+            self.allBooksLayout.layout().addItem(allBooksContainerSpacer)
+
+        if len(self.inProgressBooksLayout.children()) < 2:
+            self.inProgressBooksContainer.hide()
+            self.inProsessBooksPageNothing.show()
+        else:
+            self.inProgressBooksContainer.show()
+            self.inProsessBooksPageNothing.hide()
+            inProgressBooksContainerSpacer = QtWidgets.QSpacerItem(
+                40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+            )
+            self.inProgressBooksLayout.layout().addItem(inProgressBooksContainerSpacer)
+
+        if len(self.listenedBooksLayout.children()) < 2:
+            self.listenedBooksContainer.hide()
+            self.listenedBooksPageNothing.show()
+        else:
+            self.listenedBooksContainer.show()
+            self.listenedBooksPageNothing.hide()
+            listenedBooksContainerSpacer = QtWidgets.QSpacerItem(
+                40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+            )
+            self.listenedBooksLayout.layout().addItem(listenedBooksContainerSpacer)
+
+        self.library.setMinimumWidth(max(sizes))
+
+        self.library.setCurrentWidget(self.allBooksPage)
+
+        self.stackedWidget.setCurrentWidget(self.libraryPage)
+
+    @staticmethod
+    def _initBookWidget(parent: QtWidgets.QWidget, book: Books) -> UiBook:
+        bookFrame = QtWidgets.QFrame(parent)
+        bookWidget = UiBook()
+        bookWidget.setupUi(bookFrame)
+
+        bookWidget.titleLabel.setText(f"{book.author} - {book.name}")
+        icon = QtGui.QIcon()
+        if book.favorite:
+            icon.addPixmap(
+                QtGui.QPixmap(":/other/star_fill.svg"),
+                QtGui.QIcon.Normal,
+                QtGui.QIcon.Off,
+            )
+        else:
+            icon.addPixmap(
+                QtGui.QPixmap(":/other/star.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
+            )
+        bookWidget.toggleFavoriteBtn.setIcon(icon)
+        description = book.description.replace("\n", "")
+        if len(description) > 250:
+            description = description[:250]
+            description = description[: description.rfind(" ")] + "..."
+        bookWidget.description.setText(description)
+        bookWidget.authorLabel.setText(book.author)
+        bookWidget.readerLabel.setText(book.reader)
+        bookWidget.durationLabel.setText(book.duration)
+        if book.status == Status.finished:
+            bookWidget.inProcessIcon.hide()
+            bookWidget.progressLabel.setText("Прослушано")
+        elif book.status == Status.started:
+            bookWidget.finishedIcon.hide()
+            item: BookItem
+            total = sum([item.end_time - item.start_time for item in book.items])
+            cur = (
+                sum(
+                    [
+                        item.end_time - item.start_time
+                        for i, item in enumerate(book.items)
+                        if i < book.stop_flag.item
+                    ]
+                )
+                + book.stop_flag.time
+            )
+            bookWidget.progressLabel.setText(
+                f"{int(round(cur / (total / 100)))}% прослушано"
+            )
+        else:
+            bookWidget.finishedIcon.hide()
+
+        cover_path = os.path.join(book.dir_path, "cover.jpg")
+        if os.path.isfile(cover_path):
+            pixmap = QtGui.QPixmap()
+            pixmap.load(cover_path)
+            pixmap = pixmap.scaled(200, 200, QtCore.Qt.KeepAspectRatio)
+            bookWidget.cover.setPixmap(pixmap)
+        else:
+            book_page.download_preview(bookWidget, bookWidget.cover, (200, 200), book)
+
+        parent.layout().addWidget(bookFrame)
+        return bookWidget
 
     def eventFilter(self, obj: QObject, event: QEvent) -> bool:
         window_geometry.mouseEvent(self, event)

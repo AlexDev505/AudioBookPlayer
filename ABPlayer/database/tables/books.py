@@ -70,6 +70,16 @@ class StopFlag(FieldType):
         return cls(**literal_eval(obj.decode("utf-8")))
 
 
+class Bool(FieldType):
+    @staticmethod
+    def adapter(obj: bool) -> bytes:
+        return str(int(obj)).encode()
+
+    @classmethod
+    def converter(cls, obj: bytes) -> bool:
+        return bool(int(obj.decode("utf-8")))
+
+
 @dataclass
 class Book:
     """
@@ -107,3 +117,4 @@ class Books(Table, Book):
 
     status: Status = Status.new
     stop_flag: StopFlag = StopFlag()
+    favorite: Bool = False

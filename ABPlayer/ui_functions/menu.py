@@ -51,7 +51,7 @@ def buttonsHandler(main_window: MainWindow, button: QPushButton) -> None:
     :param button: Нажатая кнопка.
     """
     if button == main_window.libraryBtn:
-        main_window.stackedWidget.setCurrentWidget(main_window.libraryPage)
+        main_window.openLibraryPage()
     elif button == main_window.addBookBtn:
         main_window.stackedWidget.setCurrentWidget(main_window.addBookPage)
     elif button == main_window.settingsBtn:
