@@ -113,8 +113,6 @@ class Driver(ABC):
         """
         item: BookItem
 
-        # Папка с книгой
-        dir_path = os.path.join(os.environ["dir_with_books"], book.author, book.name)
         urls = []  # Ссылки на файлы
         merged = False  # Если True, то в 1-ом файле присутствует несколько глав
         total_size = 0  # Общий размер книги(в битах)
@@ -139,7 +137,7 @@ class Driver(ABC):
             for i, url in enumerate(urls):
                 file_path = Path(
                     os.path.join(
-                        dir_path,
+                        book.dir_path,
                         f"{str(i + 1).rjust(2, '0')}. {book.author} - {book.name}.mp3",
                     )
                 )
@@ -147,7 +145,7 @@ class Driver(ABC):
                 prepare_file_metadata(file_path, book, i)
         else:
             for i, item in enumerate(book.items):
-                file_path = Path(os.path.join(dir_path, item.title + ".mp3"))
+                file_path = Path(os.path.join(book.dir_path, item.title + ".mp3"))
                 self._download_file(file_path, item.file_url, process_handler)
                 prepare_file_metadata(file_path, book, i, item)
 
