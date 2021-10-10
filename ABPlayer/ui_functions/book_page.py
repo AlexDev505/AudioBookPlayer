@@ -71,6 +71,8 @@ class DownloadPreviewWorker(QObject):
         self.main_window.download_cover_thread.quit()
         self.main_window.bookCoverLg.setMovie(None)
         self.main_window.bookCoverLg.setPixmap(pixmap)
+        if os.path.isdir(self.book.dir_path):
+            pixmap.save(os.path.join(self.book.dir_path, "cover.jpg"), "jpeg")
 
     def fail(self):
         self.main_window.download_cover_thread.quit()

@@ -1393,7 +1393,7 @@ QPushButton:pressed {
                              <cursorShape>ArrowCursor</cursorShape>
                             </property>
                             <property name="currentIndex">
-                             <number>1</number>
+                             <number>0</number>
                             </property>
                             <widget class="QWidget" name="allBooksPage">
                              <attribute name="title">
@@ -1413,13 +1413,33 @@ QPushButton:pressed {
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>728</width>
-                                   <height>515</height>
+                                   <width>720</width>
+                                   <height>636</height>
                                   </rect>
                                  </property>
                                  <layout class="QVBoxLayout" name="verticalLayout_10">
                                   <item>
                                    <widget class="QFrame" name="frame_4">
+                                    <property name="minimumSize">
+                                     <size>
+                                      <width>0</width>
+                                      <height>150</height>
+                                     </size>
+                                    </property>
+                                    <property name="styleSheet">
+                                     <string notr="true">background-color: rgb(47, 49, 54);
+border-radius:10px;</string>
+                                    </property>
+                                    <property name="frameShape">
+                                     <enum>QFrame::StyledPanel</enum>
+                                    </property>
+                                    <property name="frameShadow">
+                                     <enum>QFrame::Raised</enum>
+                                    </property>
+                                   </widget>
+                                  </item>
+                                  <item>
+                                   <widget class="QFrame" name="frame_7">
                                     <property name="minimumSize">
                                      <size>
                                       <width>0</width>
@@ -1456,32 +1476,6 @@ border-radius:10px;</string>
                                     <property name="frameShadow">
                                      <enum>QFrame::Raised</enum>
                                     </property>
-                                    <widget class="QFrame" name="frame">
-                                     <property name="geometry">
-                                      <rect>
-                                       <x>-40</x>
-                                       <y>-10</y>
-                                       <width>598</width>
-                                       <height>150</height>
-                                      </rect>
-                                     </property>
-                                     <property name="minimumSize">
-                                      <size>
-                                       <width>0</width>
-                                       <height>150</height>
-                                      </size>
-                                     </property>
-                                     <property name="styleSheet">
-                                      <string notr="true">background-color: rgb(47, 49, 54);
-border-radius:10px;</string>
-                                     </property>
-                                     <property name="frameShape">
-                                      <enum>QFrame::StyledPanel</enum>
-                                     </property>
-                                     <property name="frameShadow">
-                                      <enum>QFrame::Raised</enum>
-                                     </property>
-                                    </widget>
                                    </widget>
                                   </item>
                                   <item>
@@ -2299,8 +2293,8 @@ QPushButton:pressed {
                                <rect>
                                 <x>0</x>
                                 <y>0</y>
-                                <width>656</width>
-                                <height>176</height>
+                                <width>88</width>
+                                <height>16</height>
                                </rect>
                               </property>
                              </widget>
@@ -4021,7 +4015,7 @@ border-radius: 5px; </string>
  </resources>
  <connections/>
  <buttongroups>
-  <buttongroup name="menuButtons"/>
   <buttongroup name="controlPanelButtons"/>
+  <buttongroup name="menuButtons"/>
  </buttongroups>
 </ui>

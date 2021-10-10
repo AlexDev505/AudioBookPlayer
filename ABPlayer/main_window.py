@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 import typing as ty
 
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets, QtCore, QtGui
 
 from ui import UiMainWindow
 from ui_functions import (
@@ -139,7 +139,17 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         self.durationLabel.setText(book.duration)
         self.description.setText(book.description)
 
-        book_page.download_preview(self, book)
+        if not book_data:
+            book_page.download_preview(self, book)
+        else:
+            cover_path = os.path.join(book.dir_path, "cover.jpg")
+            if os.path.isfile(cover_path):
+                pixmap = QtGui.QPixmap()
+                pixmap.load(cover_path)
+                self.bookCoverLg.setPixmap(pixmap)
+            else:
+                book_page.download_preview(self, book)
+
         self.stackedWidget.setCurrentWidget(self.bookPage)
         self.book = book
 

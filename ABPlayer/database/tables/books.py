@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import typing as ty
 from dataclasses import dataclass, field
 from ast import literal_eval
@@ -88,6 +89,15 @@ class Book:
     def __post_init__(self):
         self.author = replace_quotes(self.author)
         self.name = replace_quotes(self.name)
+
+    @property
+    def dir_path(self):
+        """
+        :return: Путь к директории, в которой храниться книга.
+        """
+        return os.path.abspath(
+            os.path.join(os.environ["dir_with_books"], self.author, self.name)
+        )
 
 
 class Books(Table, Book):
