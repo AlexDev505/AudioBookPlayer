@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class UiMainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1202, 646)
+        MainWindow.resize(1208, 764)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setStyleSheet(
             "QWidget {\n"
@@ -820,7 +820,7 @@ class UiMainWindow(object):
         )
         self.allBooksContainer.setObjectName("allBooksContainer")
         self.allBooksLayout = QtWidgets.QWidget()
-        self.allBooksLayout.setGeometry(QtCore.QRect(0, 0, 769, 429))
+        self.allBooksLayout.setGeometry(QtCore.QRect(0, 0, 775, 547))
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
         )
@@ -881,7 +881,7 @@ class UiMainWindow(object):
         self.inProgressBooksContainer.setWidgetResizable(True)
         self.inProgressBooksContainer.setObjectName("inProgressBooksContainer")
         self.inProgressBooksLayout = QtWidgets.QWidget()
-        self.inProgressBooksLayout.setGeometry(QtCore.QRect(0, 0, 769, 429))
+        self.inProgressBooksLayout.setGeometry(QtCore.QRect(0, 0, 92, 18))
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
         )
@@ -942,7 +942,7 @@ class UiMainWindow(object):
         self.listenedBooksContainer.setWidgetResizable(True)
         self.listenedBooksContainer.setObjectName("listenedBooksContainer")
         self.listenedBooksLayout = QtWidgets.QWidget()
-        self.listenedBooksLayout.setGeometry(QtCore.QRect(0, 0, 769, 429))
+        self.listenedBooksLayout.setGeometry(QtCore.QRect(0, 0, 92, 18))
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
         )
@@ -1263,7 +1263,7 @@ class UiMainWindow(object):
         self.bookItems.setWidgetResizable(True)
         self.bookItems.setObjectName("bookItems")
         self.bookItemsLayout = QtWidgets.QWidget()
-        self.bookItemsLayout.setGeometry(QtCore.QRect(0, 0, 688, 176))
+        self.bookItemsLayout.setGeometry(QtCore.QRect(0, 0, 694, 176))
         self.bookItemsLayout.setObjectName("bookItemsLayout")
         self.bookItems.setWidget(self.bookItemsLayout)
         self.verticalLayout_21.addWidget(self.bookItems)
@@ -1713,6 +1713,7 @@ class UiMainWindow(object):
         font.setWeight(75)
         self.infoPageLabel.setFont(font)
         self.infoPageLabel.setText("")
+        self.infoPageLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.infoPageLabel.setObjectName("infoPageLabel")
         self.verticalLayout_18.addWidget(self.infoPageLabel)
         self.infoPageBtn = QtWidgets.QPushButton(self.infoPageContent)

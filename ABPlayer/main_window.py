@@ -193,6 +193,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
             if self.libraryFiltersPanel.width() != 25:
                 self.toggleBooksFilterPanelBtn.click()
         else:
+            self.library.setMinimumWidth(max(sizes))
             self.allBooksContainer.show()
             self.allBooksPageNothing.hide()
             allBooksContainerSpacer = QtWidgets.QSpacerItem(
@@ -221,8 +222,6 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
                 40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
             )
             self.listenedBooksLayout.layout().addItem(listenedBooksContainerSpacer)
-
-        self.library.setMinimumWidth(max(sizes))
 
         self.library.setCurrentWidget(self.allBooksPage)
 

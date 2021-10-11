@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1202</width>
-    <height>646</height>
+    <width>1208</width>
+    <height>764</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1482,8 +1482,8 @@ QPushButton:pressed {
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>769</width>
-                                   <height>429</height>
+                                   <width>775</width>
+                                   <height>547</height>
                                   </rect>
                                  </property>
                                  <property name="sizePolicy">
@@ -1570,8 +1570,8 @@ QPushButton:pressed {
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>769</width>
-                                   <height>429</height>
+                                   <width>92</width>
+                                   <height>18</height>
                                   </rect>
                                  </property>
                                  <property name="sizePolicy">
@@ -1658,8 +1658,8 @@ QPushButton:pressed {
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>769</width>
-                                   <height>429</height>
+                                   <width>92</width>
+                                   <height>18</height>
                                   </rect>
                                  </property>
                                  <property name="sizePolicy">
@@ -2305,7 +2305,7 @@ QPushButton:pressed {
                                <rect>
                                 <x>0</x>
                                 <y>0</y>
-                                <width>688</width>
+                                <width>694</width>
                                 <height>176</height>
                                </rect>
                               </property>
@@ -3225,6 +3225,9 @@ QPushButton:pressed {
                         </property>
                         <property name="text">
                          <string/>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignCenter</set>
                         </property>
                        </widget>
                       </item>
