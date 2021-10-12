@@ -5,14 +5,13 @@ import typing as ty
 from PyQt5.QtCore import Qt, QEvent, QRect, QPoint
 
 if ty.TYPE_CHECKING:
-    from main_window import MainWindow
     from PyQt5.QtWidgets import QMainWindow
 
 
 def dragZonePressEvent(window: QMainWindow, event: QEvent) -> None:
     """
     Обрабатывает нажатие на виджет, отвечающий за перемещение окна.
-    :param window: Инстанс окна.
+    :param window: Экземпляр окна.
     :param event:
     """
     if event.button() == Qt.LeftButton:
@@ -22,7 +21,7 @@ def dragZonePressEvent(window: QMainWindow, event: QEvent) -> None:
 def dragZoneMoveEvent(window: QMainWindow, event: QEvent) -> None:
     """
     Обрабатывает движение мыши по виджету, отвечающему за перемещение окна.
-    :param window: Инстанс окна.
+    :param window: Экземпляр окна.
     :param event:
     """
     if (
@@ -51,7 +50,7 @@ def dragZoneMoveEvent(window: QMainWindow, event: QEvent) -> None:
 def dragZoneReleaseEvent(window: QMainWindow, event: QEvent) -> None:
     """
     Обрабатывает отпускание кнопки мыши на виджете, отвечающем за перемещение окна.
-    :param window: Инстанс окна.
+    :param window: Экземпляр окна.
     :param event:
     """
     if event.button() == Qt.LeftButton:
@@ -61,7 +60,7 @@ def dragZoneReleaseEvent(window: QMainWindow, event: QEvent) -> None:
 def mouseEvent(window: QMainWindow, event: QEvent) -> None:
     """
     Обрабатывает события мыши, для реализации изменения размера окна.
-    :param window: Инстанс окна.
+    :param window: Экземпляр окна.
     :param event:
     """
     if window.isFullScreen():
@@ -91,7 +90,7 @@ def _check_position(window: QMainWindow, event: QEvent) -> None:
     """
     Проверяет положение мыши.
     Устанавливает определённый курсор, при наведении на край и обратно.
-    :param window: Инстанс окна.
+    :param window: Экземпляр окна.
     :param event:
     """
     rect = window.rect()
@@ -109,7 +108,7 @@ def _check_position(window: QMainWindow, event: QEvent) -> None:
 def _resize_window(window: QMainWindow, event: QEvent) -> None:
     """
     Изменяет размер окна.
-    :param window: Инстанс окна.
+    :param window: Экземпляр окна.
     :param event:
     """
     geometry = window.__dict__["_start_window_geometry"]
@@ -122,7 +121,7 @@ def _resize_window(window: QMainWindow, event: QEvent) -> None:
 def toggleFullScreen(window: QMainWindow) -> None:
     """
     Активирует/выключает полноэкранный режим.
-    :param window: Инстанс окна.
+    :param window: Экземпляр окна.
     """
     if not window.isFullScreen():
         window.showFullScreen()

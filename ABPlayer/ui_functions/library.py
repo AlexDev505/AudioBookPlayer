@@ -12,7 +12,7 @@ if ty.TYPE_CHECKING:
 def toggleFiltersPanel(main_window: MainWindow) -> None:
     """
     Открывает/закрывает меню фильтров.
-    :param main_window: Инстанс окна.
+    :param main_window: Экземпляр главного окна.
     """
 
     def animation_finished() -> None:

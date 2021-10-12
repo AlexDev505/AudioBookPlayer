@@ -16,8 +16,12 @@ if ty.TYPE_CHECKING:
 
 
 class SearchWorker(QObject):
-    finished: QtCore.pyqtSignal = pyqtSignal(object)
-    failed: QtCore.pyqtSignal = pyqtSignal()
+    """
+    Класс реализующий поиск книги.
+    """
+
+    finished: QtCore.pyqtSignal = pyqtSignal(object)  # Поиск завершен
+    failed: QtCore.pyqtSignal = pyqtSignal()  # Ошибка при поиске
 
     def __init__(self, main_window: MainWindow, drv: Driver, url: str):
         super(SearchWorker, self).__init__()
@@ -32,11 +36,11 @@ class SearchWorker(QObject):
         except Exception:
             self.failed.emit()
 
-    def finish(self, book: Book):
+    def finish(self, book: Book) -> None:
         self.main_window.search_thread.quit()
         self.main_window.openBookPage(book)
 
-    def fail(self):
+    def fail(self) -> None:
         self.main_window.search_thread.quit()
         self.main_window.openInfoPage(
             text="Не удалось получить данные об этой книге",
@@ -46,16 +50,23 @@ class SearchWorker(QObject):
 
 
 def search(main_window: MainWindow) -> None:
+    """
+    Запускает поиск книги.
+    :param main_window: Экземпляр главного окна.
+    """
     url = main_window.searchNewBookLineEdit.text().strip()
-    main_window.searchNewBookLineEdit.clear()
-    if not url:
+    main_window.searchNewBookLineEdit.clear()  # Очищаем поле ввода
+    if not url:  # Поле ввода пустое
         main_window.searchNewBookLineEdit.setFocus()
         return
-    else:
-        url = url.strip()
+    url = url.strip()
 
-    main_window.openInfoPage(movie=_loading_animation(main_window))
+    # Открываем страницу загрузки
+    main_window.search_loading_movie = QMovie(":/other/loading.gif")
+    main_window.search_loading_movie.setScaledSize(QSize(50, 50))
+    main_window.openInfoPage(movie=main_window.search_loading_movie)
 
+    # Драйвер не найден
     if not any(url.startswith(drv().site_url) for drv in drivers):
         main_window.openInfoPage(
             text="Драйвер для данного сайта не найден",
@@ -68,14 +79,9 @@ def search(main_window: MainWindow) -> None:
 
     drv = [drv for drv in drivers if url.startswith(drv().site_url)][0]()
 
+    # Создаём и запускаем новый поток
     main_window.search_thread = QThread()
     main_window.search_worker = SearchWorker(main_window, drv, url)
     main_window.search_worker.moveToThread(main_window.search_thread)
     main_window.search_thread.started.connect(main_window.search_worker.run)
     main_window.search_thread.start()
-
-
-def _loading_animation(main_window: MainWindow) -> QMovie:
-    main_window.movie = QMovie(":/other/loading.gif")
-    main_window.movie.setScaledSize(QSize(50, 50))
-    return main_window.movie

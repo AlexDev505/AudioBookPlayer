@@ -26,16 +26,6 @@ if ty.TYPE_CHECKING:
     from database.tables.books import BookItem
 
 
-class Worker(QtCore.QObject):
-    def __init__(self, main_window: MainWindow):
-        super(Worker, self).__init__()
-        self.main_window = main_window
-
-    def run(self):
-        while True:
-            print(eval(input()))
-
-
 class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -50,12 +40,6 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
 
         self.downloading = False  # Идёт ли процесс скачивания
         self.book: Book = ...
-
-        self.th = QtCore.QThread()
-        self.w = Worker(self)
-        self.w.moveToThread(self.th)
-        self.th.started.connect(self.w.run)
-        self.th.start()
 
         self.openLibraryPage()
 
@@ -165,17 +149,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         self.durationLabel.setText(book.duration)
         self.description.setText(book.description)
 
-        if not book_data:
-            book_page.download_preview(self, self.bookCoverLg, (230, 230), book)
-        else:
-            cover_path = os.path.join(book.dir_path, "cover.jpg")
-            if os.path.isfile(cover_path):
-                pixmap = QtGui.QPixmap()
-                pixmap.load(cover_path)
-                pixmap = pixmap.scaled(230, 230, QtCore.Qt.KeepAspectRatio)
-                self.bookCoverLg.setPixmap(pixmap)
-            else:
-                book_page.download_preview(self, self.bookCoverLg, (230, 230), book)
+        book_page.load_preview(self.bookCoverLg, (230, 230), book)
 
         self.stackedWidget.setCurrentWidget(self.bookPage)
         self.book = book
@@ -183,7 +157,19 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
     def openLibraryPage(self):
         books: ty.List[Books] = Books(os.environ["DB_PATH"]).filter(return_list=True)
 
-        self.clearLibraryLayout()
+        for layout in [
+            self.allBooksLayout,
+            self.inProgressBooksLayout,
+            self.listenedBooksLayout,
+        ]:
+            for children in layout.children():
+                if not isinstance(children, QtWidgets.QVBoxLayout):
+                    children.hide()
+                    children.deleteLater()
+            for i in reversed(range(layout.layout().count())):
+                item = layout.layout().itemAt(i)
+                if isinstance(item, QtWidgets.QSpacerItem):
+                    layout.layout().removeItem(item)
 
         sizes = []
         for book in books:
@@ -238,21 +224,6 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
 
         self.stackedWidget.setCurrentWidget(self.libraryPage)
 
-    def clearLibraryLayout(self):
-        for layout in [
-            self.allBooksLayout,
-            self.inProgressBooksLayout,
-            self.listenedBooksLayout,
-        ]:
-            for children in layout.children():
-                if not isinstance(children, QtWidgets.QVBoxLayout):
-                    children.hide()
-                    children.deleteLater()
-            for i in reversed(range(layout.layout().count())):
-                item = layout.layout().itemAt(i)
-                if isinstance(item, QtWidgets.QSpacerItem):
-                    layout.layout().removeItem(item)
-
     def _initBookWidget(self, parent: QtWidgets.QWidget, book: Books) -> UiBook:
         bookFrame = QtWidgets.QFrame(parent)
         bookWidget = UiBook()
@@ -302,14 +273,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         else:
             bookWidget.finishedIcon.hide()
 
-        cover_path = os.path.join(book.dir_path, "cover.jpg")
-        if os.path.isfile(cover_path):
-            pixmap = QtGui.QPixmap()
-            pixmap.load(cover_path)
-            pixmap = pixmap.scaled(200, 200, QtCore.Qt.KeepAspectRatio)
-            bookWidget.cover.setPixmap(pixmap)
-        else:
-            book_page.download_preview(bookWidget, bookWidget.cover, (200, 200), book)
+        book_page.load_preview(bookWidget.cover, (200, 200), book)
 
         bookWidget.frame.mousePressEvent = lambda e: self.openBookPage(book)
         parent.layout().addWidget(bookFrame)

@@ -14,7 +14,7 @@ if ty.TYPE_CHECKING:
 def toggleMenu(main_window: MainWindow) -> None:
     """
     Открывает/закрывает меню.
-    :param main_window: Инстанс окна.
+    :param main_window: Экземпляр главного окна.
     """
     width = main_window.menuFrame.width()  # Ширина меню сейчас
     # Конечная ширина меню 200-открытое 65-закрытое
@@ -47,7 +47,7 @@ def buttonsHandler(main_window: MainWindow, button: QPushButton) -> None:
     """
     Обработчик кнопок меню.
     Открывает соответствующие страницы.
-    :param main_window: Инстанс окна.
+    :param main_window: Экземпляр главного окна.
     :param button: Нажатая кнопка.
     """
     if button == main_window.libraryBtn:

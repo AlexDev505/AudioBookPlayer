@@ -1,23 +1,23 @@
 from __future__ import annotations
 
+import os
+import ssl
 import typing as ty
 import urllib.request
-import ssl
-import os
 
 from PyQt5.QtCore import (
+    Qt,
     QSize,
     QThread,
     QObject,
     pyqtSignal,
-    Qt,
     QEasingCurve,
     QPropertyAnimation,
 )
 from PyQt5.QtGui import QMovie, QPixmap
 
-from drivers import drivers, DownloadProcessHandler
 from database import Books
+from drivers import drivers, BaseDownloadProcessHandler
 
 if ty.TYPE_CHECKING:
     from PyQt5 import QtCore
@@ -27,88 +27,133 @@ if ty.TYPE_CHECKING:
 
 
 class Cache(object):
+    """
+    Кэш.
+    Временно хранит обложки книг. (до 4-х штук)
+    """
+
     cache = {}
 
     @classmethod
-    def get(cls, item: str):
+    def get(cls, item: str) -> QPixmap:
+        """
+        :param item: Ссылка на картинку.
+        :return: Экземпляр QPixmap.
+        """
         return cls.cache.get(item)
 
     @classmethod
-    def set(cls, key: str, value: QPixmap):
+    def set(cls, key: str, value: QPixmap) -> None:
+        """
+        Добавляет картинку в кэш.
+        :param key: Ссылка на картинку.
+        :param value: Экземпляр QPixmap.
+        """
         if len(cls.cache) >= 4:
             del cls.cache[list(cls.cache.keys())[0]]
         cls.cache[key] = value
 
 
 class DownloadPreviewWorker(QObject):
+    """
+    Реализует скачивание обложки книги.
+    При успешном скачивании обложка устанавливается в указанный QLabel.
+    При ошибке скачивания указанный QLabel скрывается.
+    """
+
     finished: QtCore.pyqtSignal = pyqtSignal(object)
     failed: QtCore.pyqtSignal = pyqtSignal()
 
     def __init__(
         self,
-        main_window: ty.Any,
         cover_label: QLabel,
         size: ty.Tuple[int, int],
         book: Book,
     ):
+        """
+        :param cover_label: Экземпляр QLabel, для которого скачивается обложка.
+        :param size: Размеры QLabel.
+        :param book: Экземпляр книги.
+        """
         super(DownloadPreviewWorker, self).__init__()
-        self.main_window = main_window
-        self.cover_label = cover_label
-        self.size = size
-        self.book = book
+        self.cover_label, self.size, self.book = cover_label, size, book
         self.finished.connect(lambda pixmap: self.finish(pixmap))
         self.failed.connect(self.fail)
 
     def run(self):
-        if not self.book.preview:
+        if not self.book.preview:  # Если у книги нет обложки
             self.failed.emit()
             return
 
         try:
-            pixmap = Cache.get(self.book.preview)
+            pixmap = Cache.get(self.book.preview)  # Проверяем кэш
             if not pixmap:
+                # Скачивание
                 context = ssl.SSLContext()
                 data = urllib.request.urlopen(self.book.preview, context=context).read()
                 pixmap = QPixmap()
                 pixmap.loadFromData(data)
-                Cache.set(self.book.preview, pixmap)
+                Cache.set(self.book.preview, pixmap)  # Заносим в кэш
             self.finished.emit(pixmap)
         except Exception:
             self.failed.emit()
 
-    def finish(self, pixmap: QPixmap):
-        self.main_window.download_cover_thread.quit()
-        self.cover_label.setMovie(None)
-        if os.path.isdir(self.book.dir_path):
+    def finish(self, pixmap: QPixmap) -> None:
+        self.cover_label.download_cover_thread.quit()
+        self.cover_label.setMovie(None)  # Отключаем анимацию загрузки
+        if os.path.isdir(self.book.dir_path):  # Если книга скачана
+            # Сохраняем обложку
             pixmap.save(os.path.join(self.book.dir_path, "cover.jpg"), "jpeg")
+        # Подстраиваем размер обложки под QLabel
         pixmap = pixmap.scaled(*self.size, Qt.KeepAspectRatio)
         self.cover_label.setPixmap(pixmap)
 
-    def fail(self):
-        self.main_window.download_cover_thread.quit()
-        self.cover_label.hide()
+    def fail(self) -> None:
+        self.cover_label.download_cover_thread.quit()
+        self.cover_label.setMovie(None)  # Отключаем анимацию загрузки
+        self.cover_label.hide()  # Скрываем элемент
 
 
-def download_preview(
-    main_window: ty.Any, cover_label: QLabel, size: ty.Tuple[int, int], book: Book
-) -> None:
+def load_preview(cover_label: QLabel, size: ty.Tuple[int, int], book: Book) -> None:
+    """
+    Устанавливает обложку книги в определенный QLabel.
+    Если обложка не скачана - скачивает.
+    :param cover_label: Экземпляр QLabel, для которого скачивается обложка.
+    :param size: Размеры QLabel.
+    :param book: Экземпляр книги.
+    """
     cover_label.show()
-    main_window.loading_cover_movie = QMovie(":/other/loading.gif")
-    main_window.loading_cover_movie.setScaledSize(QSize(50, 50))
-    cover_label.setMovie(main_window.loading_cover_movie)
-    main_window.loading_cover_movie.start()
-    main_window.download_cover_thread = QThread()
-    main_window.download_cover_worker = DownloadPreviewWorker(
-        main_window, cover_label, size, book
-    )
-    main_window.download_cover_worker.moveToThread(main_window.download_cover_thread)
-    main_window.download_cover_thread.started.connect(
-        main_window.download_cover_worker.run
-    )
-    main_window.download_cover_thread.start()
+    cover_path = os.path.join(book.dir_path, "cover.jpg")
+    if os.path.isfile(cover_path):  # Если обложка скачана
+        pixmap = QPixmap()
+        pixmap.load(cover_path)
+        pixmap = pixmap.scaled(*size, Qt.KeepAspectRatio)
+        cover_label.setPixmap(pixmap)
+    else:
+        # Анимация загрузки
+        cover_label.loading_cover_movie = QMovie(":/other/loading.gif")
+        cover_label.loading_cover_movie.setScaledSize(QSize(50, 50))
+        cover_label.setMovie(cover_label.loading_cover_movie)
+        cover_label.loading_cover_movie.start()
+        # Создаем и запускаем новый поток
+        cover_label.download_cover_thread = QThread()
+        cover_label.download_cover_worker = DownloadPreviewWorker(
+            cover_label, size, book
+        )
+        cover_label.download_cover_worker.moveToThread(
+            cover_label.download_cover_thread
+        )
+        cover_label.download_cover_thread.started.connect(
+            cover_label.download_cover_worker.run
+        )
+        cover_label.download_cover_thread.start()
 
 
 class DownloadBookWorker(QObject):
+    """
+    Реализует скачивание книги.
+    """
+
     finished: QtCore.pyqtSignal = pyqtSignal()
     failed: QtCore.pyqtSignal = pyqtSignal(str)
 
@@ -122,20 +167,23 @@ class DownloadBookWorker(QObject):
         try:
             drv = [drv for drv in drivers if self.book.url.startswith(drv().site_url)][
                 0
-            ]()
-            drv.download_book(self.book, DownloadBookProcessHandler(self.main_window))
+            ]()  # Драйвер, который нужно использовать для скачивания
+            drv.download_book(self.book, DownloadProcessHandler(self.main_window))
             books = Books(os.environ["DB_PATH"])
-            books.insert(**vars(self.book))
+            books.insert(**vars(self.book))  # Добавляем книгу в бд
             self.finished.emit()
         except Exception as err:
+            # TODO: Необходимо реализовать нормальный обзор ошибок
             self.failed.emit(str(err))
 
     def finish(self):
         self.main_window.downloading = False
         self.main_window.download_book_thread.quit()
+        # Если пользователь находится на странице скачиваемой книги
         if self.main_window.pbFrame.minimumWidth() == 0:
-            self.main_window.openBookPage(self.book)
+            self.main_window.openBookPage(self.book)  # Обновляем страницу
         else:
+            # Закрываем полосу прогресса
             self.main_window.pb_animation = QPropertyAnimation(
                 self.main_window.pbFrame, b"minimumWidth"
             )
@@ -157,23 +205,40 @@ class DownloadBookWorker(QObject):
         )
 
 
-class DownloadBookProcessHandler(DownloadProcessHandler):
+class DownloadProcessHandler(BaseDownloadProcessHandler):
     def __init__(self, main_window: MainWindow):
-        super(DownloadBookProcessHandler, self).__init__()
+        """
+        :param main_window: Экземпляр главного окна.
+        """
+        super(DownloadProcessHandler, self).__init__()
         self.main_window = main_window
 
-    def move_progress(self):
+    def show_progress(self) -> None:
+        """
+        Отображение прогресса.
+        """
         progress = int(round(self.done_size / (self.total_size / 100), 0))
         self.main_window.downloadingProgressBarLg.setValue(progress)
 
 
 def download_book(main_window: MainWindow, book: Book) -> None:
+    """
+    Запускает скачивание книги.
+    :param main_window: Экземпляр главного окна.
+    :param book: Экземпляр книги.
+    """
+    if main_window.downloading:
+        # TODO: Нужно показывать диалоговое окно
+        return
+
     main_window.downloadingProgressBarLg.setValue(0)
     main_window.downloadingProgressBar.setValue(0)
+
     main_window.playerContent.setCurrentWidget(main_window.downloadingPage)
     main_window.saveBtn.hide()
-
     main_window.downloading = True
+
+    # Создаем и запускаем новый поток
     main_window.download_book_thread = QThread()
     main_window.download_book_worker = DownloadBookWorker(main_window, book)
     main_window.download_book_worker.moveToThread(main_window.download_book_thread)
