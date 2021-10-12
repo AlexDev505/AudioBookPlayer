@@ -13,7 +13,7 @@ if ty.TYPE_CHECKING:
 def buttonsHandler(main_window: MainWindow, button: QPushButton) -> None:
     """
     Обработчик кнопок панели управления.
-    :param main_window: Инстанс окна.
+    :param main_window: Экземпляр главного окна.
     :param button: Нажатая кнопка.
     """
     if button == main_window.speedBtn:
@@ -25,7 +25,7 @@ def buttonsHandler(main_window: MainWindow, button: QPushButton) -> None:
 def toggleSpeedSlider(main_window: MainWindow) -> None:
     """
     Показывает/скрывает регулятор скорости.
-    :param main_window: Инстанс окна.
+    :param main_window: Экземпляр главного окна.
     """
     if main_window.volumeFrame.minimumWidth() != 0:
         toggleVolumeSlider(main_window)
@@ -50,7 +50,7 @@ def toggleSpeedSlider(main_window: MainWindow) -> None:
 def toggleVolumeSlider(main_window: MainWindow) -> None:
     """
     Показывает/скрывает регулятор громкости.
-    :param main_window: Инстанс окна.
+    :param main_window: Экземпляр главного окна.
     """
     if main_window.speedFrame.minimumWidth() != 0:
         toggleSpeedSlider(main_window)
@@ -75,7 +75,7 @@ def toggleVolumeSlider(main_window: MainWindow) -> None:
 def volumeSliderHandler(main_window: MainWindow, value: int) -> None:
     """
     Обработчик изменений значения слайдера громкости.
-    :param main_window: Инстанс окна.
+    :param main_window: Экземпляр главного окна.
     :param value: Новое значение.
     """
     main_window.volumeLabel.setText(f"{value} %")
@@ -105,7 +105,7 @@ def volumeSliderHandler(main_window: MainWindow, value: int) -> None:
 def speedSliderHandler(main_window: MainWindow, value: int) -> None:
     """
     Обработчик изменений значения слайдера скорости.
-    :param main_window: Инстанс окна.
+    :param main_window: Экземпляр главного окна.
     :param value: Новое значение.
     """
     value -= 50

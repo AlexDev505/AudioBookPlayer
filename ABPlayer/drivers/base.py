@@ -35,7 +35,7 @@ def prepare_file_metadata(
     file.tag.save()
 
 
-class DownloadProcessHandler:
+class BaseDownloadProcessHandler(ABC):
     """
     Обработчик процесса скачивания.
     Визуализирует процесс скачивания книги в пользовательском интерфейсе.
@@ -45,16 +45,18 @@ class DownloadProcessHandler:
         self.total_size: int = ...
         self.done_size: int = ...
 
-    def init(self, total_size: int):
+    def init(self, total_size: int) -> None:
         self.total_size = total_size
         self.done_size = 0
 
-    def progress(self, size: int):
+    def progress(self, size: int) -> None:
         self.done_size += size
-        self.move_progress()
+        self.show_progress()
 
-    def move_progress(self):
-        # Временный код
+    def show_progress(self) -> None:
+        """
+        Отображает прогресс.
+        """
         sys.stdout.write(
             f"\r{self.done_size}/{self.total_size}\t"
             f"{round(self.done_size / (self.total_size / 100), 2)} %"
@@ -63,18 +65,18 @@ class DownloadProcessHandler:
 
 
 class Driver(ABC):
-    drivers: ty.List[ty.Type[Driver]] = []
+    drivers: ty.List[ty.Type[Driver]] = []  # Все доступные драйверы
 
     def __init_subclass__(cls, **kwargs):
         Driver.drivers.append(cls)
 
-    def get_driver(self):
+    def get_driver(self) -> webdriver.Chrome:
         """
         :returns: Драйвер, для работы с браузером.
         """
         return self.driver(options=self.driver_options)
 
-    def get_page(self, url: str):
+    def get_page(self, url: str) -> webdriver.Chrome:
         """
         :param url: Ссылка на книгу.
         :returns: Загруженную в драйвер страницу.
@@ -104,11 +106,11 @@ class Driver(ABC):
     def download_book(
         self,
         book: Book,
-        process_handler: DownloadProcessHandler = None,
+        process_handler: BaseDownloadProcessHandler = None,
     ) -> None:
         """
         Метод, скачивающий аудио файлы книги.
-        :param book: Инстанс книги.
+        :param book: Экземпляр книги.
         :param process_handler: Обработчик процесса скачивания.
         """
         item: BookItem
@@ -153,7 +155,7 @@ class Driver(ABC):
     def _download_file(
         file_path: Path,
         url: str,
-        process_handler: DownloadProcessHandler,
+        process_handler: BaseDownloadProcessHandler,
     ) -> None:
         """
         Метод, скачивающий аудио файл.
@@ -175,16 +177,14 @@ class Driver(ABC):
                     file.write(data)
 
     @property
-    def driver(self) -> ty.Union[ty.Type[webdriver.Chrome], ty.Type[webdriver.Firefox]]:
+    def driver(self) -> ty.Type[webdriver.Chrome]:
         """
         :returns: Нужный драйвер браузера.
         """
         return webdriver.Chrome
 
     @property
-    def driver_options(
-        self,
-    ) -> ty.Union[webdriver.ChromeOptions, webdriver.FirefoxOptions]:
+    def driver_options(self) -> webdriver.ChromeOptions:
         """
         :returns: Настройки драйвера браузера.
         """

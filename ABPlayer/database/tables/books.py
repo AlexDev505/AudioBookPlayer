@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import os
 import typing as ty
-from dataclasses import dataclass, field
 from ast import literal_eval
+from dataclasses import dataclass, field
 
 from sqlite3_api import Table
 from sqlite3_api.field_types import List, FieldType
@@ -15,6 +15,7 @@ from database.tools import replace_quotes
 class BookItem:
     """
     Глава книги.
+    В базе данных храниться как словарь.
     """
 
     file_url: str  # Ссылка на файл, для скачивания
@@ -33,6 +34,7 @@ class BookItem:
 class BookItems(List):
     """
     Список глав.
+    В Базе данных храниться как список словарей.
     """
 
     def __init__(self, items: ty.List[ty.Dict[str, ty.Union[str, int]]] = ()):
@@ -42,6 +44,7 @@ class BookItems(List):
 class Status(FieldType):
     """
     Статус книги.
+    В базе данных хранится как строка.
     """
 
     new = "new"  # Новая книга
@@ -57,9 +60,10 @@ class Status(FieldType):
 class StopFlag(FieldType):
     """
     Отметка, на которой пользователь остановил прослушивание.
+    В базе данных храниться как словарь.
     """
 
-    item: int = 0  # Глава
+    item: int = 0  # Глава(Индекс)
     time: int = 0  # Секунда
 
     def __repr__(self):
@@ -71,6 +75,12 @@ class StopFlag(FieldType):
 
 
 class Bool(FieldType):
+    """
+    Булевая переменная.
+    В базе данных храниться в виде `0` или `1`.
+    При выборке данных из бд, конвертируется в `True` или `False`.
+    """
+
     @staticmethod
     def adapter(obj: bool) -> bytes:
         return str(int(obj)).encode()
@@ -83,7 +93,8 @@ class Bool(FieldType):
 @dataclass
 class Book:
     """
-    Класс, описывающий, как книги, хранятся в базе данных.
+    Класс, описывающий, как книги, хранятся в базе данных,
+    а так же какие данные драйвера парсят с сайтов.
     """
 
     author: str = ""
@@ -101,7 +112,7 @@ class Book:
         self.name = replace_quotes(self.name)
 
     @property
-    def dir_path(self):
+    def dir_path(self) -> str:
         """
         :return: Путь к директории, в которой храниться книга.
         """
@@ -112,7 +123,7 @@ class Book:
 
 class Books(Table, Book):
     """
-    Класс, для взаимодействия с базой данных.
+    Класс, описывающий, как книги, хранятся в базе данных.
     """
 
     status: Status = Status.new
