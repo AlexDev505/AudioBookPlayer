@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class UiMainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1208, 764)
+        MainWindow.resize(1115, 756)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setStyleSheet(
             "QWidget {\n"
@@ -820,7 +820,7 @@ class UiMainWindow(object):
         )
         self.allBooksContainer.setObjectName("allBooksContainer")
         self.allBooksLayout = QtWidgets.QWidget()
-        self.allBooksLayout.setGeometry(QtCore.QRect(0, 0, 775, 547))
+        self.allBooksLayout.setGeometry(QtCore.QRect(0, 0, 682, 539))
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
         )
@@ -881,7 +881,7 @@ class UiMainWindow(object):
         self.inProgressBooksContainer.setWidgetResizable(True)
         self.inProgressBooksContainer.setObjectName("inProgressBooksContainer")
         self.inProgressBooksLayout = QtWidgets.QWidget()
-        self.inProgressBooksLayout.setGeometry(QtCore.QRect(0, 0, 92, 18))
+        self.inProgressBooksLayout.setGeometry(QtCore.QRect(0, 0, 775, 547))
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
         )
@@ -942,7 +942,7 @@ class UiMainWindow(object):
         self.listenedBooksContainer.setWidgetResizable(True)
         self.listenedBooksContainer.setObjectName("listenedBooksContainer")
         self.listenedBooksLayout = QtWidgets.QWidget()
-        self.listenedBooksLayout.setGeometry(QtCore.QRect(0, 0, 92, 18))
+        self.listenedBooksLayout.setGeometry(QtCore.QRect(0, 0, 775, 547))
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
         )
@@ -1263,7 +1263,7 @@ class UiMainWindow(object):
         self.bookItems.setWidgetResizable(True)
         self.bookItems.setObjectName("bookItems")
         self.bookItemsLayout = QtWidgets.QWidget()
-        self.bookItemsLayout.setGeometry(QtCore.QRect(0, 0, 694, 176))
+        self.bookItemsLayout.setGeometry(QtCore.QRect(0, 0, 601, 176))
         self.bookItemsLayout.setObjectName("bookItemsLayout")
         self.bookItems.setWidget(self.bookItemsLayout)
         self.verticalLayout_21.addWidget(self.bookItems)
@@ -1383,7 +1383,7 @@ class UiMainWindow(object):
         self.verticalLayout_30.addWidget(self.playerFrame)
         self.descriptionFrame = QtWidgets.QFrame(self.bookPageContent)
         sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.MinimumExpanding
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
         )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -2007,7 +2007,7 @@ class UiMainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(1)
         self.library.setCurrentIndex(0)
         self.playerContent.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)

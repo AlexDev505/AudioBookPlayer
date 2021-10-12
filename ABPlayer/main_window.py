@@ -9,6 +9,7 @@ from ui import UiMainWindow, UiBook
 from ui_functions import (
     add_book_page,
     book_page,
+    content,
     control_panel,
     library,
     menu,
@@ -23,6 +24,16 @@ if ty.TYPE_CHECKING:
     from PyQt5.QtGui import QMovie
     from database import Book
     from database.tables.books import BookItem
+
+
+class Worker(QtCore.QObject):
+    def __init__(self, main_window: MainWindow):
+        super(Worker, self).__init__()
+        self.main_window = main_window
+
+    def run(self):
+        while True:
+            print(eval(input()))
 
 
 class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
@@ -40,7 +51,18 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         self.downloading = False  # Идёт ли процесс скачивания
         self.book: Book = ...
 
+        self.th = QtCore.QThread()
+        self.w = Worker(self)
+        self.w.moveToThread(self.th)
+        self.th.started.connect(self.w.run)
+        self.th.start()
+
         self.openLibraryPage()
+
+        self.stackedWidget.oldSetCurrentWidget = self.stackedWidget.setCurrentWidget
+        self.stackedWidget.setCurrentWidget = lambda page: content.setCurrentPage(
+            self, page
+        )
 
     def setupSignals(self):
         # APPLICATION
@@ -150,6 +172,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
             if os.path.isfile(cover_path):
                 pixmap = QtGui.QPixmap()
                 pixmap.load(cover_path)
+                pixmap = pixmap.scaled(230, 230, QtCore.Qt.KeepAspectRatio)
                 self.bookCoverLg.setPixmap(pixmap)
             else:
                 book_page.download_preview(self, self.bookCoverLg, (230, 230), book)
@@ -160,19 +183,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
     def openLibraryPage(self):
         books: ty.List[Books] = Books(os.environ["DB_PATH"]).filter(return_list=True)
 
-        for layout in [
-            self.allBooksLayout,
-            self.inProgressBooksLayout,
-            self.listenedBooksLayout,
-        ]:
-            for children in layout.children():
-                if not isinstance(children, QtWidgets.QVBoxLayout):
-                    children.hide()
-                    children.deleteLater()
-            for i in reversed(range(layout.layout().count())):
-                item = layout.layout().itemAt(i)
-                if isinstance(item, QtWidgets.QSpacerItem):
-                    layout.layout().removeItem(item)
+        self.clearLibraryLayout()
 
         sizes = []
         for book in books:
@@ -227,8 +238,22 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
 
         self.stackedWidget.setCurrentWidget(self.libraryPage)
 
-    @staticmethod
-    def _initBookWidget(parent: QtWidgets.QWidget, book: Books) -> UiBook:
+    def clearLibraryLayout(self):
+        for layout in [
+            self.allBooksLayout,
+            self.inProgressBooksLayout,
+            self.listenedBooksLayout,
+        ]:
+            for children in layout.children():
+                if not isinstance(children, QtWidgets.QVBoxLayout):
+                    children.hide()
+                    children.deleteLater()
+            for i in reversed(range(layout.layout().count())):
+                item = layout.layout().itemAt(i)
+                if isinstance(item, QtWidgets.QSpacerItem):
+                    layout.layout().removeItem(item)
+
+    def _initBookWidget(self, parent: QtWidgets.QWidget, book: Books) -> UiBook:
         bookFrame = QtWidgets.QFrame(parent)
         bookWidget = UiBook()
         bookWidget.setupUi(bookFrame)
@@ -286,6 +311,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         else:
             book_page.download_preview(bookWidget, bookWidget.cover, (200, 200), book)
 
+        bookWidget.frame.mousePressEvent = lambda e: self.openBookPage(book)
         parent.layout().addWidget(bookFrame)
         return bookWidget
 

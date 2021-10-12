@@ -1,5 +1,6 @@
 from . import add_book_page
 from . import book_page
+from . import content
 from . import control_panel
 from . import library
 from . import menu
