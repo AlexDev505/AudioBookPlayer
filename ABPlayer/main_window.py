@@ -5,7 +5,7 @@ import typing as ty
 
 from PyQt5 import QtWidgets, QtCore, QtGui
 
-from ui import UiMainWindow, UiBook
+from ui import UiMainWindow, UiBook, Item
 from ui_functions import (
     add_book_page,
     book_page,
@@ -83,18 +83,12 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         self.volumeSlider.valueChanged.connect(
             lambda value: control_panel.volumeSliderHandler(self, value)
         )
-        oldVolumeSliderMousePressEvent = self.volumeSlider.mousePressEvent
-        self.volumeSlider.mousePressEvent = lambda e: sliders.mousePressEvent(
-            e, self.volumeSlider, oldVolumeSliderMousePressEvent
-        )
+        sliders.prepareSlider(self.volumeSlider)
 
         self.speedSlider.valueChanged.connect(
             lambda value: control_panel.speedSliderHandler(self, value)
         )
-        oldSpeedSliderMousePressEvent = self.speedSlider.mousePressEvent
-        self.speedSlider.mousePressEvent = lambda e: sliders.mousePressEvent(
-            e, self.speedSlider, oldSpeedSliderMousePressEvent
-        )
+        sliders.prepareSlider(self.speedSlider)
 
         # ADD BOOK PAGE
         self.searchNewBookBtn.clicked.connect(lambda e: add_book_page.search(self))
@@ -125,6 +119,8 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         self.stackedWidget.setCurrentWidget(self.infoPage)
 
     def openBookPage(self, book: Book):
+        item: BookItem
+
         self.titleLabel.setText(f"{book.author} - {book.name}")
         book_data = Books(os.environ["DB_PATH"]).filter(
             author=book.author, name=book.name
@@ -142,6 +138,27 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
             self.saveBtn.hide()
             self.playerContent.setCurrentWidget(self.playerPage)
             book = book_data
+
+            # Очищаем от старых элементов
+            for children in self.bookItemsLayout.children():
+                if not isinstance(children, QtWidgets.QVBoxLayout):
+                    children.hide()
+                    children.deleteLater()
+            for i in reversed(range(self.bookItemsLayout.layout().count())):
+                item = self.bookItemsLayout.layout().itemAt(i)
+                if isinstance(item, QtWidgets.QSpacerItem):
+                    self.bookItemsLayout.layout().removeItem(item)
+
+            for i, item in enumerate(book.items):
+                if book.stop_flag.item == i:
+                    Item(self, self.bookItemsLayout, item, book.stop_flag.time)
+                    continue
+                Item(self, self.bookItemsLayout, item)
+
+            bookItemsSpacer = QtWidgets.QSpacerItem(
+                40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+            )
+            self.bookItemsLayout.layout().addItem(bookItemsSpacer)
 
         self.authorLabel.setText(book.author)
         self.nameLabel.setText(book.name)

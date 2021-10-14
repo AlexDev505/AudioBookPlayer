@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class UiMainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1115, 756)
+        MainWindow.resize(1323, 818)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setStyleSheet(
             "QWidget {\n"
@@ -131,7 +131,7 @@ class UiMainWindow(object):
             " QScrollBar:vertical {\n"
             "    border: none;\n"
             "    width: 8px;\n"
-            "    margin: 15px 0px 15px 0 px;\n"
+            "    margin: 15px 0px 15px 0px;\n"
             " }\n"
             "/*  HANDLE BAR VERTICAL */\n"
             "QScrollBar::handle:vertical {\n"
@@ -156,6 +156,7 @@ class UiMainWindow(object):
             "    background: rgb(46, 51, 56);\n"
             "    border-radius: 4px;\n"
             "}\n"
+            "\n"
             "/* PROGRESS BAR */\n"
             "QProgressBar {\n"
             "    background-color: rgb(64, 68, 75);\n"
@@ -207,6 +208,9 @@ class UiMainWindow(object):
             "    text-align: left;\n"
             "}\n"
             "/* BOOK PAGE CONTENT */\n"
+            "#playerPage QScrollBar:vertical {\n"
+            "    margin: 0px;\n"
+            " }\n"
             "#playerContent, #playerPage, #needDownloadingPage, #downloadingPage {\n"
             "    background-color: rgb(54, 57, 63);\n"
             "}\n"
@@ -214,13 +218,24 @@ class UiMainWindow(object):
             "    border: 2px solid rgb(64, 68, 75);\n"
             "    border-radius: 3px;\n"
             "}\n"
-            "#bookPageContent #bookItems {\n"
-            "    background-color: rgb(54, 57, 63);\n"
+            "#bookItems {\n"
             "    border: 2px solid rgb(64, 68, 75);\n"
             "    border-radius: 3px;\n"
             "}\n"
-            "#bookPageContent #bookItemsLayout, #description {\n"
+            "#bookPageContent, #description {\n"
             "    background-color: rgb(54, 57, 63);\n"
+            "}\n"
+            "#bookItems * {\n"
+            "    background-color: rgb(64, 68, 75);\n"
+            "}\n"
+            "#playerPage QSlider::handle:horizontal {\n"
+            "    background-color: rgba(64, 68, 75, 0);\n"
+            "}\n"
+            "#bookItems QSlider::sub-page:horizontal {\n"
+            "    background:rgb(142, 146, 151);\n"
+            "}\n"
+            "#bookItems QSlider::add-page:horizontal {\n"
+            "    background: rgb(54, 57, 63);\n"
             "}\n"
             "\n"
             "/* LIBRARY FILTERS PANEL */\n"
@@ -759,12 +774,13 @@ class UiMainWindow(object):
         self.horizontalLayout_13.setObjectName("horizontalLayout_13")
         self.library = QtWidgets.QTabWidget(self.libraryFrame)
         sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+            QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
         )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.library.sizePolicy().hasHeightForWidth())
         self.library.setSizePolicy(sizePolicy)
+        self.library.setMinimumSize(QtCore.QSize(0, 0))
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(12)
@@ -805,7 +821,7 @@ class UiMainWindow(object):
         self.verticalLayout_12.addWidget(self.allBooksPageNothing)
         self.allBooksContainer = QtWidgets.QScrollArea(self.allBooksPage)
         sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+            QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
         )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -814,13 +830,16 @@ class UiMainWindow(object):
         )
         self.allBooksContainer.setSizePolicy(sizePolicy)
         self.allBooksContainer.setMinimumSize(QtCore.QSize(0, 0))
+        self.allBooksContainer.setHorizontalScrollBarPolicy(
+            QtCore.Qt.ScrollBarAlwaysOff
+        )
         self.allBooksContainer.setWidgetResizable(True)
         self.allBooksContainer.setAlignment(
             QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop
         )
         self.allBooksContainer.setObjectName("allBooksContainer")
         self.allBooksLayout = QtWidgets.QWidget()
-        self.allBooksLayout.setGeometry(QtCore.QRect(0, 0, 682, 539))
+        self.allBooksLayout.setGeometry(QtCore.QRect(0, 0, 890, 601))
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
         )
@@ -831,8 +850,8 @@ class UiMainWindow(object):
         )
         self.allBooksLayout.setSizePolicy(sizePolicy)
         self.allBooksLayout.setObjectName("allBooksLayout")
-        self.verticalLayout_10 = QtWidgets.QVBoxLayout(self.allBooksLayout)
-        self.verticalLayout_10.setObjectName("verticalLayout_10")
+        self.verticalLayout_38 = QtWidgets.QVBoxLayout(self.allBooksLayout)
+        self.verticalLayout_38.setObjectName("verticalLayout_38")
         self.allBooksContainer.setWidget(self.allBooksLayout)
         self.verticalLayout_12.addWidget(self.allBooksContainer)
         self.library.addTab(self.allBooksPage, "")
@@ -881,7 +900,7 @@ class UiMainWindow(object):
         self.inProgressBooksContainer.setWidgetResizable(True)
         self.inProgressBooksContainer.setObjectName("inProgressBooksContainer")
         self.inProgressBooksLayout = QtWidgets.QWidget()
-        self.inProgressBooksLayout.setGeometry(QtCore.QRect(0, 0, 775, 547))
+        self.inProgressBooksLayout.setGeometry(QtCore.QRect(0, 0, 890, 601))
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
         )
@@ -942,7 +961,7 @@ class UiMainWindow(object):
         self.listenedBooksContainer.setWidgetResizable(True)
         self.listenedBooksContainer.setObjectName("listenedBooksContainer")
         self.listenedBooksLayout = QtWidgets.QWidget()
-        self.listenedBooksLayout.setGeometry(QtCore.QRect(0, 0, 775, 547))
+        self.listenedBooksLayout.setGeometry(QtCore.QRect(0, 0, 890, 601))
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
         )
@@ -1165,7 +1184,7 @@ class UiMainWindow(object):
         self.playerPage = QtWidgets.QWidget()
         self.playerPage.setObjectName("playerPage")
         self.verticalLayout_21 = QtWidgets.QVBoxLayout(self.playerPage)
-        self.verticalLayout_21.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_21.setContentsMargins(2, 2, 2, 2)
         self.verticalLayout_21.setSpacing(5)
         self.verticalLayout_21.setObjectName("verticalLayout_21")
         self.playerBtns = QtWidgets.QFrame(self.playerPage)
@@ -1261,10 +1280,47 @@ class UiMainWindow(object):
         self.verticalLayout_21.addWidget(self.playerBtns)
         self.bookItems = QtWidgets.QScrollArea(self.playerPage)
         self.bookItems.setWidgetResizable(True)
+        self.bookItems.setAlignment(
+            QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop
+        )
         self.bookItems.setObjectName("bookItems")
         self.bookItemsLayout = QtWidgets.QWidget()
-        self.bookItemsLayout.setGeometry(QtCore.QRect(0, 0, 601, 176))
+        self.bookItemsLayout.setGeometry(QtCore.QRect(0, 0, 797, 258))
         self.bookItemsLayout.setObjectName("bookItemsLayout")
+        self.verticalLayout_10 = QtWidgets.QVBoxLayout(self.bookItemsLayout)
+        self.verticalLayout_10.setContentsMargins(0, 0, 2, 0)
+        self.verticalLayout_10.setSpacing(2)
+        self.verticalLayout_10.setObjectName("verticalLayout_10")
+        self.horizontalSlider = QtWidgets.QSlider(self.bookItemsLayout)
+        self.horizontalSlider.setMinimumSize(QtCore.QSize(0, 50))
+        self.horizontalSlider.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.horizontalSlider.setOrientation(QtCore.Qt.Horizontal)
+        self.horizontalSlider.setObjectName("horizontalSlider")
+        self.verticalLayout_10.addWidget(self.horizontalSlider)
+        self.horizontalSlider_2 = QtWidgets.QSlider(self.bookItemsLayout)
+        self.horizontalSlider_2.setMinimumSize(QtCore.QSize(0, 50))
+        self.horizontalSlider_2.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.horizontalSlider_2.setOrientation(QtCore.Qt.Horizontal)
+        self.horizontalSlider_2.setObjectName("horizontalSlider_2")
+        self.verticalLayout_10.addWidget(self.horizontalSlider_2)
+        self.horizontalSlider_3 = QtWidgets.QSlider(self.bookItemsLayout)
+        self.horizontalSlider_3.setMinimumSize(QtCore.QSize(0, 50))
+        self.horizontalSlider_3.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.horizontalSlider_3.setOrientation(QtCore.Qt.Horizontal)
+        self.horizontalSlider_3.setObjectName("horizontalSlider_3")
+        self.verticalLayout_10.addWidget(self.horizontalSlider_3)
+        self.horizontalSlider_4 = QtWidgets.QSlider(self.bookItemsLayout)
+        self.horizontalSlider_4.setMinimumSize(QtCore.QSize(0, 50))
+        self.horizontalSlider_4.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.horizontalSlider_4.setOrientation(QtCore.Qt.Horizontal)
+        self.horizontalSlider_4.setObjectName("horizontalSlider_4")
+        self.verticalLayout_10.addWidget(self.horizontalSlider_4)
+        self.horizontalSlider_5 = QtWidgets.QSlider(self.bookItemsLayout)
+        self.horizontalSlider_5.setMinimumSize(QtCore.QSize(0, 50))
+        self.horizontalSlider_5.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.horizontalSlider_5.setOrientation(QtCore.Qt.Horizontal)
+        self.horizontalSlider_5.setObjectName("horizontalSlider_5")
+        self.verticalLayout_10.addWidget(self.horizontalSlider_5)
         self.bookItems.setWidget(self.bookItemsLayout)
         self.verticalLayout_21.addWidget(self.bookItems)
         self.playerContent.addWidget(self.playerPage)
@@ -1923,6 +1979,7 @@ class UiMainWindow(object):
         self.controlPanelButtons.addButton(self.volumeBtn)
         self.horizontalLayout_10.addWidget(self.volumeBtn)
         self.volumeFrame = QtWidgets.QFrame(self.volumeBox)
+        self.volumeFrame.setMinimumSize(QtCore.QSize(120, 0))
         self.volumeFrame.setMaximumSize(QtCore.QSize(0, 16777215))
         self.volumeFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.volumeFrame.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -2007,7 +2064,7 @@ class UiMainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(0)
         self.library.setCurrentIndex(0)
         self.playerContent.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
