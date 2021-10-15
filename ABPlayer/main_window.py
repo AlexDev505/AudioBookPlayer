@@ -39,7 +39,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         self.setupSignals()
 
         self.downloading = False  # Идёт ли процесс скачивания
-        self.book: Book = ...
+        self.book: Books = ...
 
         self.openLibraryPage()
 
@@ -98,6 +98,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         self.downloadBookBtn.clicked.connect(
             lambda e: book_page.download_book(self, self.book)
         )
+        self.deleteBtn.clicked.connect(lambda e: book_page.delete_book(self))
 
     def openInfoPage(
         self,
