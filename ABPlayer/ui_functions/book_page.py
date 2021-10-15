@@ -15,6 +15,7 @@ from PyQt5.QtCore import (
     QPropertyAnimation,
 )
 from PyQt5.QtGui import QMovie, QPixmap
+from PyQt5.QtWidgets import QMessageBox
 
 from database import Books
 from drivers import drivers, BaseDownloadProcessHandler
@@ -246,3 +247,81 @@ def download_book(main_window: MainWindow, book: Book) -> None:
         main_window.download_book_worker.run
     )
     main_window.download_book_thread.start()
+
+
+class DeleteBookWorker(QObject):
+    """
+    Реализует удаление книги.
+    """
+
+    finished: QtCore.pyqtSignal = pyqtSignal()
+    failed: QtCore.pyqtSignal = pyqtSignal(str)
+
+    def __init__(self, main_window: MainWindow):
+        super(DeleteBookWorker, self).__init__()
+        self.main_window = main_window
+        self.finished.connect(self.finish)
+        self.failed.connect(lambda text: self.fail(text))
+
+    def run(self):
+        try:
+            self.main_window.btnGroupFrame.setDisabled(True)
+            self.main_window.btnGroupFrame_2.setDisabled(True)
+            books = Books(os.environ["DB_PATH"])
+            books.api.execute(
+                """DELETE FROM books WHERE id=?""", self.main_window.book.id
+            )
+            books.api.commit()
+            for root, dirs, files in os.walk(self.main_window.book.dir_path):
+                for file in files:
+                    os.remove(os.path.join(root, file))
+                os.rmdir(root)
+            self.finished.emit()
+        except Exception as err:
+            # TODO: Необходимо реализовать нормальный обзор ошибок
+            self.failed.emit(str(err))
+        finally:
+            self.main_window.btnGroupFrame.setDisabled(False)
+            self.main_window.btnGroupFrame_2.setDisabled(False)
+
+    def finish(self):
+        self.main_window.delete_book_thread.quit()
+        self.main_window.openLibraryPage()
+
+    def fail(self, text: str):
+        self.main_window.delete_book_thread.quit()
+        self.main_window.openInfoPage(
+            text=text,
+            btn_text="Вернуться в библиотеку",
+            btn_function=lambda: self.main_window.stackedWidget.setCurrentWidget(
+                self.main_window.libraryPage
+            ),
+        )
+
+
+def delete_book(main_window: MainWindow) -> None:
+    if main_window.book is ...:
+        return
+
+    answer = QMessageBox.question(
+        main_window,
+        "Подтвердите действие",
+        "Вы действительно хотите удалить книгу из библиотеки?",
+        QMessageBox.Yes | QMessageBox.No,
+        QMessageBox.No,
+    )
+
+    if answer == QMessageBox.No:
+        return
+
+    # Открываем страницу загрузки
+    main_window.delete_book_loading_movie = QMovie(":/other/loading.gif")
+    main_window.delete_book_loading_movie.setScaledSize(QSize(50, 50))
+    main_window.openInfoPage(movie=main_window.delete_book_loading_movie)
+
+    # Создаем и запускаем новый поток
+    main_window.delete_book_thread = QThread()
+    main_window.delete_book_worker = DeleteBookWorker(main_window)
+    main_window.delete_book_worker.moveToThread(main_window.delete_book_thread)
+    main_window.delete_book_thread.started.connect(main_window.delete_book_worker.run)
+    main_window.delete_book_thread.start()
