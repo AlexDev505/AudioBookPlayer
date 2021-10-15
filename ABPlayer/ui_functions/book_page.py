@@ -176,9 +176,10 @@ class DownloadBookWorker(QObject):
         except Exception as err:
             # TODO: Необходимо реализовать нормальный обзор ошибок
             self.failed.emit(str(err))
+        finally:
+            self.main_window.downloadable_book = ...
 
     def finish(self):
-        self.main_window.downloading = False
         self.main_window.download_book_thread.quit()
         # Если пользователь находится на странице скачиваемой книги
         if self.main_window.pbFrame.minimumWidth() == 0:
@@ -195,7 +196,6 @@ class DownloadBookWorker(QObject):
             self.main_window.pb_animation.start()
 
     def fail(self, text: str):
-        self.main_window.downloading = False
         self.main_window.download_book_thread.quit()
         self.main_window.openInfoPage(
             text=text,
@@ -228,11 +228,11 @@ def download_book(main_window: MainWindow, book: Book) -> None:
     :param main_window: Экземпляр главного окна.
     :param book: Экземпляр книги.
     """
-    if main_window.downloading:
+    if main_window.downloadable_book is not ...:
         QMessageBox.information(
             main_window,
             "Предупреждение",
-            "Дождитесть окончания скачивания другой книги",
+            "Дождитесь окончания скачивания другой книги",
         )
         return
 
@@ -241,7 +241,7 @@ def download_book(main_window: MainWindow, book: Book) -> None:
 
     main_window.playerContent.setCurrentWidget(main_window.downloadingPage)
     main_window.saveBtn.hide()
-    main_window.downloading = True
+    main_window.downloadable_book = book
 
     # Создаем и запускаем новый поток
     main_window.download_book_thread = QThread()
@@ -261,9 +261,9 @@ class DeleteBookWorker(QObject):
     finished: QtCore.pyqtSignal = pyqtSignal()
     failed: QtCore.pyqtSignal = pyqtSignal(str)
 
-    def __init__(self, main_window: MainWindow):
+    def __init__(self, main_window: MainWindow, book: Books):
         super(DeleteBookWorker, self).__init__()
-        self.main_window = main_window
+        self.main_window, self.book = main_window, book
         self.finished.connect(self.finish)
         self.failed.connect(lambda text: self.fail(text))
 
@@ -272,11 +272,9 @@ class DeleteBookWorker(QObject):
             self.main_window.btnGroupFrame.setDisabled(True)
             self.main_window.btnGroupFrame_2.setDisabled(True)
             books = Books(os.environ["DB_PATH"])
-            books.api.execute(
-                """DELETE FROM books WHERE id=?""", self.main_window.book.id
-            )
+            books.api.execute("""DELETE FROM books WHERE id=?""", self.book.id)
             books.api.commit()
-            for root, dirs, files in os.walk(self.main_window.book.dir_path):
+            for root, dirs, files in os.walk(self.book.dir_path):
                 for file in files:
                     os.remove(os.path.join(root, file))
                 os.rmdir(root)
@@ -303,8 +301,9 @@ class DeleteBookWorker(QObject):
         )
 
 
-def delete_book(main_window: MainWindow) -> None:
-    if main_window.book is ...:
+def delete_book(main_window: MainWindow, book: Books = None) -> None:
+    book = book or main_window.book
+    if book is ...:
         return
 
     answer = QMessageBox.question(
@@ -325,7 +324,7 @@ def delete_book(main_window: MainWindow) -> None:
 
     # Создаем и запускаем новый поток
     main_window.delete_book_thread = QThread()
-    main_window.delete_book_worker = DeleteBookWorker(main_window)
+    main_window.delete_book_worker = DeleteBookWorker(main_window, book)
     main_window.delete_book_worker.moveToThread(main_window.delete_book_thread)
     main_window.delete_book_thread.started.connect(main_window.delete_book_worker.run)
     main_window.delete_book_thread.start()
