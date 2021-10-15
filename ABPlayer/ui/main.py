@@ -207,7 +207,30 @@ class UiMainWindow(object):
             "    border-top-left-radius: 15px;\n"
             "    text-align: left;\n"
             "}\n"
+            "\n"
             "/* BOOK PAGE CONTENT */\n"
+            "#bookItems {\n"
+            "    border: 2px solid rgb(64, 68, 75);\n"
+            "    border-radius: 3px;\n"
+            "}\n"
+            "#bookPageContent, #description {\n"
+            "    background-color: rgb(54, 57, 63);\n"
+            "}\n"
+            "#bookItems * {\n"
+            "    background-color: rgb(54, 57, 63);\n"
+            "}\n"
+            "/* PLAYER BTNS */\n"
+            "#playerBtns QPushButton {\n"
+            "    background-color: rgb(64, 68, 75);\n"
+            "    padding: 5px 3px 5px 3px;\n"
+            "}\n"
+            "#playerBtns QPushButton:hover {\n"
+            "    background-color: rgb(58, 62, 68);\n"
+            "}\n"
+            "#playerBtns QPushButton:pressed {\n"
+            "    margin-bottom: -1px;\n"
+            "}\n"
+            "/* PAGES */\n"
             "#playerPage QScrollBar:vertical {\n"
             "    margin: 0px;\n"
             " }\n"
@@ -218,15 +241,9 @@ class UiMainWindow(object):
             "    border: 2px solid rgb(64, 68, 75);\n"
             "    border-radius: 3px;\n"
             "}\n"
-            "#bookItems {\n"
-            "    border: 2px solid rgb(64, 68, 75);\n"
-            "    border-radius: 3px;\n"
-            "}\n"
-            "#bookPageContent, #description {\n"
-            "    background-color: rgb(54, 57, 63);\n"
-            "}\n"
-            "#bookItems * {\n"
-            "    background-color: rgb(64, 68, 75);\n"
+            "/* ITEMS */\n"
+            "#bookItems QSlider {\n"
+            "    border-bottom: 2px solid rgb(64, 68, 75);\n"
             "}\n"
             "#playerPage QSlider::handle:horizontal {\n"
             "    background-color: rgba(64, 68, 75, 0);\n"
@@ -900,7 +917,7 @@ class UiMainWindow(object):
         self.inProgressBooksContainer.setWidgetResizable(True)
         self.inProgressBooksContainer.setObjectName("inProgressBooksContainer")
         self.inProgressBooksLayout = QtWidgets.QWidget()
-        self.inProgressBooksLayout.setGeometry(QtCore.QRect(0, 0, 92, 18))
+        self.inProgressBooksLayout.setGeometry(QtCore.QRect(0, 0, 890, 601))
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
         )
@@ -961,7 +978,7 @@ class UiMainWindow(object):
         self.listenedBooksContainer.setWidgetResizable(True)
         self.listenedBooksContainer.setObjectName("listenedBooksContainer")
         self.listenedBooksLayout = QtWidgets.QWidget()
-        self.listenedBooksLayout.setGeometry(QtCore.QRect(0, 0, 92, 18))
+        self.listenedBooksLayout.setGeometry(QtCore.QRect(0, 0, 890, 601))
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
         )
@@ -1188,18 +1205,6 @@ class UiMainWindow(object):
         self.verticalLayout_21.setSpacing(5)
         self.verticalLayout_21.setObjectName("verticalLayout_21")
         self.playerBtns = QtWidgets.QFrame(self.playerPage)
-        self.playerBtns.setStyleSheet(
-            "QPushButton {\n"
-            "    background-color: rgb(64, 68, 75);\n"
-            "    padding: 5px 3px 5px 3px;\n"
-            "}\n"
-            "QPushButton:hover {\n"
-            "    background-color: rgb(58, 62, 68);\n"
-            "}\n"
-            "QPushButton:pressed {\n"
-            "    margin-bottom: -1px;\n"
-            "}"
-        )
         self.playerBtns.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.playerBtns.setFrameShadow(QtWidgets.QFrame.Raised)
         self.playerBtns.setObjectName("playerBtns")
@@ -1288,8 +1293,8 @@ class UiMainWindow(object):
         self.bookItemsLayout.setGeometry(QtCore.QRect(0, 0, 805, 172))
         self.bookItemsLayout.setObjectName("bookItemsLayout")
         self.verticalLayout_10 = QtWidgets.QVBoxLayout(self.bookItemsLayout)
-        self.verticalLayout_10.setContentsMargins(0, 0, 2, 0)
-        self.verticalLayout_10.setSpacing(2)
+        self.verticalLayout_10.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_10.setSpacing(0)
         self.verticalLayout_10.setObjectName("verticalLayout_10")
         self.bookItems.setWidget(self.bookItemsLayout)
         self.verticalLayout_21.addWidget(self.bookItems)

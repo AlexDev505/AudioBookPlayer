@@ -205,7 +205,30 @@ QProgressBar::chunk {
 	border-top-left-radius: 15px;
 	text-align: left;
 }
+
 /* BOOK PAGE CONTENT */
+#bookItems {
+	border: 2px solid rgb(64, 68, 75);
+	border-radius: 3px;
+}
+#bookPageContent, #description {
+	background-color: rgb(54, 57, 63);
+}
+#bookItems * {
+	background-color: rgb(54, 57, 63);
+}
+/* PLAYER BTNS */
+#playerBtns QPushButton {
+	background-color: rgb(64, 68, 75);
+	padding: 5px 3px 5px 3px;
+}
+#playerBtns QPushButton:hover {
+	background-color: rgb(58, 62, 68);
+}
+#playerBtns QPushButton:pressed {
+	margin-bottom: -1px;
+}
+/* PAGES */
 #playerPage QScrollBar:vertical {
 	margin: 0px;
  }
@@ -216,15 +239,9 @@ QProgressBar::chunk {
 	border: 2px solid rgb(64, 68, 75);
 	border-radius: 3px;
 }
-#bookItems {
-	border: 2px solid rgb(64, 68, 75);
-	border-radius: 3px;
-}
-#bookPageContent, #description {
-	background-color: rgb(54, 57, 63);
-}
-#bookItems * {
-	background-color: rgb(64, 68, 75);
+/* ITEMS */
+#bookItems QSlider {
+	border-bottom: 2px solid rgb(64, 68, 75);
 }
 #playerPage QSlider::handle:horizontal {
 	background-color: rgba(64, 68, 75, 0);
@@ -1594,8 +1611,8 @@ QPushButton:pressed {
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>92</width>
-                                   <height>18</height>
+                                   <width>890</width>
+                                   <height>601</height>
                                   </rect>
                                  </property>
                                  <property name="sizePolicy">
@@ -1682,8 +1699,8 @@ QPushButton:pressed {
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>92</width>
-                                   <height>18</height>
+                                   <width>890</width>
+                                   <height>601</height>
                                   </rect>
                                  </property>
                                  <property name="sizePolicy">
@@ -2153,18 +2170,6 @@ QPushButton:pressed {
                            </property>
                            <item>
                             <widget class="QFrame" name="playerBtns">
-                             <property name="styleSheet">
-                              <string notr="true">QPushButton {
-	background-color: rgb(64, 68, 75);
-	padding: 5px 3px 5px 3px;
-}
-QPushButton:hover {
-	background-color: rgb(58, 62, 68);
-}
-QPushButton:pressed {
-	margin-bottom: -1px;
-}</string>
-                             </property>
                              <property name="frameShape">
                               <enum>QFrame::StyledPanel</enum>
                              </property>
@@ -2338,7 +2343,7 @@ QPushButton:pressed {
                               </property>
                               <layout class="QVBoxLayout" name="verticalLayout_10">
                                <property name="spacing">
-                                <number>2</number>
+                                <number>0</number>
                                </property>
                                <property name="leftMargin">
                                 <number>0</number>
@@ -2347,7 +2352,7 @@ QPushButton:pressed {
                                 <number>0</number>
                                </property>
                                <property name="rightMargin">
-                                <number>2</number>
+                                <number>0</number>
                                </property>
                                <property name="bottomMargin">
                                 <number>0</number>

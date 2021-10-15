@@ -118,6 +118,21 @@ class Item(QtWidgets.QFrame, UiItem):
         )
         if done_time is not None:
             self.doneTime.setText(f"{convert_into_seconds(done_time)}")
+            background = re.search(
+                r"#playerBtns QPushButton {\n"
+                r" {4}background-color: (?P<rgb>.+);\n"
+                r" {4}padding: 5px 3px 5px 3px;\n}",
+                main_window.centralwidget.styleSheet(),
+                flags=re.MULTILINE,
+            )
+            if background:
+                self.setStyleSheet(
+                    f"""
+                    #bookItems QSlider::add-page:horizontal {{
+                        background: {background.group('rgb')};
+                    }}
+                    """
+                )
         else:
             self.doneTime.hide()
             self.separator.hide()
