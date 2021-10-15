@@ -229,7 +229,11 @@ def download_book(main_window: MainWindow, book: Book) -> None:
     :param book: Экземпляр книги.
     """
     if main_window.downloading:
-        # TODO: Нужно показывать диалоговое окно
+        QMessageBox.information(
+            main_window,
+            "Предупреждение",
+            "Дождитесть окончания скачивания другой книги",
+        )
         return
 
     main_window.downloadingProgressBarLg.setValue(0)
