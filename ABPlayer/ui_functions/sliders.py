@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QStyle
 
 if ty.TYPE_CHECKING:
     from PyQt5.QtCore import QEvent
-    from PyQt5.QtWidgets import QSlider, QWidget
+    from PyQt5.QtWidgets import QSlider
 
 
 def prepareSlider(slider: QSlider) -> None:
