@@ -20,34 +20,7 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget {
-	background-color:rgb(54, 57, 63);
-	color: rgb(215, 214, 217)
-}
-
-/* SLIDER */
-QSlider::groove:horizontal {
-	background-color: rgb(54, 57, 63);
-	border-radius: 1px;
-}
-QSlider::sub-page:horizontal {
-	background: rgb(142, 146, 151);
-	border-radius: 1px;
-	height: 40px;
-}
-QSlider::add-page:horizontal {
-	background: rgb(64, 68, 75);
-	border-radius: 1px;
-	height: 40px;
-}
-QSlider::handle:horizontal {
-	background: rgb(142, 146, 151);
-	border: 0px;
-    width: 5px;
-    margin-top: 0px;
-    margin-bottom: 0px;
-	border-radius: 1px;
-}</string>
+   <string notr="true"/>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <property name="spacing">

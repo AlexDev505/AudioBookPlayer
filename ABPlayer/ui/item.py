@@ -108,13 +108,14 @@ class Item(QtWidgets.QFrame, UiItem):
         super(Item, self).__init__(parent)
         self.setupUi(self)
         parent.layout().addWidget(self)
+
         sliders.prepareSlider(self.slider)
+        self.slider.wheelEvent = lambda e: None
 
         self.title.setText(item.title)
         self.totalTime.setText(
             f"{convert_into_seconds(item.end_time - item.start_time)}"
         )
-        self.slider.sc = None
         if done_time is not None:
             self.doneTime.setText(f"{convert_into_seconds(done_time)}")
         else:

@@ -230,7 +230,7 @@ QProgressBar::chunk {
 	background-color: rgba(64, 68, 75, 0);
 }
 #bookItems QSlider::sub-page:horizontal {
-	background:rgb(142, 146, 151);
+	background: rgb(142, 146, 151);
 }
 #bookItems QSlider::add-page:horizontal {
 	background: rgb(54, 57, 63);
