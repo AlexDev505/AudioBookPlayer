@@ -31,10 +31,15 @@ class SearchWorker(QObject):
 
     def run(self) -> None:
         try:
+            self.main_window.btnGroupFrame.setDisabled(True)
+            self.main_window.btnGroupFrame_2.setDisabled(True)
             book = self.drv.get_book(self.url)
             self.finished.emit(book)
         except Exception:
             self.failed.emit()
+        finally:
+            self.main_window.btnGroupFrame.setDisabled(False)
+            self.main_window.btnGroupFrame_2.setDisabled(False)
 
     def finish(self, book: Book) -> None:
         self.main_window.search_thread.quit()
