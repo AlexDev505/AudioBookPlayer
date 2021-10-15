@@ -38,7 +38,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
 
         self.setupSignals()
 
-        self.downloading = False  # Идёт ли процесс скачивания
+        self.downloadable_book: Book = ...  # Книга, которую скачиваем
         self.book: Books = ...
 
         self.openLibraryPage()
@@ -130,8 +130,15 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
             self.toggleFavoriteBtn.hide()
             self.deleteBtn.hide()
             self.changeDriverBtn.hide()
-            self.saveBtn.show()
-            self.playerContent.setCurrentWidget(self.needDownloadingPage)
+            if (
+                self.downloadable_book is not ...
+                and self.downloadable_book.url == book.url
+            ):
+                self.saveBtn.hide()
+                self.playerContent.setCurrentWidget(self.downloadingPage)
+            else:
+                self.saveBtn.show()
+                self.playerContent.setCurrentWidget(self.needDownloadingPage)
         else:
             self.toggleFavoriteBtn.show()
             self.deleteBtn.show()
@@ -299,6 +306,9 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
             bookWidget.finishedIcon.hide()
 
         book_page.load_preview(bookWidget.cover, (200, 200), book)
+        bookWidget.deleteBtn.clicked.connect(
+            lambda e: book_page.delete_book(self, book)
+        )
 
         bookWidget.frame.mousePressEvent = lambda e: self.openBookPage(book)
         parent.layout().addWidget(bookFrame)
