@@ -158,10 +158,9 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
             QtCore.QTimer.singleShot(
                 100,
                 lambda: self.bookItems.verticalScrollBar().setValue(
-                    book.stop_flag.item * 50 + (book.stop_flag.item - 1) * 2
+                    book.stop_flag.item * 50
                 ),
             )
-            #
 
             bookItemsSpacer = QtWidgets.QSpacerItem(
                 40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
