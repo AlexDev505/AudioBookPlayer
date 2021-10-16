@@ -609,6 +609,10 @@ def _get_url(main_window: MainWindow, dlg: InputDialog) -> ty.Union[None, False,
 
 
 def listeningProgressTools(main_window: MainWindow) -> None:
+    """
+    Изменение прогресса по нажатию на кнопку.
+    :param main_window: Экземпляр главного окна.
+    """
     if main_window.book.status == Status.finished:
         answer = QMessageBox.question(
             main_window,
