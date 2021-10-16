@@ -99,11 +99,11 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         self.searchNewBookBtn.clicked.connect(lambda e: add_book_page.search(self))
 
         # BOOK PAGE
-        self.saveBtn.clicked.connect(lambda e: book_page.download_book(self, self.book))
+        self.saveBtn.clicked.connect(lambda e: book_page.downloadBook(self, self.book))
         self.downloadBookBtn.clicked.connect(
-            lambda e: book_page.download_book(self, self.book)
+            lambda e: book_page.downloadBook(self, self.book)
         )
-        self.deleteBtn.clicked.connect(lambda e: book_page.delete_book(self))
+        self.deleteBtn.clicked.connect(lambda e: book_page.deleteBook(self))
         self.stopDownloadingBtn.clicked.connect(
             lambda e: book_page.stopBookDownloading(self)
         )
@@ -189,7 +189,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         self.durationLabel.setText(book.duration)
         self.description.setText(book.description)
 
-        book_page.load_preview(self.bookCoverLg, (230, 230), book)
+        book_page.loadPreview(self.bookCoverLg, (230, 230), book)
 
         self.book = book
         self.stackedWidget.setCurrentWidget(self.bookPage)
@@ -313,7 +313,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         else:
             bookWidget.finishedIcon.hide()
 
-        book_page.load_preview(bookWidget.cover, (200, 200), book)
+        book_page.loadPreview(bookWidget.cover, (200, 200), book)
         bookWidget.deleteBtn.clicked.connect(
             lambda e: book_page.delete_book(self, book)
         )

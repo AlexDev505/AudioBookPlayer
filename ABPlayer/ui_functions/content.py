@@ -18,6 +18,7 @@ def setCurrentPage(main_window: MainWindow, page: QWidget) -> None:
     :param main_window: Экземпляр главного окна.
     :param page: Новая страница.
     """
+    # Скрытие / отображение полосы загрузки
     if main_window.downloadable_book is not ...:
         main_window.pb_animation = QPropertyAnimation(
             main_window.pbFrame, b"minimumWidth"
@@ -38,6 +39,7 @@ def setCurrentPage(main_window: MainWindow, page: QWidget) -> None:
             main_window.pb_animation.setStartValue(150)
             main_window.pb_animation.setEndValue(0)
             main_window.pb_animation.start()
+
     if main_window.stackedWidget.currentWidget() == main_window.libraryPage:
         main_window.library.setMinimumWidth(0)
         QTimer.singleShot(
