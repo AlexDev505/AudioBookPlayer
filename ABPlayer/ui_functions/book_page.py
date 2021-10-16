@@ -29,6 +29,7 @@ from PyQt5.QtWidgets import (
 )
 
 from database import Books
+from database.tables.books import Status
 from drivers import drivers, BaseDownloadProcessHandler
 from .add_book_page import SearchWorker
 
@@ -605,3 +606,38 @@ def _get_url(main_window: MainWindow, dlg: InputDialog) -> ty.Union[None, False,
         )
     else:
         return url
+
+
+def listeningProgressTools(main_window: MainWindow) -> None:
+    if main_window.book.status == Status.finished:
+        answer = QMessageBox.question(
+            main_window,
+            "Подтвердите действие",
+            "Пометить книгу как не прослушанное?",
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No,
+        )
+
+        if answer == QMessageBox.No:
+            return
+
+        listening_progress = main_window.book.listening_progress
+        main_window.progressLabel.setText(f"{listening_progress} прослушано")
+        if listening_progress == "0%":
+            main_window.book.update(status=Status.new)
+        else:
+            main_window.book.update(status=Status.started)
+    else:
+        answer = QMessageBox.question(
+            main_window,
+            "Подтвердите действие",
+            "Пометить книгу как прослушанное?",
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No,
+        )
+
+        if answer == QMessageBox.No:
+            return
+
+        main_window.progressLabel.setText("Прослушано")
+        main_window.book.update(status=Status.finished)
