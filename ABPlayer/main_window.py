@@ -105,6 +105,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         )
         self.deleteBtn.clicked.connect(lambda e: book_page.deleteBook(self))
         self.toggleFavoriteBtn.clicked.connect(lambda e: book_page.toggleFavorite(self))
+        self.changeDriverBtn.clicked.connect(lambda e: book_page.changeDriver(self))
         self.stopDownloadingBtn.clicked.connect(
             lambda e: book_page.stopBookDownloading(self)
         )
