@@ -1611,8 +1611,8 @@ QPushButton:pressed {
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>890</width>
-                                   <height>601</height>
+                                   <width>92</width>
+                                   <height>18</height>
                                   </rect>
                                  </property>
                                  <property name="sizePolicy">
@@ -1699,8 +1699,8 @@ QPushButton:pressed {
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>890</width>
-                                   <height>601</height>
+                                   <width>92</width>
+                                   <height>18</height>
                                   </rect>
                                  </property>
                                  <property name="sizePolicy">
@@ -2516,7 +2516,10 @@ QPushButton:pressed {
                           </layout>
                          </widget>
                          <widget class="QWidget" name="downloadingPage">
-                          <layout class="QHBoxLayout" name="horizontalLayout_34">
+                          <layout class="QHBoxLayout" name="horizontalLayout_36">
+                           <property name="spacing">
+                            <number>0</number>
+                           </property>
                            <property name="leftMargin">
                             <number>0</number>
                            </property>
@@ -2547,6 +2550,9 @@ QPushButton:pressed {
                            </item>
                            <item>
                             <layout class="QVBoxLayout" name="verticalLayout_24">
+                             <property name="spacing">
+                              <number>5</number>
+                             </property>
                              <item>
                               <spacer name="verticalSpacer_12">
                                <property name="orientation">
@@ -2579,19 +2585,71 @@ QPushButton:pressed {
                               </widget>
                              </item>
                              <item>
-                              <widget class="QProgressBar" name="downloadingProgressBarLg">
-                               <property name="minimumSize">
-                                <size>
-                                 <width>400</width>
-                                 <height>30</height>
-                                </size>
+                              <widget class="QFrame" name="frame_5">
+                               <property name="styleSheet">
+                                <string notr="true">QPushButton:hover {
+	background-color: rgb(50, 53, 59);
+}
+QPushButton:pressed {
+	margin-bottom: -1px;
+}</string>
                                </property>
-                               <property name="value">
-                                <number>24</number>
-                               </property>
-                               <property name="alignment">
-                                <set>Qt::AlignCenter</set>
-                               </property>
+                               <layout class="QHBoxLayout" name="horizontalLayout_34">
+                                <property name="spacing">
+                                 <number>5</number>
+                                </property>
+                                <property name="leftMargin">
+                                 <number>0</number>
+                                </property>
+                                <property name="topMargin">
+                                 <number>0</number>
+                                </property>
+                                <property name="rightMargin">
+                                 <number>0</number>
+                                </property>
+                                <property name="bottomMargin">
+                                 <number>0</number>
+                                </property>
+                                <item>
+                                 <widget class="QProgressBar" name="downloadingProgressBarLg">
+                                  <property name="minimumSize">
+                                   <size>
+                                    <width>400</width>
+                                    <height>30</height>
+                                   </size>
+                                  </property>
+                                  <property name="value">
+                                   <number>24</number>
+                                  </property>
+                                  <property name="alignment">
+                                   <set>Qt::AlignCenter</set>
+                                  </property>
+                                 </widget>
+                                </item>
+                                <item>
+                                 <widget class="QPushButton" name="stopDownloadingBtn">
+                                  <property name="minimumSize">
+                                   <size>
+                                    <width>30</width>
+                                    <height>30</height>
+                                   </size>
+                                  </property>
+                                  <property name="text">
+                                   <string/>
+                                  </property>
+                                  <property name="icon">
+                                   <iconset resource="resources/icons.qrc">
+                                    <normaloff>:/other/x.svg</normaloff>:/other/x.svg</iconset>
+                                  </property>
+                                  <property name="iconSize">
+                                   <size>
+                                    <width>25</width>
+                                    <height>25</height>
+                                   </size>
+                                  </property>
+                                 </widget>
+                                </item>
+                               </layout>
                               </widget>
                              </item>
                              <item>

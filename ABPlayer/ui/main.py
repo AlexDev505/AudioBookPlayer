@@ -917,7 +917,7 @@ class UiMainWindow(object):
         self.inProgressBooksContainer.setWidgetResizable(True)
         self.inProgressBooksContainer.setObjectName("inProgressBooksContainer")
         self.inProgressBooksLayout = QtWidgets.QWidget()
-        self.inProgressBooksLayout.setGeometry(QtCore.QRect(0, 0, 890, 601))
+        self.inProgressBooksLayout.setGeometry(QtCore.QRect(0, 0, 92, 18))
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
         )
@@ -978,7 +978,7 @@ class UiMainWindow(object):
         self.listenedBooksContainer.setWidgetResizable(True)
         self.listenedBooksContainer.setObjectName("listenedBooksContainer")
         self.listenedBooksLayout = QtWidgets.QWidget()
-        self.listenedBooksLayout.setGeometry(QtCore.QRect(0, 0, 890, 601))
+        self.listenedBooksLayout.setGeometry(QtCore.QRect(0, 0, 92, 18))
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
         )
@@ -1371,14 +1371,16 @@ class UiMainWindow(object):
         self.playerContent.addWidget(self.needDownloadingPage)
         self.downloadingPage = QtWidgets.QWidget()
         self.downloadingPage.setObjectName("downloadingPage")
-        self.horizontalLayout_34 = QtWidgets.QHBoxLayout(self.downloadingPage)
-        self.horizontalLayout_34.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_34.setObjectName("horizontalLayout_34")
+        self.horizontalLayout_36 = QtWidgets.QHBoxLayout(self.downloadingPage)
+        self.horizontalLayout_36.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_36.setSpacing(0)
+        self.horizontalLayout_36.setObjectName("horizontalLayout_36")
         spacerItem10 = QtWidgets.QSpacerItem(
             194, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum
         )
-        self.horizontalLayout_34.addItem(spacerItem10)
+        self.horizontalLayout_36.addItem(spacerItem10)
         self.verticalLayout_24 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_24.setSpacing(5)
         self.verticalLayout_24.setObjectName("verticalLayout_24")
         spacerItem11 = QtWidgets.QSpacerItem(
             20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
@@ -1394,21 +1396,43 @@ class UiMainWindow(object):
         self.label_7.setAlignment(QtCore.Qt.AlignCenter)
         self.label_7.setObjectName("label_7")
         self.verticalLayout_24.addWidget(self.label_7)
-        self.downloadingProgressBarLg = QtWidgets.QProgressBar(self.downloadingPage)
+        self.frame_5 = QtWidgets.QFrame(self.downloadingPage)
+        self.frame_5.setStyleSheet(
+            "QPushButton:hover {\n"
+            "    background-color: rgb(50, 53, 59);\n"
+            "}\n"
+            "QPushButton:pressed {\n"
+            "    margin-bottom: -1px;\n"
+            "}"
+        )
+        self.frame_5.setObjectName("frame_5")
+        self.horizontalLayout_34 = QtWidgets.QHBoxLayout(self.frame_5)
+        self.horizontalLayout_34.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_34.setSpacing(5)
+        self.horizontalLayout_34.setObjectName("horizontalLayout_34")
+        self.downloadingProgressBarLg = QtWidgets.QProgressBar(self.frame_5)
         self.downloadingProgressBarLg.setMinimumSize(QtCore.QSize(400, 30))
         self.downloadingProgressBarLg.setProperty("value", 24)
         self.downloadingProgressBarLg.setAlignment(QtCore.Qt.AlignCenter)
         self.downloadingProgressBarLg.setObjectName("downloadingProgressBarLg")
-        self.verticalLayout_24.addWidget(self.downloadingProgressBarLg)
+        self.horizontalLayout_34.addWidget(self.downloadingProgressBarLg)
+        self.stopDownloadingBtn = QtWidgets.QPushButton(self.frame_5)
+        self.stopDownloadingBtn.setMinimumSize(QtCore.QSize(30, 30))
+        self.stopDownloadingBtn.setText("")
+        self.stopDownloadingBtn.setIcon(icon2)
+        self.stopDownloadingBtn.setIconSize(QtCore.QSize(25, 25))
+        self.stopDownloadingBtn.setObjectName("stopDownloadingBtn")
+        self.horizontalLayout_34.addWidget(self.stopDownloadingBtn)
+        self.verticalLayout_24.addWidget(self.frame_5)
         spacerItem12 = QtWidgets.QSpacerItem(
             20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
         )
         self.verticalLayout_24.addItem(spacerItem12)
-        self.horizontalLayout_34.addLayout(self.verticalLayout_24)
+        self.horizontalLayout_36.addLayout(self.verticalLayout_24)
         spacerItem13 = QtWidgets.QSpacerItem(
             193, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum
         )
-        self.horizontalLayout_34.addItem(spacerItem13)
+        self.horizontalLayout_36.addItem(spacerItem13)
         self.playerContent.addWidget(self.downloadingPage)
         self.horizontalLayout_31.addWidget(self.playerContent)
         self.verticalLayout_30.addWidget(self.playerFrame)
