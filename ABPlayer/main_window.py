@@ -90,6 +90,11 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         )
         sliders.prepareSlider(self.speedSlider)
 
+        book_page.prepareProgressBar(self.downloadingProgressBar)
+        self.downloadingProgressBar.mousePressEvent = lambda e: self.openBookPage(
+            self.downloadable_book
+        )
+
         # ADD BOOK PAGE
         self.searchNewBookBtn.clicked.connect(lambda e: add_book_page.search(self))
 
@@ -99,6 +104,9 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
             lambda e: book_page.download_book(self, self.book)
         )
         self.deleteBtn.clicked.connect(lambda e: book_page.delete_book(self))
+        self.stopDownloadingBtn.clicked.connect(
+            lambda e: book_page.stopBookDownloading(self)
+        )
 
     def openInfoPage(
         self,
@@ -183,8 +191,8 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
 
         book_page.load_preview(self.bookCoverLg, (230, 230), book)
 
-        self.stackedWidget.setCurrentWidget(self.bookPage)
         self.book = book
+        self.stackedWidget.setCurrentWidget(self.bookPage)
 
     def openLibraryPage(self):
         books: ty.List[Books] = Books(os.environ["DB_PATH"]).filter(return_list=True)

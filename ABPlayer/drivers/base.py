@@ -151,8 +151,8 @@ class Driver(ABC):
                 self._download_file(file_path, item.file_url, process_handler)
                 prepare_file_metadata(file_path, book, i, item)
 
-    @staticmethod
     def _download_file(
+        self,
         file_path: Path,
         url: str,
         process_handler: BaseDownloadProcessHandler,
@@ -166,15 +166,18 @@ class Driver(ABC):
         if not file_path.exists():
             file_path.parent.mkdir(parents=True, exist_ok=True)
 
-        with open(file_path, "wb") as file:
-            resp = requests.get(str(url), stream=True)
-            if resp.headers.get("content-length") is None:
-                file.write(resp.content)
-            else:
-                for data in resp.iter_content(chunk_size=5120):
-                    if process_handler:
-                        process_handler.progress(len(data))
-                    file.write(data)
+        # Храним файл в переменной, чтобы можно было закрыть его из другой части кода.
+        # Иначе, при остановке скачивания, возникает ошибка.
+        self._file = open(file_path, "wb")
+        resp = requests.get(str(url), stream=True)
+        if resp.headers.get("content-length") is None:
+            self._file.write(resp.content)
+        else:
+            for data in resp.iter_content(chunk_size=5120):
+                if process_handler:
+                    process_handler.progress(len(data))
+                self._file.write(data)
+        self._file.close()
 
     @property
     def driver(self) -> ty.Type[webdriver.Chrome]:

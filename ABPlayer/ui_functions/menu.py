@@ -54,6 +54,7 @@ def buttonsHandler(main_window: MainWindow, button: QPushButton) -> None:
         main_window.openLibraryPage()
     elif button == main_window.addBookBtn:
         main_window.stackedWidget.setCurrentWidget(main_window.addBookPage)
+        main_window.searchNewBookLineEdit.setFocus()
     elif button == main_window.settingsBtn:
         main_window.stackedWidget.setCurrentWidget(main_window.settingsPage)
     elif button == main_window.dirWithBooksBtn:

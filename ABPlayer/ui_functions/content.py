@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import typing as ty
 
-from PyQt5.QtCore import QTimer
+from PyQt5.QtCore import QTimer, QPropertyAnimation, QEasingCurve
 
 if ty.TYPE_CHECKING:
     from PyQt5.QtWidgets import QWidget
@@ -18,6 +18,26 @@ def setCurrentPage(main_window: MainWindow, page: QWidget) -> None:
     :param main_window: Экземпляр главного окна.
     :param page: Новая страница.
     """
+    if main_window.downloadable_book is not ...:
+        main_window.pb_animation = QPropertyAnimation(
+            main_window.pbFrame, b"minimumWidth"
+        )
+        main_window.pb_animation.setDuration(150)
+        main_window.pb_animation.setEasingCurve(QEasingCurve.InOutQuart)
+        if (
+            main_window.stackedWidget.currentWidget() == main_window.bookPage
+            and main_window.pbFrame.width() == 0
+        ):
+            main_window.pb_animation.setStartValue(0)
+            main_window.pb_animation.setEndValue(150)
+            main_window.pb_animation.start()
+        elif (
+            page == main_window.bookPage
+            and main_window.book.url == main_window.downloadable_book.url
+        ):
+            main_window.pb_animation.setStartValue(150)
+            main_window.pb_animation.setEndValue(0)
+            main_window.pb_animation.start()
     if main_window.stackedWidget.currentWidget() == main_window.libraryPage:
         main_window.library.setMinimumWidth(0)
         QTimer.singleShot(
