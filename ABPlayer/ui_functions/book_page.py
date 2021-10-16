@@ -17,14 +17,23 @@ from PyQt5.QtCore import (
     QPropertyAnimation,
 )
 from PyQt5.QtGui import QMovie, QPixmap, QIcon
-from PyQt5.QtWidgets import QMessageBox, QToolTip, QProgressBar
+from PyQt5.QtWidgets import (
+    QMessageBox,
+    QDialogButtonBox,
+    QDialog,
+    QToolTip,
+    QProgressBar,
+    QVBoxLayout,
+    QLabel,
+    QLineEdit,
+)
 
 from database import Books
 from drivers import drivers, BaseDownloadProcessHandler
+from .add_book_page import SearchWorker
 
 if ty.TYPE_CHECKING:
     from PyQt5 import QtCore
-    from PyQt5.QtWidgets import QLabel
     from main_window import MainWindow
     from database import Book
 
@@ -461,3 +470,138 @@ def toggleFavorite(main_window: MainWindow, book: Books = None) -> None:
         icon.addPixmap(QPixmap(":/other/star.svg"), QIcon.Normal, QIcon.Off)
     main_window.sender().setIcon(icon)
     book.save()
+
+
+class InputDialog(QDialog):
+    """
+    Диалоговое окно для получения ссылки на книгу.
+    """
+
+    def __init__(self, parent):
+        super().__init__(parent)
+
+        self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
+        self.setWindowTitle("Изменение источника")
+
+        self.buttonBox = QDialogButtonBox(QDialogButtonBox.Ok)
+        self.buttonBox.accepted.connect(self.accept)
+        self.buttonBox.rejected.connect(self.reject)
+
+        self.layout = QVBoxLayout()
+        self.message = QLabel("Введите ссылку на книгу")
+        self.layout.addWidget(self.message)
+        self.lineEdit = QLineEdit()
+        self.layout.addWidget(self.lineEdit)
+        self.layout.addWidget(self.buttonBox)
+        self.setLayout(self.layout)
+
+    def accept(self) -> None:
+        """
+        Нажатие на клавишу "ОК".
+        """
+        if self.lineEdit.text().strip():
+            super(InputDialog, self).accept()
+        else:
+            self.lineEdit.setFocus()
+
+
+def changeDriver(main_window: MainWindow) -> None:
+    """
+    Запускает изменение источника книги.
+    :param main_window: Экземпляр главного окна.
+    """
+
+    def delete(book: Book) -> None:
+        """
+        Запускает удаление старой книги.
+        :param book: Новая книга.
+        """
+        main_window.search_thread.quit()
+
+        # Создаем и запускаем новый поток для удаления старой книги
+        main_window.delete_book_thread = QThread()
+        main_window.delete_book_worker = DeleteBookWorker(main_window, main_window.book)
+        main_window.delete_book_worker.finished.disconnect()
+        # По завершению удаления, запускается скачивание
+        main_window.delete_book_worker.finished.connect(lambda: download(book))
+        main_window.delete_book_worker.moveToThread(main_window.delete_book_thread)
+        main_window.delete_book_thread.started.connect(
+            main_window.delete_book_worker.run
+        )
+        main_window.delete_book_thread.start()
+
+    def download(book: Book) -> None:
+        """
+        Запускает скачивание книги.
+        :param book: Экземпляр книги.
+        """
+        main_window.delete_book_thread.quit()
+        main_window.openBookPage(book)
+
+        main_window.downloadingProgressBarLg.setValue(0)
+        main_window.downloadingProgressBar.setValue(0)
+
+        main_window.playerContent.setCurrentWidget(main_window.downloadingPage)
+        main_window.saveBtn.hide()
+        main_window.downloadable_book = book
+
+        # Создаем и запускаем новый поток для скачивания новой книги
+        main_window.download_book_thread = QThread()
+        main_window.download_book_worker = DownloadBookWorker(main_window, book)
+        main_window.download_book_worker.moveToThread(main_window.download_book_thread)
+        main_window.download_book_thread.started.connect(
+            main_window.download_book_worker.run
+        )
+        main_window.download_book_thread.start()
+
+    if main_window.downloadable_book is not ...:
+        QMessageBox.information(
+            main_window,
+            "Предупреждение",
+            "Дождитесь окончания скачивания другой книги",
+        )
+        return
+
+    # Создаём диалог и получаем ссылку
+    dlg = InputDialog(main_window)
+    url = _get_url(main_window, dlg)
+    while not url:
+        if url is False:  # Закрытие окна
+            return
+        url = _get_url(main_window, dlg)
+
+    # Открываем страницу загрузки
+    main_window.delete_book_loading_movie = QMovie(":/other/loading.gif")
+    main_window.delete_book_loading_movie.setScaledSize(QSize(50, 50))
+    main_window.openInfoPage(movie=main_window.delete_book_loading_movie)
+
+    drv = [drv for drv in drivers if url.startswith(drv().site_url)][0]()
+
+    # Создаём и запускаем новый поток для поиска книги
+    main_window.search_thread = QThread()
+    main_window.search_worker = SearchWorker(main_window, drv, url)
+    main_window.search_worker.finished.disconnect()  # noqa
+    # По завершению поиска, запускается удаление старой книги
+    main_window.search_worker.finished.connect(lambda book: delete(book))  # noqa
+    main_window.search_worker.moveToThread(main_window.search_thread)
+    main_window.search_thread.started.connect(main_window.search_worker.run)
+    main_window.search_thread.start()
+
+
+def _get_url(main_window: MainWindow, dlg: InputDialog) -> ty.Union[None, False, str]:
+    answer = dlg.exec()
+    dlg.lineEdit.setFocus()
+    url = dlg.lineEdit.text().strip()
+
+    if not answer:  # Закрытие окна
+        return False
+    elif not any(url.startswith(drv().site_url) for drv in drivers):
+        QMessageBox.critical(
+            main_window, "Ошибка", "Драйвер для данного сайта не найден"
+        )
+    elif url == main_window.book.url:
+        QMessageBox.information(
+            main_window, "Внимание", "Ссылка ведёт на тот же источник"
+        )
+    else:
+        return url
