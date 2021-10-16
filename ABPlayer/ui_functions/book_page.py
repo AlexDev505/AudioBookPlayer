@@ -415,11 +415,8 @@ def deleteBook(main_window: MainWindow, book: Books = None) -> None:
     Запускает удаление книги.
     :param main_window: Экземпляр главного окна.
     :param book: Экземпляр книги. (Если не передан используется main_window.book)
-    :return:
     """
     book = book or main_window.book
-    if book is ...:
-        return
 
     answer = QMessageBox.question(
         main_window,
@@ -446,6 +443,11 @@ def deleteBook(main_window: MainWindow, book: Books = None) -> None:
 
 
 def toggleFavorite(main_window: MainWindow, book: Books = None) -> None:
+    """
+    Добавляет/снимает метку "Избранное".
+    :param main_window: Экземпляр главного окна.
+    :param book: Экземпляр книги. (Если не передан используется main_window.book)
+    """
     book = book or main_window.book
     book.favorite = not book.favorite
     icon = QIcon()
