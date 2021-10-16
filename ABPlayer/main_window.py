@@ -104,6 +104,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
             lambda e: book_page.downloadBook(self, self.book)
         )
         self.deleteBtn.clicked.connect(lambda e: book_page.deleteBook(self))
+        self.toggleFavoriteBtn.clicked.connect(lambda e: book_page.toggleFavorite(self))
         self.stopDownloadingBtn.clicked.connect(
             lambda e: book_page.stopBookDownloading(self)
         )
@@ -154,6 +155,21 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
             self.saveBtn.hide()
             self.playerContent.setCurrentWidget(self.playerPage)
             book = book_data
+
+            icon = QtGui.QIcon()
+            if book.favorite:
+                icon.addPixmap(
+                    QtGui.QPixmap(":/other/star_fill.svg"),
+                    QtGui.QIcon.Normal,
+                    QtGui.QIcon.Off,
+                )
+            else:
+                icon.addPixmap(
+                    QtGui.QPixmap(":/other/star.svg"),
+                    QtGui.QIcon.Normal,
+                    QtGui.QIcon.Off,
+                )
+            self.toggleFavoriteBtn.setIcon(icon)
 
             # Очищаем от старых элементов
             for children in self.bookItemsLayout.children():
@@ -315,6 +331,9 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
 
         book_page.loadPreview(bookWidget.cover, (200, 200), book)
         bookWidget.deleteBtn.clicked.connect(lambda e: book_page.deleteBook(self, book))
+        bookWidget.toggleFavoriteBtn.clicked.connect(
+            lambda e: book_page.toggleFavorite(self, book)
+        )
 
         bookWidget.frame.mousePressEvent = lambda e: self.openBookPage(book)
         parent.layout().addWidget(bookFrame)
