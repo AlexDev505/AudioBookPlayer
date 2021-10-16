@@ -129,3 +129,18 @@ class Books(Table, Book):
     status: Status = Status.new
     stop_flag: StopFlag = StopFlag()
     favorite: Bool = False
+
+    @property
+    def listening_progress(self):
+        total = sum([item.end_time - item.start_time for item in self.items])
+        cur = (
+            sum(
+                [
+                    item.end_time - item.start_time
+                    for i, item in enumerate(self.items)
+                    if i < self.stop_flag.item
+                ]
+            )
+            + self.stop_flag.time
+        )
+        return f"{int(round(cur / (total / 100)))}%"

@@ -79,7 +79,7 @@ class KnigaVUhe(Driver):
                     file_index=i + 1,
                     title=item["title"],
                     start_time=0,
-                    end_time=0,
+                    end_time=item["duration"],
                 )
             )
 

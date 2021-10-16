@@ -99,6 +99,9 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         self.searchNewBookBtn.clicked.connect(lambda e: add_book_page.search(self))
 
         # BOOK PAGE
+        self.progressToolsBtn.clicked.connect(
+            lambda e: book_page.listeningProgressTools(self)
+        )
         self.saveBtn.clicked.connect(lambda e: book_page.downloadBook(self, self.book))
         self.downloadBookBtn.clicked.connect(
             lambda e: book_page.downloadBook(self, self.book)
@@ -137,6 +140,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
             author=book.author, name=book.name
         )
         if not book_data:
+            self.progressFrame.hide()
             self.toggleFavoriteBtn.hide()
             self.deleteBtn.hide()
             self.changeDriverBtn.hide()
@@ -150,6 +154,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
                 self.saveBtn.show()
                 self.playerContent.setCurrentWidget(self.needDownloadingPage)
         else:
+            self.progressFrame.show()
             self.toggleFavoriteBtn.show()
             self.deleteBtn.show()
             self.changeDriverBtn.show()
@@ -157,6 +162,10 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
             self.playerContent.setCurrentWidget(self.playerPage)
             book = book_data
 
+            # Отображаем прогресс прослушивания
+            self.progressLabel.setText(f"{book.listening_progress} прослушано")
+
+            # Устанавливаем иконку на кнопку "Добавить в избранное"
             icon = QtGui.QIcon()
             if book.favorite:
                 icon.addPixmap(
@@ -182,19 +191,22 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
                 if isinstance(item, QtWidgets.QSpacerItem):
                     self.bookItemsLayout.layout().removeItem(item)
 
+            # Инициализируем элементы
             for i, item in enumerate(book.items):
                 if book.stop_flag.item == i:
                     Item(self, self.bookItemsLayout, item, book.stop_flag.time)
                     continue
                 Item(self, self.bookItemsLayout, item)
+            # Автоматически прокручиваем к текущему элементу
             self.bookItems.scroll(0, 50 * book.stop_flag.item)
             QtCore.QTimer.singleShot(
-                100,
+                500,
                 lambda: self.bookItems.verticalScrollBar().setValue(
                     book.stop_flag.item * 50
                 ),
             )
 
+            # Прижимаем элементы к верхнему краю
             bookItemsSpacer = QtWidgets.QSpacerItem(
                 40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
             )
@@ -312,21 +324,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
             bookWidget.progressLabel.setText("Прослушано")
         elif book.status == Status.started:
             bookWidget.finishedIcon.hide()
-            item: BookItem
-            total = sum([item.end_time - item.start_time for item in book.items])
-            cur = (
-                sum(
-                    [
-                        item.end_time - item.start_time
-                        for i, item in enumerate(book.items)
-                        if i < book.stop_flag.item
-                    ]
-                )
-                + book.stop_flag.time
-            )
-            bookWidget.progressLabel.setText(
-                f"{int(round(cur / (total / 100)))}% прослушано"
-            )
+            bookWidget.progressLabel.setText(f"{book.listening_progress} прослушано")
         else:
             bookWidget.finishedIcon.hide()
 
