@@ -314,9 +314,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
             bookWidget.finishedIcon.hide()
 
         book_page.loadPreview(bookWidget.cover, (200, 200), book)
-        bookWidget.deleteBtn.clicked.connect(
-            lambda e: book_page.delete_book(self, book)
-        )
+        bookWidget.deleteBtn.clicked.connect(lambda e: book_page.deleteBook(self, book))
 
         bookWidget.frame.mousePressEvent = lambda e: self.openBookPage(book)
         parent.layout().addWidget(bookFrame)
