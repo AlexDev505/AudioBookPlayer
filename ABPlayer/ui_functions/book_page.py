@@ -16,7 +16,7 @@ from PyQt5.QtCore import (
     QEasingCurve,
     QPropertyAnimation,
 )
-from PyQt5.QtGui import QMovie, QPixmap
+from PyQt5.QtGui import QMovie, QPixmap, QIcon
 from PyQt5.QtWidgets import QMessageBox, QToolTip, QProgressBar
 
 from database import Books
@@ -443,3 +443,19 @@ def deleteBook(main_window: MainWindow, book: Books = None) -> None:
     main_window.delete_book_worker.moveToThread(main_window.delete_book_thread)
     main_window.delete_book_thread.started.connect(main_window.delete_book_worker.run)
     main_window.delete_book_thread.start()
+
+
+def toggleFavorite(main_window: MainWindow, book: Books = None) -> None:
+    book = book or main_window.book
+    book.favorite = not book.favorite
+    icon = QIcon()
+    if book.favorite:
+        icon.addPixmap(
+            QPixmap(":/other/star_fill.svg"),
+            QIcon.Normal,
+            QIcon.Off,
+        )
+    else:
+        icon.addPixmap(QPixmap(":/other/star.svg"), QIcon.Normal, QIcon.Off)
+    main_window.sender().setIcon(icon)
+    book.save()
