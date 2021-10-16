@@ -135,11 +135,10 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
     def openBookPage(self, book: Book):
         item: BookItem
 
-        self.titleLabel.setText(f"{book.author} - {book.name}")
         book_data = Books(os.environ["DB_PATH"]).filter(
             author=book.author, name=book.name
         )
-        if not book_data:
+        if not book_data:  # Книга не зарегистрирована в бд
             self.progressFrame.hide()
             self.toggleFavoriteBtn.hide()
             self.deleteBtn.hide()
@@ -147,7 +146,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
             if (
                 self.downloadable_book is not ...
                 and self.downloadable_book.url == book.url
-            ):
+            ):  # Эта книга в процессе скачивания
                 self.saveBtn.hide()
                 self.playerContent.setCurrentWidget(self.downloadingPage)
             else:
@@ -212,12 +211,14 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
             )
             self.bookItemsLayout.layout().addItem(bookItemsSpacer)
 
+        self.titleLabel.setText(f"{book.author} - {book.name}")
         self.authorLabel.setText(book.author)
         self.nameLabel.setText(book.name)
         self.readerLabel.setText(book.reader)
         self.durationLabel.setText(book.duration)
         self.description.setText(book.description)
 
+        # Загрузка обложки
         book_page.loadPreview(self.bookCoverLg, (230, 230), book)
 
         self.book = book
@@ -226,6 +227,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
     def openLibraryPage(self):
         books: ty.List[Books] = Books(os.environ["DB_PATH"]).filter(return_list=True)
 
+        # Удаляем старые элементы
         for layout in [
             self.allBooksLayout,
             self.inProgressBooksLayout,
@@ -240,7 +242,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
                 if isinstance(item, QtWidgets.QSpacerItem):
                     layout.layout().removeItem(item)
 
-        sizes = []
+        sizes = []  # Размеры всех элементов
         for book in books:
             bookWidget = self._initBookWidget(self.allBooksLayout, book)
             sizes.append(
@@ -259,9 +261,10 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
             if self.libraryFiltersPanel.width() != 25:
                 self.toggleBooksFilterPanelBtn.click()
         else:
-            self.library.setMinimumWidth(max(sizes))
+            self.library.setMinimumWidth(max(sizes))  # Устанавливаем минимальный размер
             self.allBooksContainer.show()
             self.allBooksPageNothing.hide()
+            # Прижимаем элементы к верхнему краю
             allBooksContainerSpacer = QtWidgets.QSpacerItem(
                 40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
             )
@@ -273,6 +276,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         else:
             self.inProgressBooksContainer.show()
             self.inProsessBooksPageNothing.hide()
+            # Прижимаем элементы к верхнему краю
             inProgressBooksContainerSpacer = QtWidgets.QSpacerItem(
                 40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
             )
@@ -284,13 +288,13 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         else:
             self.listenedBooksContainer.show()
             self.listenedBooksPageNothing.hide()
+            # Прижимаем элементы к верхнему краю
             listenedBooksContainerSpacer = QtWidgets.QSpacerItem(
                 40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
             )
             self.listenedBooksLayout.layout().addItem(listenedBooksContainerSpacer)
 
         self.library.setCurrentWidget(self.allBooksPage)
-
         self.stackedWidget.setCurrentWidget(self.libraryPage)
 
     def _initBookWidget(self, parent: QtWidgets.QWidget, book: Books) -> UiBook:
@@ -299,6 +303,16 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         bookWidget.setupUi(bookFrame)
 
         bookWidget.titleLabel.setText(f"{book.author} - {book.name}")
+        description = book.description.replace("\n", "")
+        if len(description) > 250:
+            description = description[:250]
+            description = description[: description.rfind(" ")] + "..."
+        bookWidget.description.setText(description)
+        bookWidget.authorLabel.setText(book.author)
+        bookWidget.readerLabel.setText(book.reader)
+        bookWidget.durationLabel.setText(book.duration)
+
+        # Устанавливаем иконку на кнопку "Добавить в избранное"
         icon = QtGui.QIcon()
         if book.favorite:
             icon.addPixmap(
@@ -311,14 +325,8 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
                 QtGui.QPixmap(":/other/star.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
             )
         bookWidget.toggleFavoriteBtn.setIcon(icon)
-        description = book.description.replace("\n", "")
-        if len(description) > 250:
-            description = description[:250]
-            description = description[: description.rfind(" ")] + "..."
-        bookWidget.description.setText(description)
-        bookWidget.authorLabel.setText(book.author)
-        bookWidget.readerLabel.setText(book.reader)
-        bookWidget.durationLabel.setText(book.duration)
+
+        # Настраиваем прогресс прослушивания
         if book.status == Status.finished:
             bookWidget.inProcessIcon.hide()
             bookWidget.progressLabel.setText("Прослушано")
@@ -328,13 +336,16 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         else:
             bookWidget.finishedIcon.hide()
 
+        # Загрузка обложки
         book_page.loadPreview(bookWidget.cover, (200, 200), book)
+
+        # Настройка кнопок
         bookWidget.deleteBtn.clicked.connect(lambda e: book_page.deleteBook(self, book))
         bookWidget.toggleFavoriteBtn.clicked.connect(
             lambda e: book_page.toggleFavorite(self, book)
         )
-
         bookWidget.frame.mousePressEvent = lambda e: self.openBookPage(book)
+
         parent.layout().addWidget(bookFrame)
         return bookWidget
 

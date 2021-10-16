@@ -132,6 +132,9 @@ class Books(Table, Book):
 
     @property
     def listening_progress(self):
+        """
+        :return: Прогресс прослушивания. (В процентах)
+        """
         total = sum([item.end_time - item.start_time for item in self.items])
         cur = (
             sum(
