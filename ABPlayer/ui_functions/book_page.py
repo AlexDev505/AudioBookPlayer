@@ -30,6 +30,10 @@ if ty.TYPE_CHECKING:
 
 
 def convert_into_bits(bits: int) -> str:
+    """
+    :param bits: Число битов.
+    :return: Строка вида <Число> <Единица измерения>
+    """
     postfixes = ["КБ", "МБ", "ГБ"]
     if bits >= 2 ** 33:
         return f"{round(bits / 2 ** 33, 3)} {postfixes[-1]}"
@@ -127,7 +131,7 @@ class DownloadPreviewWorker(QObject):
         self.cover_label.hide()  # Скрываем элемент
 
 
-def load_preview(cover_label: QLabel, size: ty.Tuple[int, int], book: Book) -> None:
+def loadPreview(cover_label: QLabel, size: ty.Tuple[int, int], book: Book) -> None:
     """
     Устанавливает обложку книги в определенный QLabel.
     Если обложка не скачана - скачивает.
@@ -252,29 +256,42 @@ class DownloadProcessHandler(BaseDownloadProcessHandler):
 
 
 def prepareProgressBar(pb: QProgressBar) -> None:
+    """
+    Подготовка полосы загрузки.
+    :param pb: Экземпляр QProgressBar.
+    """
+
     class ToolTipUpdater(QObject):
+        """
+        Реализует динамическое изменение всплывающей подсказки.
+        """
+
         def timerEvent(self, x) -> None:
             QToolTip.showText(pb.toolTipPos, pb.toolTip(), pb)
 
     def eventFilter(event: QEvent) -> bool:
-        if event.type() == QEvent.ToolTip:
-            pb.toolTipPos = event.globalPos()
+        """
+        Обработчик событий полосы загрузки.
+        :param event:
+        """
+        if event.type() == QEvent.ToolTip:  # Удержание курсора на объекте
+            pb.toolTipPos = event.globalPos()  # Позиция, гду будет отображена подсказка
             pb.toolTipUpdater = ToolTipUpdater()
             pb.toolTipTimer = QBasicTimer()
-            pb.toolTipTimer.start(100, pb.toolTipUpdater)
+            pb.toolTipTimer.start(100, pb.toolTipUpdater)  # Обновление подсказки
             return True
-        elif event.type() == QEvent.Leave:
+        elif event.type() == QEvent.Leave:  # Курсор покидает объект
             if pb.__dict__.get("toolTipPos"):
                 pb.toolTipTimer.stop()
                 pb.toolTipPos = None
-                QToolTip.hideText()
+                QToolTip.hideText()  # Скрываем подсказку
         return QProgressBar.event(pb, event)
 
     pb.toolTipPos = None
     pb.event = eventFilter
 
 
-def download_book(main_window: MainWindow, book: Book) -> None:
+def downloadBook(main_window: MainWindow, book: Book) -> None:
     """
     Запускает скачивание книги.
     :param main_window: Экземпляр главного окна.
@@ -305,36 +322,6 @@ def download_book(main_window: MainWindow, book: Book) -> None:
     main_window.download_book_thread.start()
 
 
-def stopBookDownloading(main_window: MainWindow) -> None:
-    answer = QMessageBox.question(
-        main_window,
-        "Подтвердите действие",
-        "Вы действительно хотите прервать скачивание книги?",
-        QMessageBox.Yes | QMessageBox.No,
-        QMessageBox.No,
-    )
-
-    if answer == QMessageBox.No:
-        return
-
-    main_window.download_book_worker.close.emit()
-    main_window.download_book_thread.terminate()
-    downloadable_book = main_window.downloadable_book
-    main_window.downloadable_book = ...
-
-    # Открываем страницу загрузки
-    main_window.delete_book_loading_movie = QMovie(":/other/loading.gif")
-    main_window.delete_book_loading_movie.setScaledSize(QSize(50, 50))
-    main_window.openInfoPage(movie=main_window.delete_book_loading_movie)
-
-    # Создаем и запускаем новый поток
-    main_window.delete_book_thread = QThread()
-    main_window.delete_book_worker = DeleteBookWorker(main_window, downloadable_book)
-    main_window.delete_book_worker.moveToThread(main_window.delete_book_thread)
-    main_window.delete_book_thread.started.connect(main_window.delete_book_worker.run)
-    main_window.delete_book_thread.start()
-
-
 class DeleteBookWorker(QObject):
     """
     Реализует удаление книги.
@@ -353,10 +340,12 @@ class DeleteBookWorker(QObject):
         try:
             self.main_window.btnGroupFrame.setDisabled(True)
             self.main_window.btnGroupFrame_2.setDisabled(True)
+            # Удаление книги из бд
             if self.book.__dict__.get("id"):
                 books = Books(os.environ["DB_PATH"])
                 books.api.execute("""DELETE FROM books WHERE id=?""", self.book.id)
                 books.api.commit()
+            # Удаление файлов книги
             if os.path.isdir(self.book.dir_path):
                 for root, dirs, files in os.walk(self.book.dir_path):
                     for file in files:
@@ -385,7 +374,49 @@ class DeleteBookWorker(QObject):
         )
 
 
-def delete_book(main_window: MainWindow, book: Books = None) -> None:
+def stopBookDownloading(main_window: MainWindow) -> None:
+    """
+    Останавливает загрузку книги и запускает процесс её удаления.
+    :param main_window: Экземпляр главного окна.
+    """
+    answer = QMessageBox.question(
+        main_window,
+        "Подтвердите действие",
+        "Вы действительно хотите прервать скачивание книги?",
+        QMessageBox.Yes | QMessageBox.No,
+        QMessageBox.No,
+    )
+
+    if answer == QMessageBox.No:
+        return
+
+    # Останавливаем скачивание
+    main_window.download_book_worker.close.emit()
+    main_window.download_book_thread.terminate()
+
+    downloadable_book = main_window.downloadable_book
+    main_window.downloadable_book = ...
+
+    # Открываем страницу загрузки
+    main_window.delete_book_loading_movie = QMovie(":/other/loading.gif")
+    main_window.delete_book_loading_movie.setScaledSize(QSize(50, 50))
+    main_window.openInfoPage(movie=main_window.delete_book_loading_movie)
+
+    # Создаем и запускаем новый поток
+    main_window.delete_book_thread = QThread()
+    main_window.delete_book_worker = DeleteBookWorker(main_window, downloadable_book)
+    main_window.delete_book_worker.moveToThread(main_window.delete_book_thread)
+    main_window.delete_book_thread.started.connect(main_window.delete_book_worker.run)
+    main_window.delete_book_thread.start()
+
+
+def deleteBook(main_window: MainWindow, book: Books = None) -> None:
+    """
+    Запускает удаление книги.
+    :param main_window: Экземпляр главного окна.
+    :param book: Экземпляр книги. (Если не передан используется main_window.book)
+    :return:
+    """
     book = book or main_window.book
     if book is ...:
         return
