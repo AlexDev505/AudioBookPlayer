@@ -19,12 +19,17 @@ def setCurrentPage(main_window: MainWindow, page: QWidget) -> None:
     :param page: Новая страница.
     """
     # Скрытие / отображение полосы загрузки
-    if main_window.downloadable_book is not ...:
+    if main_window.downloadable_book is not ... and not main_window.__dict__.get(
+        "pb_animation"
+    ):
         main_window.pb_animation = QPropertyAnimation(
             main_window.pbFrame, b"minimumWidth"
         )
         main_window.pb_animation.setDuration(150)
         main_window.pb_animation.setEasingCurve(QEasingCurve.InOutQuart)
+        main_window.pb_animation.finished.connect(
+            lambda: main_window.__dict__.__delitem__("pb_animation")
+        )  # Удаляем анимацию
         if (
             main_window.stackedWidget.currentWidget() == main_window.bookPage
             and main_window.pbFrame.width() == 0
@@ -39,6 +44,9 @@ def setCurrentPage(main_window: MainWindow, page: QWidget) -> None:
             main_window.pb_animation.setStartValue(150)
             main_window.pb_animation.setEndValue(0)
             main_window.pb_animation.start()
+        else:
+            main_window.pb_animation.deleteLater()
+            main_window.__dict__.__delitem__("pb_animation")
 
     if main_window.stackedWidget.currentWidget() == main_window.libraryPage:
         main_window.library.setMinimumWidth(0)

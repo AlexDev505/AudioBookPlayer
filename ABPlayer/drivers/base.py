@@ -35,7 +35,7 @@ def prepare_file_metadata(
     file.tag.save()
 
 
-class BaseDownloadProcessHandler(ABC):
+class BaseDownloadProcessHandler:
     """
     Обработчик процесса скачивания.
     Визуализирует процесс скачивания книги в пользовательском интерфейсе.

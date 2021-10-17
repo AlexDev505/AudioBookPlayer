@@ -27,24 +27,27 @@ def toggleSpeedSlider(main_window: MainWindow) -> None:
     Показывает/скрывает регулятор скорости.
     :param main_window: Экземпляр главного окна.
     """
-    if main_window.volumeFrame.minimumWidth() != 0:
-        toggleVolumeSlider(main_window)
-    width = main_window.speedFrame.width()  # Ширина виджета сейчас
-    # Конечная ширина виджета 110-открытое 65-закрытое
-    end_value = 120 if width == 0 else 0
+    if not main_window.__dict__.get(
+        "speed_frame_animation"
+    ) and not main_window.__dict__.get("volume_frame_animation"):
+        if main_window.volumeFrame.minimumWidth() != 0:
+            toggleVolumeSlider(main_window)
 
-    main_window.speedBtn.setDisabled(True)  # Отключаем кнопку на время анимации
-    main_window.speed_frame_animation = QPropertyAnimation(
-        main_window.speedFrame, b"minimumWidth"
-    )
-    main_window.speed_frame_animation.setDuration(150)
-    main_window.speed_frame_animation.setStartValue(width)
-    main_window.speed_frame_animation.setEndValue(end_value)
-    main_window.speed_frame_animation.setEasingCurve(QEasingCurve.InOutQuart)
-    main_window.speed_frame_animation.start()
-    main_window.speed_frame_animation.finished.connect(
-        lambda: main_window.speedBtn.setDisabled(False)
-    )  # Включаем кнопку по завершению анимации
+        width = main_window.speedFrame.width()  # Ширина виджета сейчас
+        # Конечная ширина виджета. 110-открытое 65-закрытое
+        end_value = 120 if width == 0 else 0
+
+        main_window.speed_frame_animation = QPropertyAnimation(
+            main_window.speedFrame, b"minimumWidth"
+        )
+        main_window.speed_frame_animation.setDuration(150)
+        main_window.speed_frame_animation.setStartValue(width)
+        main_window.speed_frame_animation.setEndValue(end_value)
+        main_window.speed_frame_animation.setEasingCurve(QEasingCurve.InOutQuart)
+        main_window.speed_frame_animation.finished.connect(
+            lambda: main_window.__dict__.__delitem__("speed_frame_animation")
+        )  # Удаляем анимацию
+        main_window.speed_frame_animation.start()
 
 
 def toggleVolumeSlider(main_window: MainWindow) -> None:
@@ -52,24 +55,27 @@ def toggleVolumeSlider(main_window: MainWindow) -> None:
     Показывает/скрывает регулятор громкости.
     :param main_window: Экземпляр главного окна.
     """
-    if main_window.speedFrame.minimumWidth() != 0:
-        toggleSpeedSlider(main_window)
-    width = main_window.volumeFrame.width()  # Ширина виджета сейчас
-    # Конечная ширина виджета 110-открытое 65-закрытое
-    end_value = 120 if width == 0 else 0
+    if not main_window.__dict__.get(
+        "volume_frame_animation"
+    ) and not main_window.__dict__.get("speed_frame_animation"):
+        if main_window.speedFrame.minimumWidth() != 0:
+            toggleSpeedSlider(main_window)
 
-    main_window.volumeBtn.setDisabled(True)  # Отключаем кнопку на время анимации
-    main_window.volume_frame_animation = QPropertyAnimation(
-        main_window.volumeFrame, b"minimumWidth"
-    )
-    main_window.volume_frame_animation.setDuration(150)
-    main_window.volume_frame_animation.setStartValue(width)
-    main_window.volume_frame_animation.setEndValue(end_value)
-    main_window.volume_frame_animation.setEasingCurve(QEasingCurve.InOutQuart)
-    main_window.volume_frame_animation.start()
-    main_window.volume_frame_animation.finished.connect(
-        lambda: main_window.volumeBtn.setDisabled(False)
-    )  # Включаем кнопку по завершению анимации
+        width = main_window.volumeFrame.width()  # Ширина виджета сейчас
+        # Конечная ширина виджета 110-открытое 65-закрытое
+        end_value = 120 if width == 0 else 0
+
+        main_window.volume_frame_animation = QPropertyAnimation(
+            main_window.volumeFrame, b"minimumWidth"
+        )
+        main_window.volume_frame_animation.setDuration(150)
+        main_window.volume_frame_animation.setStartValue(width)
+        main_window.volume_frame_animation.setEndValue(end_value)
+        main_window.volume_frame_animation.setEasingCurve(QEasingCurve.InOutQuart)
+        main_window.volume_frame_animation.finished.connect(
+            lambda: main_window.__dict__.__delitem__("volume_frame_animation")
+        )  # Удаляем анимацию
+        main_window.volume_frame_animation.start()
 
 
 def volumeSliderHandler(main_window: MainWindow, value: int) -> None:
