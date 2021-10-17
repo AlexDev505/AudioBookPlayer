@@ -191,13 +191,14 @@ class DownloadBookWorker(QObject):
         self.drv = [drv for drv in drivers if self.book.url.startswith(drv().site_url)][
             0
         ]()  # Драйвер, который нужно использовать для скачивания
+        self.download_process_handler = DownloadProcessHandler(self.main_window)
         self.finished.connect(self.finish)
         self.failed.connect(lambda text: self.fail(text))
         self.close.connect(self._close)
 
     def run(self):
         try:
-            self.drv.download_book(self.book, DownloadProcessHandler(self.main_window))
+            self.drv.download_book(self.book, self.download_process_handler)
             books = Books(os.environ["DB_PATH"])
             books.insert(**vars(self.book))  # Добавляем книгу в бд
             self.finished.emit()
@@ -214,14 +215,18 @@ class DownloadBookWorker(QObject):
             self.main_window.openBookPage(self.book)  # Обновляем страницу
         else:
             # Закрываем полосу прогресса
-            self.main_window.pb_animation = QPropertyAnimation(
-                self.main_window.pbFrame, b"minimumWidth"
-            )
-            self.main_window.pb_animation.setDuration(150)
-            self.main_window.pb_animation.setStartValue(150)
-            self.main_window.pb_animation.setEndValue(0)
-            self.main_window.pb_animation.setEasingCurve(QEasingCurve.InOutQuart)
-            self.main_window.pb_animation.start()
+            if not self.main_window.__dict__.get("pb_animation"):
+                self.main_window.pb_animation = QPropertyAnimation(
+                    self.main_window.pbFrame, b"minimumWidth"
+                )
+                self.main_window.pb_animation.setDuration(150)
+                self.main_window.pb_animation.setStartValue(150)
+                self.main_window.pb_animation.setEndValue(0)
+                self.main_window.pb_animation.setEasingCurve(QEasingCurve.InOutQuart)
+                self.main_window.pb_animation.finished.connect(
+                    lambda: self.main_window.__dict__.__delitem__("pb_animation")
+                )  # Удаляем анимацию
+                self.main_window.pb_animation.start()
             if (
                 self.main_window.stackedWidget.currentWidget()
                 == self.main_window.libraryPage
@@ -244,7 +249,9 @@ class DownloadBookWorker(QObject):
             file.close()
 
 
-class DownloadProcessHandler(BaseDownloadProcessHandler):
+class DownloadProcessHandler(QObject, BaseDownloadProcessHandler):
+    move: QtCore.pyqtSignal = pyqtSignal()
+
     def __init__(self, main_window: MainWindow):
         """
         :param main_window: Экземпляр главного окна.
@@ -252,8 +259,16 @@ class DownloadProcessHandler(BaseDownloadProcessHandler):
         super(DownloadProcessHandler, self).__init__()
         self.main_window = main_window
         self._last_size = ""
+        self.move.connect(self._show_progress)
 
     def show_progress(self) -> None:
+        """
+        Отправляет сингал для отображения прогресса.
+        Если отображать прогресс в том же потоке, возникают неприятные баги.
+        """
+        self.move.emit()
+
+    def _show_progress(self) -> None:
         """
         Отображение прогресса.
         """

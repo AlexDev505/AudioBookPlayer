@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import sys
 import typing as ty
 from inspect import isclass
 
@@ -60,4 +61,12 @@ def main():
 
 
 if __name__ == "__main__":
+    sys._excepthook = sys.excepthook
+
+    def exception_hook(exctype, value, traceback):
+        print(exctype, value, traceback)
+        sys._excepthook(exctype, value, traceback)
+        # sys.exit(1)
+
+    sys.excepthook = exception_hook
     main()
