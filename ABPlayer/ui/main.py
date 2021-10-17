@@ -431,6 +431,19 @@ class UiMainWindow(object):
         self.menuButtons.setObjectName("menuButtons")
         self.menuButtons.addButton(self.libraryBtn)
         self.verticalLayout_2.addWidget(self.libraryBtn)
+        self.favoriteBtn = QtWidgets.QPushButton(self.btnGroupFrame)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(13)
+        font.setBold(True)
+        font.setWeight(75)
+        self.favoriteBtn.setFont(font)
+        icon5 = QtGui.QIcon(":/other/star_fill.svg")
+        self.favoriteBtn.setIcon(icon5)
+        self.favoriteBtn.setIconSize(QtCore.QSize(25, 25))
+        self.favoriteBtn.setObjectName("favoriteBtn")
+        self.menuButtons.addButton(self.favoriteBtn)
+        self.verticalLayout_2.addWidget(self.favoriteBtn)
         self.addBookBtn = QtWidgets.QPushButton(self.btnGroupFrame)
         font = QtGui.QFont()
         font.setFamily("Arial")
@@ -438,11 +451,11 @@ class UiMainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.addBookBtn.setFont(font)
-        icon5 = QtGui.QIcon()
-        icon5.addPixmap(
+        icon6 = QtGui.QIcon()
+        icon6.addPixmap(
             QtGui.QPixmap(":/other/plus.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.addBookBtn.setIcon(icon5)
+        self.addBookBtn.setIcon(icon6)
         self.addBookBtn.setIconSize(QtCore.QSize(25, 25))
         self.addBookBtn.setObjectName("addBookBtn")
         self.menuButtons.addButton(self.addBookBtn)
@@ -464,11 +477,11 @@ class UiMainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.dirWithBooksBtn.setFont(font)
-        icon6 = QtGui.QIcon()
-        icon6.addPixmap(
+        icon7 = QtGui.QIcon()
+        icon7.addPixmap(
             QtGui.QPixmap(":/menu/folder.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.dirWithBooksBtn.setIcon(icon6)
+        self.dirWithBooksBtn.setIcon(icon7)
         self.dirWithBooksBtn.setIconSize(QtCore.QSize(25, 25))
         self.dirWithBooksBtn.setObjectName("dirWithBooksBtn")
         self.menuButtons.addButton(self.dirWithBooksBtn)
@@ -480,11 +493,11 @@ class UiMainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.settingsBtn.setFont(font)
-        icon7 = QtGui.QIcon()
-        icon7.addPixmap(
+        icon8 = QtGui.QIcon()
+        icon8.addPixmap(
             QtGui.QPixmap(":/menu/settings.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.settingsBtn.setIcon(icon7)
+        self.settingsBtn.setIcon(icon8)
         self.settingsBtn.setIconSize(QtCore.QSize(25, 25))
         self.settingsBtn.setObjectName("settingsBtn")
         self.menuButtons.addButton(self.settingsBtn)
@@ -547,13 +560,13 @@ class UiMainWindow(object):
         self.toggleBooksFilterPanelBtn.setMinimumSize(QtCore.QSize(25, 0))
         self.toggleBooksFilterPanelBtn.setMaximumSize(QtCore.QSize(25, 16777215))
         self.toggleBooksFilterPanelBtn.setText("")
-        icon8 = QtGui.QIcon()
-        icon8.addPixmap(
+        icon9 = QtGui.QIcon()
+        icon9.addPixmap(
             QtGui.QPixmap(":/other/angle_right.svg"),
             QtGui.QIcon.Normal,
             QtGui.QIcon.Off,
         )
-        self.toggleBooksFilterPanelBtn.setIcon(icon8)
+        self.toggleBooksFilterPanelBtn.setIcon(icon9)
         self.toggleBooksFilterPanelBtn.setIconSize(QtCore.QSize(14, 14))
         self.toggleBooksFilterPanelBtn.setObjectName("toggleBooksFilterPanelBtn")
         self.horizontalLayout_15.addWidget(self.toggleBooksFilterPanelBtn)
@@ -616,11 +629,11 @@ class UiMainWindow(object):
         font.setWeight(75)
         self.searchBookBtn.setFont(font)
         self.searchBookBtn.setText("")
-        icon9 = QtGui.QIcon()
-        icon9.addPixmap(
+        icon10 = QtGui.QIcon()
+        icon10.addPixmap(
             QtGui.QPixmap(":/menu/search.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.searchBookBtn.setIcon(icon9)
+        self.searchBookBtn.setIcon(icon10)
         self.searchBookBtn.setIconSize(QtCore.QSize(28, 28))
         self.searchBookBtn.setObjectName("searchBookBtn")
         self.horizontalLayout_16.addWidget(self.searchBookBtn)
@@ -682,12 +695,13 @@ class UiMainWindow(object):
         self.invertSortBtn = QtWidgets.QPushButton(self.sortByFrame)
         self.invertSortBtn.setMinimumSize(QtCore.QSize(35, 35))
         self.invertSortBtn.setMaximumSize(QtCore.QSize(35, 35))
-        icon10 = QtGui.QIcon()
-        icon10.addPixmap(
+        icon11 = QtGui.QIcon()
+        icon11.addPixmap(
             QtGui.QPixmap(":/other/sort_down.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.invertSortBtn.setIcon(icon10)
+        self.invertSortBtn.setIcon(icon11)
         self.invertSortBtn.setIconSize(QtCore.QSize(28, 28))
+        self.invertSortBtn.setCheckable(True)
         self.invertSortBtn.setObjectName("invertSortBtn")
         self.horizontalLayout_17.addWidget(self.invertSortBtn)
         self.verticalLayout_8.addWidget(self.sortByFrame)
@@ -917,7 +931,7 @@ class UiMainWindow(object):
         self.inProgressBooksContainer.setWidgetResizable(True)
         self.inProgressBooksContainer.setObjectName("inProgressBooksContainer")
         self.inProgressBooksLayout = QtWidgets.QWidget()
-        self.inProgressBooksLayout.setGeometry(QtCore.QRect(0, 0, 92, 18))
+        self.inProgressBooksLayout.setGeometry(QtCore.QRect(0, 0, 890, 601))
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
         )
@@ -978,7 +992,7 @@ class UiMainWindow(object):
         self.listenedBooksContainer.setWidgetResizable(True)
         self.listenedBooksContainer.setObjectName("listenedBooksContainer")
         self.listenedBooksLayout = QtWidgets.QWidget()
-        self.listenedBooksLayout.setGeometry(QtCore.QRect(0, 0, 92, 18))
+        self.listenedBooksLayout.setGeometry(QtCore.QRect(0, 0, 890, 601))
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
         )
@@ -1058,11 +1072,11 @@ class UiMainWindow(object):
         self.progressToolsBtn.setMaximumSize(QtCore.QSize(20, 20))
         self.progressToolsBtn.setStyleSheet("margin-bottom: -4px")
         self.progressToolsBtn.setText("")
-        icon11 = QtGui.QIcon()
-        icon11.addPixmap(
+        icon12 = QtGui.QIcon()
+        icon12.addPixmap(
             QtGui.QPixmap(":/other/check.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.progressToolsBtn.setIcon(icon11)
+        self.progressToolsBtn.setIcon(icon12)
         self.progressToolsBtn.setIconSize(QtCore.QSize(12, 12))
         self.progressToolsBtn.setObjectName("progressToolsBtn")
         self.horizontalLayout_27.addWidget(self.progressToolsBtn)
@@ -1103,11 +1117,11 @@ class UiMainWindow(object):
         self.toggleFavoriteBtn.setMinimumSize(QtCore.QSize(45, 45))
         self.toggleFavoriteBtn.setMaximumSize(QtCore.QSize(45, 45))
         self.toggleFavoriteBtn.setText("")
-        icon12 = QtGui.QIcon()
-        icon12.addPixmap(
+        icon13 = QtGui.QIcon()
+        icon13.addPixmap(
             QtGui.QPixmap(":/other/star.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.toggleFavoriteBtn.setIcon(icon12)
+        self.toggleFavoriteBtn.setIcon(icon13)
         self.toggleFavoriteBtn.setIconSize(QtCore.QSize(30, 30))
         self.toggleFavoriteBtn.setObjectName("toggleFavoriteBtn")
         self.horizontalLayout_28.addWidget(self.toggleFavoriteBtn)
@@ -1122,11 +1136,11 @@ class UiMainWindow(object):
         self.saveBtn.setMinimumSize(QtCore.QSize(45, 45))
         self.saveBtn.setMaximumSize(QtCore.QSize(45, 45))
         self.saveBtn.setText("")
-        icon13 = QtGui.QIcon()
-        icon13.addPixmap(
+        icon14 = QtGui.QIcon()
+        icon14.addPixmap(
             QtGui.QPixmap(":/other/download.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.saveBtn.setIcon(icon13)
+        self.saveBtn.setIcon(icon14)
         self.saveBtn.setIconSize(QtCore.QSize(30, 30))
         self.saveBtn.setObjectName("saveBtn")
         self.horizontalLayout_28.addWidget(self.saveBtn)
@@ -1141,11 +1155,11 @@ class UiMainWindow(object):
         self.deleteBtn.setMinimumSize(QtCore.QSize(45, 45))
         self.deleteBtn.setMaximumSize(QtCore.QSize(45, 45))
         self.deleteBtn.setText("")
-        icon14 = QtGui.QIcon()
-        icon14.addPixmap(
+        icon15 = QtGui.QIcon()
+        icon15.addPixmap(
             QtGui.QPixmap(":/other/trash.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.deleteBtn.setIcon(icon14)
+        self.deleteBtn.setIcon(icon15)
         self.deleteBtn.setIconSize(QtCore.QSize(30, 30))
         self.deleteBtn.setObjectName("deleteBtn")
         self.horizontalLayout_28.addWidget(self.deleteBtn)
@@ -1162,11 +1176,11 @@ class UiMainWindow(object):
         self.changeDriverBtn.setMinimumSize(QtCore.QSize(45, 45))
         self.changeDriverBtn.setMaximumSize(QtCore.QSize(45, 45))
         self.changeDriverBtn.setText("")
-        icon15 = QtGui.QIcon()
-        icon15.addPixmap(
+        icon16 = QtGui.QIcon()
+        icon16.addPixmap(
             QtGui.QPixmap(":/other/hdd.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.changeDriverBtn.setIcon(icon15)
+        self.changeDriverBtn.setIcon(icon16)
         self.changeDriverBtn.setIconSize(QtCore.QSize(30, 30))
         self.changeDriverBtn.setObjectName("changeDriverBtn")
         self.horizontalLayout_28.addWidget(self.changeDriverBtn)
@@ -1227,13 +1241,13 @@ class UiMainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.pastBtn.setFont(font)
-        icon16 = QtGui.QIcon()
-        icon16.addPixmap(
+        icon17 = QtGui.QIcon()
+        icon17.addPixmap(
             QtGui.QPixmap(":/other/double_angle_left.svg"),
             QtGui.QIcon.Normal,
             QtGui.QIcon.Off,
         )
-        self.pastBtn.setIcon(icon16)
+        self.pastBtn.setIcon(icon17)
         self.pastBtn.setIconSize(QtCore.QSize(30, 30))
         self.pastBtn.setObjectName("pastBtn")
         self.horizontalLayout_30.addWidget(self.pastBtn)
@@ -1247,11 +1261,11 @@ class UiMainWindow(object):
         font.setWeight(75)
         self.playPauseBntLg.setFont(font)
         self.playPauseBntLg.setText("")
-        icon17 = QtGui.QIcon()
-        icon17.addPixmap(
+        icon18 = QtGui.QIcon()
+        icon18.addPixmap(
             QtGui.QPixmap(":/other/play.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.playPauseBntLg.setIcon(icon17)
+        self.playPauseBntLg.setIcon(icon18)
         self.playPauseBntLg.setIconSize(QtCore.QSize(30, 30))
         self.playPauseBntLg.setObjectName("playPauseBntLg")
         self.horizontalLayout_30.addWidget(self.playPauseBntLg)
@@ -1272,13 +1286,13 @@ class UiMainWindow(object):
         font.setWeight(75)
         self.futureBtn.setFont(font)
         self.futureBtn.setLayoutDirection(QtCore.Qt.RightToLeft)
-        icon18 = QtGui.QIcon()
-        icon18.addPixmap(
+        icon19 = QtGui.QIcon()
+        icon19.addPixmap(
             QtGui.QPixmap(":/other/double_angle_right.svg"),
             QtGui.QIcon.Normal,
             QtGui.QIcon.Off,
         )
-        self.futureBtn.setIcon(icon18)
+        self.futureBtn.setIcon(icon19)
         self.futureBtn.setIconSize(QtCore.QSize(30, 30))
         self.futureBtn.setObjectName("futureBtn")
         self.horizontalLayout_30.addWidget(self.futureBtn)
@@ -1290,7 +1304,7 @@ class UiMainWindow(object):
         )
         self.bookItems.setObjectName("bookItems")
         self.bookItemsLayout = QtWidgets.QWidget()
-        self.bookItemsLayout.setGeometry(QtCore.QRect(0, 0, 805, 172))
+        self.bookItemsLayout.setGeometry(QtCore.QRect(0, 0, 492, 172))
         self.bookItemsLayout.setObjectName("bookItemsLayout")
         self.verticalLayout_10 = QtWidgets.QVBoxLayout(self.bookItemsLayout)
         self.verticalLayout_10.setContentsMargins(0, 0, 0, 0)
@@ -1722,7 +1736,7 @@ class UiMainWindow(object):
         font.setWeight(75)
         self.searchNewBookBtn.setFont(font)
         self.searchNewBookBtn.setText("")
-        self.searchNewBookBtn.setIcon(icon9)
+        self.searchNewBookBtn.setIcon(icon10)
         self.searchNewBookBtn.setIconSize(QtCore.QSize(28, 28))
         self.searchNewBookBtn.setObjectName("searchNewBookBtn")
         self.horizontalLayout_22.addWidget(self.searchNewBookBtn)
@@ -1882,7 +1896,7 @@ class UiMainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.playPauseBtn.setFont(font)
-        self.playPauseBtn.setIcon(icon17)
+        self.playPauseBtn.setIcon(icon18)
         self.playPauseBtn.setIconSize(QtCore.QSize(40, 40))
         self.playPauseBtn.setObjectName("playPauseBtn")
         self.controlPanelButtons = QtWidgets.QButtonGroup(MainWindow)
@@ -1920,11 +1934,11 @@ class UiMainWindow(object):
         self.speedBtn.setMinimumSize(QtCore.QSize(40, 40))
         self.speedBtn.setMaximumSize(QtCore.QSize(40, 40))
         self.speedBtn.setText("")
-        icon19 = QtGui.QIcon()
-        icon19.addPixmap(
+        icon20 = QtGui.QIcon()
+        icon20.addPixmap(
             QtGui.QPixmap(":/other/watch.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.speedBtn.setIcon(icon19)
+        self.speedBtn.setIcon(icon20)
         self.speedBtn.setIconSize(QtCore.QSize(28, 28))
         self.speedBtn.setObjectName("speedBtn")
         self.controlPanelButtons.addButton(self.speedBtn)
@@ -1966,13 +1980,13 @@ class UiMainWindow(object):
         self.volumeBtn.setMinimumSize(QtCore.QSize(40, 40))
         self.volumeBtn.setMaximumSize(QtCore.QSize(40, 40))
         self.volumeBtn.setText("")
-        icon20 = QtGui.QIcon()
-        icon20.addPixmap(
+        icon21 = QtGui.QIcon()
+        icon21.addPixmap(
             QtGui.QPixmap(":/volume/medium_volume.svg"),
             QtGui.QIcon.Normal,
             QtGui.QIcon.Off,
         )
-        self.volumeBtn.setIcon(icon20)
+        self.volumeBtn.setIcon(icon21)
         self.volumeBtn.setIconSize(QtCore.QSize(28, 28))
         self.volumeBtn.setObjectName("volumeBtn")
         self.controlPanelButtons.addButton(self.volumeBtn)
@@ -2010,11 +2024,11 @@ class UiMainWindow(object):
         font.setWeight(75)
         self.overlayBtn.setFont(font)
         self.overlayBtn.setText("")
-        icon21 = QtGui.QIcon()
-        icon21.addPixmap(
+        icon22 = QtGui.QIcon()
+        icon22.addPixmap(
             QtGui.QPixmap(":/other/overlay.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.overlayBtn.setIcon(icon21)
+        self.overlayBtn.setIcon(icon22)
         self.overlayBtn.setIconSize(QtCore.QSize(28, 28))
         self.overlayBtn.setObjectName("overlayBtn")
         self.controlPanelButtons.addButton(self.overlayBtn)
@@ -2074,6 +2088,7 @@ class UiMainWindow(object):
         self.logo.setText(_translate("MainWindow", "AB Player"))
         self.menuBtn.setText(_translate("MainWindow", " Скрыть меню"))
         self.libraryBtn.setText(_translate("MainWindow", " Мои книги"))
+        self.favoriteBtn.setText(_translate("MainWindow", " Избранные"))
         self.addBookBtn.setText(_translate("MainWindow", " Новая книга"))
         self.dirWithBooksBtn.setText(_translate("MainWindow", " Папка с книгами"))
         self.settingsBtn.setText(_translate("MainWindow", " Настройки"))

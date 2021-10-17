@@ -48,7 +48,10 @@ def setCurrentPage(main_window: MainWindow, page: QWidget) -> None:
             main_window.pb_animation.deleteLater()
             main_window.__dict__.__delitem__("pb_animation")
 
-    if main_window.stackedWidget.currentWidget() == main_window.libraryPage:
+    if (
+        main_window.stackedWidget.currentWidget() == main_window.libraryPage
+        and page != main_window.libraryPage
+    ):
         main_window.library.setMinimumWidth(0)
         QTimer.singleShot(
             100, lambda: main_window.stackedWidget.oldSetCurrentWidget(page)

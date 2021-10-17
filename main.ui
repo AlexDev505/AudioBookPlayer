@@ -642,6 +642,34 @@ QProgressBar::chunk {
               </widget>
              </item>
              <item>
+              <widget class="QPushButton" name="favoriteBtn">
+               <property name="font">
+                <font>
+                 <family>Arial</family>
+                 <pointsize>13</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string> Избранные</string>
+               </property>
+               <property name="icon">
+                <iconset resource="resources/icons.qrc">
+                 <normaloff>:/other/star_fill.svg</normaloff>:/other/star_fill.svg</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>25</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">menuButtons</string>
+               </attribute>
+              </widget>
+             </item>
+             <item>
               <widget class="QPushButton" name="addBookBtn">
                <property name="font">
                 <font>
@@ -1194,6 +1222,9 @@ QPushButton:pressed {
                                    <width>28</width>
                                    <height>28</height>
                                   </size>
+                                 </property>
+                                 <property name="checkable">
+                                  <bool>true</bool>
                                  </property>
                                 </widget>
                                </item>
@@ -2337,7 +2368,7 @@ QPushButton:pressed {
                                <rect>
                                 <x>0</x>
                                 <y>0</y>
-                                <width>805</width>
+                                <width>492</width>
                                 <height>172</height>
                                </rect>
                               </property>
