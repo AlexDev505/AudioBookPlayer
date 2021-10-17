@@ -11,6 +11,7 @@ from ui_functions import (
     book_page,
     content,
     control_panel,
+    filter_panel,
     library,
     menu,
     sliders,
@@ -40,6 +41,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
 
         self.downloadable_book: Book = ...  # Книга, которую скачиваем
         self.book: Books = ...
+        self.favorite_books_page: bool = False
 
         self.openLibraryPage()
 
@@ -74,6 +76,14 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         self.toggleBooksFilterPanelBtn.clicked.connect(
             lambda e: library.toggleFiltersPanel(self)
         )
+        self.clearSortAuthorBtn.clicked.connect(
+            lambda e: filter_panel.resetAuthor(self)
+        )
+        self.invertSortBtn.clicked.connect(
+            lambda e: filter_panel.toggleInvertSort(self)
+        )
+        self.sortBy.currentIndexChanged.connect(lambda e: self.openLibraryPage())
+        self.sortAuthor.currentIndexChanged.connect(lambda e: self.openLibraryPage())
 
         # CONTROL PANEL
         self.controlPanelButtons.buttonClicked.connect(
@@ -225,7 +235,37 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         self.stackedWidget.setCurrentWidget(self.bookPage)
 
     def openLibraryPage(self):
-        books: ty.List[Books] = Books(os.environ["DB_PATH"]).filter(return_list=True)
+        db = Books(os.environ["DB_PATH"])
+        all_books = db.filter(return_list=True)  # Все книги
+
+        # Фильтруем и сортируем книги
+        filter_kwargs = {}
+
+        # Только избранные
+        if self.favorite_books_page:
+            filter_kwargs["favorite"] = True
+
+        # Фильтрация по автору
+        author = self.sortAuthor.currentIndex()
+        if author != 0:
+            filter_kwargs["author"] = self.sortAuthor.currentText()
+
+        books: ty.List[Books] = Books(os.environ["DB_PATH"]).filter(
+            return_list=True, **filter_kwargs
+        )
+
+        # Сортировка
+        sort_by = self.sortBy.currentIndex()
+        if sort_by == 0:  # По дате добавления
+            books.reverse()  # Новые сверху
+        elif sort_by == 1:  # По названию
+            books.sort(key=lambda obj: obj.name)
+        elif sort_by == 2:  # По автору
+            books.sort(key=lambda obj: obj.author)
+
+        # Если нужно, отображаем в обратном порядке
+        if self.invertSortBtn.isChecked():
+            books.reverse()
 
         # Удаляем старые элементы
         for layout in [
@@ -241,6 +281,18 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
                 item = layout.layout().itemAt(i)
                 if isinstance(item, QtWidgets.QSpacerItem):
                     layout.layout().removeItem(item)
+
+        self.sortAuthor.currentIndexChanged.disconnect()
+        self.sortAuthor.clear()
+        self.sortAuthor.addItem("Все")
+        authors = sorted(set(obj.author for obj in all_books))
+        for author in authors:
+            self.sortAuthor.addItem(author)
+        if filter_kwargs.get("author"):
+            self.sortAuthor.setCurrentIndex(
+                authors.index(filter_kwargs.get("author")) + 1
+            )
+        self.sortAuthor.currentIndexChanged.connect(lambda e: self.openLibraryPage())
 
         sizes = []  # Размеры всех элементов
         for book in books:
@@ -294,7 +346,8 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
             )
             self.listenedBooksLayout.layout().addItem(listenedBooksContainerSpacer)
 
-        self.library.setCurrentWidget(self.allBooksPage)
+        if self.stackedWidget.currentWidget() != self.libraryPage:
+            self.library.setCurrentWidget(self.allBooksPage)
         self.stackedWidget.setCurrentWidget(self.libraryPage)
 
     def _initBookWidget(self, parent: QtWidgets.QWidget, book: Books) -> UiBook:
