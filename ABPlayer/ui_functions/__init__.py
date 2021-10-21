@@ -5,5 +5,6 @@ from . import control_panel
 from . import filter_panel
 from . import library
 from . import menu
+from . import player
 from . import sliders
 from . import window_geometry

@@ -16,6 +16,7 @@ from ui_functions import (
     filter_panel,
     library,
     menu,
+    player,
     sliders,
     window_geometry,
 )
@@ -41,10 +42,13 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
 
         self.downloadable_book: Book = ...  # Книга, которую скачиваем
         self.book: Books = ...  # Открытая книга
+        self.current_item_widget: Item = ...
         self.favorite_books_page: bool = False
         self.search_on: bool = False  # Нужно ли производить поиск по ключевым словам
         # Число запущенных потоков, скачивающих обложки книг
         self.download_cover_thread_count = 0
+
+        self.player = player.Player(self)
 
         self.openLibraryPage()
 
@@ -126,6 +130,11 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
             lambda e: book_page.stopBookDownloading(self)
         )
 
+        # PLAYER
+        self.pastBtn.clicked.connect(lambda e: player.rewindTo(self, "past"))
+        self.futureBtn.clicked.connect(lambda e: player.rewindTo(self, "future"))
+        self.playPauseBntLg.clicked.connect(lambda e: player.playPause(self))
+
     def openInfoPage(
         self,
         text: str = "",
@@ -148,8 +157,10 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
     def openBookPage(self, book: Book):
         item: BookItem
 
+        self.book = book
+
         book_data = Books(os.environ["DB_PATH"]).filter(
-            author=book.author, name=book.name
+            author=self.book.author, name=self.book.name
         )
         if not book_data:  # Книга не зарегистрирована в бд
             self.progressFrame.hide()
@@ -158,7 +169,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
             self.changeDriverBtn.hide()
             if (
                 self.downloadable_book is not ...
-                and self.downloadable_book.url == book.url
+                and self.downloadable_book.url == self.book.url
             ):  # Эта книга в процессе скачивания
                 self.saveBtn.hide()
                 self.playerContent.setCurrentWidget(self.downloadingPage)
@@ -172,14 +183,11 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
             self.changeDriverBtn.show()
             self.saveBtn.hide()
             self.playerContent.setCurrentWidget(self.playerPage)
-            book = book_data
-
-            # Отображаем прогресс прослушивания
-            self.progressLabel.setText(f"{book.listening_progress} прослушано")
+            self.book = book_data
 
             # Устанавливаем иконку на кнопку "Добавить в избранное"
             icon = QtGui.QIcon()
-            if book.favorite:
+            if self.book.favorite:
                 icon.addPixmap(
                     QtGui.QPixmap(":/other/star_fill.svg"),
                     QtGui.QIcon.Normal,
@@ -193,49 +201,56 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
                 )
             self.toggleFavoriteBtn.setIcon(icon)
 
-            # Очищаем от старых элементов
-            for children in self.bookItemsLayout.children():
-                if not isinstance(children, QtWidgets.QVBoxLayout):
-                    children.hide()
-                    children.deleteLater()
-            for i in reversed(range(self.bookItemsLayout.layout().count())):
-                item = self.bookItemsLayout.layout().itemAt(i)
-                if isinstance(item, QtWidgets.QSpacerItem):
-                    self.bookItemsLayout.layout().removeItem(item)
+            self.loadPlayer()
 
-            # Инициализируем элементы
-            for i, item in enumerate(book.items):
-                if book.stop_flag.item == i:
-                    Item(self, self.bookItemsLayout, item, book.stop_flag.time)
-                    continue
-                Item(self, self.bookItemsLayout, item)
-            # Автоматически прокручиваем к текущему элементу
-            self.bookItems.scroll(0, 50 * book.stop_flag.item)
-            QtCore.QTimer.singleShot(
-                500,
-                lambda: self.bookItems.verticalScrollBar().setValue(
-                    book.stop_flag.item * 50
-                ),
-            )
-
-            # Прижимаем элементы к верхнему краю
-            bookItemsSpacer = QtWidgets.QSpacerItem(
-                40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
-            )
-            self.bookItemsLayout.layout().addItem(bookItemsSpacer)
-
-        self.titleLabel.setText(f"{book.author} - {book.name}")
-        self.authorLabel.setText(book.author)
-        self.nameLabel.setText(book.name)
-        self.readerLabel.setText(book.reader)
-        self.durationLabel.setText(book.duration)
-        self.description.setText(book.description)
+        self.titleLabel.setText(f"{self.book.author} - {self.book.name}")
+        self.authorLabel.setText(self.book.author)
+        self.nameLabel.setText(self.book.name)
+        self.readerLabel.setText(self.book.reader)
+        self.durationLabel.setText(self.book.duration)
+        self.description.setText(self.book.description)
 
         # Загрузка обложки
-        book_page.loadPreview(self, self.bookCoverLg, (230, 230), book)
+        book_page.loadPreview(self, self.bookCoverLg, (230, 230), self.book)
 
-        self.book = book
         self.stackedWidget.setCurrentWidget(self.bookPage)
+
+    def loadPlayer(self):
+        # Отображаем прогресс прослушивания
+        self.progressLabel.setText(f"{self.book.listening_progress} прослушано")
+
+        # Очищаем от старых элементов
+        for children in self.bookItemsLayout.children():
+            if not isinstance(children, QtWidgets.QVBoxLayout):
+                children.hide()
+                children.deleteLater()
+        for i in reversed(range(self.bookItemsLayout.layout().count())):
+            item = self.bookItemsLayout.layout().itemAt(i)
+            if isinstance(item, QtWidgets.QSpacerItem):
+                self.bookItemsLayout.layout().removeItem(item)
+
+        # Инициализируем элементы
+        for i, item in enumerate(self.book.items):
+            if self.book.stop_flag.item == i:
+                self.current_item_widget = Item(
+                    self, self.bookItemsLayout, item, self.book.stop_flag.time
+                )
+                continue
+            Item(self, self.bookItemsLayout, item)
+        # Автоматически прокручиваем к текущему элементу
+        self.bookItems.scroll(0, 50 * self.book.stop_flag.item)
+        QtCore.QTimer.singleShot(
+            250,
+            lambda: self.bookItems.verticalScrollBar().setValue(
+                self.book.stop_flag.item * 50
+            ),
+        )
+
+        # Прижимаем элементы к верхнему краю
+        bookItemsSpacer = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+        )
+        self.bookItemsLayout.layout().addItem(bookItemsSpacer)
 
     def openLibraryPage(self, books_ids: ty.List[int] = None):
         if self.search_on and books_ids is None:
