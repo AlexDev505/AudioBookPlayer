@@ -2,6 +2,6 @@ venv/
 .idea/
 __pycache__/
 build/
-books/
+книги/
 database.sqlite
 ABPlayer/drivers/chromedriver.exe

@@ -43,6 +43,8 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         self.book: Books = ...
         self.favorite_books_page: bool = False
         self.search_on: bool = False
+        # Число запущенных потоков, скачивающих обложки книг
+        self.download_cover_thread_count = 0
 
         self.openLibraryPage()
 
@@ -231,7 +233,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         self.description.setText(book.description)
 
         # Загрузка обложки
-        book_page.loadPreview(self.bookCoverLg, (230, 230), book)
+        book_page.loadPreview(self, self.bookCoverLg, (230, 230), book)
 
         self.book = book
         self.stackedWidget.setCurrentWidget(self.bookPage)
@@ -398,7 +400,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
             bookWidget.finishedIcon.hide()
 
         # Загрузка обложки
-        book_page.loadPreview(bookWidget.cover, (200, 200), book)
+        book_page.loadPreview(self, bookWidget.cover, (200, 200), book)
 
         # Настройка кнопок
         bookWidget.deleteBtn.clicked.connect(lambda e: book_page.deleteBook(self, book))

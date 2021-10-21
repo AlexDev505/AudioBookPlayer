@@ -8,6 +8,7 @@ import urllib.request
 from PyQt5.QtCore import (
     Qt,
     QSize,
+    QTimer,
     QEvent,
     QThread,
     QObject,
@@ -93,6 +94,7 @@ class DownloadPreviewWorker(QObject):
 
     def __init__(
         self,
+        main_window: MainWindow,
         cover_label: QLabel,
         size: ty.Tuple[int, int],
         book: Book,
@@ -103,6 +105,7 @@ class DownloadPreviewWorker(QObject):
         :param book: Экземпляр книги.
         """
         super(DownloadPreviewWorker, self).__init__()
+        self.main_window = main_window
         self.cover_label, self.size, self.book = cover_label, size, book
         self.finished.connect(lambda pixmap: self.finish(pixmap))
         self.failed.connect(self.fail)
@@ -124,6 +127,8 @@ class DownloadPreviewWorker(QObject):
             self.finished.emit(pixmap)
         except Exception:
             self.failed.emit()
+        finally:
+            self.main_window.download_cover_thread_count -= 1
 
     def finish(self, pixmap: QPixmap) -> None:
         self.cover_label.download_cover_thread.quit()
@@ -141,10 +146,13 @@ class DownloadPreviewWorker(QObject):
         self.cover_label.hide()  # Скрываем элемент
 
 
-def loadPreview(cover_label: QLabel, size: ty.Tuple[int, int], book: Book) -> None:
+def loadPreview(
+    main_window: MainWindow, cover_label: QLabel, size: ty.Tuple[int, int], book: Book
+) -> None:
     """
     Устанавливает обложку книги в определенный QLabel.
     Если обложка не скачана - скачивает.
+    :param main_window: Экземпляр главного окна.
     :param cover_label: Экземпляр QLabel, для которого скачивается обложка.
     :param size: Размеры QLabel.
     :param book: Экземпляр книги.
@@ -158,14 +166,24 @@ def loadPreview(cover_label: QLabel, size: ty.Tuple[int, int], book: Book) -> No
         cover_label.setPixmap(pixmap)
     else:
         # Анимация загрузки
-        cover_label.loading_cover_movie = QMovie(":/other/loading.gif")
-        cover_label.loading_cover_movie.setScaledSize(QSize(50, 50))
-        cover_label.setMovie(cover_label.loading_cover_movie)
-        cover_label.loading_cover_movie.start()
+        if not cover_label.__dict__.get("loading_cover_movie"):
+            cover_label.loading_cover_movie = QMovie(":/other/loading.gif")
+            cover_label.loading_cover_movie.setScaledSize(QSize(50, 50))
+            cover_label.setMovie(cover_label.loading_cover_movie)
+            cover_label.loading_cover_movie.start()
+
+        # Запускаем максимум 2 потока для скачивания
+        if main_window.download_cover_thread_count >= 2:
+            QTimer.singleShot(
+                2000, lambda: loadPreview(main_window, cover_label, size, book)
+            )  # Пробуем запустить скачивание через 2 сек
+            return
+
         # Создаем и запускаем новый поток
+        main_window.download_cover_thread_count += 1
         cover_label.download_cover_thread = QThread()
         cover_label.download_cover_worker = DownloadPreviewWorker(
-            cover_label, size, book
+            main_window, cover_label, size, book
         )
         cover_label.download_cover_worker.moveToThread(
             cover_label.download_cover_thread
@@ -173,7 +191,7 @@ def loadPreview(cover_label: QLabel, size: ty.Tuple[int, int], book: Book) -> No
         cover_label.download_cover_thread.started.connect(
             cover_label.download_cover_worker.run
         )
-        cover_label.download_cover_thread.start()
+        QTimer.singleShot(100, lambda: cover_label.download_cover_thread.start())
 
 
 class DownloadBookWorker(QObject):

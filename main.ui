@@ -3480,7 +3480,7 @@ border-radius: 5px; </string>
             <property name="frameShadow">
              <enum>QFrame::Raised</enum>
             </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_7">
+            <layout class="QHBoxLayout" name="horizontalLayout_37">
              <property name="spacing">
               <number>0</number>
              </property>
@@ -3497,28 +3497,16 @@ border-radius: 5px; </string>
               <number>5</number>
              </property>
              <item>
-              <widget class="QFrame" name="bookPreview">
-               <property name="minimumSize">
-                <size>
-                 <width>150</width>
-                 <height>60</height>
-                </size>
-               </property>
+              <widget class="QFrame" name="miniPlayerFrame">
                <property name="maximumSize">
                 <size>
-                 <width>340</width>
-                 <height>60</height>
+                 <width>0</width>
+                 <height>16777215</height>
                 </size>
                </property>
-               <property name="frameShape">
-                <enum>QFrame::StyledPanel</enum>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Raised</enum>
-               </property>
-               <layout class="QHBoxLayout" name="horizontalLayout_6">
+               <layout class="QHBoxLayout" name="horizontalLayout_7">
                 <property name="spacing">
-                 <number>5</number>
+                 <number>0</number>
                 </property>
                 <property name="leftMargin">
                  <number>0</number>
@@ -3533,39 +3521,17 @@ border-radius: 5px; </string>
                  <number>0</number>
                 </property>
                 <item>
-                 <widget class="QLabel" name="bookCover">
+                 <widget class="QFrame" name="bookPreview">
                   <property name="minimumSize">
                    <size>
-                    <width>60</width>
+                    <width>150</width>
                     <height>60</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>60</width>
+                    <width>340</width>
                     <height>60</height>
-                   </size>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">background-color: rgb(130, 130, 130);</string>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QFrame" name="bookTitle">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>16777215</width>
-                    <height>16777215</height>
                    </size>
                   </property>
                   <property name="frameShape">
@@ -3574,7 +3540,7 @@ border-radius: 5px; </string>
                   <property name="frameShadow">
                    <enum>QFrame::Raised</enum>
                   </property>
-                  <layout class="QVBoxLayout" name="verticalLayout_6">
+                  <layout class="QHBoxLayout" name="horizontalLayout_6">
                    <property name="spacing">
                     <number>5</number>
                    </property>
@@ -3591,89 +3557,150 @@ border-radius: 5px; </string>
                     <number>0</number>
                    </property>
                    <item>
-                    <widget class="QLabel" name="bookNameLabel">
-                     <property name="font">
-                      <font>
-                       <family>Arial</family>
-                       <pointsize>12</pointsize>
-                       <weight>75</weight>
-                       <bold>true</bold>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Название</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLabel" name="bookAuthorLabel">
-                     <property name="font">
-                      <font>
-                       <family>Arial</family>
-                       <pointsize>10</pointsize>
-                       <weight>50</weight>
-                       <bold>false</bold>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Автор</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <spacer name="verticalSpacer_2">
-                     <property name="orientation">
-                      <enum>Qt::Vertical</enum>
-                     </property>
-                     <property name="sizeHint" stdset="0">
+                    <widget class="QLabel" name="bookCover">
+                     <property name="minimumSize">
                       <size>
-                       <width>20</width>
-                       <height>40</height>
+                       <width>60</width>
+                       <height>60</height>
                       </size>
                      </property>
-                    </spacer>
+                     <property name="maximumSize">
+                      <size>
+                       <width>60</width>
+                       <height>60</height>
+                      </size>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">background-color: rgb(130, 130, 130);</string>
+                     </property>
+                     <property name="text">
+                      <string/>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QFrame" name="bookTitle">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="frameShape">
+                      <enum>QFrame::StyledPanel</enum>
+                     </property>
+                     <property name="frameShadow">
+                      <enum>QFrame::Raised</enum>
+                     </property>
+                     <layout class="QVBoxLayout" name="verticalLayout_6">
+                      <property name="spacing">
+                       <number>5</number>
+                      </property>
+                      <property name="leftMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>0</number>
+                      </property>
+                      <item>
+                       <widget class="QLabel" name="bookNameLabel">
+                        <property name="font">
+                         <font>
+                          <family>Arial</family>
+                          <pointsize>12</pointsize>
+                          <weight>75</weight>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>Название</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="bookAuthorLabel">
+                        <property name="font">
+                         <font>
+                          <family>Arial</family>
+                          <pointsize>10</pointsize>
+                          <weight>50</weight>
+                          <bold>false</bold>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>Автор</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <spacer name="verticalSpacer_2">
+                        <property name="orientation">
+                         <enum>Qt::Vertical</enum>
+                        </property>
+                        <property name="sizeHint" stdset="0">
+                         <size>
+                          <width>20</width>
+                          <height>40</height>
+                         </size>
+                        </property>
+                       </spacer>
+                      </item>
+                     </layout>
+                    </widget>
                    </item>
                   </layout>
                  </widget>
                 </item>
+                <item>
+                 <widget class="QPushButton" name="playPauseBtn">
+                  <property name="minimumSize">
+                   <size>
+                    <width>40</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>40</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <family>Arial</family>
+                    <pointsize>13</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="resources/icons.qrc">
+                    <normaloff>:/other/play.svg</normaloff>:/other/play.svg</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>40</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <attribute name="buttonGroup">
+                   <string notr="true">controlPanelButtons</string>
+                  </attribute>
+                 </widget>
+                </item>
                </layout>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="playPauseBtn">
-               <property name="minimumSize">
-                <size>
-                 <width>40</width>
-                 <height>40</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>40</width>
-                 <height>40</height>
-                </size>
-               </property>
-               <property name="font">
-                <font>
-                 <family>Arial</family>
-                 <pointsize>13</pointsize>
-                 <weight>75</weight>
-                 <bold>true</bold>
-                </font>
-               </property>
-               <property name="icon">
-                <iconset resource="resources/icons.qrc">
-                 <normaloff>:/other/play.svg</normaloff>:/other/play.svg</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>40</width>
-                 <height>40</height>
-                </size>
-               </property>
-               <attribute name="buttonGroup">
-                <string notr="true">controlPanelButtons</string>
-               </attribute>
               </widget>
              </item>
              <item>
