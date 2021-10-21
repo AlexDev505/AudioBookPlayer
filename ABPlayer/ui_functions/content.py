@@ -3,6 +3,7 @@ from __future__ import annotations
 import typing as ty
 
 from PyQt5.QtCore import QTimer, QPropertyAnimation, QEasingCurve
+from PyQt5.QtWidgets import QStackedWidget
 
 if ty.TYPE_CHECKING:
     from PyQt5.QtWidgets import QWidget
@@ -54,7 +55,8 @@ def setCurrentPage(main_window: MainWindow, page: QWidget) -> None:
     ):
         main_window.library.setMinimumWidth(0)
         QTimer.singleShot(
-            100, lambda: main_window.stackedWidget.oldSetCurrentWidget(page)
+            100,
+            lambda: QStackedWidget.setCurrentWidget(main_window.stackedWidget, page),
         )  # Меняем страницу через 1 миллисекунду
     else:
-        main_window.stackedWidget.oldSetCurrentWidget(page)
+        QStackedWidget.setCurrentWidget(main_window.stackedWidget, page)

@@ -35,10 +35,13 @@ def mousePressEvent(event: QEvent, sender) -> None:
             )
         )
 
-    # sender.oldMousePressEvent(event)
-
 
 def mouseReleaseEvent(event: QEvent, sender) -> None:
+    """
+    Обрабатывает отпускание кнопки мыши.
+    :param event:
+    :param sender: Отправитель события.
+    """
     if event.button() == Qt.LeftButton:
         sender.pressed = False
         sender.setValue(

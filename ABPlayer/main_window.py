@@ -5,6 +5,8 @@ import typing as ty
 
 from PyQt5 import QtWidgets, QtCore, QtGui
 
+from database import Books
+from database.tables.books import Status
 from ui import UiMainWindow, UiBook, Item
 from ui_functions import (
     add_book_page,
@@ -17,8 +19,6 @@ from ui_functions import (
     sliders,
     window_geometry,
 )
-from database import Books
-from database.tables.books import Status
 
 if ty.TYPE_CHECKING:
     from PyQt5.QtCore import QObject, QEvent
@@ -40,21 +40,20 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         self.setupSignals()
 
         self.downloadable_book: Book = ...  # Книга, которую скачиваем
-        self.book: Books = ...
+        self.book: Books = ...  # Открытая книга
         self.favorite_books_page: bool = False
-        self.search_on: bool = False
+        self.search_on: bool = False  # Нужно ли производить поиск по ключевым словам
         # Число запущенных потоков, скачивающих обложки книг
         self.download_cover_thread_count = 0
 
         self.openLibraryPage()
 
-        self.stackedWidget.oldSetCurrentWidget = self.stackedWidget.setCurrentWidget
+    def setupSignals(self):
+        # APPLICATION
         self.stackedWidget.setCurrentWidget = lambda page: content.setCurrentPage(
             self, page
         )
 
-    def setupSignals(self):
-        # APPLICATION
         self.closeAppBtn.clicked.connect(self.close)
         self.fullscreenAppBtn.clicked.connect(
             lambda: window_geometry.toggleFullScreen(self)
@@ -411,6 +410,17 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
 
         parent.layout().addWidget(bookFrame)
         return bookWidget
+
+    def setLock(self, value: bool) -> None:
+        """
+        Блокирует/разблокирует интерфейс.
+        Используется при загрузке данных.
+        :param value: True или False.
+        """
+        self.btnGroupFrame.setDisabled(value)
+        self.btnGroupFrame_2.setDisabled(value)
+        self.downloadingProgressBar.setDisabled(value)
+        self.overlayBtn.setDisabled(value)
 
     def eventFilter(self, obj: QObject, event: QEvent) -> bool:
         window_geometry.mouseEvent(self, event)

@@ -6,22 +6,24 @@ import typing as ty
 from inspect import isclass
 
 # CONFIG SETUP
+# Путь к директории приложения
 # os.environ['APP_DIR'] = os.path.join(os.environ["LOCALAPPDATA"], 'AudioBookPlayer')
 os.environ["APP_DIR"] = "../"
-from database import Config
+# Путь к базе данных
+os.environ["DB_PATH"] = os.path.join(os.environ["APP_DIR"], "database.sqlite")
+# Путь к файлу с временными данными
+os.environ["TEMP_PATH"] = os.path.join(os.environ["APP_DIR"], "temp.txt")
+# Инициализация конфигурации
+# (хранил бы в json`е, но нужно несколько таблиц в бд, поэтому вот так вот...)
+from database import Config  # noqa
 
-db = Config(os.environ["DB_PATH"])
-config = db.filter()
-if not config:
-    db.insert()
-    config = db.filter()
-config.add_to_env()
+Config.init()
 
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication  # noqa
 
-from drivers.exceptions import DriverError
-from main_window import MainWindow
-from start_app import StartAppWindow
+from drivers.exceptions import DriverError  # noqa
+from main_window import MainWindow  # noqa
+from start_app import StartAppWindow  # noqa
 
 
 def startApp() -> StartAppWindow:
@@ -73,6 +75,7 @@ def main():
 
 
 if __name__ == "__main__":
+    # Временный код
     sys._excepthook = sys.excepthook
 
     def exception_hook(exctype, value, traceback):

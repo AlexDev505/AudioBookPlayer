@@ -19,14 +19,14 @@ from PyQt5.QtCore import (
 )
 from PyQt5.QtGui import QMovie, QPixmap, QIcon
 from PyQt5.QtWidgets import (
-    QMessageBox,
-    QDialogButtonBox,
+    QLabel,
     QDialog,
     QToolTip,
-    QProgressBar,
-    QVBoxLayout,
-    QLabel,
     QLineEdit,
+    QVBoxLayout,
+    QMessageBox,
+    QProgressBar,
+    QDialogButtonBox,
 )
 
 from database import Books
@@ -127,11 +127,10 @@ class DownloadPreviewWorker(QObject):
             self.finished.emit(pixmap)
         except Exception:
             self.failed.emit()
-        finally:
-            self.main_window.download_cover_thread_count -= 1
 
     def finish(self, pixmap: QPixmap) -> None:
         self.cover_label.download_cover_thread.quit()
+        self.main_window.download_cover_thread_count -= 1
         self.cover_label.setMovie(None)  # Отключаем анимацию загрузки
         if os.path.isdir(self.book.dir_path):  # Если книга скачана
             # Сохраняем обложку
@@ -142,6 +141,7 @@ class DownloadPreviewWorker(QObject):
 
     def fail(self) -> None:
         self.cover_label.download_cover_thread.quit()
+        self.main_window.download_cover_thread_count -= 1
         self.cover_label.setMovie(None)  # Отключаем анимацию загрузки
         self.cover_label.hide()  # Скрываем элемент
 
@@ -191,7 +191,7 @@ def loadPreview(
         cover_label.download_cover_thread.started.connect(
             cover_label.download_cover_worker.run
         )
-        QTimer.singleShot(100, lambda: cover_label.download_cover_thread.start())
+        cover_label.download_cover_thread.start()
 
 
 class DownloadBookWorker(QObject):
@@ -223,8 +223,7 @@ class DownloadBookWorker(QObject):
         except Exception as err:
             # TODO: Необходимо реализовать нормальный обзор ошибок
             self.failed.emit(str(err))
-        finally:
-            self.main_window.downloadable_book = ...
+        self.main_window.downloadable_book = ...
 
     def finish(self):
         self.main_window.download_book_thread.quit()
@@ -380,9 +379,8 @@ class DeleteBookWorker(QObject):
         self.failed.connect(lambda text: self.fail(text))
 
     def run(self):
+        self.main_window.setLock(True)
         try:
-            self.main_window.btnGroupFrame.setDisabled(True)
-            self.main_window.btnGroupFrame_2.setDisabled(True)
             # Удаление книги из бд
             if self.book.__dict__.get("id"):
                 books = Books(os.environ["DB_PATH"])
@@ -398,9 +396,7 @@ class DeleteBookWorker(QObject):
         except Exception as err:
             # TODO: Необходимо реализовать нормальный обзор ошибок
             self.failed.emit(str(err))
-        finally:
-            self.main_window.btnGroupFrame.setDisabled(False)
-            self.main_window.btnGroupFrame_2.setDisabled(False)
+        self.main_window.setLock(False)
 
     def finish(self):
         self.main_window.delete_book_thread.quit()

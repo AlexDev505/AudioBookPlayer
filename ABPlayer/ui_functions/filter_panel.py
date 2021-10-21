@@ -15,11 +15,19 @@ if ty.TYPE_CHECKING:
 
 
 def resetAuthor(main_window: MainWindow) -> None:
+    """
+    Сбрасывает фильтрацию по автору.
+    :param main_window: Экземпляр главного окна.
+    """
     main_window.sortAuthor.setCurrentIndex(0)
 
 
 def toggleInvertSort(main_window: MainWindow) -> None:
-    # Изменяем иконку кнопки
+    """
+    Обрабатывает нажатие на кнопку инверсии сортировки.
+    Изменяет иконку кнопки.
+    :param main_window: Экземпляр главного окна.
+    """
     icon = QIcon()
     if main_window.invertSortBtn.isChecked():
         icon.addPixmap(QPixmap(":/other/sort_up.svg"), QIcon.Normal, QIcon.Off)
@@ -44,20 +52,21 @@ class SearchWorker(QObject):
         self.failed.connect(self.fail)
 
     def run(self) -> None:
+        self.main_window.setLock(True)
         try:
-            self.main_window.btnGroupFrame.setDisabled(True)
-            self.main_window.btnGroupFrame_2.setDisabled(True)
             books = Books(os.environ["DB_PATH"]).filter(return_list=True)
             if not len(books):
                 raise ValueError
+            # Отключаем объекты от бд, чтобы не возникло ошибок из-за потоков
             for book in books:
                 del book.__dict__["_Table__api"]
             search_array = {
                 book.id: book.name.lower().split() + book.author.lower().split()
                 for book in books
-            }
-            search_words = self.text.lower().split()
-            matched_books_ids = []
+            }  # Данные о книгах
+            search_words = self.text.lower().split()  # Слова по которым будем искать
+            matched_books_ids = []  # Идентификаторы найденных книг
+            # Поиск
             for i, array in search_array.items():
                 for search_word in search_words:
                     if difflib.get_close_matches(search_word, array):
@@ -66,9 +75,7 @@ class SearchWorker(QObject):
             self.finished.emit(matched_books_ids)
         except Exception:
             self.failed.emit()
-        finally:
-            self.main_window.btnGroupFrame.setDisabled(False)
-            self.main_window.btnGroupFrame_2.setDisabled(False)
+        self.main_window.setLock(False)
 
     def finish(self, books_ids: ty.List[int]) -> None:
         self.main_window.search_thread.quit()
@@ -80,6 +87,10 @@ class SearchWorker(QObject):
 
 
 def search(main_window: MainWindow) -> None:
+    """
+    Запускает поиск книг по ключевым словам.
+    :param main_window: Экземпляр главного окна.
+    """
     text = main_window.searchBookLineEdit.text().strip()
     if not text:
         main_window.search_on = False
