@@ -2,13 +2,13 @@ from __future__ import annotations
 
 from inspect import isclass
 
+import requests
 from PyQt5 import QtWidgets, QtGui, QtCore
 
 from drivers import chromedriver
 from drivers.exceptions import *
 from ui.start_app import UiStartApp
 from ui_functions import window_geometry
-import requests
 
 
 class StartAppWindow(QtWidgets.QMainWindow, UiStartApp):

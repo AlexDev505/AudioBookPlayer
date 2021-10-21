@@ -63,4 +63,4 @@ def buttonsHandler(main_window: MainWindow, button: QPushButton) -> None:
     elif button == main_window.settingsBtn:
         main_window.stackedWidget.setCurrentWidget(main_window.settingsPage)
     elif button == main_window.dirWithBooksBtn:
-        os.startfile(os.environ["dir_with_books"])
+        os.startfile(os.environ["books_folder"])
