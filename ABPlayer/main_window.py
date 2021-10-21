@@ -84,6 +84,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         )
         self.sortBy.currentIndexChanged.connect(lambda e: self.openLibraryPage())
         self.sortAuthor.currentIndexChanged.connect(lambda e: self.openLibraryPage())
+        self.searchBookBtn.clicked.connect(lambda e: filter_panel.search(self))
 
         # CONTROL PANEL
         self.controlPanelButtons.buttonClicked.connect(
@@ -234,38 +235,43 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         self.book = book
         self.stackedWidget.setCurrentWidget(self.bookPage)
 
-    def openLibraryPage(self):
+    def openLibraryPage(self, books: ty.List[Books] = None):
         db = Books(os.environ["DB_PATH"])
         all_books = db.filter(return_list=True)  # Все книги
 
         # Фильтруем и сортируем книги
         filter_kwargs = {}
+        if books is None:
+            self.searchBookLineEdit.setText("")
 
-        # Только избранные
-        if self.favorite_books_page:
-            filter_kwargs["favorite"] = True
+            # Только избранные
+            if self.favorite_books_page:
+                filter_kwargs["favorite"] = True
 
-        # Фильтрация по автору
-        author = self.sortAuthor.currentIndex()
-        if author != 0:
-            filter_kwargs["author"] = self.sortAuthor.currentText()
+            # Фильтрация по автору
+            author = self.sortAuthor.currentIndex()
+            if author != 0:
+                filter_kwargs["author"] = self.sortAuthor.currentText()
 
-        books: ty.List[Books] = Books(os.environ["DB_PATH"]).filter(
-            return_list=True, **filter_kwargs
-        )
+            books: ty.List[Books] = Books(os.environ["DB_PATH"]).filter(
+                return_list=True, **filter_kwargs
+            )
 
-        # Сортировка
-        sort_by = self.sortBy.currentIndex()
-        if sort_by == 0:  # По дате добавления
-            books.reverse()  # Новые сверху
-        elif sort_by == 1:  # По названию
-            books.sort(key=lambda obj: obj.name)
-        elif sort_by == 2:  # По автору
-            books.sort(key=lambda obj: obj.author)
+            # Сортировка
+            sort_by = self.sortBy.currentIndex()
+            if sort_by == 0:  # По дате добавления
+                books.reverse()  # Новые сверху
+            elif sort_by == 1:  # По названию
+                books.sort(key=lambda obj: obj.name)
+            elif sort_by == 2:  # По автору
+                books.sort(key=lambda obj: obj.author)
 
-        # Если нужно, отображаем в обратном порядке
-        if self.invertSortBtn.isChecked():
-            books.reverse()
+            # Если нужно, отображаем в обратном порядке
+            if self.invertSortBtn.isChecked():
+                books.reverse()
+        else:
+            for book in books:
+                book.__dict__["_Table__api"] = db
 
         # Удаляем старые элементы
         for layout in [
@@ -310,8 +316,6 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         if not len(books):
             self.allBooksContainer.hide()
             self.allBooksPageNothing.show()
-            if self.libraryFiltersPanel.width() != 25:
-                self.toggleBooksFilterPanelBtn.click()
         else:
             self.library.setMinimumWidth(max(sizes))  # Устанавливаем минимальный размер
             self.allBooksContainer.show()
