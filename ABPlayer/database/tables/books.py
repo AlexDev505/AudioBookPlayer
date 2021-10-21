@@ -117,7 +117,7 @@ class Book:
         :return: Путь к директории, в которой храниться книга.
         """
         return os.path.abspath(
-            os.path.join(os.environ["dir_with_books"], self.author, self.name)
+            os.path.join(os.environ["books_folder"], self.author, self.name)
         )
 
 

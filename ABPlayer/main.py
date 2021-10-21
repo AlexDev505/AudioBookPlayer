@@ -1,12 +1,24 @@
 from __future__ import annotations
 
+import os
 import sys
 import typing as ty
 from inspect import isclass
 
+# CONFIG SETUP
+# os.environ['APP_DIR'] = os.path.join(os.environ["LOCALAPPDATA"], 'AudioBookPlayer')
+os.environ["APP_DIR"] = "../"
+from database import Config
+
+db = Config(os.environ["DB_PATH"])
+config = db.filter()
+if not config:
+    db.insert()
+    config = db.filter()
+config.add_to_env()
+
 from PyQt5.QtWidgets import QApplication
 
-import config  # Noqa
 from drivers.exceptions import DriverError
 from main_window import MainWindow
 from start_app import StartAppWindow
