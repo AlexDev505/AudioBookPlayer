@@ -5,24 +5,12 @@ import re
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from ui_functions import sliders
+from ui_functions import sliders, player
+from tools import convert_into_seconds
 
 if ty.TYPE_CHECKING:
     from main import MainWindow
     from database.tables.books import BookItem
-
-
-def convert_into_seconds(seconds: int) -> str:
-    """
-    :param seconds: Число секунд.
-    :return: Строка вида `<часы>:<минуты>:<секунды>`.
-    """
-    h = seconds // 3600
-    m = seconds % 3600 // 60
-    s = seconds % 60
-    return ((str(h).rjust(2, "0") + ":") if h else "") + ":".join(
-        map(lambda x: str(x).rjust(2, "0"), (m, s))
-    )
 
 
 class UiItem(object):
@@ -109,7 +97,8 @@ class Item(QtWidgets.QFrame, UiItem):
         self.setupUi(self)
         parent.layout().addWidget(self)
 
-        sliders.prepareSlider(self.slider)
+        self.item = item
+
         self.slider.wheelEvent = lambda e: None
 
         self.title.setText(item.title)
@@ -133,6 +122,11 @@ class Item(QtWidgets.QFrame, UiItem):
                     }}
                     """
                 )
+            sliders.prepareSlider(self.slider)
+            self.slider.setValue(int(done_time / (item.duration / 100)))
+            self.slider.valueChanged.connect(
+                lambda value: player.setTime(main_window, value, self)
+            )
         else:
             self.doneTime.hide()
             self.separator.hide()
@@ -150,3 +144,6 @@ class Item(QtWidgets.QFrame, UiItem):
                     }}
                     """
                 )
+            self.slider.mouseReleaseEvent = lambda e: player.selectItem(
+                main_window, e, self
+            )

@@ -32,26 +32,13 @@ from PyQt5.QtWidgets import (
 from database import Books
 from database.tables.books import Status
 from drivers import drivers, BaseDownloadProcessHandler
+from tools import convert_into_bits
 from .add_book_page import SearchWorker
 
 if ty.TYPE_CHECKING:
     from PyQt5 import QtCore
     from main_window import MainWindow
     from database import Book
-
-
-def convert_into_bits(bits: int) -> str:
-    """
-    :param bits: Число битов.
-    :return: Строка вида <Число> <Единица измерения>
-    """
-    postfixes = ["КБ", "МБ", "ГБ"]
-    if bits >= 2 ** 33:
-        return f"{round(bits / 2 ** 33, 3)} {postfixes[-1]}"
-    elif bits >= 2 ** 23:
-        return f"{round(bits / 2 ** 23, 2)} {postfixes[-2]}"
-    elif bits >= 2 ** 13:
-        return f"{round(bits / 2 ** 13, 1)} {postfixes[-3]}"
 
 
 class Cache(object):

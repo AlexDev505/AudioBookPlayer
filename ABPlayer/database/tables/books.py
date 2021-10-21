@@ -30,6 +30,10 @@ class BookItem:
     def __repr__(self):
         return str(vars(self))
 
+    @property
+    def duration(self) -> int:
+        return self.end_time - self.start_time
+
 
 class BookItems(List):
     """
