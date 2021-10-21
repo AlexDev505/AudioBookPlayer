@@ -51,9 +51,11 @@ def buttonsHandler(main_window: MainWindow, button: QPushButton) -> None:
     """
     if button == main_window.libraryBtn:
         main_window.favorite_books_page = False
+        main_window.search_on = False
         main_window.openLibraryPage()
     elif button == main_window.favoriteBtn:
         main_window.favorite_books_page = True
+        main_window.search_on = False
         main_window.openLibraryPage()
     elif button == main_window.addBookBtn:
         main_window.stackedWidget.setCurrentWidget(main_window.addBookPage)

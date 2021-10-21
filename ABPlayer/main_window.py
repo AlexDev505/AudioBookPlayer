@@ -42,6 +42,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         self.downloadable_book: Book = ...  # Книга, которую скачиваем
         self.book: Books = ...
         self.favorite_books_page: bool = False
+        self.search_on: bool = False
 
         self.openLibraryPage()
 
@@ -235,43 +236,46 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         self.book = book
         self.stackedWidget.setCurrentWidget(self.bookPage)
 
-    def openLibraryPage(self, books: ty.List[Books] = None):
+    def openLibraryPage(self, books_ids: ty.List[int] = None):
+        if self.search_on and books_ids is None:
+            filter_panel.search(self)
+            return
+        if books_ids is None:
+            self.searchBookLineEdit.setText("")
+
         db = Books(os.environ["DB_PATH"])
         all_books = db.filter(return_list=True)  # Все книги
 
         # Фильтруем и сортируем книги
         filter_kwargs = {}
-        if books is None:
-            self.searchBookLineEdit.setText("")
 
-            # Только избранные
-            if self.favorite_books_page:
-                filter_kwargs["favorite"] = True
+        # Только избранные
+        if self.favorite_books_page:
+            filter_kwargs["favorite"] = True
 
-            # Фильтрация по автору
-            author = self.sortAuthor.currentIndex()
-            if author != 0:
-                filter_kwargs["author"] = self.sortAuthor.currentText()
+        # Фильтрация по автору
+        author = self.sortAuthor.currentIndex()
+        if author != 0:
+            filter_kwargs["author"] = self.sortAuthor.currentText()
 
-            books: ty.List[Books] = Books(os.environ["DB_PATH"]).filter(
-                return_list=True, **filter_kwargs
-            )
+        books: ty.List[Books] = Books(os.environ["DB_PATH"]).filter(
+            return_list=True, **filter_kwargs
+        )
+        if books_ids is not None:
+            books = [book for book in books if book.id in books_ids]
 
-            # Сортировка
-            sort_by = self.sortBy.currentIndex()
-            if sort_by == 0:  # По дате добавления
-                books.reverse()  # Новые сверху
-            elif sort_by == 1:  # По названию
-                books.sort(key=lambda obj: obj.name)
-            elif sort_by == 2:  # По автору
-                books.sort(key=lambda obj: obj.author)
+        # Сортировка
+        sort_by = self.sortBy.currentIndex()
+        if sort_by == 0:  # По дате добавления
+            books.reverse()  # Новые сверху
+        elif sort_by == 1:  # По названию
+            books.sort(key=lambda obj: obj.name)
+        elif sort_by == 2:  # По автору
+            books.sort(key=lambda obj: obj.author)
 
-            # Если нужно, отображаем в обратном порядке
-            if self.invertSortBtn.isChecked():
-                books.reverse()
-        else:
-            for book in books:
-                book.__dict__["_Table__api"] = db
+        # Если нужно, отображаем в обратном порядке
+        if self.invertSortBtn.isChecked():
+            books.reverse()
 
         # Удаляем старые элементы
         for layout in [

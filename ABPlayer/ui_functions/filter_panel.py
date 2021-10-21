@@ -53,26 +53,26 @@ class SearchWorker(QObject):
             for book in books:
                 del book.__dict__["_Table__api"]
             search_array = {
-                i: book.name.lower().split() + book.author.lower().split()
-                for i, book in enumerate(books)
+                book.id: book.name.lower().split() + book.author.lower().split()
+                for book in books
             }
             search_words = self.text.lower().split()
-            matched_books = []
+            matched_books_ids = []
             for i, array in search_array.items():
                 for search_word in search_words:
                     if difflib.get_close_matches(search_word, array):
-                        matched_books.append(books[i])
+                        matched_books_ids.append(i)
                         break
-            self.finished.emit(matched_books)
+            self.finished.emit(matched_books_ids)
         except Exception:
             self.failed.emit()
         finally:
             self.main_window.btnGroupFrame.setDisabled(False)
             self.main_window.btnGroupFrame_2.setDisabled(False)
 
-    def finish(self, books: ty.List[Books]) -> None:
+    def finish(self, books_ids: ty.List[int]) -> None:
         self.main_window.search_thread.quit()
-        QTimer.singleShot(100, lambda: self.main_window.openLibraryPage(books))
+        QTimer.singleShot(100, lambda: self.main_window.openLibraryPage(books_ids))
 
     def fail(self) -> None:
         self.main_window.search_thread.quit()
@@ -82,8 +82,11 @@ class SearchWorker(QObject):
 def search(main_window: MainWindow) -> None:
     text = main_window.searchBookLineEdit.text().strip()
     if not text:
-        main_window.searchBookLineEdit.setFocus()
+        main_window.search_on = False
+        main_window.openLibraryPage()
         return
+
+    main_window.search_on = True
 
     # Открываем страницу загрузки
     main_window.search_loading_movie = QMovie(":/other/loading.gif")
