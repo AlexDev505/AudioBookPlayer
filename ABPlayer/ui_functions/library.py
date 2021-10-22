@@ -3,7 +3,7 @@ from __future__ import annotations
 import typing as ty
 
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve
-from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtGui import QIcon
 
 if ty.TYPE_CHECKING:
     from main_window import MainWindow
@@ -38,14 +38,7 @@ def toggleFiltersPanel(main_window: MainWindow) -> None:
         main_window.filters_menu_animation.start()
 
         # Изменяем иконку кнопки
-        last_icon = main_window.toggleBooksFilterPanelBtn.__dict__.get("_last_icon")
-        if not last_icon:
-            last_icon = QIcon()
-            last_icon.addPixmap(
-                QPixmap(":/other/angle_left.svg"), QIcon.Normal, QIcon.Off
-            )
-
-        main_window.toggleBooksFilterPanelBtn.__dict__[
-            "_last_icon"
-        ] = main_window.toggleBooksFilterPanelBtn.icon()
-        main_window.toggleBooksFilterPanelBtn.setIcon(last_icon)
+        icon = QIcon(
+            ":/other/angle_left.svg" if end_value == 25 else ":/other/angle_right.svg"
+        )
+        main_window.toggleBooksFilterPanelBtn.setIcon(icon)

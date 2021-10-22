@@ -23,9 +23,7 @@ from ui_functions import (
 
 if ty.TYPE_CHECKING:
     from PyQt5.QtCore import QObject, QEvent
-    from PyQt5.QtGui import QMovie
-    from database import Book
-    from database.tables.books import BookItem
+    from database.tables.books import Book, BookItem
 
 
 class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
@@ -38,8 +36,6 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         )
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
 
-        self.setupSignals()
-
         self.downloadable_book: Book = ...  # Книга, которую скачиваем
         self.book: Books = ...  # Открытая книга
         self.current_item_widget: Item = ...
@@ -48,8 +44,9 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         # Число запущенных потоков, скачивающих обложки книг
         self.download_cover_thread_count = 0
 
-        self.player = player.Player(self)
+        self.player = player.Player()
 
+        self.setupSignals()
         self.openLibraryPage()
 
     def setupSignals(self):
@@ -133,12 +130,13 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         # PLAYER
         self.pastBtn.clicked.connect(lambda e: player.rewindTo(self, "past"))
         self.futureBtn.clicked.connect(lambda e: player.rewindTo(self, "future"))
-        self.playPauseBntLg.clicked.connect(lambda e: player.playPause(self))
+        self.playPauseBntLg.clicked.connect(lambda e: self.player.setState(self))
+        self.playPauseBtn.clicked.connect(lambda e: self.player.setState(self))
 
     def openInfoPage(
         self,
         text: str = "",
-        movie: QMovie = None,
+        movie: QtGui.QMovie = None,
         btn_text: str = "",
         btn_function: ty.Callable = None,
     ):
@@ -153,6 +151,11 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         else:
             self.infoPageBtn.hide()
         self.stackedWidget.setCurrentWidget(self.infoPage)
+
+    def openLoadingPage(self):
+        movie = QtGui.QMovie(":/other/loading.gif")
+        movie.setScaledSize(QtCore.QSize(50, 50))
+        self.openInfoPage(movie=movie)
 
     def openBookPage(self, book: Book):
         item: BookItem
