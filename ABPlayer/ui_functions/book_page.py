@@ -6,70 +6,42 @@ import typing as ty
 import urllib.request
 
 from PyQt5.QtCore import (
-    Qt,
-    QSize,
-    QTimer,
-    QEvent,
-    QThread,
-    QObject,
-    pyqtSignal,
     QBasicTimer,
     QEasingCurve,
+    QEvent,
+    QObject,
     QPropertyAnimation,
+    QSize,
+    QTimer,
+    Qt,
+    pyqtSignal,
 )
 from PyQt5.QtGui import QMovie, QPixmap, QIcon
 from PyQt5.QtWidgets import (
-    QLabel,
     QDialog,
-    QToolTip,
+    QDialogButtonBox,
+    QLabel,
     QLineEdit,
-    QVBoxLayout,
     QMessageBox,
     QProgressBar,
-    QDialogButtonBox,
+    QToolTip,
+    QVBoxLayout,
 )
 
-from database import Books
-from database.tables.books import Status
+from database.tables.books import Books, Status
 from drivers import drivers, BaseDownloadProcessHandler
-from tools import convert_into_bits
+from tools import convert_into_bits, Cache, BaseWorker
 from .add_book_page import SearchWorker
 
 if ty.TYPE_CHECKING:
     from PyQt5 import QtCore
     from main_window import MainWindow
-    from database import Book
+    from database.tables.books import Book
+
+cache = Cache()
 
 
-class Cache(object):
-    """
-    Кэш.
-    Временно хранит обложки книг. (до 4-х штук)
-    """
-
-    cache = {}
-
-    @classmethod
-    def get(cls, item: str) -> QPixmap:
-        """
-        :param item: Ссылка на картинку.
-        :return: Экземпляр QPixmap.
-        """
-        return cls.cache.get(item)
-
-    @classmethod
-    def set(cls, key: str, value: QPixmap) -> None:
-        """
-        Добавляет картинку в кэш.
-        :param key: Ссылка на картинку.
-        :param value: Экземпляр QPixmap.
-        """
-        if len(cls.cache) >= 4:
-            del cls.cache[list(cls.cache.keys())[0]]
-        cls.cache[key] = value
-
-
-class DownloadPreviewWorker(QObject):
+class DownloadPreviewWorker(BaseWorker):
     """
     Реализует скачивание обложки книги.
     При успешном скачивании обложка устанавливается в указанный QLabel.
@@ -94,30 +66,29 @@ class DownloadPreviewWorker(QObject):
         super(DownloadPreviewWorker, self).__init__()
         self.main_window = main_window
         self.cover_label, self.size, self.book = cover_label, size, book
+
+    def connectSignals(self) -> None:
         self.finished.connect(lambda pixmap: self.finish(pixmap))
         self.failed.connect(self.fail)
 
-    def run(self):
-        if not self.book.preview:  # Если у книги нет обложки
-            self.failed.emit()
-            return
-
+    def worker(self) -> None:
         try:
-            pixmap = Cache.get(self.book.preview)  # Проверяем кэш
+            pixmap = cache.get(self.book.preview)  # Проверяем кэш
             if not pixmap:
+                if not self.book.preview:  # Если у книги нет обложки
+                    raise ValueError
                 # Скачивание
                 context = ssl.SSLContext()
                 data = urllib.request.urlopen(self.book.preview, context=context).read()
                 pixmap = QPixmap()
                 pixmap.loadFromData(data)
-                Cache.set(self.book.preview, pixmap)  # Заносим в кэш
+                cache.set(self.book.preview, pixmap)  # Заносим в кэш
             self.finished.emit(pixmap)
         except Exception:
             self.failed.emit()
+        self.main_window.download_cover_thread_count -= 1
 
     def finish(self, pixmap: QPixmap) -> None:
-        self.cover_label.download_cover_thread.quit()
-        self.main_window.download_cover_thread_count -= 1
         self.cover_label.setMovie(None)  # Отключаем анимацию загрузки
         if os.path.isdir(self.book.dir_path):  # Если книга скачана
             # Сохраняем обложку
@@ -127,8 +98,6 @@ class DownloadPreviewWorker(QObject):
         self.cover_label.setPixmap(pixmap)
 
     def fail(self) -> None:
-        self.cover_label.download_cover_thread.quit()
-        self.main_window.download_cover_thread_count -= 1
         self.cover_label.setMovie(None)  # Отключаем анимацию загрузки
         self.cover_label.hide()  # Скрываем элемент
 
@@ -153,11 +122,11 @@ def loadPreview(
         cover_label.setPixmap(pixmap)
     else:
         # Анимация загрузки
-        if not cover_label.__dict__.get("loading_cover_movie"):
-            cover_label.loading_cover_movie = QMovie(":/other/loading.gif")
-            cover_label.loading_cover_movie.setScaledSize(QSize(50, 50))
-            cover_label.setMovie(cover_label.loading_cover_movie)
-            cover_label.loading_cover_movie.start()
+        if not cover_label.movie():
+            movie = QMovie(":/other/loading.gif")
+            movie.setScaledSize(QSize(50, 50))
+            cover_label.setMovie(movie)
+            movie.start()
 
         # Запускаем максимум 2 потока для скачивания
         if main_window.download_cover_thread_count >= 2:
@@ -168,40 +137,37 @@ def loadPreview(
 
         # Создаем и запускаем новый поток
         main_window.download_cover_thread_count += 1
-        cover_label.download_cover_thread = QThread()
-        cover_label.download_cover_worker = DownloadPreviewWorker(
+        cover_label.DownloadPreviewWorker = DownloadPreviewWorker(
             main_window, cover_label, size, book
         )
-        cover_label.download_cover_worker.moveToThread(
-            cover_label.download_cover_thread
-        )
-        cover_label.download_cover_thread.started.connect(
-            cover_label.download_cover_worker.run
-        )
-        cover_label.download_cover_thread.start()
+        cover_label.DownloadPreviewWorker.start()
 
 
-class DownloadBookWorker(QObject):
+class DownloadBookWorker(BaseWorker):
     """
     Реализует скачивание книги.
     """
 
     finished: QtCore.pyqtSignal = pyqtSignal()
     failed: QtCore.pyqtSignal = pyqtSignal(str)
-    close: QtCore.pyqtSignal = pyqtSignal()
 
     def __init__(self, main_window: MainWindow, book: Book):
+        """
+        :param main_window: Экземпляр главного окна.
+        :param book: Экземпляр не скачанной книги.
+        """
         super(DownloadBookWorker, self).__init__()
         self.main_window, self.book = main_window, book
         self.drv = [drv for drv in drivers if self.book.url.startswith(drv().site_url)][
             0
         ]()  # Драйвер, который нужно использовать для скачивания
         self.download_process_handler = DownloadProcessHandler(self.main_window)
+
+    def connectSignals(self) -> None:
         self.finished.connect(self.finish)
         self.failed.connect(lambda text: self.fail(text))
-        self.close.connect(self._close)
 
-    def run(self):
+    def worker(self) -> None:
         try:
             self.drv.download_book(self.book, self.download_process_handler)
             books = Books(os.environ["DB_PATH"])
@@ -212,8 +178,7 @@ class DownloadBookWorker(QObject):
             self.failed.emit(str(err))
         self.main_window.downloadable_book = ...
 
-    def finish(self):
-        self.main_window.download_book_thread.quit()
+    def finish(self) -> None:
         # Если пользователь находится на странице скачиваемой книги
         if self.main_window.pbFrame.minimumWidth() == 0:
             self.main_window.openBookPage(self.book)  # Обновляем страницу
@@ -237,8 +202,7 @@ class DownloadBookWorker(QObject):
             ):
                 self.main_window.openLibraryPage()
 
-    def fail(self, text: str):
-        self.main_window.download_book_thread.quit()
+    def fail(self, text: str) -> None:
         self.main_window.openInfoPage(
             text=text,
             btn_text="Вернуться в библиотеку",
@@ -247,10 +211,14 @@ class DownloadBookWorker(QObject):
             ),
         )
 
-    def _close(self):
+    def terminate(self) -> Book:
         file = self.drv.__dict__.get("_file")
         if file:
             file.close()
+        self.thread.terminate()
+        downloadable_book = self.main_window.downloadable_book
+        self.main_window.downloadable_book = ...
+        return downloadable_book
 
 
 class DownloadProcessHandler(QObject, BaseDownloadProcessHandler):
@@ -281,7 +249,7 @@ class DownloadProcessHandler(QObject, BaseDownloadProcessHandler):
         self.main_window.downloadingProgressBar.setValue(progress)
         self.main_window.downloadingProgressBar.setToolTip(
             f"{convert_into_bits(self.done_size)} / {convert_into_bits(self.total_size)}",
-        )
+        )  # Изменяем всплывающую подсказку
 
 
 def prepareProgressBar(pb: QProgressBar) -> None:
@@ -304,7 +272,7 @@ def prepareProgressBar(pb: QProgressBar) -> None:
         :param event:
         """
         if event.type() == QEvent.ToolTip:  # Удержание курсора на объекте
-            pb.toolTipPos = event.globalPos()  # Позиция, гду будет отображена подсказка
+            pb.toolTipPos = event.globalPos()  # Позиция, где будет отображена подсказка
             pb.toolTipUpdater = ToolTipUpdater()
             pb.toolTipTimer = QBasicTimer()
             pb.toolTipTimer.start(100, pb.toolTipUpdater)  # Обновление подсказки
@@ -342,16 +310,11 @@ def downloadBook(main_window: MainWindow, book: Book) -> None:
     main_window.downloadable_book = book
 
     # Создаем и запускаем новый поток
-    main_window.download_book_thread = QThread()
-    main_window.download_book_worker = DownloadBookWorker(main_window, book)
-    main_window.download_book_worker.moveToThread(main_window.download_book_thread)
-    main_window.download_book_thread.started.connect(
-        main_window.download_book_worker.run
-    )
-    main_window.download_book_thread.start()
+    main_window.DownloadBookWorker = DownloadBookWorker(main_window, book)
+    main_window.DownloadBookWorker.start()
 
 
-class DeleteBookWorker(QObject):
+class DeleteBookWorker(BaseWorker):
     """
     Реализует удаление книги.
     """
@@ -362,10 +325,12 @@ class DeleteBookWorker(QObject):
     def __init__(self, main_window: MainWindow, book: ty.Union[Book, Books]):
         super(DeleteBookWorker, self).__init__()
         self.main_window, self.book = main_window, book
+
+    def connectSignals(self) -> None:
         self.finished.connect(self.finish)
         self.failed.connect(lambda text: self.fail(text))
 
-    def run(self):
+    def worker(self) -> None:
         self.main_window.setLock(True)
         try:
             # Удаление книги из бд
@@ -385,12 +350,10 @@ class DeleteBookWorker(QObject):
             self.failed.emit(str(err))
         self.main_window.setLock(False)
 
-    def finish(self):
-        self.main_window.delete_book_thread.quit()
+    def finish(self) -> None:
         self.main_window.openLibraryPage()
 
-    def fail(self, text: str):
-        self.main_window.delete_book_thread.quit()
+    def fail(self, text: str) -> None:
         self.main_window.openInfoPage(
             text=text,
             btn_text="Вернуться в библиотеку",
@@ -405,35 +368,26 @@ def stopBookDownloading(main_window: MainWindow) -> None:
     Останавливает загрузку книги и запускает процесс её удаления.
     :param main_window: Экземпляр главного окна.
     """
-    answer = QMessageBox.question(
-        main_window,
-        "Подтвердите действие",
-        "Вы действительно хотите прервать скачивание книги?",
-        QMessageBox.Yes | QMessageBox.No,
-        QMessageBox.No,
-    )
-
-    if answer == QMessageBox.No:
+    if (
+        QMessageBox.question(
+            main_window,
+            "Подтвердите действие",
+            "Вы действительно хотите прервать скачивание книги?",
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No,
+        )
+        != QMessageBox.Yes
+    ):
         return
 
     # Останавливаем скачивание
-    main_window.download_book_worker.close.emit()
-    main_window.download_book_thread.terminate()
+    downloadable_book: Book = main_window.DownloadBookWorker.terminate()
 
-    downloadable_book = main_window.downloadable_book
-    main_window.downloadable_book = ...
-
-    # Открываем страницу загрузки
-    main_window.delete_book_loading_movie = QMovie(":/other/loading.gif")
-    main_window.delete_book_loading_movie.setScaledSize(QSize(50, 50))
-    main_window.openInfoPage(movie=main_window.delete_book_loading_movie)
+    main_window.openLoadingPage()
 
     # Создаем и запускаем новый поток
-    main_window.delete_book_thread = QThread()
-    main_window.delete_book_worker = DeleteBookWorker(main_window, downloadable_book)
-    main_window.delete_book_worker.moveToThread(main_window.delete_book_thread)
-    main_window.delete_book_thread.started.connect(main_window.delete_book_worker.run)
-    main_window.delete_book_thread.start()
+    main_window.DeleteBookWorker = DeleteBookWorker(main_window, downloadable_book)
+    main_window.DeleteBookWorker.start()
 
 
 def deleteBook(main_window: MainWindow, book: Books = None) -> None:
@@ -444,47 +398,35 @@ def deleteBook(main_window: MainWindow, book: Books = None) -> None:
     """
     book = book or main_window.book
 
-    answer = QMessageBox.question(
-        main_window,
-        "Подтвердите действие",
-        "Вы действительно хотите удалить книгу из библиотеки?",
-        QMessageBox.Yes | QMessageBox.No,
-        QMessageBox.No,
-    )
-
-    if answer == QMessageBox.No:
+    if (
+        QMessageBox.question(
+            main_window,
+            "Подтвердите действие",
+            "Вы действительно хотите удалить книгу из библиотеки?",
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No,
+        )
+        != QMessageBox.Yes
+    ):
         return
 
-    # Открываем страницу загрузки
-    main_window.delete_book_loading_movie = QMovie(":/other/loading.gif")
-    main_window.delete_book_loading_movie.setScaledSize(QSize(50, 50))
-    main_window.openInfoPage(movie=main_window.delete_book_loading_movie)
+    main_window.openLoadingPage()
 
     # Создаем и запускаем новый поток
-    main_window.delete_book_thread = QThread()
-    main_window.delete_book_worker = DeleteBookWorker(main_window, book)
-    main_window.delete_book_worker.moveToThread(main_window.delete_book_thread)
-    main_window.delete_book_thread.started.connect(main_window.delete_book_worker.run)
-    main_window.delete_book_thread.start()
+    main_window.DeleteBookWorker = DeleteBookWorker(main_window, book)
+    main_window.DeleteBookWorker.start()
 
 
 def toggleFavorite(main_window: MainWindow, book: Books = None) -> None:
     """
     Добавляет/снимает метку "Избранное".
+    Изменяет иконку кнопки.
     :param main_window: Экземпляр главного окна.
     :param book: Экземпляр книги. (Если не передан используется main_window.book)
     """
     book = book or main_window.book
     book.favorite = not book.favorite
-    icon = QIcon()
-    if book.favorite:
-        icon.addPixmap(
-            QPixmap(":/other/star_fill.svg"),
-            QIcon.Normal,
-            QIcon.Off,
-        )
-    else:
-        icon.addPixmap(QPixmap(":/other/star.svg"), QIcon.Normal, QIcon.Off)
+    icon = QIcon(":/other/star_fill.svg" if book.favorite else ":/other/star.svg")
     main_window.sender().setIcon(icon)
     book.save()
 
@@ -533,26 +475,21 @@ def changeDriver(main_window: MainWindow) -> None:
         Запускает удаление старой книги.
         :param book: Новая книга.
         """
-        main_window.search_thread.quit()
+        main_window.SearchWorker.deleteLater()
 
         # Создаем и запускаем новый поток для удаления старой книги
-        main_window.delete_book_thread = QThread()
-        main_window.delete_book_worker = DeleteBookWorker(main_window, main_window.book)
-        main_window.delete_book_worker.finished.disconnect()
+        main_window.DeleteBookWorker = DeleteBookWorker(main_window, main_window.book)
         # По завершению удаления, запускается скачивание
-        main_window.delete_book_worker.finished.connect(lambda: download(book))
-        main_window.delete_book_worker.moveToThread(main_window.delete_book_thread)
-        main_window.delete_book_thread.started.connect(
-            main_window.delete_book_worker.run
-        )
-        main_window.delete_book_thread.start()
+        main_window.DeleteBookWorker.finished.disconnect()
+        main_window.DeleteBookWorker.finished.connect(lambda: download(book))
+        main_window.DeleteBookWorker.start()
 
     def download(book: Book) -> None:
         """
         Запускает скачивание книги.
         :param book: Экземпляр книги.
         """
-        main_window.delete_book_thread.quit()
+        main_window.DeleteBookWorker.deleteLater()
         main_window.openBookPage(book)
 
         main_window.downloadingProgressBarLg.setValue(0)
@@ -563,13 +500,8 @@ def changeDriver(main_window: MainWindow) -> None:
         main_window.downloadable_book = book
 
         # Создаем и запускаем новый поток для скачивания новой книги
-        main_window.download_book_thread = QThread()
-        main_window.download_book_worker = DownloadBookWorker(main_window, book)
-        main_window.download_book_worker.moveToThread(main_window.download_book_thread)
-        main_window.download_book_thread.started.connect(
-            main_window.download_book_worker.run
-        )
-        main_window.download_book_thread.start()
+        main_window.DownloadBookWorker = DownloadBookWorker(main_window, book)
+        main_window.DownloadBookWorker.start()
 
     if main_window.downloadable_book is not ...:
         QMessageBox.information(
@@ -587,22 +519,16 @@ def changeDriver(main_window: MainWindow) -> None:
             return
         url = _get_url(main_window, dlg)
 
-    # Открываем страницу загрузки
-    main_window.delete_book_loading_movie = QMovie(":/other/loading.gif")
-    main_window.delete_book_loading_movie.setScaledSize(QSize(50, 50))
-    main_window.openInfoPage(movie=main_window.delete_book_loading_movie)
+    main_window.openLoadingPage()
 
     drv = [drv for drv in drivers if url.startswith(drv().site_url)][0]()
 
     # Создаём и запускаем новый поток для поиска книги
-    main_window.search_thread = QThread()
-    main_window.search_worker = SearchWorker(main_window, drv, url)
-    main_window.search_worker.finished.disconnect()  # noqa
+    main_window.SearchWorker = SearchWorker(main_window, drv, url)
     # По завершению поиска, запускается удаление старой книги
-    main_window.search_worker.finished.connect(lambda book: delete(book))  # noqa
-    main_window.search_worker.moveToThread(main_window.search_thread)
-    main_window.search_thread.started.connect(main_window.search_worker.run)
-    main_window.search_thread.start()
+    main_window.SearchWorker.finished.disconnect()  # noqa
+    main_window.SearchWorker.finished.connect(lambda book: delete(book))  # noqa
+    main_window.SearchWorker.start()
 
 
 def _get_url(main_window: MainWindow, dlg: InputDialog) -> ty.Union[None, False, str]:

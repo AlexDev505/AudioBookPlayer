@@ -8,6 +8,7 @@ from PyQt5.QtCore import QThread, QObject, pyqtSignal, QSize, QTimer
 from PyQt5.QtGui import QIcon, QPixmap, QMovie
 
 from database import Books
+from tools import BaseWorker
 
 if ty.TYPE_CHECKING:
     from PyQt5 import QtCore
@@ -37,7 +38,7 @@ def toggleInvertSort(main_window: MainWindow) -> None:
     main_window.openLibraryPage()
 
 
-class SearchWorker(QObject):
+class SearchWorker(BaseWorker):
     """
     Класс реализующий поиск книги.
     """
@@ -48,10 +49,12 @@ class SearchWorker(QObject):
     def __init__(self, main_window: MainWindow, text: str):
         super(SearchWorker, self).__init__()
         self.main_window, self.text = main_window, text
+
+    def connectSignals(self) -> None:
         self.finished.connect(lambda books: self.finish(books))
         self.failed.connect(self.fail)
 
-    def run(self) -> None:
+    def worker(self) -> None:
         self.main_window.setLock(True)
         try:
             books = Books(os.environ["DB_PATH"]).filter(return_list=True)
@@ -78,11 +81,9 @@ class SearchWorker(QObject):
         self.main_window.setLock(False)
 
     def finish(self, books_ids: ty.List[int]) -> None:
-        self.main_window.search_thread.quit()
         QTimer.singleShot(100, lambda: self.main_window.openLibraryPage(books_ids))
 
     def fail(self) -> None:
-        self.main_window.search_thread.quit()
         QTimer.singleShot(100, lambda: self.main_window.openLibraryPage([]))
 
 
@@ -99,14 +100,8 @@ def search(main_window: MainWindow) -> None:
 
     main_window.search_on = True
 
-    # Открываем страницу загрузки
-    main_window.search_loading_movie = QMovie(":/other/loading.gif")
-    main_window.search_loading_movie.setScaledSize(QSize(50, 50))
-    main_window.openInfoPage(movie=main_window.search_loading_movie)
+    main_window.openLoadingPage()
 
     # Создаём и запускаем новый поток
-    main_window.search_thread = QThread()
-    main_window.search_worker = SearchWorker(main_window, text)
-    main_window.search_worker.moveToThread(main_window.search_thread)
-    main_window.search_thread.started.connect(main_window.search_worker.run)
-    main_window.search_thread.start()
+    main_window.SearchWorker = SearchWorker(main_window, text)
+    main_window.SearchWorker.start()

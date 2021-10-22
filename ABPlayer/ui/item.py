@@ -100,6 +100,7 @@ class Item(QtWidgets.QFrame, UiItem):
         self.item = item
 
         self.slider.wheelEvent = lambda e: None
+        self.slider.setRange(0, item.duration)
 
         self.title.setText(item.title)
         self.totalTime.setText(
@@ -123,10 +124,10 @@ class Item(QtWidgets.QFrame, UiItem):
                     """
                 )
             sliders.prepareSlider(self.slider)
-            self.slider.setValue(int(done_time / (item.duration / 100)))
-            self.slider.valueChanged.connect(
-                lambda value: player.setTime(main_window, value, self)
-            )
+            self.slider.setValue(done_time)
+            # self.slider.valueChanged.connect(
+            #     lambda value: player.setTime(main_window, value, self)
+            # )
         else:
             self.doneTime.hide()
             self.separator.hide()

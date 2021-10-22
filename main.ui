@@ -844,7 +844,7 @@ QProgressBar::chunk {
              <item>
               <widget class="QStackedWidget" name="stackedWidget">
                <property name="currentIndex">
-                <number>0</number>
+                <number>1</number>
                </property>
                <widget class="QWidget" name="libraryPage">
                 <layout class="QHBoxLayout" name="horizontalLayout_21">
@@ -2368,7 +2368,7 @@ QPushButton:pressed {
                                <rect>
                                 <x>0</x>
                                 <y>0</y>
-                                <width>492</width>
+                                <width>805</width>
                                 <height>172</height>
                                </rect>
                               </property>

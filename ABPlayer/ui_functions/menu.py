@@ -33,13 +33,8 @@ def toggleMenu(main_window: MainWindow) -> None:
         main_window.menu_animation.start()
 
         # Изменяем иконку кнопки
-        last_icon = main_window.menuBtn.__dict__.get("_last_icon")
-        if not last_icon:
-            last_icon = QIcon()
-            last_icon.addPixmap(QPixmap(":/menu/menu.svg"), QIcon.Normal, QIcon.Off)
-
-        main_window.menuBtn.__dict__["_last_icon"] = main_window.menuBtn.icon()
-        main_window.menuBtn.setIcon(last_icon)
+        icon = QIcon(":/menu/menu.svg" if end_value == 65 else ":/other/angle_left.svg")
+        main_window.menuBtn.setIcon(icon)
 
 
 def buttonsHandler(main_window: MainWindow, button: QPushButton) -> None:
