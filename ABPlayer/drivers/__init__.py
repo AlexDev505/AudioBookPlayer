@@ -5,4 +5,4 @@ from .knigavuhe import KnigaVUhe
 
 drivers = Driver.drivers
 
-__all__ = [drivers, Driver, BaseDownloadProcessHandler, chromedriver]
+__all__ = ["drivers", "Driver", "BaseDownloadProcessHandler", "chromedriver"]

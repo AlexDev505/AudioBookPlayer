@@ -216,6 +216,7 @@ class DownloadBookWorker(BaseWorker):
         if file:
             file.close()
         self.thread.terminate()
+        self.thread.exit()
         downloadable_book = self.main_window.downloadable_book
         self.main_window.downloadable_book = ...
         return downloadable_book
@@ -344,6 +345,10 @@ class DeleteBookWorker(BaseWorker):
                     for file in files:
                         os.remove(os.path.join(root, file))
                     os.rmdir(root)
+                # Удаляем папку автора, если она пуста
+                author_dir = os.path.dirname(self.book.dir_path)
+                if len(os.listdir(author_dir)) == 0:
+                    os.rmdir(author_dir)
             self.finished.emit()
         except Exception as err:
             # TODO: Необходимо реализовать нормальный обзор ошибок
