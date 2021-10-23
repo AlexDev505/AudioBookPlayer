@@ -4,8 +4,8 @@ import difflib
 import os
 import typing as ty
 
-from PyQt5.QtCore import QThread, QObject, pyqtSignal, QSize, QTimer
-from PyQt5.QtGui import QIcon, QPixmap, QMovie
+from PyQt5.QtCore import pyqtSignal, QTimer
+from PyQt5.QtGui import QIcon, QPixmap
 
 from database import Books
 from tools import BaseWorker

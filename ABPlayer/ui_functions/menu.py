@@ -4,7 +4,7 @@ import os
 import typing as ty
 
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve
-from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtGui import QIcon
 
 if ty.TYPE_CHECKING:
     from PyQt5.QtWidgets import QPushButton

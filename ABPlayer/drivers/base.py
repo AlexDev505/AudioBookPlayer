@@ -11,7 +11,7 @@ import requests
 from selenium import webdriver
 
 if ty.TYPE_CHECKING:
-    from database import Book, BookItem
+    from database.tables.books import Book, BookItem
 
 
 def prepare_file_metadata(
