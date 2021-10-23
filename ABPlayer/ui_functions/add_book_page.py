@@ -11,8 +11,8 @@ from tools import BaseWorker
 if ty.TYPE_CHECKING:
     from PyQt5 import QtCore
     from main_window import MainWindow
-    from drivers import Driver
-    from database import Book
+    from drivers.base import Driver
+    from database.tables.books import Book
 
 
 class SearchWorker(BaseWorker):
