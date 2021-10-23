@@ -79,9 +79,9 @@ class ConnectionFail(DriverError):
 
 
 __all__ = [
-    DriverError,
-    ChromeNotFound,
-    NotAvailableVersion,
-    DownloadingFail,
-    ConnectionFail,
+    "DriverError",
+    "ChromeNotFound",
+    "NotAvailableVersion",
+    "DownloadingFail",
+    "ConnectionFail",
 ]

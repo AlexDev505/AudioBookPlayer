@@ -7,4 +7,4 @@ Books(os.environ["DB_PATH"]).create_table()
 Config(os.environ["DB_PATH"]).create_table()
 
 
-__all__ = [Books, Book, BookItems, BookItem, Config]
+__all__ = ["Books", "Book", "BookItems", "BookItem", "Config"]
