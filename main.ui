@@ -844,7 +844,7 @@ QProgressBar::chunk {
              <item>
               <widget class="QStackedWidget" name="stackedWidget">
                <property name="currentIndex">
-                <number>1</number>
+                <number>0</number>
                </property>
                <widget class="QWidget" name="libraryPage">
                 <layout class="QHBoxLayout" name="horizontalLayout_21">
@@ -1642,8 +1642,8 @@ QPushButton:pressed {
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>890</width>
-                                   <height>601</height>
+                                   <width>92</width>
+                                   <height>18</height>
                                   </rect>
                                  </property>
                                  <property name="sizePolicy">
@@ -1730,8 +1730,8 @@ QPushButton:pressed {
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>890</width>
-                                   <height>601</height>
+                                   <width>92</width>
+                                   <height>18</height>
                                   </rect>
                                  </property>
                                  <property name="sizePolicy">
@@ -2267,7 +2267,7 @@ QPushButton:pressed {
                                </widget>
                               </item>
                               <item>
-                               <widget class="QPushButton" name="playPauseBntLg">
+                               <widget class="QPushButton" name="playPauseBtnLg">
                                 <property name="minimumSize">
                                  <size>
                                   <width>0</width>
@@ -4201,7 +4201,7 @@ border-radius: 5px; </string>
  </resources>
  <connections/>
  <buttongroups>
-  <buttongroup name="controlPanelButtons"/>
   <buttongroup name="menuButtons"/>
+  <buttongroup name="controlPanelButtons"/>
  </buttongroups>
 </ui>
