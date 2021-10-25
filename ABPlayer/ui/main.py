@@ -934,7 +934,7 @@ class UiMainWindow(object):
         self.inProgressBooksContainer.setWidgetResizable(True)
         self.inProgressBooksContainer.setObjectName("inProgressBooksContainer")
         self.inProgressBooksLayout = QtWidgets.QWidget()
-        self.inProgressBooksLayout.setGeometry(QtCore.QRect(0, 0, 890, 601))
+        self.inProgressBooksLayout.setGeometry(QtCore.QRect(0, 0, 92, 18))
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
         )
@@ -995,7 +995,7 @@ class UiMainWindow(object):
         self.listenedBooksContainer.setWidgetResizable(True)
         self.listenedBooksContainer.setObjectName("listenedBooksContainer")
         self.listenedBooksLayout = QtWidgets.QWidget()
-        self.listenedBooksLayout.setGeometry(QtCore.QRect(0, 0, 890, 601))
+        self.listenedBooksLayout.setGeometry(QtCore.QRect(0, 0, 92, 18))
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
         )
@@ -1254,24 +1254,24 @@ class UiMainWindow(object):
         self.pastBtn.setIconSize(QtCore.QSize(30, 30))
         self.pastBtn.setObjectName("pastBtn")
         self.horizontalLayout_30.addWidget(self.pastBtn)
-        self.playPauseBntLg = QtWidgets.QPushButton(self.playerBtns)
-        self.playPauseBntLg.setMinimumSize(QtCore.QSize(0, 45))
-        self.playPauseBntLg.setMaximumSize(QtCore.QSize(16777215, 45))
+        self.playPauseBtnLg = QtWidgets.QPushButton(self.playerBtns)
+        self.playPauseBtnLg.setMinimumSize(QtCore.QSize(0, 45))
+        self.playPauseBtnLg.setMaximumSize(QtCore.QSize(16777215, 45))
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(12)
         font.setBold(True)
         font.setWeight(75)
-        self.playPauseBntLg.setFont(font)
-        self.playPauseBntLg.setText("")
+        self.playPauseBtnLg.setFont(font)
+        self.playPauseBtnLg.setText("")
         icon18 = QtGui.QIcon()
         icon18.addPixmap(
             QtGui.QPixmap(":/other/play.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.playPauseBntLg.setIcon(icon18)
-        self.playPauseBntLg.setIconSize(QtCore.QSize(30, 30))
-        self.playPauseBntLg.setObjectName("playPauseBntLg")
-        self.horizontalLayout_30.addWidget(self.playPauseBntLg)
+        self.playPauseBtnLg.setIcon(icon18)
+        self.playPauseBtnLg.setIconSize(QtCore.QSize(30, 30))
+        self.playPauseBtnLg.setObjectName("playPauseBtnLg")
+        self.horizontalLayout_30.addWidget(self.playPauseBtnLg)
         self.futureBtn = QtWidgets.QPushButton(self.playerBtns)
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Fixed
@@ -1307,7 +1307,7 @@ class UiMainWindow(object):
         )
         self.bookItems.setObjectName("bookItems")
         self.bookItemsLayout = QtWidgets.QWidget()
-        self.bookItemsLayout.setGeometry(QtCore.QRect(0, 0, 492, 172))
+        self.bookItemsLayout.setGeometry(QtCore.QRect(0, 0, 805, 172))
         self.bookItemsLayout.setObjectName("bookItemsLayout")
         self.verticalLayout_10 = QtWidgets.QVBoxLayout(self.bookItemsLayout)
         self.verticalLayout_10.setContentsMargins(0, 0, 0, 0)

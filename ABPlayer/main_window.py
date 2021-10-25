@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 import typing as ty
 
-from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5 import QtWidgets, QtCore, QtGui, QtMultimedia
 
 from database import Books
 from database.tables.books import Status
@@ -26,9 +26,10 @@ if ty.TYPE_CHECKING:
     from database.tables.books import Book, BookItem
 
 
-class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
+class MainWindow(QtWidgets.QMainWindow, UiMainWindow, player.MainWindowPlayer):
     def __init__(self):
         super(MainWindow, self).__init__()
+        player.MainWindowPlayer.__init__(self)
         self.setupUi(self)
 
         self.setWindowFlags(
@@ -44,7 +45,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         # Число запущенных потоков, скачивающих обложки книг
         self.download_cover_thread_count = 0
 
-        self.player = player.Player()
+        # self.player = player.Player()
 
         self.setupSignals()
         self.openLibraryPage()
@@ -128,9 +129,9 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
         )
 
         # PLAYER
-        self.pastBtn.clicked.connect(lambda e: player.rewindTo(self, "past"))
-        self.futureBtn.clicked.connect(lambda e: player.rewindTo(self, "future"))
-        self.playPauseBntLg.clicked.connect(lambda e: self.player.setState(self))
+        self.pastBtn.clicked.connect(lambda e: self.player.rewindToPast())
+        self.futureBtn.clicked.connect(lambda e: self.player.rewindToFuture())
+        self.playPauseBtnLg.clicked.connect(lambda e: self.player.playPause(self))
         self.playPauseBtn.clicked.connect(lambda e: self.player.setState(self))
 
     def openInfoPage(
@@ -188,6 +189,10 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
             self.playerContent.setCurrentWidget(self.playerPage)
             self.book = book_data
 
+            if self.player.book is not ...:
+                if self.book.url == self.player.book.url:
+                    self.book = self.player.book
+
             # Устанавливаем иконку на кнопку "Добавить в избранное"
             icon = QtGui.QIcon()
             if self.book.favorite:
@@ -203,6 +208,15 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
                     QtGui.QIcon.Off,
                 )
             self.toggleFavoriteBtn.setIcon(icon)
+
+            # Иконка кнопки play/pause
+            icon = QtGui.QIcon(
+                ":/other/pause.svg"
+                if self.player.player.state() == QtMultimedia.QMediaPlayer.PlayingState
+                and self.book == self.player.book
+                else ":/other/play.svg"
+            )
+            self.playPauseBtnLg.setIcon(icon)
 
             self.loadPlayer()
 
@@ -325,6 +339,9 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow):
 
         sizes = []  # Размеры всех элементов
         for book in books:
+            if self.player.book is not ...:
+                if book.url == self.player.book:
+                    book = self.player.book
             bookWidget = self._initBookWidget(self.allBooksLayout, book)
             sizes.append(
                 bookWidget.titleLabel.sizeHint().width()

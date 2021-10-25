@@ -125,9 +125,12 @@ class Item(QtWidgets.QFrame, UiItem):
                 )
             sliders.prepareSlider(self.slider)
             self.slider.setValue(done_time)
-            # self.slider.valueChanged.connect(
-            #     lambda value: player.setTime(main_window, value, self)
-            # )
+            self.slider.valueChanged.connect(
+                lambda value: player.showProgress(main_window, value, self)
+            )
+            self.slider.mouseReleaseEvent = lambda e: player.sliderMouseReleaseEvent(
+                main_window, e, self.slider
+            )
         else:
             self.doneTime.hide()
             self.separator.hide()
