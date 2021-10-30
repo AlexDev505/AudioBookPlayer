@@ -403,6 +403,16 @@ def deleteBook(main_window: MainWindow, book: Books = None) -> None:
     """
     book = book or main_window.book
 
+    # TODO: Удаление прослушиваемой книги
+    if main_window.player.book is not ... and main_window.player.book.url == book.url:
+        main_window.openInfoPage(
+            text="Невозможно удалить книгу, пока вы её слушаете.\n"
+            "Начните слушать другую книгу и повторите попытку.",
+            btn_text="В библиотеку",
+            btn_function=main_window.openLibraryPage,
+        )
+        return
+
     if (
         QMessageBox.question(
             main_window,
@@ -419,7 +429,7 @@ def deleteBook(main_window: MainWindow, book: Books = None) -> None:
 
     # Создаем и запускаем новый поток
     main_window.DeleteBookWorker = DeleteBookWorker(main_window, book)
-    main_window.DeleteBookWorker.start()
+    QTimer.singleShot(2000, main_window.DeleteBookWorker.start)
 
 
 def toggleFavorite(main_window: MainWindow, book: Books = None) -> None:
@@ -516,6 +526,19 @@ def changeDriver(main_window: MainWindow) -> None:
         )
         return
 
+    # TODO: Удаление прослушиваемой книги
+    if (
+        main_window.player.book is not ...
+        and main_window.player.book.url == main_window.book.url
+    ):
+        main_window.openInfoPage(
+            text="Невозможно удалить книгу, пока вы её слушаете.\n"
+            "Начните слушать другую книгу и повторите попытку.",
+            btn_text="В библиотеку",
+            btn_function=main_window.openLibraryPage,
+        )
+        return
+
     # Создаём диалог и получаем ссылку
     dlg = InputDialog(main_window)
     url = _get_url(main_window, dlg)
@@ -573,11 +596,11 @@ def listeningProgressTools(main_window: MainWindow) -> None:
             return
 
         listening_progress = main_window.book.listening_progress
-        main_window.progressLabel.setText(f"{listening_progress} прослушано")
         if listening_progress == "0%":
             main_window.book.update(status=Status.new)
         else:
             main_window.book.update(status=Status.started)
+        main_window.loadPlayer()
     else:
         answer = QMessageBox.question(
             main_window,
@@ -590,5 +613,10 @@ def listeningProgressTools(main_window: MainWindow) -> None:
         if answer == QMessageBox.No:
             return
 
-        main_window.progressLabel.setText("Прослушано")
-        main_window.book.update(status=Status.finished)
+        book = main_window.player.book
+        if book is not ... and book.url == main_window.book.url:
+            main_window.player.finish_book()
+            main_window.loadPlayer()
+        else:
+            main_window.book.update(status=Status.finished)
+            main_window.loadPlayer()

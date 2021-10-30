@@ -934,7 +934,7 @@ class UiMainWindow(object):
         self.inProgressBooksContainer.setWidgetResizable(True)
         self.inProgressBooksContainer.setObjectName("inProgressBooksContainer")
         self.inProgressBooksLayout = QtWidgets.QWidget()
-        self.inProgressBooksLayout.setGeometry(QtCore.QRect(0, 0, 92, 18))
+        self.inProgressBooksLayout.setGeometry(QtCore.QRect(0, 0, 890, 601))
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
         )
@@ -995,7 +995,7 @@ class UiMainWindow(object):
         self.listenedBooksContainer.setWidgetResizable(True)
         self.listenedBooksContainer.setObjectName("listenedBooksContainer")
         self.listenedBooksLayout = QtWidgets.QWidget()
-        self.listenedBooksLayout.setGeometry(QtCore.QRect(0, 0, 92, 18))
+        self.listenedBooksLayout.setGeometry(QtCore.QRect(0, 0, 890, 601))
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
         )
@@ -1307,7 +1307,7 @@ class UiMainWindow(object):
         )
         self.bookItems.setObjectName("bookItems")
         self.bookItemsLayout = QtWidgets.QWidget()
-        self.bookItemsLayout.setGeometry(QtCore.QRect(0, 0, 805, 172))
+        self.bookItemsLayout.setGeometry(QtCore.QRect(0, 0, 84, 16))
         self.bookItemsLayout.setObjectName("bookItemsLayout")
         self.verticalLayout_10 = QtWidgets.QVBoxLayout(self.bookItemsLayout)
         self.verticalLayout_10.setContentsMargins(0, 0, 0, 0)
@@ -1844,7 +1844,7 @@ class UiMainWindow(object):
         self.miniPlayerFrame.setObjectName("miniPlayerFrame")
         self.horizontalLayout_7 = QtWidgets.QHBoxLayout(self.miniPlayerFrame)
         self.horizontalLayout_7.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_7.setSpacing(0)
+        self.horizontalLayout_7.setSpacing(10)
         self.horizontalLayout_7.setObjectName("horizontalLayout_7")
         self.bookPreview = QtWidgets.QFrame(self.miniPlayerFrame)
         self.bookPreview.setMinimumSize(QtCore.QSize(150, 60))
@@ -1859,8 +1859,8 @@ class UiMainWindow(object):
         self.bookCover = QtWidgets.QLabel(self.bookPreview)
         self.bookCover.setMinimumSize(QtCore.QSize(60, 60))
         self.bookCover.setMaximumSize(QtCore.QSize(60, 60))
-        self.bookCover.setStyleSheet("background-color: rgb(130, 130, 130);")
         self.bookCover.setText("")
+        self.bookCover.setAlignment(QtCore.Qt.AlignCenter)
         self.bookCover.setObjectName("bookCover")
         self.horizontalLayout_6.addWidget(self.bookCover)
         self.bookTitle = QtWidgets.QFrame(self.bookPreview)
@@ -1880,6 +1880,7 @@ class UiMainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.bookNameLabel.setFont(font)
+        self.bookNameLabel.setStyleSheet("color: rgba(255, 255, 255, 0);")
         self.bookNameLabel.setObjectName("bookNameLabel")
         self.verticalLayout_6.addWidget(self.bookNameLabel)
         self.bookAuthorLabel = QtWidgets.QLabel(self.bookTitle)
@@ -2171,8 +2172,6 @@ class UiMainWindow(object):
         self.searchNewBookLineEdit.setPlaceholderText(
             _translate("MainWindow", "Введите название книги или вставьте ссылку")
         )
-        self.bookNameLabel.setText(_translate("MainWindow", "Название"))
-        self.bookAuthorLabel.setText(_translate("MainWindow", "Автор"))
         self.speedBtn.setToolTip(_translate("MainWindow", "Скорость воспроизведения"))
         self.speedLabel.setText(_translate("MainWindow", "1x"))
         self.volumeBtn.setToolTip(_translate("MainWindow", "Громкость"))
