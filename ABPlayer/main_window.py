@@ -15,6 +15,7 @@ from ui_functions import (
     control_panel,
     filter_panel,
     library,
+    marquee,
     menu,
     player,
     sliders,
@@ -49,6 +50,9 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow, player.MainWindowPlayer):
 
         self.setupSignals()
         self.openLibraryPage()
+
+        marquee.prepareLabel(self, self.bookNameLabel)
+        # marquee.prepareLabel(self, self.bookAuthorLabel)
 
     def setupSignals(self):
         # APPLICATION
@@ -234,7 +238,12 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow, player.MainWindowPlayer):
 
     def loadPlayer(self):
         # Отображаем прогресс прослушивания
-        self.progressLabel.setText(f"{self.book.listening_progress} прослушано")
+        if self.book.status == Status.finished:
+            self.progressLabel.setText("Прослушано")
+            self.progressToolsBtn.setToolTip("Отметить как не прослушанное")
+        else:
+            self.progressLabel.setText(f"{self.book.listening_progress} прослушано")
+            self.progressToolsBtn.setToolTip("Отметить как прослушанное")
 
         # Очищаем от старых элементов
         for children in self.bookItemsLayout.children():

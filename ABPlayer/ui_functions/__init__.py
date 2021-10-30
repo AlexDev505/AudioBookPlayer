@@ -4,6 +4,7 @@ from . import content
 from . import control_panel
 from . import filter_panel
 from . import library
+from . import marquee
 from . import menu
 from . import player
 from . import sliders
