@@ -107,6 +107,8 @@ def volumeSliderHandler(main_window: MainWindow, value: int) -> None:
         volume_icon.addPixmap(QPixmap(":/volume/volume.svg"), QIcon.Normal, QIcon.Off)
         main_window.volumeBtn.setIcon(volume_icon)
 
+    main_window.player.player.setVolume(value)
+
 
 def speedSliderHandler(main_window: MainWindow, value: int) -> None:
     """
@@ -114,11 +116,8 @@ def speedSliderHandler(main_window: MainWindow, value: int) -> None:
     :param main_window: Экземпляр главного окна.
     :param value: Новое значение.
     """
-    value -= 50
-    value *= 2
     value = value // 5 * 5
+    value = 1 + value / 50
 
-    if value == 0:
-        main_window.speedLabel.setText("1x")
-    else:
-        main_window.speedLabel.setText(f"{'+' if abs(value) == value else ''}{value} %")
+    main_window.speedLabel.setText(f"x{value}")
+    main_window.player.player.setPlaybackRate(value)

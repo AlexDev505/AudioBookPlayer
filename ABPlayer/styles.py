@@ -3,8 +3,7 @@ import typing as ty
 
 __all__ = ["get_style_sheet", "DEFAULT_STYLESHEET"]
 
-DEFAULT_STYLESHEET = """
-QWidget {
+DEFAULT_STYLESHEET = """QWidget {
     color: rgb(215, 214, 217);
 }
 
@@ -175,7 +174,7 @@ Line {
     border-radius: 0px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
-    border-left: 1px solid #8E9297;
+    border-left: 1px solid rgb(142, 146, 151);
     padding-left: 2px;
     padding-right: 2px;
 }
@@ -235,16 +234,16 @@ Line {
     background-color: rgb(54, 57, 63);
     border-top-left-radius: 15px;
 }
+/* BUTTONS */
+#infoPageContent QPushButton, #needDownloadingPage QPushButton {
+    padding: 10px;
+    background-color: rgb(47, 49, 54);
+    border: 1px solid rgb(41, 43, 47);
+    border-radius: 5px;
+}
 /* LIBRARY PAGE CONTENT */
 #libraryPageContent QTabWidget * {
     background-color: rgb(54, 57, 63);
-}
-/* SEARCH RESULT PAGE CONTENT */
-#driversList,
-#driversListLayout {
-    background-color: rgb(47, 49, 54);
-    border-top-left-radius: 15px;
-    text-align: left;
 }
 /* BOOK PAGE CONTENT */
 #bookItems {
@@ -270,14 +269,14 @@ Line {
 }
 #allBooksLayout QWidget,
 #inProgressBooksLayout QWidget,
-#listenedBooksLayout QWidget{
+#listenedBooksLayout QWidget {
     background-color: rgba(255, 255, 255, 0);
     color: rgb(215, 214, 217);
 }
 
 #allBooksLayout #frame,
 #inProgressBooksLayout #frame,
-#listenedBooksLayout #frame{
+#listenedBooksLayout #frame {
     background-color: rgb(47, 49, 54);
     border-radius:10px;
 }
@@ -293,13 +292,13 @@ Line {
 #allBooksLayout QPushButton:hover,
 #inProgressBooksLayout QPushButton:hover,
 #listenedBooksLayout QPushButton:hover {
-    background-color: #34373C;
+    background-color: rgb(52, 55, 60);
     border-radius: 5px;
 }
 #allBooksLayout QPushButton:pressed,
 #inProgressBooksLayout QPushButton:pressed,
 #listenedBooksLayout QPushButton:pressed {
-    background-color: #37393F;
+    background-color: rgb(55, 57, 63);
 }
 /* FILTERS PANEL */
 #libraryFiltersPanel {
