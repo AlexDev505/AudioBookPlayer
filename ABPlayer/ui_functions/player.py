@@ -111,7 +111,6 @@ class PlayerInterface(QObject):
         :return:
         """
 
-    @abstractmethod
     def _stateChanged(self, state: QMediaPlayer.State) -> None:
         """
         :param state:

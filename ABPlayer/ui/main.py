@@ -16,267 +16,6 @@ class UiMainWindow(object):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1323, 818)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
-        self.centralwidget.setStyleSheet(
-            "QWidget {\n"
-            "    color: rgb(215, 214, 217)\n"
-            "}\n"
-            "\n"
-            "/* QFrame */\n"
-            "QFrame {\n"
-            "    border: none;\n"
-            "}\n"
-            "\n"
-            "/*  BUTTONS */\n"
-            "QPushButton {\n"
-            "    background-color: rgba(0, 0, 0, 0);\n"
-            "    color: rgb(142, 146, 151);\n"
-            "    border-radius: 5px;    \n"
-            "    border: none;\n"
-            "}\n"
-            "QPushButton:hover {\n"
-            "    background-color: #34373C;\n"
-            "    border-radius: 5px;    \n"
-            "}\n"
-            "QPushButton:pressed {    \n"
-            "    background-color: #37393F;\n"
-            "}\n"
-            "\n"
-            "/* LINE EDIT */\n"
-            "QLineEdit {\n"
-            "    background-color: rgb(64, 68, 75);\n"
-            "    border-radius: 5px;\n"
-            "    padding-left:3px;\n"
-            "    border: none;\n"
-            "}\n"
-            "\n"
-            "/* COMBOBOX */\n"
-            "QComboBox {\n"
-            "    background-color: rgb(64, 68, 75);\n"
-            "    border-radius: 5px;\n"
-            "    border: none;\n"
-            "}\n"
-            "QComboBox QAbstractItemView {\n"
-            "      selection-background-color:  rgb(50, 53, 59);\n"
-            "}\n"
-            "QComboBox::drop-down {\n"
-            "    border: none;\n"
-            "}\n"
-            "QComboBox::down-arrow {\n"
-            "    image: url(:/other/angle_down.svg);\n"
-            "    border: none;\n"
-            "    width: 35px;\n"
-            "    height: 35px;\n"
-            "    padding-right: 20px;\n"
-            "}\n"
-            "\n"
-            "/*  TOOLTIP */\n"
-            "QToolTip {\n"
-            "    border: none;\n"
-            "    background-color: rgb(29, 30, 34);\n"
-            "    border-left: 2px solid rgb(142, 146, 151);\n"
-            "    color: rgb(142, 146, 151);\n"
-            "    text-align: left;\n"
-            "    padding: 4px;\n"
-            "}\n"
-            "\n"
-            "/* SLIDER */\n"
-            "QSlider {\n"
-            "    background-color: rgb(41, 43, 47);\n"
-            "}\n"
-            "QSlider::groove:horizontal {\n"
-            "    background: rgb(64, 68, 75);\n"
-            "    border-radius: 1px;\n"
-            "}\n"
-            "QSlider::sub-page:horizontal {\n"
-            "    background: rgb(142, 146, 151);\n"
-            "    border-radius: 1px;\n"
-            "    height: 40px;\n"
-            "}\n"
-            "QSlider::add-page:horizontal {\n"
-            "    background: rgb(64, 68, 75);\n"
-            "    border-radius: 1px;\n"
-            "    height: 40px;\n"
-            "}\n"
-            "QSlider::handle:horizontal {\n"
-            "    background: rgb(142, 146, 151);\n"
-            "    border: 0px;\n"
-            "    width: 5px;\n"
-            "    margin-top: 0px;\n"
-            "    margin-bottom: 0px;\n"
-            "    border-radius: 1px;\n"
-            "}\n"
-            "\n"
-            "/* TAB WIDGET */\n"
-            "QTabWidget::pane {\n"
-            "    border: none;\n"
-            "} \n"
-            "QTabBar::tab {\n"
-            "    background: rgba(0, 0, 0, 0);\n"
-            "    padding: 10px;\n"
-            "    font-weight: normal;\n"
-            "     border: none;\n"
-            "} \n"
-            "QTabBar::tab:selected {\n"
-            "      background: rgba(0, 0, 0, 0);\n"
-            "    border-top: 2px solid #fff;\n"
-            "    font-weight: bold;\n"
-            "    margin-bottom: -1px; \n"
-            "}\n"
-            "\n"
-            "/*SCROLLBAR */\n"
-            "QScrollArea {\n"
-            "    border: none;\n"
-            "}\n"
-            "/* VERTICAL SCROLLBAR */\n"
-            " QScrollBar:vertical {\n"
-            "    border: none;\n"
-            "    width: 8px;\n"
-            "    margin: 15px 0px 15px 0px;\n"
-            " }\n"
-            "/*  HANDLE BAR VERTICAL */\n"
-            "QScrollBar::handle:vertical {\n"
-            "    background-color: rgb(32, 34, 37);\n"
-            "    min-height: 30px;\n"
-            "    border-radius: 4px;\n"
-            "}\n"
-            "/* BTN TOP - SCROLLBAR */\n"
-            "QScrollBar::sub-line:vertical {\n"
-            "    height: 0px;\n"
-            "}\n"
-            "/* BTN BOTTOM - SCROLLBAR */\n"
-            "QScrollBar::add-line:vertical {\n"
-            "    height: 0px;\n"
-            "}\n"
-            "/* RESET ARROW */\n"
-            "QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {\n"
-            "    background: rgb(46, 51, 56);\n"
-            "    border-radius: 4px;\n"
-            "}\n"
-            "QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {\n"
-            "    background: rgb(46, 51, 56);\n"
-            "    border-radius: 4px;\n"
-            "}\n"
-            "\n"
-            "/* PROGRESS BAR */\n"
-            "QProgressBar {\n"
-            "    background-color: rgb(64, 68, 75);\n"
-            "    border: none;\n"
-            "    border-radius: 5px;\n"
-            "    color: black;\n"
-            "}\n"
-            "QProgressBar::chunk {\n"
-            "    background-color: rgb(142, 146, 151);\n"
-            "    border-radius :5px;\n"
-            "}      \n"
-            "\n"
-            "\n"
-            "/* TOP FRAME */\n"
-            "#topFrame {\n"
-            "    background-color: rgb(32, 34, 37);\n"
-            "}\n"
-            "#logo {\n"
-            "    color: rgb(142, 146, 151);\n"
-            "}\n"
-            "\n"
-            "/*  MENU */\n"
-            "#menuFrame {\n"
-            "    background-color: rgb(32, 34, 37);\n"
-            "}\n"
-            "#menuFrame * {\n"
-            "    text-align: left;\n"
-            "}\n"
-            "#menuFrame QPushButton {\n"
-            "    padding: 6px 10px 6px 10px;\n"
-            "}\n"
-            "\n"
-            "/*  CONTENT */\n"
-            "#content, #stackedWidget, #libraryPage, #bookPage, #addBookPage, #infoPage, #settingsPage {\n"
-            "    background-color: rgb(32, 34, 37);\n"
-            "}\n"
-            "#libraryPageContent, #bookPageContent, #addBookPageContent, #infoPageContent, #settingsPageContent {\n"
-            "    background-color: rgb(54, 57, 63);\n"
-            "    border-top-left-radius: 15px;\n"
-            "}\n"
-            "/* LIBRARY PAGE CONTENT */\n"
-            "#libraryPageContent QTabWidget *{\n"
-            "    background-color: rgb(54, 57, 63);\n"
-            "}\n"
-            "/* SEARCH RESULT PAGE CONTENT */\n"
-            "#driversList, #driversListLayout {\n"
-            "    background-color: rgb(47, 49, 54);\n"
-            "    border-top-left-radius: 15px;\n"
-            "    text-align: left;\n"
-            "}\n"
-            "\n"
-            "/* BOOK PAGE CONTENT */\n"
-            "#bookItems {\n"
-            "    border: 2px solid rgb(64, 68, 75);\n"
-            "    border-radius: 3px;\n"
-            "}\n"
-            "#bookPageContent, #description {\n"
-            "    background-color: rgb(54, 57, 63);\n"
-            "}\n"
-            "#bookItems * {\n"
-            "    background-color: rgb(54, 57, 63);\n"
-            "}\n"
-            "/* PLAYER BTNS */\n"
-            "#playerBtns QPushButton {\n"
-            "    background-color: rgb(64, 68, 75);\n"
-            "    padding: 5px 3px 5px 3px;\n"
-            "}\n"
-            "#playerBtns QPushButton:hover {\n"
-            "    background-color: rgb(58, 62, 68);\n"
-            "}\n"
-            "#playerBtns QPushButton:pressed {\n"
-            "    margin-bottom: -1px;\n"
-            "}\n"
-            "/* PAGES */\n"
-            "#playerPage QScrollBar:vertical {\n"
-            "    margin: 0px;\n"
-            " }\n"
-            "#playerContent, #playerPage, #needDownloadingPage, #downloadingPage {\n"
-            "    background-color: rgb(54, 57, 63);\n"
-            "}\n"
-            "#needDownloadingPage, #downloadingPage{\n"
-            "    border: 2px solid rgb(64, 68, 75);\n"
-            "    border-radius: 3px;\n"
-            "}\n"
-            "/* ITEMS */\n"
-            "#bookItems QSlider {\n"
-            "    border-bottom: 2px solid rgb(64, 68, 75);\n"
-            "}\n"
-            "#playerPage QSlider::handle:horizontal {\n"
-            "    background-color: rgba(64, 68, 75, 0);\n"
-            "}\n"
-            "#bookItems QSlider::sub-page:horizontal {\n"
-            "    background: rgb(142, 146, 151);\n"
-            "}\n"
-            "#bookItems QSlider::add-page:horizontal {\n"
-            "    background: rgb(54, 57, 63);\n"
-            "}\n"
-            "\n"
-            "/* LIBRARY FILTERS PANEL */\n"
-            "#libraryFiltersPanel {\n"
-            "    background-color: rgb(47, 49, 54);\n"
-            "    border-top-left-radius: 15px;\n"
-            "}\n"
-            "#libraryFiltersPanel QFrame {\n"
-            "    background-color: rgb(47, 49, 54);\n"
-            "}\n"
-            "#toggleBooksFilterPanelBtn {\n"
-            "    background-color: rgb(54, 57, 63);\n"
-            "    border-radius: 0px;\n"
-            "    border-top-left-radius: 15px;\n"
-            "}\n"
-            "#toggleBooksFilterPanelBtn:hover {\n"
-            "    background-color: rgb(50, 53, 59);\n"
-            "}\n"
-            "\n"
-            "/*  CONTROL PANEL */\n"
-            "#controlPanel, #controlPanel QFrame {\n"
-            "    background-color: rgb(41, 43, 47);\n"
-            "}"
-        )
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
@@ -285,8 +24,6 @@ class UiMainWindow(object):
         self.topFrame = QtWidgets.QFrame(self.centralwidget)
         self.topFrame.setMinimumSize(QtCore.QSize(0, 28))
         self.topFrame.setMaximumSize(QtCore.QSize(16777215, 28))
-        self.topFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.topFrame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.topFrame.setObjectName("topFrame")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.topFrame)
         self.horizontalLayout_2.setContentsMargins(6, 0, 0, 0)
@@ -309,8 +46,6 @@ class UiMainWindow(object):
         sizePolicy.setHeightForWidth(self.topBtnFrame.sizePolicy().hasHeightForWidth())
         self.topBtnFrame.setSizePolicy(sizePolicy)
         self.topBtnFrame.setMaximumSize(QtCore.QSize(100, 16777215))
-        self.topBtnFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.topBtnFrame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.topBtnFrame.setObjectName("topBtnFrame")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.topBtnFrame)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -318,7 +53,6 @@ class UiMainWindow(object):
         self.minimizeAppBtn = QtWidgets.QPushButton(self.topBtnFrame)
         self.minimizeAppBtn.setMinimumSize(QtCore.QSize(25, 25))
         self.minimizeAppBtn.setMaximumSize(QtCore.QSize(25, 25))
-        self.minimizeAppBtn.setText("")
         icon = QtGui.QIcon()
         icon.addPixmap(
             QtGui.QPixmap(":/other/dash.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
@@ -330,7 +64,6 @@ class UiMainWindow(object):
         self.fullscreenAppBtn = QtWidgets.QPushButton(self.topBtnFrame)
         self.fullscreenAppBtn.setMinimumSize(QtCore.QSize(25, 25))
         self.fullscreenAppBtn.setMaximumSize(QtCore.QSize(25, 25))
-        self.fullscreenAppBtn.setText("")
         icon1 = QtGui.QIcon()
         icon1.addPixmap(
             QtGui.QPixmap(":/other/square.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
@@ -342,7 +75,6 @@ class UiMainWindow(object):
         self.closeAppBtn = QtWidgets.QPushButton(self.topBtnFrame)
         self.closeAppBtn.setMinimumSize(QtCore.QSize(25, 25))
         self.closeAppBtn.setMaximumSize(QtCore.QSize(25, 25))
-        self.closeAppBtn.setText("")
         icon2 = QtGui.QIcon()
         icon2.addPixmap(
             QtGui.QPixmap(":/other/x.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
@@ -385,8 +117,6 @@ class UiMainWindow(object):
         self.menuBtn.setObjectName("menuBtn")
         self.verticalLayout.addWidget(self.menuBtn)
         self.splitLine = QtWidgets.QFrame(self.menuFrame)
-        self.splitLine.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.splitLine.setFrameShadow(QtWidgets.QFrame.Raised)
         self.splitLine.setObjectName("splitLine")
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.splitLine)
         self.horizontalLayout_4.setContentsMargins(20, 0, 20, 0)
@@ -401,7 +131,6 @@ class UiMainWindow(object):
         sizePolicy.setHeightForWidth(self.line.sizePolicy().hasHeightForWidth())
         self.line.setSizePolicy(sizePolicy)
         self.line.setMinimumSize(QtCore.QSize(0, 0))
-        self.line.setStyleSheet("background-color: rgb(45, 47, 50);")
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
@@ -583,28 +312,6 @@ class UiMainWindow(object):
         self.verticalLayout_16.setSpacing(20)
         self.verticalLayout_16.setObjectName("verticalLayout_16")
         self.searchField = QtWidgets.QFrame(self.libraryFiltersFrame)
-        self.searchField.setStyleSheet(
-            "QLineEdit {\n"
-            "    border-radius: 0px;\n"
-            "    border-top-left-radius: 5px;\n"
-            "    border-bottom-left-radius: 5px;\n"
-            "}\n"
-            "QPushButton {\n"
-            "    background-color: rgb(64, 68, 75);\n"
-            "    border-radius: 0px;\n"
-            "    border-top-right-radius: 5px;\n"
-            "    border-bottom-right-radius: 5px;\n"
-            "    border-left: 1px solid #8E9297;\n"
-            "    padding-left: 2px;\n"
-            "    padding-right: 2px;\n"
-            "}\n"
-            "QPushButton:hover {\n"
-            "    background-color: rgb(50, 53, 59);\n"
-            "}\n"
-            "QPushButton:pressed {\n"
-            "    margin-bottom: -1px;\n"
-            "}"
-        )
         self.searchField.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.searchField.setFrameShadow(QtWidgets.QFrame.Raised)
         self.searchField.setObjectName("searchField")
@@ -654,28 +361,6 @@ class UiMainWindow(object):
         self.label_2.setObjectName("label_2")
         self.verticalLayout_8.addWidget(self.label_2)
         self.sortByFrame = QtWidgets.QFrame(self.libraryFiltersFrame)
-        self.sortByFrame.setStyleSheet(
-            "QComboBox {\n"
-            "    border-radius: 0px;\n"
-            "    border-top-left-radius: 5px;\n"
-            "    border-bottom-left-radius: 5px;\n"
-            "}\n"
-            "QPushButton {\n"
-            "    background-color: rgb(64, 68, 75);\n"
-            "    border-radius: 0px;\n"
-            "    border-top-right-radius: 5px;\n"
-            "    border-bottom-right-radius: 5px;\n"
-            "    border-left: 1px solid #8E9297;\n"
-            "    padding-left: 2px;\n"
-            "    padding-right: 2px;\n"
-            "}\n"
-            "QPushButton:hover {\n"
-            "    background-color: rgb(50, 53, 59);\n"
-            "}\n"
-            "QPushButton:pressed {\n"
-            "    margin-bottom: -1px;\n"
-            "}"
-        )
         self.sortByFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.sortByFrame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.sortByFrame.setObjectName("sortByFrame")
@@ -722,28 +407,6 @@ class UiMainWindow(object):
         self.label_3.setObjectName("label_3")
         self.verticalLayout_15.addWidget(self.label_3)
         self.sortAuthorFrame = QtWidgets.QFrame(self.libraryFiltersFrame)
-        self.sortAuthorFrame.setStyleSheet(
-            "QComboBox {\n"
-            "    border-radius: 0px;\n"
-            "    border-top-left-radius: 5px;\n"
-            "    border-bottom-left-radius: 5px;\n"
-            "}\n"
-            "QPushButton {\n"
-            "    background-color: rgb(64, 68, 75);\n"
-            "    border-radius: 0px;\n"
-            "    border-top-right-radius: 5px;\n"
-            "    border-bottom-right-radius: 5px;\n"
-            "    border-left: 1px solid #8E9297;\n"
-            "    padding-left: 2px;\n"
-            "    padding-right: 2px;\n"
-            "}\n"
-            "QPushButton:hover {\n"
-            "    background-color: rgb(50, 53, 59);\n"
-            "}\n"
-            "QPushButton:pressed {\n"
-            "    margin-bottom: -1px;\n"
-            "}"
-        )
         self.sortAuthorFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.sortAuthorFrame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.sortAuthorFrame.setObjectName("sortAuthorFrame")
@@ -793,12 +456,6 @@ class UiMainWindow(object):
         self.label.setObjectName("label")
         self.verticalLayout_3.addWidget(self.label)
         self.libraryFrame = QtWidgets.QFrame(self.libraryBox)
-        self.libraryFrame.setStyleSheet(
-            "#libraryFrame {\n"
-            "    border-top: 2px solid rgb(41, 43, 47);\n"
-            "    border-radius: 2px;\n"
-            "}"
-        )
         self.libraryFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.libraryFrame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.libraryFrame.setObjectName("libraryFrame")
@@ -1023,7 +680,6 @@ class UiMainWindow(object):
         self.horizontalLayout_26.setSpacing(0)
         self.horizontalLayout_26.setObjectName("horizontalLayout_26")
         self.bookPageContent = QtWidgets.QFrame(self.bookPage)
-        self.bookPageContent.setStyleSheet("")
         self.bookPageContent.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.bookPageContent.setFrameShadow(QtWidgets.QFrame.Raised)
         self.bookPageContent.setObjectName("bookPageContent")
@@ -1094,14 +750,6 @@ class UiMainWindow(object):
         )
         self.horizontalLayout_29.addItem(spacerItem3)
         self.bookPageBtnsFrame = QtWidgets.QFrame(self.bookPageContent)
-        self.bookPageBtnsFrame.setStyleSheet(
-            "QPushButton:hover {\n"
-            "    background-color: rgb(50, 53, 59);\n"
-            "}\n"
-            "QPushButton:pressed {\n"
-            "    margin-bottom: -1px;\n"
-            "}"
-        )
         self.bookPageBtnsFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.bookPageBtnsFrame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.bookPageBtnsFrame.setObjectName("bookPageBtnsFrame")
@@ -1206,7 +854,6 @@ class UiMainWindow(object):
         self.bookCoverLg = QtWidgets.QLabel(self.playerFrame)
         self.bookCoverLg.setMinimumSize(QtCore.QSize(230, 230))
         self.bookCoverLg.setMaximumSize(QtCore.QSize(230, 230))
-        self.bookCoverLg.setStyleSheet("")
         self.bookCoverLg.setText("")
         self.bookCoverLg.setAlignment(QtCore.Qt.AlignCenter)
         self.bookCoverLg.setObjectName("bookCoverLg")
@@ -1307,7 +954,7 @@ class UiMainWindow(object):
         )
         self.bookItems.setObjectName("bookItems")
         self.bookItemsLayout = QtWidgets.QWidget()
-        self.bookItemsLayout.setGeometry(QtCore.QRect(0, 0, 84, 16))
+        self.bookItemsLayout.setGeometry(QtCore.QRect(0, 0, 805, 172))
         self.bookItemsLayout.setObjectName("bookItemsLayout")
         self.verticalLayout_10 = QtWidgets.QVBoxLayout(self.bookItemsLayout)
         self.verticalLayout_10.setContentsMargins(0, 0, 0, 0)
@@ -1355,20 +1002,6 @@ class UiMainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.downloadBookBtn.setFont(font)
-        self.downloadBookBtn.setStyleSheet(
-            "QPushButton {\n"
-            "    padding: 10px;\n"
-            "    background-color: rgb(47, 49, 54);\n"
-            "    border: 1px solid #292B2F;\n"
-            "    border-radius: 5px; \n"
-            "}\n"
-            "QPushButton:hover {\n"
-            "    border-color: rgb(47, 49, 54);\n"
-            "}\n"
-            "QPushButton:pressed {\n"
-            "    margin-bottom: -1px;\n"
-            "}"
-        )
         self.downloadBookBtn.setObjectName("downloadBookBtn")
         self.horizontalLayout_32.addWidget(self.downloadBookBtn)
         spacerItem7 = QtWidgets.QSpacerItem(
@@ -1414,14 +1047,6 @@ class UiMainWindow(object):
         self.label_7.setObjectName("label_7")
         self.verticalLayout_24.addWidget(self.label_7)
         self.frame_5 = QtWidgets.QFrame(self.downloadingPage)
-        self.frame_5.setStyleSheet(
-            "QPushButton:hover {\n"
-            "    background-color: rgb(50, 53, 59);\n"
-            "}\n"
-            "QPushButton:pressed {\n"
-            "    margin-bottom: -1px;\n"
-            "}"
-        )
         self.frame_5.setObjectName("frame_5")
         self.horizontalLayout_34 = QtWidgets.QHBoxLayout(self.frame_5)
         self.horizontalLayout_34.setContentsMargins(0, 0, 0, 0)
@@ -1505,7 +1130,6 @@ class UiMainWindow(object):
         font.setBold(False)
         font.setWeight(50)
         self.authorLabel.setFont(font)
-        self.authorLabel.setStyleSheet("")
         self.authorLabel.setObjectName("authorLabel")
         self.verticalLayout_26.addWidget(self.authorLabel)
         self.horizontalLayout_35.addWidget(self.frame_4)
@@ -1536,7 +1160,6 @@ class UiMainWindow(object):
         font.setBold(False)
         font.setWeight(50)
         self.nameLabel.setFont(font)
-        self.nameLabel.setStyleSheet("")
         self.nameLabel.setObjectName("nameLabel")
         self.verticalLayout_27.addWidget(self.nameLabel)
         self.horizontalLayout_35.addWidget(self.frame_3)
@@ -1567,7 +1190,6 @@ class UiMainWindow(object):
         font.setBold(False)
         font.setWeight(50)
         self.readerLabel.setFont(font)
-        self.readerLabel.setStyleSheet("")
         self.readerLabel.setObjectName("readerLabel")
         self.verticalLayout_22.addWidget(self.readerLabel)
         self.horizontalLayout_35.addWidget(self.frame)
@@ -1598,7 +1220,6 @@ class UiMainWindow(object):
         font.setBold(False)
         font.setWeight(50)
         self.durationLabel.setFont(font)
-        self.durationLabel.setStyleSheet("")
         self.durationLabel.setObjectName("durationLabel")
         self.verticalLayout_25.addWidget(self.durationLabel)
         self.horizontalLayout_35.addWidget(self.frame_2)
@@ -1690,28 +1311,6 @@ class UiMainWindow(object):
         self.label_4.setObjectName("label_4")
         self.verticalLayout_17.addWidget(self.label_4)
         self.searchField_2 = QtWidgets.QFrame(self.searchForm)
-        self.searchField_2.setStyleSheet(
-            "QLineEdit {\n"
-            "    border-radius: 0px;\n"
-            "    border-top-left-radius: 5px;\n"
-            "    border-bottom-left-radius: 5px;\n"
-            "}\n"
-            "QPushButton {\n"
-            "    background-color: rgb(64, 68, 75);\n"
-            "    border-radius: 0px;\n"
-            "    border-top-right-radius: 5px;\n"
-            "    border-bottom-right-radius: 5px;\n"
-            "    border-left: 1px solid #8E9297;\n"
-            "    padding-left: 2px;\n"
-            "    padding-right: 2px;\n"
-            "}\n"
-            "QPushButton:hover {\n"
-            "    background-color: rgb(50, 53, 59);\n"
-            "}\n"
-            "QPushButton:pressed {\n"
-            "    margin-bottom: -1px;\n"
-            "}"
-        )
         self.searchField_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.searchField_2.setFrameShadow(QtWidgets.QFrame.Raised)
         self.searchField_2.setObjectName("searchField_2")
@@ -1795,12 +1394,6 @@ class UiMainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.infoPageBtn.setFont(font)
-        self.infoPageBtn.setStyleSheet(
-            "padding: 10px;\n"
-            "background-color: rgb(47, 49, 54);\n"
-            "border: 1px solid #292B2F;\n"
-            "border-radius: 5px; "
-        )
         self.infoPageBtn.setText("")
         self.infoPageBtn.setObjectName("infoPageBtn")
         self.verticalLayout_18.addWidget(self.infoPageBtn)
@@ -1927,16 +1520,12 @@ class UiMainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.toolsFrame.sizePolicy().hasHeightForWidth())
         self.toolsFrame.setSizePolicy(sizePolicy)
-        self.toolsFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.toolsFrame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.toolsFrame.setObjectName("toolsFrame")
         self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.toolsFrame)
         self.horizontalLayout_8.setContentsMargins(0, 0, 5, 0)
         self.horizontalLayout_8.setSpacing(5)
         self.horizontalLayout_8.setObjectName("horizontalLayout_8")
         self.speedBox = QtWidgets.QFrame(self.toolsFrame)
-        self.speedBox.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.speedBox.setFrameShadow(QtWidgets.QFrame.Raised)
         self.speedBox.setObjectName("speedBox")
         self.horizontalLayout_11 = QtWidgets.QHBoxLayout(self.speedBox)
         self.horizontalLayout_11.setContentsMargins(0, 0, 0, 0)
@@ -1958,8 +1547,6 @@ class UiMainWindow(object):
         self.speedFrame = QtWidgets.QFrame(self.speedBox)
         self.speedFrame.setMinimumSize(QtCore.QSize(0, 0))
         self.speedFrame.setMaximumSize(QtCore.QSize(0, 16777215))
-        self.speedFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.speedFrame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.speedFrame.setObjectName("speedFrame")
         self.horizontalLayout_12 = QtWidgets.QHBoxLayout(self.speedFrame)
         self.horizontalLayout_12.setContentsMargins(0, 0, 0, 0)
@@ -1981,8 +1568,6 @@ class UiMainWindow(object):
         self.horizontalLayout_11.addWidget(self.speedFrame)
         self.horizontalLayout_8.addWidget(self.speedBox)
         self.volumeBox = QtWidgets.QFrame(self.toolsFrame)
-        self.volumeBox.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.volumeBox.setFrameShadow(QtWidgets.QFrame.Raised)
         self.volumeBox.setObjectName("volumeBox")
         self.horizontalLayout_10 = QtWidgets.QHBoxLayout(self.volumeBox)
         self.horizontalLayout_10.setContentsMargins(5, 0, 0, 0)
@@ -2091,7 +1676,7 @@ class UiMainWindow(object):
         self.retranslateUi(MainWindow)
         self.stackedWidget.setCurrentIndex(0)
         self.library.setCurrentIndex(0)
-        self.playerContent.setCurrentIndex(0)
+        self.playerContent.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
