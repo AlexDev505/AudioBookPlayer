@@ -1558,7 +1558,7 @@ class UiMainWindow(object):
         self.speedSlider.setStyleSheet("")
         self.speedSlider.setMaximum(100)
         self.speedSlider.setSingleStep(10)
-        self.speedSlider.setProperty("value", 50)
+        self.speedSlider.setProperty("value", 0)
         self.speedSlider.setOrientation(QtCore.Qt.Horizontal)
         self.speedSlider.setObjectName("speedSlider")
         self.horizontalLayout_12.addWidget(self.speedSlider)
