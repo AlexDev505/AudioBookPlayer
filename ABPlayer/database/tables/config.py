@@ -10,7 +10,7 @@ class Config(Table):
     """
 
     books_folder: str = "книги"
-    theme: str = ""
+    theme: str = "Тёмная"
 
     @classmethod
     def init(cls) -> None:

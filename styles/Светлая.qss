@@ -1,0 +1,357 @@
+QWidget {
+    color: rgb(106, 116, 128);
+}
+
+QFrame {
+    border: none;
+}
+
+/*  BUTTONS */
+QPushButton {
+    background-color: rgba(0, 0, 0, 0);
+    color: rgb(106, 116, 128);
+    border-radius: 5px;
+    border: none;
+}
+QPushButton:hover {
+    background-color: rgb(218, 221, 226);
+    border-radius: 5px;
+}
+QPushButton:pressed {
+    background-color: rgb(212, 215, 220);
+}
+
+/* LINE EDIT */
+QLineEdit {
+    background-color: rgb(235, 237, 239);
+    border-radius: 5px;
+    padding-left:3px;
+    border: none;
+}
+
+/* COMBOBOX */
+QComboBox {
+    background-color: rgb(235, 237, 239);
+    border-radius: 5px;
+    border: none;
+}
+QComboBox QAbstractItemView {
+    selection-background-color:  rgb(235, 237, 239);
+	selection-color: rgb(106, 116, 128);
+}
+QComboBox::drop-down {
+    border: none;
+}
+QComboBox::down-arrow {
+    image: url(:/other/angle_down.svg);
+    border: none;
+    width: 35px;
+    height: 35px;
+    padding-right: 20px;
+}
+
+/*  TOOLTIP */
+QToolTip {
+    background-color: rgb(234, 236, 239);
+    color: rgb(106, 116, 128);
+    border: none;
+    border-left: 2px solid rgb(106, 116, 128);
+    text-align: left;
+    padding: 4px;
+}
+
+/* SLIDER */
+QSlider {
+    background-color: rgba(0, 0, 0, 0);
+}
+QSlider::groove:horizontal {
+    background: rgb(159, 161, 162);
+    border-radius: 1px;
+}
+QSlider::sub-page:horizontal {
+    background: rgb(159, 161, 162);
+    border-radius: 1px;
+    height: 40px;
+}
+QSlider::add-page:horizontal {
+    background: rgb(227, 229, 231);
+    border-radius: 1px;
+    height: 40px;
+}
+QSlider::handle:horizontal {
+    background: rgb(159, 161, 162);
+    border: 0px;
+    width: 5px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    border-radius: 1px;
+}
+
+/* TAB WIDGET */
+QTabWidget::pane {
+    border: none;
+}
+QTabBar::tab {
+    background: rgba(0, 0, 0, 0);
+    padding: 10px;
+    font-weight: normal;
+    border: none;
+}
+QTabBar::tab:selected {
+    background: rgba(0, 0, 0, 0);
+    border-top: 2px solid rgb(0, 0, 0);
+    font-weight: bold;
+    margin-bottom: -1px;
+}
+
+/*SCROLLBAR */
+QScrollArea {
+    border: none;
+}
+/* VERTICAL SCROLLBAR */
+QScrollBar:vertical {
+    border: none;
+    width: 8px;
+    margin: 15px 0px 15px 0px;
+}
+/* HANDLE BAR VERTICAL */
+QScrollBar::handle:vertical {
+    background-color: rgb(204, 204, 204);
+    min-height: 30px;
+    border-radius: 4px;
+}
+/* BTN TOP */
+QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+/* BTN BOTTOM */
+QScrollBar::add-line:vertical {
+    height: 0px;
+}
+/* RESET ARROW */
+QScrollBar::up-arrow:vertical
+QScrollBar::down-arrow:vertical,
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical {
+    background: rgb(242, 242, 242);
+    border-radius: 4px;
+}
+
+/* PROGRESS BAR */
+QProgressBar {
+    background-color: rgb(235, 237, 239);
+    border: none;
+    border-radius: 5px;
+    color: black;
+}
+QProgressBar::chunk {
+    background-color: rgb(106, 116, 128);
+    border-radius :5px;
+}
+
+/* LINE */
+Line {
+    background-color: rgb(209, 211, 215);
+}
+
+
+/* INPUT FIELD */
+#searchField QLineEdit,
+#searchField_2 QLineEdit {
+    border-radius: 0px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+#searchField QPushButton,
+#searchField_2 QPushButton,
+#sortAuthorFrame QPushButton,
+#sortByFrame QPushButton {
+    background-color: rgb(235, 237, 239);
+    border-radius: 0px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-left: 1px solid rgb(106, 116, 128);
+    padding-left: 2px;
+    padding-right: 2px;
+}
+#searchField QPushButton:hover,
+#searchField_2 QPushButton:hover,
+#sortAuthorFrame QPushButton:hover,
+#sortByFrame QPushButton:hover {
+    background-color: rgb(242, 243, 245);
+}
+#searchField QPushButton:pressed,
+#searchField_2 QPushButton:pressed,
+#sortAuthorFrame QPushButton:pressed,
+#sortByFrame QPushButton:pressed {
+    margin-bottom: -1px;
+}
+#sortAuthorFrame QComboBox,
+#sortByFrame QComboBox {
+    border-radius: 0px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+/* TOP FRAME */
+#topFrame {
+    background-color: rgb(227, 229, 232);
+}
+#logo {
+    color: rgb(116, 127, 141);
+}
+
+/*  MENU */
+#menuFrame {
+    background-color: rgb(227, 229, 232);
+}
+#menuFrame * {
+    text-align: left;
+}
+#menuFrame QPushButton {
+    padding: 6px 10px 6px 10px;
+}
+
+/*  CONTENT */
+#content,
+#stackedWidget,
+#libraryPage,
+#bookPage,
+#addBookPage,
+#infoPage,
+#settingsPage {
+    background-color: rgb(227, 229, 232);
+}
+#libraryPageContent,
+#bookPageContent,
+#addBookPageContent,
+#infoPageContent,
+#settingsPageContent {
+    background-color: rgb(255, 255, 255);
+    border-top-left-radius: 15px;
+}
+/* BUTTONS */
+#infoPageContent QPushButton, #needDownloadingPage QPushButton {
+    padding: 10px;
+    background-color: rgb(242, 243, 245);
+    border: 1px solid  rgb(235, 237, 239);
+    border-radius: 5px;
+}
+/* LIBRARY PAGE CONTENT */
+#libraryPageContent QTabWidget * {
+    background-color: rgb(255, 255, 255);
+}
+/* BOOK PAGE CONTENT */
+#bookItems {
+    border: 2px solid  rgb(235, 237, 239);
+    border-radius: 3px;
+}
+#bookPageContent,
+#description,
+#bookItems * {
+    background-color:  rgb(255, 255, 255);
+}
+#bookPageContent QPushButton:hover {
+    background-color: rgb(242, 243, 245);
+}
+#bookPageContent QPushButton:pressed {
+    margin-bottom: -1px;
+}
+
+/* LIBRARY */
+#libraryFrame {
+    border-top: 2px solid rgb(235, 237, 239);
+    border-radius: 2px;
+}
+#allBooksLayout QWidget,
+#inProgressBooksLayout QWidget,
+#listenedBooksLayout QWidget {
+    background-color: rgba(255, 255, 255, 0);
+}
+
+#allBooksLayout #frame,
+#inProgressBooksLayout #frame,
+#listenedBooksLayout #frame{
+    background-color: rgb(242, 243, 245);
+    border-radius:10px;
+}
+
+#allBooksLayout QPushButton,
+#inProgressBooksLayout QPushButton,
+#listenedBooksLayout QPushButton {
+    background-color: rgba(0, 0, 0, 0);
+    color: rgb(106, 116, 128);
+    border-radius: 5px;
+    border: none;
+}
+#allBooksLayout QPushButton:hover,
+#inProgressBooksLayout QPushButton:hover,
+#listenedBooksLayout QPushButton:hover {
+    background-color: rgb(218, 221, 226);
+    border-radius: 5px;
+}
+#allBooksLayout QPushButton:pressed,
+#inProgressBooksLayout QPushButton:pressed,
+#listenedBooksLayout QPushButton:pressed {
+    background-color: rgb(212, 215, 220);
+}
+/* FILTERS PANEL */
+#libraryFiltersPanel {
+    background-color: rgb(242, 243, 245);
+    border-top-left-radius: 15px;
+}
+#libraryFiltersPanel QFrame {
+    background-color: rgb(242, 243, 245);
+}
+#toggleBooksFilterPanelBtn {
+    background-color: rgb(255, 255, 255);
+    border-radius: 0px;
+    border-top-left-radius: 15px;
+}
+#toggleBooksFilterPanelBtn:hover {
+    background-color: rgb(246, 247, 249);
+}
+
+/* PLAYER */
+/* PLAYER BTNS */
+#playerBtns QPushButton {
+    background-color: rgb(235, 237, 239);
+    padding: 5px 3px 5px 3px;
+}
+#playerBtns QPushButton:hover {
+    background-color: rgb(225, 227, 229);
+}
+/* PAGES */
+#playerPage QScrollBar:vertical {
+    margin: 0px;
+ }
+#playerContent,
+#playerPage,
+#needDownloadingPage,
+#downloadingPage {
+    background-color: rgb(255, 255, 255);
+}
+#needDownloadingPage,
+#downloadingPage{
+    border: 2px solid rgb(235, 237, 239);
+    border-radius: 3px;
+}
+/* ITEMS */
+#bookItems QSlider {
+    border-bottom: 2px solid rgb(235, 237, 239);
+}
+#playerPage QSlider::handle:horizontal {
+    background-color: rgba(159, 161, 162, 0);
+}
+#bookItems QSlider::sub-page:horizontal {
+    background: rgb(159, 161, 162);
+}
+#bookItems QSlider::add-page:horizontal {
+    background: rgb(255, 255, 255);
+}
+
+/*  CONTROL PANEL */
+#controlPanel,
+#controlPanel QFrame {
+    background-color: rgb(235, 237, 239);
+}

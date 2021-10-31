@@ -24,40 +24,6 @@ class UiBook(object):
         Book.setSizePolicy(sizePolicy)
         Book.setMinimumSize(QtCore.QSize(750, 0))
         Book.setMaximumSize(QtCore.QSize(16777215, 240))
-        Book.setStyleSheet(
-            "QWidget {\n"
-            "    background-color: rgba(255, 255, 255, 0);\n"
-            "    color: rgb(215, 214, 217)\n"
-            "}\n"
-            "\n"
-            "#frame {\n"
-            "    background-color: rgb(47, 49, 54);\n"
-            "    border-radius:10px;\n"
-            "}\n"
-            "\n"
-            "QPushButton {\n"
-            "    background-color: rgba(0, 0, 0, 0);\n"
-            "    color: rgb(142, 146, 151);\n"
-            "    border-radius: 5px;    \n"
-            "    border: none;\n"
-            "}\n"
-            "QPushButton:hover {\n"
-            "    background-color: #34373C;\n"
-            "    border-radius: 5px;    \n"
-            "}\n"
-            "QPushButton:pressed {    \n"
-            "    background-color: #37393F;\n"
-            "}\n"
-            "\n"
-            "QToolTip {\n"
-            "    border: none;\n"
-            "    background-color: rgb(29, 30, 34);\n"
-            "    border-left: 2px solid rgb(142, 146, 151);\n"
-            "    color: rgb(142, 146, 151);\n"
-            "    text-align: left;\n"
-            "    padding: 4px;\n"
-            "}"
-        )
         self.verticalLayout = QtWidgets.QVBoxLayout(Book)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setSpacing(0)
@@ -70,7 +36,6 @@ class UiBook(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.frame.sizePolicy().hasHeightForWidth())
         self.frame.setSizePolicy(sizePolicy)
-        self.frame.setStyleSheet("")
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
@@ -80,7 +45,6 @@ class UiBook(object):
         self.horizontalLayout_7.setObjectName("horizontalLayout_7")
         self.cover = QtWidgets.QLabel(self.frame)
         self.cover.setMinimumSize(QtCore.QSize(200, 200))
-        self.cover.setText("")
         self.cover.setAlignment(QtCore.Qt.AlignCenter)
         self.cover.setObjectName("cover")
         self.horizontalLayout_7.addWidget(self.cover)

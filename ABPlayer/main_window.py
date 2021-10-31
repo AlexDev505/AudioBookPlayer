@@ -21,6 +21,7 @@ from ui_functions import (
     sliders,
     window_geometry,
 )
+import styles
 
 if ty.TYPE_CHECKING:
     from PyQt5.QtCore import QObject, QEvent
@@ -32,6 +33,10 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow, player.MainWindowPlayer):
         super(MainWindow, self).__init__()
         player.MainWindowPlayer.__init__(self)
         self.setupUi(self)
+
+        self.centralwidget.setStyleSheet(
+            styles.get_style_sheet(os.environ["theme"]) or styles.DEFAULT_STYLESHEET
+        )
 
         self.setWindowFlags(
             QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowMinimizeButtonHint
