@@ -1,7 +1,13 @@
+"""
+
+Реализует взаимодействие с доступными темами.
+
+"""
+
 import os
 import typing as ty
 
-__all__ = ["get_style_sheet", "DEFAULT_STYLESHEET"]
+__all__ = ["get_style_sheet"]
 
 DEFAULT_STYLESHEET = """QWidget {
     color: rgb(215, 214, 217);
@@ -379,15 +385,20 @@ Line {
 }
 """
 
-styles: ty.Dict[str, str] = {}
+styles: ty.Dict[str, str] = {}  # {<название темы>: <путь к файлу>}
 for root, _, files in os.walk(os.path.join(os.environ["APP_DIR"], "styles")):
     for file in files:
         if file.endswith(".qss"):
             styles[file.split(".qss")[0]] = os.path.join(root, file)
 
 
-def get_style_sheet(name: str) -> ty.Union[str, None]:
+def get_style_sheet(name: str) -> str:
+    """
+    :param name: Название темы.
+    :return: StyleSheet.
+    """
     file_path = styles.get(name)
     if file_path:
         with open(file_path, encoding="utf-8") as f:
             return f.read()
+    return DEFAULT_STYLESHEET

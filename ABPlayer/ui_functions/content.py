@@ -1,3 +1,9 @@
+"""
+
+Модификация метода изменения страницы.
+
+"""
+
 from __future__ import annotations
 
 import typing as ty
@@ -13,9 +19,13 @@ if ty.TYPE_CHECKING:
 def setCurrentPage(main_window: MainWindow, page: QWidget) -> None:
     """
     Замена стандартному `stackedWidget.setCurrentPage`.
+
     Необходимо, потому что PyQt не успевает обновить
     минимальный размер `main_window.library`, из-за чего на других страницах
     нельзя уменьшить окно меньше чем, по факту возможно.
+
+    Показывает/скрывает полосу загрузки на панели управления.
+
     :param main_window: Экземпляр главного окна.
     :param page: Новая страница.
     """
@@ -49,7 +59,13 @@ def setCurrentPage(main_window: MainWindow, page: QWidget) -> None:
             main_window.pb_animation.deleteLater()
             main_window.__dict__.__delitem__("pb_animation")
 
-    if (
+    if main_window.stackedWidget.currentWidget() == main_window.infoPage:
+        main_window.infoPageLabel.setText("")
+        QTimer.singleShot(
+            100,
+            lambda: QStackedWidget.setCurrentWidget(main_window.stackedWidget, page),
+        )  # Меняем страницу через 1 миллисекунду
+    elif (
         main_window.stackedWidget.currentWidget() == main_window.libraryPage
         and page != main_window.libraryPage
     ):

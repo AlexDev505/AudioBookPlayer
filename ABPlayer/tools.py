@@ -1,3 +1,9 @@
+"""
+
+Функции и классы, которые используются в приложении.
+
+"""
+
 import typing as ty
 from abc import abstractmethod
 
@@ -32,23 +38,36 @@ class Cache(object):
 
 
 class BaseWorker(QObject):
+    """
+    Базовый класс для функций, работающих в отдельном потоке.
+    """
+
     def __new__(cls, *args, **kwargs):
         self = super(BaseWorker, cls).__new__(cls, *args, **kwargs)
         self.__init__(*args, **kwargs)
-        self.thread = QThread()
+        self.thread = QThread()  # Создаем новый поток
         self.moveToThread(self.thread)
         self.thread.started.connect(self.worker)
         return self
 
     @abstractmethod
     def worker(self) -> None:
-        pass
+        """
+        Необходимо реализовать в наследуемом классе.
+        Функция, которая будет выполняться в другом потоке.
+        """
 
     @abstractmethod
     def connectSignals(self) -> None:
-        pass
+        """
+        Необходимо реализовать в наследуемом классе.
+        Подключение обработчиков к сигналам.
+        """
 
     def start(self) -> None:
+        """
+        Запуск потока.
+        """
         self.connectSignals()
         self.thread.start()
 

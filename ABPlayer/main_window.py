@@ -1,11 +1,29 @@
+"""
+
+Главное окно приложения.
+Соединяет весь функционал.
+
+"""
+
 from __future__ import annotations
 
 import os
 import typing as ty
 import webbrowser
 
-from PyQt5 import QtWidgets, QtCore, QtGui, QtMultimedia
+from PyQt5.QtCore import QSize, QTimer, Qt
+from PyQt5.QtGui import QFontMetrics, QIcon, QMovie
+from PyQt5.QtMultimedia import QMediaPlayer
+from PyQt5.QtWidgets import (
+    QFrame,
+    QMainWindow,
+    QSizePolicy,
+    QSpacerItem,
+    QVBoxLayout,
+    QWidget,
+)
 
+import styles
 from database import Books
 from database.tables.books import Status
 from ui import UiMainWindow, UiBook, Item
@@ -18,47 +36,50 @@ from ui_functions import (
     library,
     marquee,
     menu,
-    settings_page,
     player,
+    settings_page,
     sliders,
     window_geometry,
 )
-import styles
 
 if ty.TYPE_CHECKING:
-    from PyQt5.QtCore import QObject, QEvent
-    from database.tables.books import Book, BookItem
+    from PyQt5.QtCore import QEvent, QObject
+    from database.tables.books import Book
 
 
-class MainWindow(QtWidgets.QMainWindow, UiMainWindow, player.MainWindowPlayer):
+class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
     def __init__(self):
         super(MainWindow, self).__init__()
         player.MainWindowPlayer.__init__(self)
         self.setupUi(self)
 
-        self.centralwidget.setStyleSheet(
-            styles.get_style_sheet(os.environ["theme"]) or styles.DEFAULT_STYLESHEET
-        )
+        # Применяем настройки темы
+        self.centralwidget.setStyleSheet(styles.get_style_sheet(os.environ["theme"]))
 
-        self.setWindowFlags(
-            QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowMinimizeButtonHint
-        )
-        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        # Окно без рамок
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowMinimizeButtonHint)
+        self.setAttribute(Qt.WA_TranslucentBackground)
 
         self.downloadable_book: Book = ...  # Книга, которую скачиваем
         self.book: Books = ...  # Открытая книга
-        self.current_item_widget: Item = ...
-        self.favorite_books_page: bool = False
+        self.current_item_widget: Item = ...  # Виджет главы
+        self.favorite_books_page: bool = (
+            False  # Находимся ли мы на странице избранных книг
+        )
         self.search_on: bool = False  # Нужно ли производить поиск по ключевым словам
         # Число запущенных потоков, скачивающих обложки книг
         self.download_cover_thread_count = 0
 
         self.setupSignals()
-        self.openLibraryPage()
+        self.openLibraryPage()  # При запуске приложения открываем библиотеку
 
+        # Модифицируем QLabel, превращая его в marquee
         marquee.prepareLabel(self, self.bookNameLabel)
 
+        # Указываем версию приложения
         self.appBuildVersionLabel.setText(f"Версия: {os.environ['version']}")
+
+        # Заполняем QComboBox темами
         for style in styles.styles:
             self.themeSelecror.addItem(style)
         if not len(styles.styles):
@@ -79,37 +100,33 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow, player.MainWindowPlayer):
             self.themeSelecror.currentIndexChanged.connect(
                 lambda e: settings_page.changeTheme(self)
             )
-        fm = QtGui.QFontMetrics(self.themeSelecror.font())
+        # Устанавливаем минимальный размер QComboBox
+        fm = QFontMetrics(self.themeSelecror.font())
         items: ty.List[int] = []
         for i in range(self.themeSelecror.count()):
             items.append(fm.width(self.themeSelecror.itemText(i)) + 80)
         self.themeSelecror.setMinimumWidth(max(items))
 
-    def setupSignals(self):
+    def setupSignals(self) -> None:
         # APPLICATION
         self.stackedWidget.setCurrentWidget = lambda page: content.setCurrentPage(
             self, page
-        )
+        )  # Модифицируем метод изменения страницы
 
-        self.closeAppBtn.clicked.connect(self.close)
+        self.closeAppBtn.clicked.connect(self.close)  # Кнопка закрытия приложения
         self.fullscreenAppBtn.clicked.connect(
             lambda: window_geometry.toggleFullScreen(self)
-        )
-        self.minimizeAppBtn.clicked.connect(self.showMinimized)
+        )  # Кнопка открытия приложения в полный экран
+        self.minimizeAppBtn.clicked.connect(self.showMinimized)  # Кнопка сворачивания
 
-        self.logo.mousePressEvent = lambda e: window_geometry.dragZonePressEvent(
-            self, e
-        )
-        self.logo.mouseMoveEvent = lambda e: window_geometry.dragZoneMoveEvent(self, e)
-        self.logo.mouseReleaseEvent = lambda e: window_geometry.dragZoneReleaseEvent(
-            self, e
-        )
+        # Подготавливаем область, отвечающую за перемещение окна
+        window_geometry.prepareDragZone(self, self.logo)
 
         # MENU
         self.menuBtn.clicked.connect(lambda e: menu.toggleMenu(self))
         self.menuButtons.buttonClicked.connect(
             lambda btn: menu.buttonsHandler(self, btn)
-        )
+        )  # Нажатие на кнопки в меню
 
         # LIBRARY
         self.toggleBooksFilterPanelBtn.clicked.connect(
@@ -124,6 +141,9 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow, player.MainWindowPlayer):
         self.sortBy.currentIndexChanged.connect(lambda e: self.openLibraryPage())
         self.sortAuthor.currentIndexChanged.connect(lambda e: self.openLibraryPage())
         self.searchBookBtn.clicked.connect(lambda e: filter_panel.search(self))
+        self.searchBookLineEdit.returnPressed.conncet(
+            lambda e: filter_panel.search(self)
+        )
 
         # CONTROL PANEL
         self.controlPanelButtons.buttonClicked.connect(
@@ -143,10 +163,13 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow, player.MainWindowPlayer):
         book_page.prepareProgressBar(self.downloadingProgressBar)
         self.downloadingProgressBar.mousePressEvent = lambda e: self.openBookPage(
             self.downloadable_book
-        )
+        )  # Нажатие на полосу загрузки
 
         # ADD BOOK PAGE
         self.searchNewBookBtn.clicked.connect(lambda e: add_book_page.search(self))
+        self.searchNewBookLineEdit.returnPressed.conncet(
+            lambda e: add_book_page.search(self)
+        )
 
         # BOOK PAGE
         self.progressToolsBtn.clicked.connect(
@@ -189,10 +212,17 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow, player.MainWindowPlayer):
     def openInfoPage(
         self,
         text: str = "",
-        movie: QtGui.QMovie = None,
+        movie: QMovie = None,
         btn_text: str = "",
         btn_function: ty.Callable = None,
-    ):
+    ) -> None:
+        """
+        Открывает информационную страницу.
+        :param text: Сообщение.
+        :param movie: Анимация.
+        :param btn_text: Текст на кнопке.
+        :param btn_function: Функция кнопки.
+        """
         self.infoPageLabel.setMovie(movie)
         self.infoPageLabel.setText(text)
         if movie:
@@ -205,19 +235,24 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow, player.MainWindowPlayer):
             self.infoPageBtn.hide()
         self.stackedWidget.setCurrentWidget(self.infoPage)
 
-    def openLoadingPage(self):
-        movie = QtGui.QMovie(":/other/loading.gif")
-        movie.setScaledSize(QtCore.QSize(50, 50))
+    def openLoadingPage(self) -> None:
+        """
+        Открывает страницу загрузки.
+        """
+        movie = QMovie(":/other/loading.gif")
+        movie.setScaledSize(QSize(50, 50))
         self.openInfoPage(movie=movie)
 
-    def openBookPage(self, book: Book):
-        item: BookItem
-
+    def openBookPage(self, book: ty.Union[Book, Books]) -> None:
+        """
+        Открывает страницу книги.
+        :param book: Экземпляр скачанной или не скачанной книги.
+        """
         self.book = book
 
         book_data = Books(os.environ["DB_PATH"]).filter(
             author=self.book.author, name=self.book.name
-        )
+        )  # Получаем информацию о книге из бд
         if not book_data:  # Книга не зарегистрирована в бд
             self.progressFrame.hide()
             self.toggleFavoriteBtn.hide()
@@ -241,30 +276,21 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow, player.MainWindowPlayer):
             self.playerContent.setCurrentWidget(self.playerPage)
             self.book = book_data
 
+            # Если эту книгу сейчас слушает пользователь
             if self.player.book is not ...:
                 if self.book.url == self.player.book.url:
                     self.book = self.player.book
 
             # Устанавливаем иконку на кнопку "Добавить в избранное"
-            icon = QtGui.QIcon()
-            if self.book.favorite:
-                icon.addPixmap(
-                    QtGui.QPixmap(":/other/star_fill.svg"),
-                    QtGui.QIcon.Normal,
-                    QtGui.QIcon.Off,
-                )
-            else:
-                icon.addPixmap(
-                    QtGui.QPixmap(":/other/star.svg"),
-                    QtGui.QIcon.Normal,
-                    QtGui.QIcon.Off,
-                )
+            icon = QIcon(
+                ":/other/star_fill.svg" if self.book.favorite else ":/other/star.svg"
+            )
             self.toggleFavoriteBtn.setIcon(icon)
 
             # Иконка кнопки play/pause
-            icon = QtGui.QIcon(
+            icon = QIcon(
                 ":/other/pause.svg"
-                if self.player.player.state() == QtMultimedia.QMediaPlayer.PlayingState
+                if self.player.player.state() == QMediaPlayer.PlayingState
                 and self.book == self.player.book
                 else ":/other/play.svg"
             )
@@ -284,7 +310,10 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow, player.MainWindowPlayer):
 
         self.stackedWidget.setCurrentWidget(self.bookPage)
 
-    def loadPlayer(self):
+    def loadPlayer(self) -> None:
+        """
+        Обновляет плеер.
+        """
         # Отображаем прогресс прослушивания
         if self.book.status == Status.finished:
             self.progressLabel.setText("Прослушано")
@@ -295,12 +324,12 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow, player.MainWindowPlayer):
 
         # Очищаем от старых элементов
         for children in self.bookItemsLayout.children():
-            if not isinstance(children, QtWidgets.QVBoxLayout):
+            if not isinstance(children, QVBoxLayout):
                 children.hide()
                 children.deleteLater()
         for i in reversed(range(self.bookItemsLayout.layout().count())):
             item = self.bookItemsLayout.layout().itemAt(i)
-            if isinstance(item, QtWidgets.QSpacerItem):
+            if isinstance(item, QSpacerItem):
                 self.bookItemsLayout.layout().removeItem(item)
 
         # Инициализируем элементы
@@ -311,9 +340,10 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow, player.MainWindowPlayer):
                 )
                 continue
             Item(self, self.bookItemsLayout, item)
+
         # Автоматически прокручиваем к текущему элементу
         self.bookItems.scroll(0, 50 * self.book.stop_flag.item)
-        QtCore.QTimer.singleShot(
+        QTimer.singleShot(
             250,
             lambda: self.bookItems.verticalScrollBar().setValue(
                 self.book.stop_flag.item * 50
@@ -321,12 +351,18 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow, player.MainWindowPlayer):
         )
 
         # Прижимаем элементы к верхнему краю
-        bookItemsSpacer = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+        bookItemsSpacer = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Expanding
         )
         self.bookItemsLayout.layout().addItem(bookItemsSpacer)
 
-    def openLibraryPage(self, books_ids: ty.List[int] = None):
+    def openLibraryPage(self, books_ids: ty.List[int] = None) -> None:
+        """
+        Открывает страницу библиотеки.
+        :param books_ids: ID книг, которые прошли фильтрацию.
+        """
+        # Возникает при изменении параметров сортировки во время
+        # поиска книг по ключевым словам
         if self.search_on and books_ids is None:
             filter_panel.search(self)
             return
@@ -350,7 +386,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow, player.MainWindowPlayer):
 
         books: ty.List[Books] = Books(os.environ["DB_PATH"]).filter(
             return_list=True, **filter_kwargs
-        )
+        )  # Запрос к бд
         if books_ids is not None:
             books = [book for book in books if book.id in books_ids]
 
@@ -367,21 +403,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow, player.MainWindowPlayer):
         if self.invertSortBtn.isChecked():
             books.reverse()
 
-        # Удаляем старые элементы
-        for layout in [
-            self.allBooksLayout,
-            self.inProgressBooksLayout,
-            self.listenedBooksLayout,
-        ]:
-            for children in layout.children():
-                if not isinstance(children, QtWidgets.QVBoxLayout):
-                    children.hide()
-                    children.deleteLater()
-            for i in reversed(range(layout.layout().count())):
-                item = layout.layout().itemAt(i)
-                if isinstance(item, QtWidgets.QSpacerItem):
-                    layout.layout().removeItem(item)
-
+        # Заполняем QComboBox авторами
         self.sortAuthor.currentIndexChanged.disconnect()
         self.sortAuthor.clear()
         self.sortAuthor.addItem("Все")
@@ -394,7 +416,23 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow, player.MainWindowPlayer):
             )
         self.sortAuthor.currentIndexChanged.connect(lambda e: self.openLibraryPage())
 
+        # Удаляем старые элементы
+        for layout in [
+            self.allBooksLayout,
+            self.inProgressBooksLayout,
+            self.listenedBooksLayout,
+        ]:
+            for children in layout.children():
+                if not isinstance(children, QVBoxLayout):
+                    children.hide()
+                    children.deleteLater()
+            for i in reversed(range(layout.layout().count())):
+                item = layout.layout().itemAt(i)
+                if isinstance(item, QSpacerItem):
+                    layout.layout().removeItem(item)
+
         sizes = []  # Размеры всех элементов
+        # Инициализируем элементы
         for book in books:
             if self.player.book is not ...:
                 if book.url == self.player.book:
@@ -418,8 +456,8 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow, player.MainWindowPlayer):
             self.allBooksContainer.show()
             self.allBooksPageNothing.hide()
             # Прижимаем элементы к верхнему краю
-            allBooksContainerSpacer = QtWidgets.QSpacerItem(
-                40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+            allBooksContainerSpacer = QSpacerItem(
+                40, 20, QSizePolicy.Expanding, QSizePolicy.Expanding
             )
             self.allBooksLayout.layout().addItem(allBooksContainerSpacer)
 
@@ -430,8 +468,8 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow, player.MainWindowPlayer):
             self.inProgressBooksContainer.show()
             self.inProsessBooksPageNothing.hide()
             # Прижимаем элементы к верхнему краю
-            inProgressBooksContainerSpacer = QtWidgets.QSpacerItem(
-                40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+            inProgressBooksContainerSpacer = QSpacerItem(
+                40, 20, QSizePolicy.Expanding, QSizePolicy.Expanding
             )
             self.inProgressBooksLayout.layout().addItem(inProgressBooksContainerSpacer)
 
@@ -442,8 +480,8 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow, player.MainWindowPlayer):
             self.listenedBooksContainer.show()
             self.listenedBooksPageNothing.hide()
             # Прижимаем элементы к верхнему краю
-            listenedBooksContainerSpacer = QtWidgets.QSpacerItem(
-                40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+            listenedBooksContainerSpacer = QSpacerItem(
+                40, 20, QSizePolicy.Expanding, QSizePolicy.Expanding
             )
             self.listenedBooksLayout.layout().addItem(listenedBooksContainerSpacer)
 
@@ -451,8 +489,14 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow, player.MainWindowPlayer):
             self.library.setCurrentWidget(self.allBooksPage)
         self.stackedWidget.setCurrentWidget(self.libraryPage)
 
-    def _initBookWidget(self, parent: QtWidgets.QWidget, book: Books) -> UiBook:
-        bookFrame = QtWidgets.QFrame(parent)
+    def _initBookWidget(self, parent: QWidget, book: Books) -> UiBook:
+        """
+        Инициализирует виджет книги.
+        :param parent: Виджет, в которые нужно поместить.
+        :param book: Экземпляр скачанной книги.
+        :return: Экземпляр виджета книги.
+        """
+        bookFrame = QFrame(parent)
         bookWidget = UiBook()
         bookWidget.setupUi(bookFrame)
 
@@ -467,17 +511,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow, player.MainWindowPlayer):
         bookWidget.durationLabel.setText(book.duration)
 
         # Устанавливаем иконку на кнопку "Добавить в избранное"
-        icon = QtGui.QIcon()
-        if book.favorite:
-            icon.addPixmap(
-                QtGui.QPixmap(":/other/star_fill.svg"),
-                QtGui.QIcon.Normal,
-                QtGui.QIcon.Off,
-            )
-        else:
-            icon.addPixmap(
-                QtGui.QPixmap(":/other/star.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
-            )
+        icon = QIcon(":/other/star_fill.svg" if book.favorite else ":/other/star.svg")
         bookWidget.toggleFavoriteBtn.setIcon(icon)
 
         # Настраиваем прогресс прослушивания
@@ -506,7 +540,7 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow, player.MainWindowPlayer):
     def setLock(self, value: bool) -> None:
         """
         Блокирует/разблокирует интерфейс.
-        Используется при загрузке данных.
+        Используется при загрузке цданных.
         :param value: True или False.
         """
         self.btnGroupFrame.setDisabled(value)

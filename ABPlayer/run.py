@@ -1,3 +1,9 @@
+"""
+
+Запуск приложения.
+
+"""
+
 import sys
 import os
 import main

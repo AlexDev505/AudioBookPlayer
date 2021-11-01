@@ -1,11 +1,28 @@
+"""
+
+Функциональность, позволяющая изменять размеры окна, а так же перемещать его.
+
+"""
+
 from __future__ import annotations
 
 import typing as ty
 
-from PyQt5.QtCore import Qt, QEvent, QRect, QPoint
+from PyQt5.QtCore import QEvent, QPoint, QRect, Qt
 
 if ty.TYPE_CHECKING:
-    from PyQt5.QtWidgets import QMainWindow
+    from PyQt5.QtWidgets import QMainWindow, QWidget
+
+
+def prepareDragZone(window: QMainWindow, obj: QWidget) -> None:
+    """
+    Подготавливает виджет, отвечающий за перемещение окна.
+    :param window: Экземпляр окна.
+    :param obj: Виджет.
+    """
+    obj.mousePressEvent = lambda e: dragZonePressEvent(window, e)
+    obj.mouseMoveEvent = lambda e: dragZoneMoveEvent(window, e)
+    obj.mouseReleaseEvent = lambda e: dragZoneReleaseEvent(window, e)
 
 
 def dragZonePressEvent(window: QMainWindow, event: QEvent) -> None:

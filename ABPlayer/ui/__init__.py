@@ -1,3 +1,9 @@
+"""
+
+Модуль, в котором реализован интерфейс.
+
+"""
+
 from . import icons_rc
 from .main import UiMainWindow
 from .book import UiBook

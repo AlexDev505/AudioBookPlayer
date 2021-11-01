@@ -1,8 +1,14 @@
+"""
+
+Функционал страницы библиотеки.
+
+"""
+
 from __future__ import annotations
 
 import typing as ty
 
-from PyQt5.QtCore import QPropertyAnimation, QEasingCurve
+from PyQt5.QtCore import QEasingCurve, QPropertyAnimation
 from PyQt5.QtGui import QIcon
 
 if ty.TYPE_CHECKING:

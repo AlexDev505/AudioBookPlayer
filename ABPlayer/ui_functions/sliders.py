@@ -1,3 +1,9 @@
+"""
+
+Модификации QSlider.
+
+"""
+
 from __future__ import annotations
 
 import typing as ty
@@ -11,62 +17,66 @@ if ty.TYPE_CHECKING:
 
 
 def prepareSlider(slider: QSlider) -> None:
+    """
+    Изменение функциональности QSlider.
+    :param slider: Экземпляр QSlider.
+    """
     slider.pressed = False
-    slider.mousePressEvent = lambda e: mousePressEvent(e, slider)
-    slider.mouseMoveEvent = lambda e: mouseMoveEvent(e, slider)
-    slider.mouseReleaseEvent = lambda e: mouseReleaseEvent(e, slider)
+    slider.mousePressEvent = lambda e: mousePressEvent(slider, e)
+    slider.mouseMoveEvent = lambda e: mouseMoveEvent(slider, e)
+    slider.mouseReleaseEvent = lambda e: mouseReleaseEvent(slider, e)
 
 
-def mousePressEvent(event: QEvent, sender) -> None:
+def mousePressEvent(slider: QSlider, event: QEvent) -> None:
     """
     Обрабатывает нажатие на слайдер.
     Реализует мгновенное изменения значения, при нажатии.
+    :param slider: Отправитель события.
     :param event:
-    :param sender: Отправитель события.
     """
     if event.button() == Qt.LeftButton:
-        sender.pressed = True
-        sender.setValue(
+        slider.pressed = True
+        slider.setValue(
             QStyle.sliderValueFromPosition(
-                sender.minimum(),
-                sender.maximum(),
+                slider.minimum(),
+                slider.maximum(),
                 event.x(),
-                sender.width(),
+                slider.width(),
             )
         )
 
 
-def mouseReleaseEvent(event: QEvent, sender) -> None:
+def mouseReleaseEvent(slider, event: QEvent) -> None:
     """
     Обрабатывает отпускание кнопки мыши.
+    :param slider: Отправитель события.
     :param event:
-    :param sender: Отправитель события.
     """
     if event.button() == Qt.LeftButton:
-        sender.pressed = False
-        sender.setValue(
+        slider.pressed = False
+        slider.setValue(
             QStyle.sliderValueFromPosition(
-                sender.minimum(),
-                sender.maximum(),
+                slider.minimum(),
+                slider.maximum(),
                 event.x(),
-                sender.width(),
+                slider.width(),
             )
         )
 
 
-def mouseMoveEvent(event: QEvent, sender) -> None:
+def mouseMoveEvent(slider, event: QEvent) -> None:
     """
     Обрабатывает движение мыши, с зажатой левой кнопкой, по слайдеру.
     Стандартный почему-то не всегда реагирует.
+    :param slider: Отправитель события.
     :param event:
-    :param sender: Отправитель события.
     """
-    if sender.pressed:
-        sender.setValue(
+    if slider.pressed:
+        slider.setValue(
             QStyle.sliderValueFromPosition(
-                sender.minimum(),
-                sender.maximum(),
+                slider.minimum(),
+                slider.maximum(),
                 event.x(),
-                sender.width(),
+                slider.width(),
             )
         )

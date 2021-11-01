@@ -1,3 +1,9 @@
+"""
+
+Модуль, в котором реализован функционал интерфейса.
+
+"""
+
 from . import add_book_page
 from . import book_page
 from . import content

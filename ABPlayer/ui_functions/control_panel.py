@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import typing as ty
 
-from PyQt5.QtCore import QPropertyAnimation, QEasingCurve
-from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtCore import QEasingCurve, QPropertyAnimation
+from PyQt5.QtGui import QIcon
 
 if ty.TYPE_CHECKING:
     from PyQt5.QtWidgets import QPushButton
@@ -86,26 +86,18 @@ def volumeSliderHandler(main_window: MainWindow, value: int) -> None:
     """
     main_window.volumeLabel.setText(f"{value} %")
 
+    # Изменяем иконку кнопки
     if value == 0:
-        mute_icon = QIcon()
-        mute_icon.addPixmap(QPixmap(":/volume/mute.svg"), QIcon.Normal, QIcon.Off)
-        main_window.volumeBtn.setIcon(mute_icon)
+        icon = QIcon(":/volume/mute.svg")
     elif value < 33:
-        low_volume_icon = QIcon()
-        low_volume_icon.addPixmap(
-            QPixmap(":/volume/low_volume.svg"), QIcon.Normal, QIcon.Off
-        )
-        main_window.volumeBtn.setIcon(low_volume_icon)
+        icon = QIcon(":/volume/low_volume.svg")
     elif 33 < value < 70:
-        medium_volume_icon = QIcon()
-        medium_volume_icon.addPixmap(
-            QPixmap(":/volume/medium_volume.svg"), QIcon.Normal, QIcon.Off
-        )
-        main_window.volumeBtn.setIcon(medium_volume_icon)
+        icon = QIcon(":/volume/medium_volume.svg")
     elif value > 70:
-        volume_icon = QIcon()
-        volume_icon.addPixmap(QPixmap(":/volume/volume.svg"), QIcon.Normal, QIcon.Off)
-        main_window.volumeBtn.setIcon(volume_icon)
+        icon = QIcon(":/volume/volume.svg")
+    else:
+        icon = main_window.volumeBtn.icon()
+    main_window.volumeBtn.setIcon(icon)
 
     main_window.player.player.setVolume(value)
 

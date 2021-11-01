@@ -9,7 +9,7 @@ class Config(Table):
     Класс, описывающий как конфигурация хранится в базе данных.
     """
 
-    books_folder: str = os.environ["DEFAULT_BOOKS_FOLDER"]
+    books_folder: str = os.environ["DEFAULT_BOOKS_FOLDER"]  # Директория с книгами
     theme: str = "Тёмная"
 
     @classmethod
