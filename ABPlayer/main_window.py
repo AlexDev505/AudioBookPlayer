@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import typing as ty
+import webbrowser
 
 from PyQt5 import QtWidgets, QtCore, QtGui, QtMultimedia
 
@@ -17,6 +18,7 @@ from ui_functions import (
     library,
     marquee,
     menu,
+    settings_page,
     player,
     sliders,
     window_geometry,
@@ -51,13 +53,37 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow, player.MainWindowPlayer):
         # Число запущенных потоков, скачивающих обложки книг
         self.download_cover_thread_count = 0
 
-        # self.player = player.Player()
-
         self.setupSignals()
         self.openLibraryPage()
 
         marquee.prepareLabel(self, self.bookNameLabel)
-        # marquee.prepareLabel(self, self.bookAuthorLabel)
+
+        self.appBuildVersionLabel.setText(f"Версия: {os.environ['version']}")
+        for style in styles.styles:
+            self.themeSelecror.addItem(style)
+        if not len(styles.styles):
+            self.themeSelecror.addItem("Тёмная")
+            self.themeSelecror.setCurrentIndex(0)
+        else:
+            if os.environ["theme"] in styles.styles:
+                self.themeSelecror.setCurrentIndex(
+                    list(styles.styles.keys()).index(os.environ["theme"])
+                )
+            else:
+                if "Тёмная" in styles.styles:
+                    self.themeSelecror.removeItem(
+                        list(styles.styles.keys()).index("Тёмная")
+                    )
+                self.themeSelecror.insertItem(0, "Тёмная")
+                self.themeSelecror.setCurrentIndex(0)
+            self.themeSelecror.currentIndexChanged.connect(
+                lambda e: settings_page.changeTheme(self)
+            )
+        fm = QtGui.QFontMetrics(self.themeSelecror.font())
+        items: ty.List[int] = []
+        for i in range(self.themeSelecror.count()):
+            items.append(fm.width(self.themeSelecror.itemText(i)) + 80)
+        self.themeSelecror.setMinimumWidth(max(items))
 
     def setupSignals(self):
         # APPLICATION
@@ -142,6 +168,23 @@ class MainWindow(QtWidgets.QMainWindow, UiMainWindow, player.MainWindowPlayer):
         self.futureBtn.clicked.connect(lambda e: self.player.rewindToFuture())
         self.playPauseBtnLg.clicked.connect(lambda e: self.player.playPause(self))
         self.playPauseBtn.clicked.connect(lambda e: self.player.setState(self))
+
+        # SETTINGS PAGE
+        self.developerBtn.clicked.connect(
+            lambda e: webbrowser.open_new_tab("https://github.com/AlexDev-py")
+        )
+        self.projectPageBtn.clicked.connect(
+            lambda e: webbrowser.open_new_tab(
+                "https://github.com/AlexDev-py/AudioBookPlayer"
+            )
+        )
+
+        self.openDirWithBooksBtn.clicked.connect(
+            lambda e: os.startfile(os.environ["books_folder"])
+        )
+        self.setDirWithBooksBtn.clicked.connect(
+            lambda e: settings_page.setDirWithBooks(self)
+        )
 
     def openInfoPage(
         self,

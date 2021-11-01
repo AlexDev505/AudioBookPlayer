@@ -34,10 +34,12 @@ class Config(Table):
         for field in self.get_fields():
             os.environ[field] = self.__dict__[field]
 
-    def update(self, **fields: [str, ty.Any]) -> None:
+    @classmethod
+    def update(cls, **fields: [str, ty.Any]) -> None:
         """
         Дополняет стандартную функцию.
         Обновляет данные как в бд, так и в виртуальном окружении.
         """
-        super(Config, self).update(**fields)
-        self.add_to_env()
+        config = cls(os.environ["DB_PATH"]).filter()
+        super(Config, config).update(**fields)
+        config.add_to_env()

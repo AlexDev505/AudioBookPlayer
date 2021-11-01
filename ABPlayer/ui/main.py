@@ -14,7 +14,12 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class UiMainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1323, 818)
+        MainWindow.resize(1270, 825)
+        icon = QtGui.QIcon()
+        icon.addPixmap(
+            QtGui.QPixmap(":/other/icon.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off
+        )
+        MainWindow.setWindowIcon(icon)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -53,33 +58,33 @@ class UiMainWindow(object):
         self.minimizeAppBtn = QtWidgets.QPushButton(self.topBtnFrame)
         self.minimizeAppBtn.setMinimumSize(QtCore.QSize(25, 25))
         self.minimizeAppBtn.setMaximumSize(QtCore.QSize(25, 25))
-        icon = QtGui.QIcon()
-        icon.addPixmap(
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(
             QtGui.QPixmap(":/other/dash.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.minimizeAppBtn.setIcon(icon)
+        self.minimizeAppBtn.setIcon(icon1)
         self.minimizeAppBtn.setIconSize(QtCore.QSize(14, 14))
         self.minimizeAppBtn.setObjectName("minimizeAppBtn")
         self.horizontalLayout.addWidget(self.minimizeAppBtn)
         self.fullscreenAppBtn = QtWidgets.QPushButton(self.topBtnFrame)
         self.fullscreenAppBtn.setMinimumSize(QtCore.QSize(25, 25))
         self.fullscreenAppBtn.setMaximumSize(QtCore.QSize(25, 25))
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(
             QtGui.QPixmap(":/other/square.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.fullscreenAppBtn.setIcon(icon1)
+        self.fullscreenAppBtn.setIcon(icon2)
         self.fullscreenAppBtn.setIconSize(QtCore.QSize(14, 14))
         self.fullscreenAppBtn.setObjectName("fullscreenAppBtn")
         self.horizontalLayout.addWidget(self.fullscreenAppBtn)
         self.closeAppBtn = QtWidgets.QPushButton(self.topBtnFrame)
         self.closeAppBtn.setMinimumSize(QtCore.QSize(25, 25))
         self.closeAppBtn.setMaximumSize(QtCore.QSize(25, 25))
-        icon2 = QtGui.QIcon()
-        icon2.addPixmap(
+        icon3 = QtGui.QIcon()
+        icon3.addPixmap(
             QtGui.QPixmap(":/other/x.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.closeAppBtn.setIcon(icon2)
+        self.closeAppBtn.setIcon(icon3)
         self.closeAppBtn.setIconSize(QtCore.QSize(14, 14))
         self.closeAppBtn.setObjectName("closeAppBtn")
         self.horizontalLayout.addWidget(self.closeAppBtn)
@@ -108,11 +113,11 @@ class UiMainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.menuBtn.setFont(font)
-        icon3 = QtGui.QIcon()
-        icon3.addPixmap(
+        icon4 = QtGui.QIcon()
+        icon4.addPixmap(
             QtGui.QPixmap(":/other/angle_left.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.menuBtn.setIcon(icon3)
+        self.menuBtn.setIcon(icon4)
         self.menuBtn.setIconSize(QtCore.QSize(25, 25))
         self.menuBtn.setObjectName("menuBtn")
         self.verticalLayout.addWidget(self.menuBtn)
@@ -149,11 +154,11 @@ class UiMainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.libraryBtn.setFont(font)
-        icon4 = QtGui.QIcon()
-        icon4.addPixmap(
+        icon5 = QtGui.QIcon()
+        icon5.addPixmap(
             QtGui.QPixmap(":/menu/book.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.libraryBtn.setIcon(icon4)
+        self.libraryBtn.setIcon(icon5)
         self.libraryBtn.setIconSize(QtCore.QSize(25, 25))
         self.libraryBtn.setObjectName("libraryBtn")
         self.menuButtons = QtWidgets.QButtonGroup(MainWindow)
@@ -167,11 +172,11 @@ class UiMainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.favoriteBtn.setFont(font)
-        icon5 = QtGui.QIcon()
-        icon5.addPixmap(
+        icon6 = QtGui.QIcon()
+        icon6.addPixmap(
             QtGui.QPixmap(":/other/star_fill.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.favoriteBtn.setIcon(icon5)
+        self.favoriteBtn.setIcon(icon6)
         self.favoriteBtn.setIconSize(QtCore.QSize(25, 25))
         self.favoriteBtn.setObjectName("favoriteBtn")
         self.menuButtons.addButton(self.favoriteBtn)
@@ -183,11 +188,11 @@ class UiMainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.addBookBtn.setFont(font)
-        icon6 = QtGui.QIcon()
-        icon6.addPixmap(
+        icon7 = QtGui.QIcon()
+        icon7.addPixmap(
             QtGui.QPixmap(":/other/plus.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.addBookBtn.setIcon(icon6)
+        self.addBookBtn.setIcon(icon7)
         self.addBookBtn.setIconSize(QtCore.QSize(25, 25))
         self.addBookBtn.setObjectName("addBookBtn")
         self.menuButtons.addButton(self.addBookBtn)
@@ -209,11 +214,11 @@ class UiMainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.dirWithBooksBtn.setFont(font)
-        icon7 = QtGui.QIcon()
-        icon7.addPixmap(
+        icon8 = QtGui.QIcon()
+        icon8.addPixmap(
             QtGui.QPixmap(":/menu/folder.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.dirWithBooksBtn.setIcon(icon7)
+        self.dirWithBooksBtn.setIcon(icon8)
         self.dirWithBooksBtn.setIconSize(QtCore.QSize(25, 25))
         self.dirWithBooksBtn.setObjectName("dirWithBooksBtn")
         self.menuButtons.addButton(self.dirWithBooksBtn)
@@ -225,11 +230,11 @@ class UiMainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.settingsBtn.setFont(font)
-        icon8 = QtGui.QIcon()
-        icon8.addPixmap(
+        icon9 = QtGui.QIcon()
+        icon9.addPixmap(
             QtGui.QPixmap(":/menu/settings.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.settingsBtn.setIcon(icon8)
+        self.settingsBtn.setIcon(icon9)
         self.settingsBtn.setIconSize(QtCore.QSize(25, 25))
         self.settingsBtn.setObjectName("settingsBtn")
         self.menuButtons.addButton(self.settingsBtn)
@@ -292,13 +297,13 @@ class UiMainWindow(object):
         self.toggleBooksFilterPanelBtn.setMinimumSize(QtCore.QSize(25, 0))
         self.toggleBooksFilterPanelBtn.setMaximumSize(QtCore.QSize(25, 16777215))
         self.toggleBooksFilterPanelBtn.setText("")
-        icon9 = QtGui.QIcon()
-        icon9.addPixmap(
+        icon10 = QtGui.QIcon()
+        icon10.addPixmap(
             QtGui.QPixmap(":/other/angle_right.svg"),
             QtGui.QIcon.Normal,
             QtGui.QIcon.Off,
         )
-        self.toggleBooksFilterPanelBtn.setIcon(icon9)
+        self.toggleBooksFilterPanelBtn.setIcon(icon10)
         self.toggleBooksFilterPanelBtn.setIconSize(QtCore.QSize(14, 14))
         self.toggleBooksFilterPanelBtn.setObjectName("toggleBooksFilterPanelBtn")
         self.horizontalLayout_15.addWidget(self.toggleBooksFilterPanelBtn)
@@ -339,11 +344,11 @@ class UiMainWindow(object):
         font.setWeight(75)
         self.searchBookBtn.setFont(font)
         self.searchBookBtn.setText("")
-        icon10 = QtGui.QIcon()
-        icon10.addPixmap(
+        icon11 = QtGui.QIcon()
+        icon11.addPixmap(
             QtGui.QPixmap(":/menu/search.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.searchBookBtn.setIcon(icon10)
+        self.searchBookBtn.setIcon(icon11)
         self.searchBookBtn.setIconSize(QtCore.QSize(28, 28))
         self.searchBookBtn.setObjectName("searchBookBtn")
         self.horizontalLayout_16.addWidget(self.searchBookBtn)
@@ -383,11 +388,11 @@ class UiMainWindow(object):
         self.invertSortBtn = QtWidgets.QPushButton(self.sortByFrame)
         self.invertSortBtn.setMinimumSize(QtCore.QSize(35, 35))
         self.invertSortBtn.setMaximumSize(QtCore.QSize(35, 35))
-        icon11 = QtGui.QIcon()
-        icon11.addPixmap(
+        icon12 = QtGui.QIcon()
+        icon12.addPixmap(
             QtGui.QPixmap(":/other/sort_down.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.invertSortBtn.setIcon(icon11)
+        self.invertSortBtn.setIcon(icon12)
         self.invertSortBtn.setIconSize(QtCore.QSize(28, 28))
         self.invertSortBtn.setCheckable(True)
         self.invertSortBtn.setObjectName("invertSortBtn")
@@ -427,7 +432,7 @@ class UiMainWindow(object):
         self.clearSortAuthorBtn = QtWidgets.QPushButton(self.sortAuthorFrame)
         self.clearSortAuthorBtn.setMinimumSize(QtCore.QSize(35, 35))
         self.clearSortAuthorBtn.setMaximumSize(QtCore.QSize(35, 35))
-        self.clearSortAuthorBtn.setIcon(icon2)
+        self.clearSortAuthorBtn.setIcon(icon3)
         self.clearSortAuthorBtn.setIconSize(QtCore.QSize(28, 28))
         self.clearSortAuthorBtn.setObjectName("clearSortAuthorBtn")
         self.horizontalLayout_18.addWidget(self.clearSortAuthorBtn)
@@ -530,7 +535,7 @@ class UiMainWindow(object):
         )
         self.allBooksContainer.setObjectName("allBooksContainer")
         self.allBooksLayout = QtWidgets.QWidget()
-        self.allBooksLayout.setGeometry(QtCore.QRect(0, 0, 890, 601))
+        self.allBooksLayout.setGeometry(QtCore.QRect(0, 0, 837, 608))
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
         )
@@ -591,7 +596,7 @@ class UiMainWindow(object):
         self.inProgressBooksContainer.setWidgetResizable(True)
         self.inProgressBooksContainer.setObjectName("inProgressBooksContainer")
         self.inProgressBooksLayout = QtWidgets.QWidget()
-        self.inProgressBooksLayout.setGeometry(QtCore.QRect(0, 0, 890, 601))
+        self.inProgressBooksLayout.setGeometry(QtCore.QRect(0, 0, 903, 621))
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
         )
@@ -652,7 +657,7 @@ class UiMainWindow(object):
         self.listenedBooksContainer.setWidgetResizable(True)
         self.listenedBooksContainer.setObjectName("listenedBooksContainer")
         self.listenedBooksLayout = QtWidgets.QWidget()
-        self.listenedBooksLayout.setGeometry(QtCore.QRect(0, 0, 890, 601))
+        self.listenedBooksLayout.setGeometry(QtCore.QRect(0, 0, 903, 621))
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
         )
@@ -731,11 +736,11 @@ class UiMainWindow(object):
         self.progressToolsBtn.setMaximumSize(QtCore.QSize(20, 20))
         self.progressToolsBtn.setStyleSheet("margin-bottom: -4px")
         self.progressToolsBtn.setText("")
-        icon12 = QtGui.QIcon()
-        icon12.addPixmap(
+        icon13 = QtGui.QIcon()
+        icon13.addPixmap(
             QtGui.QPixmap(":/other/check.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.progressToolsBtn.setIcon(icon12)
+        self.progressToolsBtn.setIcon(icon13)
         self.progressToolsBtn.setIconSize(QtCore.QSize(12, 12))
         self.progressToolsBtn.setObjectName("progressToolsBtn")
         self.horizontalLayout_27.addWidget(self.progressToolsBtn)
@@ -768,11 +773,11 @@ class UiMainWindow(object):
         self.toggleFavoriteBtn.setMinimumSize(QtCore.QSize(45, 45))
         self.toggleFavoriteBtn.setMaximumSize(QtCore.QSize(45, 45))
         self.toggleFavoriteBtn.setText("")
-        icon13 = QtGui.QIcon()
-        icon13.addPixmap(
+        icon14 = QtGui.QIcon()
+        icon14.addPixmap(
             QtGui.QPixmap(":/other/star.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.toggleFavoriteBtn.setIcon(icon13)
+        self.toggleFavoriteBtn.setIcon(icon14)
         self.toggleFavoriteBtn.setIconSize(QtCore.QSize(30, 30))
         self.toggleFavoriteBtn.setObjectName("toggleFavoriteBtn")
         self.horizontalLayout_28.addWidget(self.toggleFavoriteBtn)
@@ -787,11 +792,11 @@ class UiMainWindow(object):
         self.saveBtn.setMinimumSize(QtCore.QSize(45, 45))
         self.saveBtn.setMaximumSize(QtCore.QSize(45, 45))
         self.saveBtn.setText("")
-        icon14 = QtGui.QIcon()
-        icon14.addPixmap(
+        icon15 = QtGui.QIcon()
+        icon15.addPixmap(
             QtGui.QPixmap(":/other/download.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.saveBtn.setIcon(icon14)
+        self.saveBtn.setIcon(icon15)
         self.saveBtn.setIconSize(QtCore.QSize(30, 30))
         self.saveBtn.setObjectName("saveBtn")
         self.horizontalLayout_28.addWidget(self.saveBtn)
@@ -806,11 +811,11 @@ class UiMainWindow(object):
         self.deleteBtn.setMinimumSize(QtCore.QSize(45, 45))
         self.deleteBtn.setMaximumSize(QtCore.QSize(45, 45))
         self.deleteBtn.setText("")
-        icon15 = QtGui.QIcon()
-        icon15.addPixmap(
+        icon16 = QtGui.QIcon()
+        icon16.addPixmap(
             QtGui.QPixmap(":/other/trash.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.deleteBtn.setIcon(icon15)
+        self.deleteBtn.setIcon(icon16)
         self.deleteBtn.setIconSize(QtCore.QSize(30, 30))
         self.deleteBtn.setObjectName("deleteBtn")
         self.horizontalLayout_28.addWidget(self.deleteBtn)
@@ -827,11 +832,11 @@ class UiMainWindow(object):
         self.changeDriverBtn.setMinimumSize(QtCore.QSize(45, 45))
         self.changeDriverBtn.setMaximumSize(QtCore.QSize(45, 45))
         self.changeDriverBtn.setText("")
-        icon16 = QtGui.QIcon()
-        icon16.addPixmap(
+        icon17 = QtGui.QIcon()
+        icon17.addPixmap(
             QtGui.QPixmap(":/other/hdd.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.changeDriverBtn.setIcon(icon16)
+        self.changeDriverBtn.setIcon(icon17)
         self.changeDriverBtn.setIconSize(QtCore.QSize(30, 30))
         self.changeDriverBtn.setObjectName("changeDriverBtn")
         self.horizontalLayout_28.addWidget(self.changeDriverBtn)
@@ -891,13 +896,13 @@ class UiMainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.pastBtn.setFont(font)
-        icon17 = QtGui.QIcon()
-        icon17.addPixmap(
+        icon18 = QtGui.QIcon()
+        icon18.addPixmap(
             QtGui.QPixmap(":/other/double_angle_left.svg"),
             QtGui.QIcon.Normal,
             QtGui.QIcon.Off,
         )
-        self.pastBtn.setIcon(icon17)
+        self.pastBtn.setIcon(icon18)
         self.pastBtn.setIconSize(QtCore.QSize(30, 30))
         self.pastBtn.setObjectName("pastBtn")
         self.horizontalLayout_30.addWidget(self.pastBtn)
@@ -911,11 +916,11 @@ class UiMainWindow(object):
         font.setWeight(75)
         self.playPauseBtnLg.setFont(font)
         self.playPauseBtnLg.setText("")
-        icon18 = QtGui.QIcon()
-        icon18.addPixmap(
+        icon19 = QtGui.QIcon()
+        icon19.addPixmap(
             QtGui.QPixmap(":/other/play.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.playPauseBtnLg.setIcon(icon18)
+        self.playPauseBtnLg.setIcon(icon19)
         self.playPauseBtnLg.setIconSize(QtCore.QSize(30, 30))
         self.playPauseBtnLg.setObjectName("playPauseBtnLg")
         self.horizontalLayout_30.addWidget(self.playPauseBtnLg)
@@ -936,13 +941,13 @@ class UiMainWindow(object):
         font.setWeight(75)
         self.futureBtn.setFont(font)
         self.futureBtn.setLayoutDirection(QtCore.Qt.RightToLeft)
-        icon19 = QtGui.QIcon()
-        icon19.addPixmap(
+        icon20 = QtGui.QIcon()
+        icon20.addPixmap(
             QtGui.QPixmap(":/other/double_angle_right.svg"),
             QtGui.QIcon.Normal,
             QtGui.QIcon.Off,
         )
-        self.futureBtn.setIcon(icon19)
+        self.futureBtn.setIcon(icon20)
         self.futureBtn.setIconSize(QtCore.QSize(30, 30))
         self.futureBtn.setObjectName("futureBtn")
         self.horizontalLayout_30.addWidget(self.futureBtn)
@@ -954,7 +959,7 @@ class UiMainWindow(object):
         )
         self.bookItems.setObjectName("bookItems")
         self.bookItemsLayout = QtWidgets.QWidget()
-        self.bookItemsLayout.setGeometry(QtCore.QRect(0, 0, 805, 172))
+        self.bookItemsLayout.setGeometry(QtCore.QRect(0, 0, 84, 16))
         self.bookItemsLayout.setObjectName("bookItemsLayout")
         self.verticalLayout_10 = QtWidgets.QVBoxLayout(self.bookItemsLayout)
         self.verticalLayout_10.setContentsMargins(0, 0, 0, 0)
@@ -1061,7 +1066,7 @@ class UiMainWindow(object):
         self.stopDownloadingBtn = QtWidgets.QPushButton(self.frame_5)
         self.stopDownloadingBtn.setMinimumSize(QtCore.QSize(30, 30))
         self.stopDownloadingBtn.setText("")
-        self.stopDownloadingBtn.setIcon(icon2)
+        self.stopDownloadingBtn.setIcon(icon3)
         self.stopDownloadingBtn.setIconSize(QtCore.QSize(25, 25))
         self.stopDownloadingBtn.setObjectName("stopDownloadingBtn")
         self.horizontalLayout_34.addWidget(self.stopDownloadingBtn)
@@ -1338,7 +1343,7 @@ class UiMainWindow(object):
         font.setWeight(75)
         self.searchNewBookBtn.setFont(font)
         self.searchNewBookBtn.setText("")
-        self.searchNewBookBtn.setIcon(icon10)
+        self.searchNewBookBtn.setIcon(icon11)
         self.searchNewBookBtn.setIconSize(QtCore.QSize(28, 28))
         self.searchNewBookBtn.setObjectName("searchNewBookBtn")
         self.horizontalLayout_22.addWidget(self.searchNewBookBtn)
@@ -1418,6 +1423,350 @@ class UiMainWindow(object):
         self.settingsPageContent.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.settingsPageContent.setFrameShadow(QtWidgets.QFrame.Raised)
         self.settingsPageContent.setObjectName("settingsPageContent")
+        self.horizontalLayout_38 = QtWidgets.QHBoxLayout(self.settingsPageContent)
+        self.horizontalLayout_38.setContentsMargins(10, 10, 10, 15)
+        self.horizontalLayout_38.setSpacing(5)
+        self.horizontalLayout_38.setObjectName("horizontalLayout_38")
+        self.settingsScrollArea = QtWidgets.QScrollArea(self.settingsPageContent)
+        self.settingsScrollArea.setWidgetResizable(True)
+        self.settingsScrollArea.setObjectName("settingsScrollArea")
+        self.settingsContent = QtWidgets.QWidget()
+        self.settingsContent.setGeometry(QtCore.QRect(0, 0, 1050, 697))
+        self.settingsContent.setObjectName("settingsContent")
+        self.verticalLayout_42 = QtWidgets.QVBoxLayout(self.settingsContent)
+        self.verticalLayout_42.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_42.setSpacing(0)
+        self.verticalLayout_42.setObjectName("verticalLayout_42")
+        self.settingsFrame = QtWidgets.QFrame(self.settingsContent)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.settingsFrame.sizePolicy().hasHeightForWidth()
+        )
+        self.settingsFrame.setSizePolicy(sizePolicy)
+        self.settingsFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.settingsFrame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.settingsFrame.setObjectName("settingsFrame")
+        self.verticalLayout_41 = QtWidgets.QVBoxLayout(self.settingsFrame)
+        self.verticalLayout_41.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_41.setSpacing(30)
+        self.verticalLayout_41.setObjectName("verticalLayout_41")
+        self.interfaceSettingsFrame = QtWidgets.QFrame(self.settingsFrame)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.interfaceSettingsFrame.sizePolicy().hasHeightForWidth()
+        )
+        self.interfaceSettingsFrame.setSizePolicy(sizePolicy)
+        self.interfaceSettingsFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.interfaceSettingsFrame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.interfaceSettingsFrame.setObjectName("interfaceSettingsFrame")
+        self.verticalLayout_39 = QtWidgets.QVBoxLayout(self.interfaceSettingsFrame)
+        self.verticalLayout_39.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_39.setSpacing(10)
+        self.verticalLayout_39.setObjectName("verticalLayout_39")
+        self.label_19 = QtWidgets.QLabel(self.interfaceSettingsFrame)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_19.setFont(font)
+        self.label_19.setObjectName("label_19")
+        self.verticalLayout_39.addWidget(self.label_19)
+        self.themeSettingsFrame = QtWidgets.QFrame(self.interfaceSettingsFrame)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.themeSettingsFrame.sizePolicy().hasHeightForWidth()
+        )
+        self.themeSettingsFrame.setSizePolicy(sizePolicy)
+        self.themeSettingsFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.themeSettingsFrame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.themeSettingsFrame.setObjectName("themeSettingsFrame")
+        self.horizontalLayout_41 = QtWidgets.QHBoxLayout(self.themeSettingsFrame)
+        self.horizontalLayout_41.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_41.setSpacing(10)
+        self.horizontalLayout_41.setObjectName("horizontalLayout_41")
+        self.label_20 = QtWidgets.QLabel(self.themeSettingsFrame)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_20.setFont(font)
+        self.label_20.setObjectName("label_20")
+        self.horizontalLayout_41.addWidget(self.label_20)
+        self.themeSelecror = QtWidgets.QComboBox(self.themeSettingsFrame)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Fixed
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.themeSelecror.sizePolicy().hasHeightForWidth()
+        )
+        self.themeSelecror.setSizePolicy(sizePolicy)
+        self.themeSelecror.setMinimumSize(QtCore.QSize(100, 35))
+        self.themeSelecror.setMaximumSize(QtCore.QSize(16777215, 35))
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(10)
+        self.themeSelecror.setFont(font)
+        self.themeSelecror.setObjectName("themeSelecror")
+        self.horizontalLayout_41.addWidget(self.themeSelecror)
+        self.verticalLayout_39.addWidget(self.themeSettingsFrame)
+        self.verticalLayout_41.addWidget(self.interfaceSettingsFrame)
+        self.storageSettingsFrame = QtWidgets.QFrame(self.settingsFrame)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.storageSettingsFrame.sizePolicy().hasHeightForWidth()
+        )
+        self.storageSettingsFrame.setSizePolicy(sizePolicy)
+        self.storageSettingsFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.storageSettingsFrame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.storageSettingsFrame.setObjectName("storageSettingsFrame")
+        self.verticalLayout_40 = QtWidgets.QVBoxLayout(self.storageSettingsFrame)
+        self.verticalLayout_40.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_40.setSpacing(10)
+        self.verticalLayout_40.setObjectName("verticalLayout_40")
+        self.label_21 = QtWidgets.QLabel(self.storageSettingsFrame)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_21.setFont(font)
+        self.label_21.setObjectName("label_21")
+        self.verticalLayout_40.addWidget(self.label_21)
+        self.dirWithBooksSettingsFrame = QtWidgets.QFrame(self.storageSettingsFrame)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Preferred
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.dirWithBooksSettingsFrame.sizePolicy().hasHeightForWidth()
+        )
+        self.dirWithBooksSettingsFrame.setSizePolicy(sizePolicy)
+        self.dirWithBooksSettingsFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.dirWithBooksSettingsFrame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.dirWithBooksSettingsFrame.setObjectName("dirWithBooksSettingsFrame")
+        self.horizontalLayout_42 = QtWidgets.QHBoxLayout(self.dirWithBooksSettingsFrame)
+        self.horizontalLayout_42.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_42.setSpacing(20)
+        self.horizontalLayout_42.setObjectName("horizontalLayout_42")
+        self.label_22 = QtWidgets.QLabel(self.dirWithBooksSettingsFrame)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_22.setFont(font)
+        self.label_22.setObjectName("label_22")
+        self.horizontalLayout_42.addWidget(self.label_22)
+        self.openDirWithBooksBtn = QtWidgets.QPushButton(self.dirWithBooksSettingsFrame)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.openDirWithBooksBtn.setFont(font)
+        self.openDirWithBooksBtn.setObjectName("openDirWithBooksBtn")
+        self.horizontalLayout_42.addWidget(self.openDirWithBooksBtn)
+        self.setDirWithBooksBtn = QtWidgets.QPushButton(self.dirWithBooksSettingsFrame)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.setDirWithBooksBtn.setFont(font)
+        self.setDirWithBooksBtn.setObjectName("setDirWithBooksBtn")
+        self.horizontalLayout_42.addWidget(self.setDirWithBooksBtn)
+        self.verticalLayout_40.addWidget(self.dirWithBooksSettingsFrame)
+        self.verticalLayout_41.addWidget(self.storageSettingsFrame)
+        self.verticalLayout_42.addWidget(self.settingsFrame)
+        spacerItem23 = QtWidgets.QSpacerItem(
+            20, 547, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
+        self.verticalLayout_42.addItem(spacerItem23)
+        self.aboutAppFrame = QtWidgets.QFrame(self.settingsContent)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.aboutAppFrame.sizePolicy().hasHeightForWidth()
+        )
+        self.aboutAppFrame.setSizePolicy(sizePolicy)
+        self.aboutAppFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.aboutAppFrame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.aboutAppFrame.setObjectName("aboutAppFrame")
+        self.verticalLayout_37 = QtWidgets.QVBoxLayout(self.aboutAppFrame)
+        self.verticalLayout_37.setContentsMargins(0, 15, 0, 0)
+        self.verticalLayout_37.setSpacing(10)
+        self.verticalLayout_37.setObjectName("verticalLayout_37")
+        self.frame_7 = QtWidgets.QFrame(self.aboutAppFrame)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frame_7.sizePolicy().hasHeightForWidth())
+        self.frame_7.setSizePolicy(sizePolicy)
+        self.frame_7.setObjectName("frame_7")
+        self.horizontalLayout_39 = QtWidgets.QHBoxLayout(self.frame_7)
+        self.horizontalLayout_39.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_39.setSpacing(10)
+        self.horizontalLayout_39.setObjectName("horizontalLayout_39")
+        self.label_16 = QtWidgets.QLabel(self.frame_7)
+        self.label_16.setMinimumSize(QtCore.QSize(70, 70))
+        self.label_16.setMaximumSize(QtCore.QSize(70, 70))
+        self.label_16.setPixmap(QtGui.QPixmap(":/other/icon.png"))
+        self.label_16.setScaledContents(True)
+        self.label_16.setObjectName("label_16")
+        self.horizontalLayout_39.addWidget(self.label_16)
+        self.frame_6 = QtWidgets.QFrame(self.frame_7)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frame_6.sizePolicy().hasHeightForWidth())
+        self.frame_6.setSizePolicy(sizePolicy)
+        self.frame_6.setObjectName("frame_6")
+        self.verticalLayout_35 = QtWidgets.QVBoxLayout(self.frame_6)
+        self.verticalLayout_35.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_35.setSpacing(2)
+        self.verticalLayout_35.setObjectName("verticalLayout_35")
+        self.label_17 = QtWidgets.QLabel(self.frame_6)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(24)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_17.setFont(font)
+        self.label_17.setObjectName("label_17")
+        self.verticalLayout_35.addWidget(self.label_17)
+        self.appBuildVersionLabel = QtWidgets.QLabel(self.frame_6)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(12)
+        font.setBold(False)
+        font.setWeight(50)
+        self.appBuildVersionLabel.setFont(font)
+        self.appBuildVersionLabel.setObjectName("appBuildVersionLabel")
+        self.verticalLayout_35.addWidget(self.appBuildVersionLabel)
+        self.horizontalLayout_39.addWidget(self.frame_6)
+        self.verticalLayout_37.addWidget(self.frame_7)
+        self.frame_8 = QtWidgets.QFrame(self.aboutAppFrame)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frame_8.sizePolicy().hasHeightForWidth())
+        self.frame_8.setSizePolicy(sizePolicy)
+        self.frame_8.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_8.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_8.setObjectName("frame_8")
+        self.verticalLayout_36 = QtWidgets.QVBoxLayout(self.frame_8)
+        self.verticalLayout_36.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_36.setSpacing(5)
+        self.verticalLayout_36.setObjectName("verticalLayout_36")
+        self.horizontalLayout_40 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_40.setObjectName("horizontalLayout_40")
+        self.label_18 = QtWidgets.QLabel(self.frame_8)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(10)
+        self.label_18.setFont(font)
+        self.label_18.setObjectName("label_18")
+        self.horizontalLayout_40.addWidget(self.label_18)
+        self.developerBtn = QtWidgets.QPushButton(self.frame_8)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(11)
+        font.setBold(True)
+        font.setWeight(75)
+        self.developerBtn.setFont(font)
+        self.developerBtn.setStyleSheet(
+            "QPushButton {\n"
+            "    background-color: rgba(0, 0, 0, 0);\n"
+            "    color: rgb(4, 166, 229);\n"
+            "    border: none;\n"
+            "    border-radius: none;\n"
+            "    padding: 0px;\n"
+            "    text-align: left;\n"
+            "}\n"
+            "QPushButton:hover {\n"
+            "    text-decoration: underline;\n"
+            "}"
+        )
+        self.developerBtn.setObjectName("developerBtn")
+        self.horizontalLayout_40.addWidget(self.developerBtn)
+        self.developerEmailLabel = QtWidgets.QLabel(self.frame_8)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(11)
+        font.setBold(True)
+        font.setWeight(75)
+        self.developerEmailLabel.setFont(font)
+        self.developerEmailLabel.setTextInteractionFlags(
+            QtCore.Qt.LinksAccessibleByMouse | QtCore.Qt.TextSelectableByMouse
+        )
+        self.developerEmailLabel.setObjectName("developerEmailLabel")
+        self.horizontalLayout_40.addWidget(self.developerEmailLabel)
+        self.verticalLayout_36.addLayout(self.horizontalLayout_40)
+        self.projectPageBtn = QtWidgets.QPushButton(self.frame_8)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Fixed
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.projectPageBtn.sizePolicy().hasHeightForWidth()
+        )
+        self.projectPageBtn.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(11)
+        font.setBold(True)
+        font.setWeight(75)
+        self.projectPageBtn.setFont(font)
+        self.projectPageBtn.setStyleSheet(
+            "QPushButton {\n"
+            "    background-color: rgba(0, 0, 0, 0);\n"
+            "    color: rgb(4, 166, 229);\n"
+            "    border: none;\n"
+            "    border-radius: none;\n"
+            "    padding: 0px;\n"
+            "    text-align: left;\n"
+            "}\n"
+            "QPushButton:hover {\n"
+            "    text-decoration: underline;\n"
+            "}"
+        )
+        self.projectPageBtn.setObjectName("projectPageBtn")
+        self.verticalLayout_36.addWidget(self.projectPageBtn)
+        self.verticalLayout_37.addWidget(self.frame_8)
+        self.verticalLayout_42.addWidget(self.aboutAppFrame)
+        self.settingsScrollArea.setWidget(self.settingsContent)
+        self.horizontalLayout_38.addWidget(self.settingsScrollArea)
         self.horizontalLayout_20.addWidget(self.settingsPageContent)
         self.stackedWidget.addWidget(self.settingsPage)
         self.horizontalLayout_5.addWidget(self.stackedWidget)
@@ -1485,10 +1834,10 @@ class UiMainWindow(object):
         self.bookAuthorLabel.setFont(font)
         self.bookAuthorLabel.setObjectName("bookAuthorLabel")
         self.verticalLayout_6.addWidget(self.bookAuthorLabel)
-        spacerItem23 = QtWidgets.QSpacerItem(
+        spacerItem24 = QtWidgets.QSpacerItem(
             20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
         )
-        self.verticalLayout_6.addItem(spacerItem23)
+        self.verticalLayout_6.addItem(spacerItem24)
         self.horizontalLayout_6.addWidget(self.bookTitle)
         self.horizontalLayout_7.addWidget(self.bookPreview)
         self.playPauseBtn = QtWidgets.QPushButton(self.miniPlayerFrame)
@@ -1500,7 +1849,7 @@ class UiMainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.playPauseBtn.setFont(font)
-        self.playPauseBtn.setIcon(icon18)
+        self.playPauseBtn.setIcon(icon19)
         self.playPauseBtn.setIconSize(QtCore.QSize(40, 40))
         self.playPauseBtn.setObjectName("playPauseBtn")
         self.controlPanelButtons = QtWidgets.QButtonGroup(MainWindow)
@@ -1508,10 +1857,10 @@ class UiMainWindow(object):
         self.controlPanelButtons.addButton(self.playPauseBtn)
         self.horizontalLayout_7.addWidget(self.playPauseBtn)
         self.horizontalLayout_37.addWidget(self.miniPlayerFrame)
-        spacerItem24 = QtWidgets.QSpacerItem(
+        spacerItem25 = QtWidgets.QSpacerItem(
             674, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
         )
-        self.horizontalLayout_37.addItem(spacerItem24)
+        self.horizontalLayout_37.addItem(spacerItem25)
         self.toolsFrame = QtWidgets.QFrame(self.controlPanel)
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred
@@ -1535,11 +1884,11 @@ class UiMainWindow(object):
         self.speedBtn.setMinimumSize(QtCore.QSize(40, 40))
         self.speedBtn.setMaximumSize(QtCore.QSize(40, 40))
         self.speedBtn.setText("")
-        icon20 = QtGui.QIcon()
-        icon20.addPixmap(
+        icon21 = QtGui.QIcon()
+        icon21.addPixmap(
             QtGui.QPixmap(":/other/watch.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.speedBtn.setIcon(icon20)
+        self.speedBtn.setIcon(icon21)
         self.speedBtn.setIconSize(QtCore.QSize(28, 28))
         self.speedBtn.setObjectName("speedBtn")
         self.controlPanelButtons.addButton(self.speedBtn)
@@ -1558,7 +1907,7 @@ class UiMainWindow(object):
         self.speedSlider.setStyleSheet("")
         self.speedSlider.setMaximum(100)
         self.speedSlider.setSingleStep(10)
-        self.speedSlider.setProperty("value", 0)
+        self.speedSlider.setProperty("value", 50)
         self.speedSlider.setOrientation(QtCore.Qt.Horizontal)
         self.speedSlider.setObjectName("speedSlider")
         self.horizontalLayout_12.addWidget(self.speedSlider)
@@ -1577,13 +1926,13 @@ class UiMainWindow(object):
         self.volumeBtn.setMinimumSize(QtCore.QSize(40, 40))
         self.volumeBtn.setMaximumSize(QtCore.QSize(40, 40))
         self.volumeBtn.setText("")
-        icon21 = QtGui.QIcon()
-        icon21.addPixmap(
+        icon22 = QtGui.QIcon()
+        icon22.addPixmap(
             QtGui.QPixmap(":/volume/medium_volume.svg"),
             QtGui.QIcon.Normal,
             QtGui.QIcon.Off,
         )
-        self.volumeBtn.setIcon(icon21)
+        self.volumeBtn.setIcon(icon22)
         self.volumeBtn.setIconSize(QtCore.QSize(28, 28))
         self.volumeBtn.setObjectName("volumeBtn")
         self.controlPanelButtons.addButton(self.volumeBtn)
@@ -1621,11 +1970,11 @@ class UiMainWindow(object):
         font.setWeight(75)
         self.overlayBtn.setFont(font)
         self.overlayBtn.setText("")
-        icon22 = QtGui.QIcon()
-        icon22.addPixmap(
+        icon23 = QtGui.QIcon()
+        icon23.addPixmap(
             QtGui.QPixmap(":/other/overlay.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
         )
-        self.overlayBtn.setIcon(icon22)
+        self.overlayBtn.setIcon(icon23)
         self.overlayBtn.setIconSize(QtCore.QSize(28, 28))
         self.overlayBtn.setObjectName("overlayBtn")
         self.controlPanelButtons.addButton(self.overlayBtn)
@@ -1656,10 +2005,10 @@ class UiMainWindow(object):
         self.verticalLayout_19.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_19.setSpacing(0)
         self.verticalLayout_19.setObjectName("verticalLayout_19")
-        spacerItem25 = QtWidgets.QSpacerItem(
+        spacerItem26 = QtWidgets.QSpacerItem(
             20, 32, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
         )
-        self.verticalLayout_19.addItem(spacerItem25)
+        self.verticalLayout_19.addItem(spacerItem26)
         self.label_5 = QtWidgets.QLabel(self.resizeWidgetFrame)
         self.label_5.setMinimumSize(QtCore.QSize(30, 30))
         self.label_5.setMaximumSize(QtCore.QSize(30, 30))
@@ -1676,7 +2025,7 @@ class UiMainWindow(object):
         self.retranslateUi(MainWindow)
         self.stackedWidget.setCurrentIndex(0)
         self.library.setCurrentIndex(0)
-        self.playerContent.setCurrentIndex(1)
+        self.playerContent.setCurrentIndex(2)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -1757,6 +2106,20 @@ class UiMainWindow(object):
         self.searchNewBookLineEdit.setPlaceholderText(
             _translate("MainWindow", "Введите название книги или вставьте ссылку")
         )
+        self.label_19.setText(_translate("MainWindow", "Интерфейс"))
+        self.label_20.setText(_translate("MainWindow", "Тема"))
+        self.label_21.setText(_translate("MainWindow", "Хранилище"))
+        self.label_22.setText(_translate("MainWindow", "Папка для книг"))
+        self.openDirWithBooksBtn.setText(_translate("MainWindow", "Открыть"))
+        self.setDirWithBooksBtn.setText(_translate("MainWindow", "Изменить"))
+        self.label_17.setText(_translate("MainWindow", "Audio Book Player"))
+        self.appBuildVersionLabel.setText(_translate("MainWindow", "version"))
+        self.label_18.setText(_translate("MainWindow", "Разработчик: "))
+        self.developerBtn.setText(_translate("MainWindow", "AlexDev"))
+        self.developerEmailLabel.setText(
+            _translate("MainWindow", "(email: aleks.filiov@yandex.ru)")
+        )
+        self.projectPageBtn.setText(_translate("MainWindow", "Страница проекта"))
         self.speedBtn.setToolTip(_translate("MainWindow", "Скорость воспроизведения"))
         self.speedLabel.setText(_translate("MainWindow", "1x"))
         self.volumeBtn.setToolTip(_translate("MainWindow", "Громкость"))

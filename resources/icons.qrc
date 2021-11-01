@@ -13,6 +13,8 @@
     <file>settings.svg</file>
   </qresource>
   <qresource prefix="other">
+    <file>icon.ico</file>
+    <file>icon.png</file>
     <file>clock.svg</file>
     <file>mic.svg</file>
     <file>person.svg</file>

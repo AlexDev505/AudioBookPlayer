@@ -89,17 +89,23 @@ class DownloadPreviewWorker(BaseWorker):
         self.main_window.download_cover_thread_count -= 1
 
     def finish(self, pixmap: QPixmap) -> None:
-        self.cover_label.setMovie(None)  # Отключаем анимацию загрузки
-        if os.path.isdir(self.book.dir_path):  # Если книга скачана
-            # Сохраняем обложку
-            pixmap.save(os.path.join(self.book.dir_path, "cover.jpg"), "jpeg")
-        # Подстраиваем размер обложки под QLabel
-        pixmap = pixmap.scaled(*self.size, Qt.KeepAspectRatio)
-        self.cover_label.setPixmap(pixmap)
+        try:
+            self.cover_label.setMovie(None)  # Отключаем анимацию загрузки
+            if os.path.isdir(self.book.dir_path):  # Если книга скачана
+                # Сохраняем обложку
+                pixmap.save(os.path.join(self.book.dir_path, "cover.jpg"), "jpeg")
+            # Подстраиваем размер обложки под QLabel
+            pixmap = pixmap.scaled(*self.size, Qt.KeepAspectRatio)
+            self.cover_label.setPixmap(pixmap)
+        except RuntimeError:
+            pass
 
     def fail(self) -> None:
-        self.cover_label.setMovie(None)  # Отключаем анимацию загрузки
-        self.cover_label.hide()  # Скрываем элемент
+        try:
+            self.cover_label.setMovie(None)  # Отключаем анимацию загрузки
+            self.cover_label.hide()  # Скрываем элемент
+        except RuntimeError:
+            pass
 
 
 def loadPreview(
@@ -113,7 +119,10 @@ def loadPreview(
     :param size: Размеры QLabel.
     :param book: Экземпляр книги.
     """
-    cover_label.show()
+    try:
+        cover_label.show()
+    except RuntimeError:
+        return
     cover_path = os.path.join(book.dir_path, "cover.jpg")
     if os.path.isfile(cover_path):  # Если обложка скачана
         pixmap = QPixmap()
