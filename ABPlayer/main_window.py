@@ -141,7 +141,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         self.sortBy.currentIndexChanged.connect(lambda e: self.openLibraryPage())
         self.sortAuthor.currentIndexChanged.connect(lambda e: self.openLibraryPage())
         self.searchBookBtn.clicked.connect(lambda e: filter_panel.search(self))
-        self.searchBookLineEdit.returnPressed.conncet(
+        self.searchBookLineEdit.returnPressed.connect(
             lambda e: filter_panel.search(self)
         )
 
@@ -167,7 +167,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
 
         # ADD BOOK PAGE
         self.searchNewBookBtn.clicked.connect(lambda e: add_book_page.search(self))
-        self.searchNewBookLineEdit.returnPressed.conncet(
+        self.searchNewBookLineEdit.returnPressed.connect(
             lambda e: add_book_page.search(self)
         )
 
