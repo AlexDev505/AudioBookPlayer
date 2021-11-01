@@ -79,3 +79,7 @@ def main():
     window = startApp()
     window.show()
     app.exec()
+
+
+if __name__ == "__main__":
+    main()

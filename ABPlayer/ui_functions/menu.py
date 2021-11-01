@@ -1,9 +1,15 @@
+"""
+
+Функционал меню.
+
+"""
+
 from __future__ import annotations
 
 import os
 import typing as ty
 
-from PyQt5.QtCore import QPropertyAnimation, QEasingCurve
+from PyQt5.QtCore import QEasingCurve, QPropertyAnimation
 from PyQt5.QtGui import QIcon
 
 if ty.TYPE_CHECKING:
@@ -44,18 +50,18 @@ def buttonsHandler(main_window: MainWindow, button: QPushButton) -> None:
     :param main_window: Экземпляр главного окна.
     :param button: Нажатая кнопка.
     """
-    if button == main_window.libraryBtn:
+    if button == main_window.libraryBtn:  # Библиотека
         main_window.favorite_books_page = False
         main_window.search_on = False
         main_window.openLibraryPage()
-    elif button == main_window.favoriteBtn:
+    elif button == main_window.favoriteBtn:  # Избранные
         main_window.favorite_books_page = True
         main_window.search_on = False
         main_window.openLibraryPage()
-    elif button == main_window.addBookBtn:
+    elif button == main_window.addBookBtn:  # Новая книга
         main_window.stackedWidget.setCurrentWidget(main_window.addBookPage)
         main_window.searchNewBookLineEdit.setFocus()
-    elif button == main_window.settingsBtn:
+    elif button == main_window.settingsBtn:  # Настройки
         main_window.stackedWidget.setCurrentWidget(main_window.settingsPage)
-    elif button == main_window.dirWithBooksBtn:
+    elif button == main_window.dirWithBooksBtn:  # Папка с книгами
         os.startfile(os.environ["books_folder"])

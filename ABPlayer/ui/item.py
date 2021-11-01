@@ -1,3 +1,12 @@
+"""
+
+Виджет главы.
+
+WARNING! Файл был модифицирован после конвертации из item.ui,
+повторная конвертация приведет к утрате важного функционала.
+
+"""
+
 from __future__ import annotations
 
 import typing as ty
@@ -5,7 +14,7 @@ import re
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from ui_functions import sliders, player
+from ui_functions import player, sliders
 from tools import convert_into_seconds
 
 if ty.TYPE_CHECKING:
@@ -99,8 +108,9 @@ class Item(QtWidgets.QFrame, UiItem):
 
         self.item = item
 
+        # Не позволяем изменять значение использую колёсико мыши
         self.slider.wheelEvent = lambda e: None
-        self.slider.setRange(0, item.duration)
+        self.slider.setRange(0, item.duration)  # Изменяем диапазон значений
 
         self.title.setText(item.title)
         self.totalTime.setText(

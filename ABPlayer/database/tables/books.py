@@ -6,7 +6,7 @@ from ast import literal_eval
 from dataclasses import dataclass, field
 
 from sqlite3_api import Table
-from sqlite3_api.field_types import List, FieldType
+from sqlite3_api.field_types import FieldType, List
 
 from database.tools import replace_quotes
 

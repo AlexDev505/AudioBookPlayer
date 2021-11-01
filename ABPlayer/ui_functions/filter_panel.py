@@ -1,11 +1,17 @@
+"""
+
+Функционал панели фильтрации.
+
+"""
+
 from __future__ import annotations
 
 import difflib
 import os
 import typing as ty
 
-from PyQt5.QtCore import pyqtSignal, QTimer
-from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtCore import QTimer, pyqtSignal
+from PyQt5.QtGui import QIcon
 
 from database import Books
 from tools import BaseWorker
@@ -29,11 +35,11 @@ def toggleInvertSort(main_window: MainWindow) -> None:
     Изменяет иконку кнопки.
     :param main_window: Экземпляр главного окна.
     """
-    icon = QIcon()
-    if main_window.invertSortBtn.isChecked():
-        icon.addPixmap(QPixmap(":/other/sort_up.svg"), QIcon.Normal, QIcon.Off)
-    else:
-        icon.addPixmap(QPixmap(":/other/sort_down.svg"), QIcon.Normal, QIcon.Off)
+    icon = QIcon(
+        ":/other/sort_up.svg"
+        if main_window.invertSortBtn.isChecked()
+        else ":/other/sort_down.svg"
+    )
     main_window.invertSortBtn.setIcon(icon)
     main_window.openLibraryPage()
 
@@ -81,6 +87,9 @@ class SearchWorker(BaseWorker):
         self.main_window.setLock(False)
 
     def finish(self, books_ids: ty.List[int]) -> None:
+        # На маленьких объемах поиск работает слишком быстро,
+        # поэтому добавляем небольшую задержку
+        # для избежания ошибки при быстром переключении страниц
         QTimer.singleShot(100, lambda: self.main_window.openLibraryPage(books_ids))
 
     def fail(self) -> None:

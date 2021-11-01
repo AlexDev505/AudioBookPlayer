@@ -16,7 +16,7 @@ from PyQt5.QtCore import (
     Qt,
     pyqtSignal,
 )
-from PyQt5.QtGui import QMovie, QPixmap, QIcon
+from PyQt5.QtGui import QIcon, QMovie, QPixmap
 from PyQt5.QtWidgets import (
     QDialog,
     QDialogButtonBox,
@@ -29,8 +29,8 @@ from PyQt5.QtWidgets import (
 )
 
 from database.tables.books import Books, Status
-from drivers import drivers, BaseDownloadProcessHandler
-from tools import convert_into_bits, Cache, BaseWorker
+from drivers import BaseDownloadProcessHandler, drivers
+from tools import BaseWorker, Cache, convert_into_bits
 from .add_book_page import SearchWorker
 
 if ty.TYPE_CHECKING:
@@ -97,19 +97,22 @@ class DownloadPreviewWorker(BaseWorker):
             # Подстраиваем размер обложки под QLabel
             pixmap = pixmap.scaled(*self.size, Qt.KeepAspectRatio)
             self.cover_label.setPixmap(pixmap)
-        except RuntimeError:
+        except RuntimeError:  # cover_label может быть удалён
             pass
 
     def fail(self) -> None:
         try:
             self.cover_label.setMovie(None)  # Отключаем анимацию загрузки
             self.cover_label.hide()  # Скрываем элемент
-        except RuntimeError:
+        except RuntimeError:  # cover_label может быть удалён
             pass
 
 
 def loadPreview(
-    main_window: MainWindow, cover_label: QLabel, size: ty.Tuple[int, int], book: Book
+    main_window: MainWindow,
+    cover_label: QLabel,
+    size: ty.Tuple[int, int],
+    book: Book,
 ) -> None:
     """
     Устанавливает обложку книги в определенный QLabel.
@@ -121,8 +124,9 @@ def loadPreview(
     """
     try:
         cover_label.show()
-    except RuntimeError:
+    except RuntimeError:  # cover_label может быть удалён
         return
+
     cover_path = os.path.join(book.dir_path, "cover.jpg")
     if os.path.isfile(cover_path):  # Если обложка скачана
         pixmap = QPixmap()
@@ -264,7 +268,8 @@ class DownloadProcessHandler(QObject, BaseDownloadProcessHandler):
 
 def prepareProgressBar(pb: QProgressBar) -> None:
     """
-    Подготовка полосы загрузки.
+    Модификация полосы загрузки.
+    Позволяет динамически изменять всплывающую подсказку.
     :param pb: Экземпляр QProgressBar.
     """
 
