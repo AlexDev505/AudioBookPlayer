@@ -2,46 +2,16 @@ from __future__ import annotations
 
 import os
 import pathlib
-import ssl
-import typing as ty
-import urllib.request
 import shutil
+import typing as ty
 
-from PyQt5.QtCore import (
-    QBasicTimer,
-    QEasingCurve,
-    QEvent,
-    QObject,
-    QPropertyAnimation,
-    QSize,
-    QTimer,
-    Qt,
-    pyqtSignal,
-)
-from PyQt5.QtGui import QMovie, QPixmap, QIcon
-from PyQt5.QtWidgets import (
-    QDialog,
-    QDialogButtonBox,
-    QLabel,
-    QLineEdit,
-    QMessageBox,
-    QProgressBar,
-    QToolTip,
-    QVBoxLayout,
-    QFileDialog,
-)
+from PyQt5.QtWidgets import QMessageBox, QFileDialog
 
-from database.tables.books import Books, Status
-from drivers import drivers, BaseDownloadProcessHandler
-from tools import convert_into_bits, Cache, BaseWorker
-from .add_book_page import SearchWorker
 import styles
 from database import Config
 
 if ty.TYPE_CHECKING:
-    from PyQt5 import QtCore
     from main_window import MainWindow
-    from database.tables.books import Book
 
 
 def setDirWithBooks(main_window: MainWindow) -> None:
