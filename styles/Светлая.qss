@@ -231,10 +231,12 @@ Line {
     border-top-left-radius: 15px;
 }
 /* BUTTONS */
-#infoPageContent QPushButton, #needDownloadingPage QPushButton {
+#infoPageContent QPushButton,
+#needDownloadingPage QPushButton,
+#settingsPageContent QPushButton {
     padding: 10px;
     background-color: rgb(242, 243, 245);
-    border: 1px solid  rgb(235, 237, 239);
+    border: 1px solid rgb(235, 237, 239);
     border-radius: 5px;
 }
 /* LIBRARY PAGE CONTENT */
@@ -243,19 +245,27 @@ Line {
 }
 /* BOOK PAGE CONTENT */
 #bookItems {
-    border: 2px solid  rgb(235, 237, 239);
+    border: 2px solid rgb(235, 237, 239);
     border-radius: 3px;
 }
 #bookPageContent,
 #description,
 #bookItems * {
-    background-color:  rgb(255, 255, 255);
+    background-color: rgb(255, 255, 255);
 }
 #bookPageContent QPushButton:hover {
     background-color: rgb(242, 243, 245);
 }
 #bookPageContent QPushButton:pressed {
     margin-bottom: -1px;
+}
+/* SETTINGS PAGE CONTENT */
+#settingsContent {
+    background-color: rgb(255, 255, 255);
+}
+#aboutAppFrame {
+    border-top: 2px solid rgb(235, 237, 239);
+    border-radius: 2px;
 }
 
 /* LIBRARY */

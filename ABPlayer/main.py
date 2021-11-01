@@ -13,6 +13,8 @@ os.environ["APP_DIR"] = "../"
 os.environ["DB_PATH"] = os.path.join(os.environ["APP_DIR"], "database.sqlite")
 # Путь к файлу с временными данными
 os.environ["TEMP_PATH"] = os.path.join(os.environ["APP_DIR"], "temp.txt")
+# Версия приложения
+os.environ["VERSION"] = "dev1.0.0.0000"
 # Инициализация конфигурации
 # (хранил бы в json`е, но нужно несколько таблиц в бд, поэтому вот так вот...)
 from database import Config  # noqa

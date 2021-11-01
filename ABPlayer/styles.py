@@ -362,7 +362,7 @@ Line {
 }
 """
 
-styles = {}
+styles: ty.Dict[str, str] = {}
 for root, _, files in os.walk(os.path.join(os.environ["APP_DIR"], "styles")):
     for file in files:
         if file.endswith(".qss"):

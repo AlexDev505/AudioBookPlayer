@@ -7,5 +7,6 @@ from . import library
 from . import marquee
 from . import menu
 from . import player
+from . import settings_page
 from . import sliders
 from . import window_geometry

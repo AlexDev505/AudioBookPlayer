@@ -36,7 +36,9 @@ QComboBox {
     border: none;
 }
 QComboBox QAbstractItemView {
+    background-color: rgb(64, 68, 75);
     selection-background-color: rgb(50, 53, 59);
+    outline: none;
 }
 QComboBox::drop-down {
     border: none;
@@ -230,11 +232,18 @@ Line {
     border-top-left-radius: 15px;
 }
 /* BUTTONS */
-#infoPageContent QPushButton, #needDownloadingPage QPushButton {
+#infoPageContent QPushButton,
+#needDownloadingPage QPushButton,
+#settingsPageContent QPushButton {
     padding: 10px;
     background-color: rgb(47, 49, 54);
     border: 1px solid rgb(41, 43, 47);
     border-radius: 5px;
+}
+#infoPageContent QPushButton:hover,
+#needDownloadingPage QPushButton:hover,
+#settingsPageContent QPushButton:hover {
+    border-color: rgb(142, 146, 151);
 }
 /* LIBRARY PAGE CONTENT */
 #libraryPageContent QTabWidget * {
@@ -255,6 +264,14 @@ Line {
 }
 #bookPageContent QPushButton:pressed {
     margin-bottom: -1px;
+}
+/* SETTINGS PAGE CONTENT */
+#settingsContent {
+    background-color: rgb(54, 57, 63);
+}
+#aboutAppFrame {
+    border-top: 2px solid rgb(41, 43, 47);
+    border-radius: 2px;
 }
 
 /* LIBRARY */
