@@ -2,6 +2,6 @@ venv/
 .idea/
 __pycache__/
 build/
-книги/
+!build/styles
 AudioBookPlayer.lnk
 ABPlayer/drivers/chromedriver.exe
