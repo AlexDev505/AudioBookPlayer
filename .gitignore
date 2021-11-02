@@ -1,7 +1,8 @@
 venv/
 .idea/
 __pycache__/
-build/
-!build/styles
+/build/*
+!/build/sources/
+!/build/installers/ChromeSetup.exe
 AudioBookPlayer.lnk
 ABPlayer/drivers/chromedriver.exe
