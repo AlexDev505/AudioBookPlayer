@@ -21,7 +21,7 @@ os.environ["DEFAULT_BOOKS_FOLDER"] = os.path.join(os.environ["APP_DIR"], "Кни
 if not os.path.exists(os.environ["DEFAULT_BOOKS_FOLDER"]):
     os.mkdir(os.environ["DEFAULT_BOOKS_FOLDER"])
 # Версия приложения
-os.environ["VERSION"] = "1.0-a"
+os.environ["VERSION"] = "1.0a2"
 # Инициализация конфигурации
 # (хранил бы в json`е, но нужно несколько таблиц в бд, поэтому вот так вот...)
 from database import Config  # noqa
