@@ -604,7 +604,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
     def setLock(self, value: bool) -> None:
         """
         Блокирует/разблокирует интерфейс.
-        Используется при загрузке цданных.
+        Используется при загрузке данных.
         :param value: True или False.
         """
         self.btnGroupFrame.setDisabled(value)

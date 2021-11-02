@@ -232,9 +232,12 @@ class DownloadBookWorker(BaseWorker):
         file = self.drv.__dict__.get("_file")
         if file:
             file.close()
-        self.thread.terminate()
-        self.thread.exit()
+
         downloadable_book = self.main_window.downloadable_book
+        self.thread.setTerminationEnabled(True)
+        self.thread.exit()
+        self.thread.terminate()
+        self.thread.wait()
         self.main_window.downloadable_book = ...
         return downloadable_book
 
@@ -305,7 +308,7 @@ def prepareProgressBar(pb: QProgressBar) -> None:
                     pb.toolTipTimer.stop()
                     pb.toolTipPos = None
                     QToolTip.hideText()  # Скрываем подсказку
-            return QProgressBar.event(pb, event)
+            return False
 
     pb.toolTipPos = None
     pb.ef = PBEventFilter()

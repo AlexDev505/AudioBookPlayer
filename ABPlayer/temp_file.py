@@ -20,19 +20,19 @@ import re
 import typing as ty
 import warnings
 
-# Создаём файл
-if not os.path.isfile(os.environ["TEMP_PATH"]):
-    with open(os.environ["TEMP_PATH"], "w", encoding="utf-8"):
-        pass
-
 
 def load() -> ty.Dict[str, ty.Union[str, int, float, bool]]:
     """
     Считывает данные из файла.
     :return: Словарь с данными.
     """
+    # Создаём файл
+    if not os.path.isfile(os.environ["TEMP_PATH"]):
+        with open(os.environ["TEMP_PATH"], "w", encoding="utf-8"):
+            pass
+
     with open(os.environ["TEMP_PATH"], encoding="utf-8") as file:
-        data = file.read().split("\n")
+        data = file.read().splitlines()
     result = {}
     for item in data:
         match = re.fullmatch(
