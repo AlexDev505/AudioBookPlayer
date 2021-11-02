@@ -1651,8 +1651,8 @@ Line {
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>903</width>
-                                   <height>621</height>
+                                   <width>837</width>
+                                   <height>608</height>
                                   </rect>
                                  </property>
                                  <property name="sizePolicy">
@@ -1739,8 +1739,8 @@ Line {
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>903</width>
-                                   <height>621</height>
+                                   <width>837</width>
+                                   <height>608</height>
                                   </rect>
                                  </property>
                                  <property name="sizePolicy">
@@ -2363,7 +2363,7 @@ Line {
                                <rect>
                                 <x>0</x>
                                 <y>0</y>
-                                <width>84</width>
+                                <width>92</width>
                                 <height>16</height>
                                </rect>
                               </property>
@@ -3410,8 +3410,8 @@ p, li { white-space: pre-wrap; }
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>1050</width>
-                         <height>697</height>
+                         <width>371</width>
+                         <height>310</height>
                         </rect>
                        </property>
                        <layout class="QVBoxLayout" name="verticalLayout_42">
@@ -4071,6 +4071,12 @@ QPushButton:hover {
                 </property>
                 <item>
                  <widget class="QFrame" name="bookPreview">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
                   <property name="minimumSize">
                    <size>
                     <width>150</width>
@@ -4129,6 +4135,12 @@ QPushButton:hover {
                    </item>
                    <item>
                     <widget class="QFrame" name="bookTitle">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
                      <property name="minimumSize">
                       <size>
                        <width>0</width>
@@ -4723,7 +4735,7 @@ QPushButton:hover {
  </resources>
  <connections/>
  <buttongroups>
-  <buttongroup name="controlPanelButtons"/>
   <buttongroup name="menuButtons"/>
+  <buttongroup name="controlPanelButtons"/>
  </buttongroups>
 </ui>

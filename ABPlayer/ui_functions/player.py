@@ -4,23 +4,15 @@ import os
 import typing as ty
 from abc import abstractmethod
 
-from PyQt5.QtCore import (
-    QEasingCurve,
-    QObject,
-    QPropertyAnimation,
-    QTimer,
-    QUrl,
-    Qt,
-    pyqtSignal,
-)
+from PyQt5.QtCore import QObject, QTimer, QUrl, Qt, pyqtSignal
 from PyQt5.QtGui import QIcon
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer, QMediaPlaylist
 
+import temp_file
 from database import Books
 from database.tables.books import Status
 from tools import convert_into_seconds
 from . import sliders
-from .book_page import loadPreview
 
 if ty.TYPE_CHECKING:
     from PyQt5 import QtCore
@@ -129,7 +121,10 @@ class MainWindowPlayer(BasePlayerInterface):
     def positionChanged(self, value: int) -> None:
         # Если открыта страница прослушиваемой книги
         if self.player.book.url == self.book.url:
-            if not self.current_item_widget.slider.__dict__.get("pressed"):
+            if (
+                self.current_item_widget is not ...
+                and not self.current_item_widget.slider.__dict__.get("pressed")
+            ):
                 self.current_item_widget.slider.setValue(value)
 
     def stateChanged(self, state: QMediaPlayer.State) -> None:
@@ -161,7 +156,6 @@ class Player(QObject):
         self.book: Books = ...  # Прослушиваемая книга
 
         self.player = QMediaPlayer()
-        # TODO: Загружать громкость из файла с временными данными
         self.player.setVolume(50)  # Громкость по умолчанию
         self.playlist = QMediaPlaylist()
         self.player.setPlaylist(self.playlist)
@@ -174,6 +168,9 @@ class Player(QObject):
         self.book = main_window.book
         stop_flag_time = self.book.stop_flag.time
         main_window.reset_last_save()
+
+        # Обновляем данные о последней прослушиваемой книги
+        temp_file.update(last_listened_book_id=self.book.id)
 
         # Изменяем статс книги
         self.book.status = Status.started
@@ -197,23 +194,7 @@ class Player(QObject):
             # Перемещаемся в точку остановки
             self.setPosition(stop_flag_time, delay=250)
 
-        # TODO: Инициализировать книгу из файла с временными данными
-        # Открываем мини плеер
-        if main_window.miniPlayerFrame.maximumWidth() == 0:
-            main_window.player_animation = QPropertyAnimation(
-                main_window.miniPlayerFrame, b"maximumWidth"
-            )
-            main_window.player_animation.setStartValue(0)
-            main_window.player_animation.setEndValue(300)
-            main_window.player_animation.setEasingCurve(QEasingCurve.InOutQuart)
-            main_window.player_animation.finished.connect(
-                lambda: main_window.__dict__.__delitem__("player_animation")
-            )  # Удаляем анимацию
-            main_window.player_animation.start()
-
-        main_window.bookNameLabel.setText(self.book.name)
-        main_window.bookAuthorLabel.setText(self.book.author)
-        loadPreview(main_window, main_window.bookCover, (60, 60), self.book)
+        main_window.loadMiniPlayer()
 
     def finish_book(self) -> None:
         """
