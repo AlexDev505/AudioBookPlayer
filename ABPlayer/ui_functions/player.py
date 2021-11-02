@@ -95,6 +95,8 @@ class BasePlayerInterface(QObject):
                 <= 10
             ):
                 self.player.finish_book()
+                return
+            self.player.book = ...
         self.stateChanged(state)
 
     @abstractmethod
@@ -134,7 +136,7 @@ class MainWindowPlayer(BasePlayerInterface):
             else ":/other/play.svg"
         )
         # Если открыта страница прослушиваемой книги
-        if self.player.book.url == self.book.url:
+        if self.player.book is ... or self.player.book.url == self.book.url:
             self.playPauseBtnLg.setIcon(icon)
         self.playPauseBtn.setIcon(icon)
 
@@ -160,12 +162,13 @@ class Player(QObject):
         self.playlist = QMediaPlaylist()
         self.player.setPlaylist(self.playlist)
 
-    def init_book(self, main_window: MainWindow) -> None:
+    def init_book(self, main_window: MainWindow, book: Books) -> None:
         """
         Загружает книгу в плейлист.
         :param main_window: Экземпляр главного окна.
+        :param book:
         """
-        self.book = main_window.book
+        self.book = book
         stop_flag_time = self.book.stop_flag.time
         main_window.reset_last_save()
 
@@ -200,12 +203,13 @@ class Player(QObject):
         """
         Помечает книгу как прочитанную.
         """
-        self.setPosition(0, 0, 0)
-        self.player.pause()
+        self.setPosition(0, 0, 250)
         self.book.status = Status.finished
         self.book.stop_flag.item = 0
         self.book.stop_flag.time = 0
         self.book.save()
+        QTimer.singleShot(300, self.player.stop)
+        self.reloadPlayerInterface.emit()
 
     def setPosition(self, position: int, item: int = None, delay=100) -> None:
         """
@@ -272,7 +276,8 @@ class Player(QObject):
         time += step
         if time >= self.book.items[item].duration:
             if item == len(self.book.items) - 1:
-                time = self.book.items[-1].end_time
+                self.player.stop()
+                return
             else:
                 time -= self.book.items[item].duration
                 item += 1
@@ -294,7 +299,10 @@ class Player(QObject):
         :param main_window: Экземпляр главного окна.
         """
         if self.player.state() == QMediaPlayer.StoppedState:
-            self.init_book(main_window)  # Инициализируем книгу
+            self.init_book(
+                main_window,
+                book=self.book if self.book is not ... else main_window.book,
+            )  # Инициализируем книгу
 
         # Изменяем состояние
         if self.player.state() == QMediaPlayer.PlayingState:
@@ -321,7 +329,7 @@ def selectItem(main_window: MainWindow, event: QEvent, item_widget: Item) -> Non
         main_window.player.setState(main_window)
         book: Books = main_window.player.book
 
-    main_window.player.setPosition(0, book.items.index(item_widget.item))
+    main_window.player.setPosition(0, book.items.index(item_widget.item), delay=300)
 
 
 def showProgress(main_window: MainWindow, value: int, item_widget: Item) -> None:
@@ -354,9 +362,10 @@ def sliderMouseReleaseEvent(
     sliders.mouseReleaseEvent(slider, event)
 
     if event.button() == Qt.LeftButton:
+        position = slider.value()
         book: Books = main_window.player.book
         if book is ... or book.url != main_window.book.url:
             main_window.player.player.stop()
             main_window.player.setState(main_window)
 
-        main_window.player.setPosition(slider.value(), delay=250)
+        main_window.player.setPosition(position, delay=250)

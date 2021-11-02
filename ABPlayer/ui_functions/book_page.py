@@ -5,6 +5,7 @@ import ssl
 import typing as ty
 import urllib.request
 
+import requests.exceptions
 from PyQt5.QtCore import (
     QBasicTimer,
     QEasingCurve,
@@ -186,9 +187,12 @@ class DownloadBookWorker(BaseWorker):
             books = Books(os.environ["DB_PATH"])
             books.insert(**vars(self.book))  # Добавляем книгу в бд
             self.finished.emit()
+        except requests.exceptions.ConnectionError:
+            self.failed.emit(
+                "Соединение с сервером потеряно.\n" "Проверьте интернет соединение."
+            )
         except Exception as err:
-            # TODO: Необходимо реализовать нормальный обзор ошибок
-            self.failed.emit(str(err))
+            self.failed.emit(f"Ошибка при скачивании книги\n{str(err)}")
         self.main_window.downloadable_book = ...
 
     def finish(self) -> None:
@@ -281,26 +285,31 @@ def prepareProgressBar(pb: QProgressBar) -> None:
         def timerEvent(self, x) -> None:
             QToolTip.showText(pb.toolTipPos, pb.toolTip(), pb)
 
-    def eventFilter(event: QEvent) -> bool:
-        """
-        Обработчик событий полосы загрузки.
-        :param event:
-        """
-        if event.type() == QEvent.ToolTip:  # Удержание курсора на объекте
-            pb.toolTipPos = event.globalPos()  # Позиция, где будет отображена подсказка
-            pb.toolTipUpdater = ToolTipUpdater()
-            pb.toolTipTimer = QBasicTimer()
-            pb.toolTipTimer.start(100, pb.toolTipUpdater)  # Обновление подсказки
-            return True
-        elif event.type() == QEvent.Leave:  # Курсор покидает объект
-            if pb.__dict__.get("toolTipPos"):
-                pb.toolTipTimer.stop()
-                pb.toolTipPos = None
-                QToolTip.hideText()  # Скрываем подсказку
-        return QProgressBar.event(pb, event)
+    class PBEventFilter(QObject):
+        def eventFilter(self, obj: QObject, event: QEvent) -> bool:
+            """
+            Обработчик событий полосы загрузки.
+            :param obj:
+            :param event:
+            """
+            if event.type() == QEvent.ToolTip:  # Удержание курсора на объекте
+                pb.toolTipPos = (
+                    event.globalPos()
+                )  # Позиция, где будет отображена подсказка
+                pb.toolTipUpdater = ToolTipUpdater()
+                pb.toolTipTimer = QBasicTimer()
+                pb.toolTipTimer.start(100, pb.toolTipUpdater)  # Обновление подсказки
+                return True
+            elif event.type() == QEvent.Leave:  # Курсор покидает объект
+                if pb.__dict__.get("toolTipPos"):
+                    pb.toolTipTimer.stop()
+                    pb.toolTipPos = None
+                    QToolTip.hideText()  # Скрываем подсказку
+            return QProgressBar.event(pb, event)
 
     pb.toolTipPos = None
-    pb.event = eventFilter
+    pb.ef = PBEventFilter()
+    pb.installEventFilter(pb.ef)
 
 
 def downloadBook(main_window: MainWindow, book: Book) -> None:
@@ -364,9 +373,11 @@ class DeleteBookWorker(BaseWorker):
                 if len(os.listdir(author_dir)) == 0:
                     os.rmdir(author_dir)
             self.finished.emit()
+        except PermissionError:  # Файл занят другим процессом
+            # TODO: Можно удалять такие файлы после закрытия приложения
+            self.finished.emit()
         except Exception as err:
-            # TODO: Необходимо реализовать нормальный обзор ошибок
-            self.failed.emit(str(err))
+            self.failed.emit(f"Возникла ошибка во время удаления книги.\n{str(err)}")
         self.main_window.setLock(False)
 
     def finish(self) -> None:

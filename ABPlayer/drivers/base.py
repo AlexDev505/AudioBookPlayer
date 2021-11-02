@@ -169,7 +169,7 @@ class Driver(ABC):
         # Храним файл в переменной, чтобы можно было закрыть его из другой части кода.
         # Иначе, при остановке скачивания, возникает ошибка.
         self._file = open(file_path, "wb")
-        resp = requests.get(str(url), stream=True)
+        resp = requests.get(str(url), timeout=10, stream=True)
         if resp.headers.get("content-length") is None:
             self._file.write(resp.content)
         else:

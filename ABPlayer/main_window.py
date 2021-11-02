@@ -12,11 +12,12 @@ import typing as ty
 import webbrowser
 
 from PyQt5.QtCore import QEasingCurve, QPropertyAnimation, QSize, QTimer, Qt
-from PyQt5.QtGui import QFontMetrics, QIcon, QMovie
+from PyQt5.QtGui import QCloseEvent, QFontMetrics, QIcon, QMovie
 from PyQt5.QtMultimedia import QMediaPlayer
 from PyQt5.QtWidgets import (
     QFrame,
     QMainWindow,
+    QMessageBox,
     QSizePolicy,
     QSpacerItem,
     QVBoxLayout,
@@ -166,9 +167,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         self.sortBy.currentIndexChanged.connect(lambda e: self.openLibraryPage())
         self.sortAuthor.currentIndexChanged.connect(lambda e: self.openLibraryPage())
         self.searchBookBtn.clicked.connect(lambda e: filter_panel.search(self))
-        self.searchBookLineEdit.returnPressed.connect(
-            lambda e: filter_panel.search(self)
-        )
+        self.searchBookLineEdit.returnPressed.connect(lambda: filter_panel.search(self))
 
         # CONTROL PANEL
         self.controlPanelButtons.buttonClicked.connect(
@@ -196,7 +195,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         # ADD BOOK PAGE
         self.searchNewBookBtn.clicked.connect(lambda e: add_book_page.search(self))
         self.searchNewBookLineEdit.returnPressed.connect(
-            lambda e: add_book_page.search(self)
+            lambda: add_book_page.search(self)
         )
 
         # BOOK PAGE
@@ -254,12 +253,23 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         :param btn_text: Текст на кнопке.
         :param btn_function: Функция кнопки.
         """
-        self.infoPageLabel.setMovie(movie)
-        self.infoPageLabel.setText(text)
+        self.infoPageMovie.setMovie(movie)
+        self.infoPageLabel.clear()
+        self.infoPageLabel.setAlignment(Qt.AlignCenter)
+        self.infoPageLabel.insertPlainText(text)
         if movie:
+            self.infoPageLabel.hide()
+            self.infoPageMovie.show()
             movie.start()
+        else:
+            self.infoPageMovie.hide()
+            self.infoPageLabel.show()
         self.infoPageBtn.setText(btn_text)
         if btn_function:
+            try:
+                self.infoPageBtn.clicked.disconnect()
+            except TypeError:
+                pass
             self.infoPageBtn.clicked.connect(lambda: btn_function())
             self.infoPageBtn.show()
         else:
@@ -406,9 +416,9 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             )  # Удаляем анимацию
             self.miniPlayerFrame.player_animation.start()
 
-        self.bookNameLabel.setText(self.book.name)
-        self.bookAuthorLabel.setText(self.book.author)
-        book_page.loadPreview(self, self.bookCover, (60, 60), self.book)
+        self.bookNameLabel.setText(self.player.book.name)
+        self.bookAuthorLabel.setText(self.player.book.author)
+        book_page.loadPreview(self, self.bookCover, (60, 60), self.player.book)
 
     def openLibraryPage(self, books_ids: ty.List[int] = None) -> None:
         """
@@ -489,7 +499,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         # Инициализируем элементы
         for book in books:
             if self.player.book is not ...:
-                if book.url == self.player.book:
+                if book.url == self.player.book.url:
                     book = self.player.book
             bookWidget = self._initBookWidget(self.allBooksLayout, book)
             sizes.append(
@@ -601,8 +611,26 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         self.btnGroupFrame_2.setDisabled(value)
         self.downloadingProgressBar.setDisabled(value)
         self.overlayBtn.setDisabled(value)
+        self.bookPreview.setDisabled(value)
 
     def eventFilter(self, obj: QObject, event: QEvent) -> bool:
         window_geometry.mouseEvent(self, event)
 
         return super(MainWindow, self).eventFilter(obj, event)
+
+    def closeEvent(self, event: QCloseEvent) -> None:
+        if self.downloadable_book is not ...:
+            if (
+                QMessageBox.question(
+                    self,
+                    "Выход",
+                    "Прогресс скачивания книги сброситься.\n"
+                    "Вы действительно хотите закрыть приложение?",
+                )
+                == QMessageBox.Yes
+            ):
+                downloadable_book: Book = self.DownloadBookWorker.terminate()
+                book_page.DeleteBookWorker(self, downloadable_book).worker()
+                event.accept()
+            else:
+                event.ignore()

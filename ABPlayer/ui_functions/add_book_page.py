@@ -27,7 +27,7 @@ class SearchWorker(BaseWorker):
     """
 
     finished: QtCore.pyqtSignal = pyqtSignal(object)  # Поиск завершен
-    failed: QtCore.pyqtSignal = pyqtSignal()  # Ошибка при поиске
+    failed: QtCore.pyqtSignal = pyqtSignal(str)  # Ошибка при поиске
 
     def __init__(self, main_window: MainWindow, drv: Driver, url: str):
         super(SearchWorker, self).__init__()
@@ -35,23 +35,32 @@ class SearchWorker(BaseWorker):
 
     def connectSignals(self) -> None:
         self.finished.connect(lambda book: self.finish(book))
-        self.failed.connect(self.fail)
+        self.failed.connect(lambda message: self.fail(message))
 
     def worker(self) -> None:
         self.main_window.setLock(True)
         try:
             book = self.drv.get_book(self.url)
             self.finished.emit(book)
-        except Exception:
-            self.failed.emit()
+        except Exception as err:
+            if "ERR_INTERNET_DISCONNECTED" in str(err):
+                self.failed.emit(
+                    "Не удалось подключиться к серверу.\n"
+                    "Проверьте интернет соединение."
+                )
+            else:
+                self.failed.emit(
+                    "Не удалось получить данные об этой книге.\n"
+                    "Проверьте правильность введенной ссылки."
+                )
         self.main_window.setLock(False)
 
     def finish(self, book: Book) -> None:
         self.main_window.openBookPage(book)
 
-    def fail(self) -> None:
+    def fail(self, message: str) -> None:
         self.main_window.openInfoPage(
-            text="Не удалось получить данные об этой книге",
+            text=message,
             btn_text="Открыть ссылку в браузере",
             btn_function=lambda: webbrowser.open_new_tab(self.url),
         )
