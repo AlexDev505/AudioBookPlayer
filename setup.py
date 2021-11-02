@@ -14,7 +14,7 @@ import re
 
 import cx_Freeze
 
-__version__ = "1.0-a"
+__version__ = "1.0a2"
 target_dir = rf"build\ABPlayer"
 
 with open(r"ABPlayer\main.py", encoding="utf-8") as file:
@@ -36,10 +36,10 @@ with open("installer.nsi", "w") as file:
 
 executables = [
     cx_Freeze.Executable(
-        script=r"ABPlayer/run.py",  # Запускаемый файл
+        script=r"ABPlayer\run.py",  # Запускаемый файл
         # base="Win32GUI",  # Использует pythonw.exe
         targetName="ABPlayer.exe",  # Имя exe
-        icon="resources/icon.ico",
+        icon=r"interface\resources\icon.ico",
     )
 ]
 excludes = [
