@@ -2,10 +2,14 @@ from __future__ import annotations
 
 import typing as ty
 
-from PyQt5.QtCore import QEasingCurve, QPropertyAnimation
+from PyQt5.QtCore import QEasingCurve, QPropertyAnimation, Qt
 from PyQt5.QtGui import QIcon
 
+import temp_file
+from . import sliders
+
 if ty.TYPE_CHECKING:
+    from PyQt5.QtCore import QEvent
     from PyQt5.QtWidgets import QPushButton
     from main_window import MainWindow
 
@@ -102,6 +106,18 @@ def volumeSliderHandler(main_window: MainWindow, value: int) -> None:
     main_window.player.player.setVolume(value)
 
 
+def volumeSliderMouseReleaseEvent(main_window: MainWindow, event: QEvent) -> None:
+    """
+    Модифицирует обработку отпускание кнопки мыши с QSlider.
+    Обновляет данные о последней громкости воспроизведения.
+    :param main_window: Экземпляр главного окна.
+    :param event:
+    """
+    if event.button() == Qt.LeftButton:
+        temp_file.update(last_volume=main_window.volumeSlider.value())
+    return sliders.mouseReleaseEvent(main_window.volumeSlider, event)
+
+
 def speedSliderHandler(main_window: MainWindow, value: int) -> None:
     """
     Обработчик изменений значения слайдера скорости.
@@ -113,3 +129,8 @@ def speedSliderHandler(main_window: MainWindow, value: int) -> None:
 
     main_window.speedLabel.setText(f"x{value}")
     main_window.player.player.setPlaybackRate(value)
+
+
+def bookPreviewMousePressEvent(main_window: MainWindow, event: QEvent) -> None:
+    if event.button() == Qt.LeftButton:
+        main_window.openBookPage(main_window.player.book)

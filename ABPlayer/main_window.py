@@ -11,7 +11,7 @@ import os
 import typing as ty
 import webbrowser
 
-from PyQt5.QtCore import QSize, QTimer, Qt
+from PyQt5.QtCore import QEasingCurve, QPropertyAnimation, QSize, QTimer, Qt
 from PyQt5.QtGui import QFontMetrics, QIcon, QMovie
 from PyQt5.QtMultimedia import QMediaPlayer
 from PyQt5.QtWidgets import (
@@ -24,6 +24,7 @@ from PyQt5.QtWidgets import (
 )
 
 import styles
+import temp_file
 from database import Books
 from database.tables.books import Status
 from ui import UiMainWindow, UiBook, Item
@@ -71,10 +72,34 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         self.download_cover_thread_count = 0
 
         self.setupSignals()
-        self.openLibraryPage()  # При запуске приложения открываем библиотеку
 
         # Модифицируем QLabel, превращая его в marquee
         marquee.prepareLabel(self, self.bookNameLabel)
+
+        # Загружаем данные из прошлой сессии
+        temp = temp_file.load()
+        last_listened_book_id = temp.get("last_listened_book_id")
+        last_volume = temp.get("last_volume")
+
+        # Загружаем последнюю прослушиваемую книгу
+        if last_listened_book_id is not None:
+            book = Books(os.environ["DB_PATH"]).filter(id=last_listened_book_id)
+            if book:
+                self.book = book
+                self.player.book = book
+                self.loadMiniPlayer()
+            else:
+                temp_file.delete_items("last_listened_book_id")
+
+        # Устанавливаем последнюю громкость воспроизведения
+        if last_volume is not None:
+            if 0 <= last_volume <= 100:
+                self.player.player.setVolume(last_volume)
+                self.volumeSlider.setValue(last_volume)
+            else:
+                temp_file.delete_items("last_volume")
+
+        self.openLibraryPage()  # При запуске приложения открываем библиотеку
 
         # Указываем версию приложения
         self.appBuildVersionLabel.setText(f"Версия: {os.environ['version']}")
@@ -154,6 +179,9 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             lambda value: control_panel.volumeSliderHandler(self, value)
         )
         sliders.prepareSlider(self.volumeSlider)
+        self.volumeSlider.mouseReleaseEvent = (
+            lambda e: control_panel.volumeSliderMouseReleaseEvent(self, e)
+        )
 
         self.speedSlider.valueChanged.connect(
             lambda value: control_panel.speedSliderHandler(self, value)
@@ -184,6 +212,9 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         self.changeDriverBtn.clicked.connect(lambda e: book_page.changeDriver(self))
         self.stopDownloadingBtn.clicked.connect(
             lambda e: book_page.stopBookDownloading(self)
+        )
+        self.bookPreview.mousePressEvent = (
+            lambda e: control_panel.bookPreviewMousePressEvent(self, e)
         )
 
         # PLAYER
@@ -355,6 +386,29 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             40, 20, QSizePolicy.Expanding, QSizePolicy.Expanding
         )
         self.bookItemsLayout.layout().addItem(bookItemsSpacer)
+
+    def loadMiniPlayer(self) -> None:
+        """
+        Открывает мини плеер.
+        Обновляет в нем данные.
+        """
+        if self.miniPlayerFrame.maximumWidth() == 0:
+            self.miniPlayerFrame.player_animation = QPropertyAnimation(
+                self.miniPlayerFrame, b"maximumWidth"
+            )
+            self.miniPlayerFrame.player_animation.setStartValue(0)
+            self.miniPlayerFrame.player_animation.setEndValue(300)
+            self.miniPlayerFrame.player_animation.setEasingCurve(
+                QEasingCurve.InOutQuart
+            )
+            self.miniPlayerFrame.player_animation.finished.connect(
+                lambda: self.miniPlayerFrame.__dict__.__delitem__("player_animation")
+            )  # Удаляем анимацию
+            self.miniPlayerFrame.player_animation.start()
+
+        self.bookNameLabel.setText(self.book.name)
+        self.bookAuthorLabel.setText(self.book.author)
+        book_page.loadPreview(self, self.bookCover, (60, 60), self.book)
 
     def openLibraryPage(self, books_ids: ty.List[int] = None) -> None:
         """
