@@ -25,6 +25,11 @@ def setDirWithBooks(main_window: MainWindow) -> None:
     Изменяет путь к директории с книгами.
     :param main_window: Экземпляр главного окна.
     """
+    if main_window.downloadable_book is not ...:
+        QMessageBox.information(
+            main_window, "Предупреждение", "Дождитесь окончания скачивания книги"
+        )
+        return
     # Открываем диалог с пользователем
     path = QFileDialog.getExistingDirectory(main_window, "Выберите папку")
     if path is None or not str(path).strip():
