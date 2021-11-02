@@ -959,7 +959,7 @@ class UiMainWindow(object):
         )
         self.bookItems.setObjectName("bookItems")
         self.bookItemsLayout = QtWidgets.QWidget()
-        self.bookItemsLayout.setGeometry(QtCore.QRect(0, 0, 92, 16))
+        self.bookItemsLayout.setGeometry(QtCore.QRect(0, 0, 84, 16))
         self.bookItemsLayout.setObjectName("bookItemsLayout")
         self.verticalLayout_10 = QtWidgets.QVBoxLayout(self.bookItemsLayout)
         self.verticalLayout_10.setContentsMargins(0, 0, 0, 0)
@@ -1369,29 +1369,54 @@ class UiMainWindow(object):
         self.infoPageContent.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.infoPageContent.setFrameShadow(QtWidgets.QFrame.Raised)
         self.infoPageContent.setObjectName("infoPageContent")
-        self.horizontalLayout_25 = QtWidgets.QHBoxLayout(self.infoPageContent)
-        self.horizontalLayout_25.setObjectName("horizontalLayout_25")
-        spacerItem19 = QtWidgets.QSpacerItem(
-            408, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum
-        )
-        self.horizontalLayout_25.addItem(spacerItem19)
-        self.verticalLayout_18 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_18 = QtWidgets.QVBoxLayout(self.infoPageContent)
+        self.verticalLayout_18.setSpacing(10)
         self.verticalLayout_18.setObjectName("verticalLayout_18")
-        spacerItem20 = QtWidgets.QSpacerItem(
-            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        spacerItem19 = QtWidgets.QSpacerItem(
+            20, 254, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
         )
-        self.verticalLayout_18.addItem(spacerItem20)
-        self.infoPageLabel = QtWidgets.QLabel(self.infoPageContent)
+        self.verticalLayout_18.addItem(spacerItem19)
+        self.infoPageMovie = QtWidgets.QLabel(self.infoPageContent)
+        self.infoPageMovie.setAlignment(QtCore.Qt.AlignCenter)
+        self.infoPageMovie.setObjectName("infoPageMovie")
+        self.verticalLayout_18.addWidget(self.infoPageMovie)
+        self.infoPageLabel = QtWidgets.QTextEdit(self.infoPageContent)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.infoPageLabel.sizePolicy().hasHeightForWidth()
+        )
+        self.infoPageLabel.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setFamily("Arial")
-        font.setPointSize(20)
+        font.setPointSize(14)
         font.setBold(True)
         font.setWeight(75)
         self.infoPageLabel.setFont(font)
-        self.infoPageLabel.setText("")
-        self.infoPageLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.infoPageLabel.setStyleSheet(
+            "QTextEdit, QTextEdit * {\n"
+            "    border: none;\n"
+            "    margin-left: 3px;\n"
+            "}"
+        )
+        self.infoPageLabel.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.infoPageLabel.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.infoPageLabel.setSizeAdjustPolicy(
+            QtWidgets.QAbstractScrollArea.AdjustToContents
+        )
+        self.infoPageLabel.setMarkdown("")
+        self.infoPageLabel.setTextInteractionFlags(QtCore.Qt.TextSelectableByMouse)
         self.infoPageLabel.setObjectName("infoPageLabel")
         self.verticalLayout_18.addWidget(self.infoPageLabel)
+        self.horizontalLayout_25 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_25.setObjectName("horizontalLayout_25")
+        spacerItem20 = QtWidgets.QSpacerItem(
+            408, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum
+        )
+        self.horizontalLayout_25.addItem(spacerItem20)
         self.infoPageBtn = QtWidgets.QPushButton(self.infoPageContent)
         font = QtGui.QFont()
         font.setFamily("Arial")
@@ -1401,16 +1426,16 @@ class UiMainWindow(object):
         self.infoPageBtn.setFont(font)
         self.infoPageBtn.setText("")
         self.infoPageBtn.setObjectName("infoPageBtn")
-        self.verticalLayout_18.addWidget(self.infoPageBtn)
+        self.horizontalLayout_25.addWidget(self.infoPageBtn)
         spacerItem21 = QtWidgets.QSpacerItem(
-            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
-        )
-        self.verticalLayout_18.addItem(spacerItem21)
-        self.horizontalLayout_25.addLayout(self.verticalLayout_18)
-        spacerItem22 = QtWidgets.QSpacerItem(
             407, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum
         )
-        self.horizontalLayout_25.addItem(spacerItem22)
+        self.horizontalLayout_25.addItem(spacerItem21)
+        self.verticalLayout_18.addLayout(self.horizontalLayout_25)
+        spacerItem22 = QtWidgets.QSpacerItem(
+            20, 254, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
+        self.verticalLayout_18.addItem(spacerItem22)
         self.horizontalLayout_24.addWidget(self.infoPageContent)
         self.stackedWidget.addWidget(self.infoPage)
         self.settingsPage = QtWidgets.QWidget()
@@ -1431,7 +1456,7 @@ class UiMainWindow(object):
         self.settingsScrollArea.setWidgetResizable(True)
         self.settingsScrollArea.setObjectName("settingsScrollArea")
         self.settingsContent = QtWidgets.QWidget()
-        self.settingsContent.setGeometry(QtCore.QRect(0, 0, 371, 310))
+        self.settingsContent.setGeometry(QtCore.QRect(0, 0, 1050, 697))
         self.settingsContent.setObjectName("settingsContent")
         self.verticalLayout_42 = QtWidgets.QVBoxLayout(self.settingsContent)
         self.verticalLayout_42.setContentsMargins(0, 0, 0, 0)
@@ -1814,7 +1839,7 @@ class UiMainWindow(object):
         self.horizontalLayout_6.addWidget(self.bookCover)
         self.bookTitle = QtWidgets.QFrame(self.bookPreview)
         sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Preferred
+            QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred
         )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -2119,6 +2144,16 @@ class UiMainWindow(object):
         self.label_4.setText(_translate("MainWindow", "Поиск книги"))
         self.searchNewBookLineEdit.setPlaceholderText(
             _translate("MainWindow", "Введите название книги или вставьте ссылку")
+        )
+        self.infoPageLabel.setHtml(
+            _translate(
+                "MainWindow",
+                '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">\n'
+                '<html><head><meta name="qrichtext" content="1" /><style type="text/css">\n'
+                "p, li { white-space: pre-wrap; }\n"
+                "</style></head><body style=\" font-family:'Arial'; font-size:14pt; font-weight:600; font-style:normal;\">\n"
+                '<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /></p></body></html>',
+            )
         )
         self.label_19.setText(_translate("MainWindow", "Интерфейс"))
         self.label_20.setText(_translate("MainWindow", "Тема"))

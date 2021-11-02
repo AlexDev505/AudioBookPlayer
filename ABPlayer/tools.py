@@ -4,8 +4,10 @@
 
 """
 
+import os
 import typing as ty
 from abc import abstractmethod
+from datetime import datetime
 
 from PyQt5.QtCore import QObject, QThread
 
@@ -97,3 +99,20 @@ def convert_into_bits(bits: int) -> str:
         return f"{round(bits / 2 ** 23, 2)} {postfixes[-2]}"
     elif bits >= 2 ** 13:
         return f"{round(bits / 2 ** 13, 1)} {postfixes[-3]}"
+
+
+def debug(message: ty.Union[str, ty.List[str]]) -> None:
+    """
+    # TODO: Использовать loguru.
+    Добавляет запись в файл отладки.
+    :param message: Сообщение.
+    """
+    if isinstance(message, str):
+        message = message.splitlines()
+
+    with open(os.environ["DEBUG_PATH"], "a+") as file:
+        title = (
+            f"\n\n{datetime.now().strftime('%d.%m.%Y-%H:%M:%S')} "
+            f"v: {os.environ['VERSION']}\n"
+        )
+        file.writelines([title] + message)

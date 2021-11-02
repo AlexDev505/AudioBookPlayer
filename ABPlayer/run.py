@@ -5,18 +5,18 @@
 """
 
 import sys
-import os
-import main
 import traceback
+
+import main
+from tools import debug
 
 sys._excepthook = sys.excepthook
 
 
-def exception_hook(exctype, value, t):
-    print(exctype, value, t)
-    with open(os.path.join(os.environ["APP_DIR"], "errors.log"), "a+") as file:
-        file.writelines(["\n\n"] + traceback.format_exception(exctype, value, t))
-    sys._excepthook(exctype, value, t)
+def exception_hook(exctype, value, tb):
+    print("".join(traceback.format_exception(exctype, value, tb)))
+    debug(traceback.format_exception(exctype, value, tb))
+    sys._excepthook(exctype, value, tb)
 
 
 sys.excepthook = exception_hook
