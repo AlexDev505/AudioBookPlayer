@@ -61,7 +61,8 @@ def setCurrentPage(main_window: MainWindow, page: QWidget) -> None:
         else:
             main_window.pb_animation.deleteLater()
             main_window.__dict__.__delitem__("pb_animation")
-    elif (
+
+    if (
         main_window.stackedWidget.currentWidget() == main_window.libraryPage
         and page != main_window.libraryPage
     ):

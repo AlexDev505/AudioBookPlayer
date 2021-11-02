@@ -45,9 +45,9 @@ class BaseWorker(QObject):
     """
 
     def __new__(cls, *args, **kwargs):
-        self = super(BaseWorker, cls).__new__(cls, *args, **kwargs)
+        self = super(BaseWorker, cls).__new__(cls)
         self.__init__(*args, **kwargs)
-        self.thread = QThread()  # Создаем новый поток
+        self.thread = QThread(self)  # Создаем новый поток
         self.moveToThread(self.thread)
         self.thread.started.connect(self.worker)
         return self
