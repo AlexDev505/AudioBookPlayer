@@ -14,7 +14,7 @@ import re
 
 import cx_Freeze
 
-__version__ = "1.0a2"
+__version__ = "1.0a3"
 target_dir = rf"build\ABPlayer"
 
 with open(r"ABPlayer\main.py", encoding="utf-8") as file:
