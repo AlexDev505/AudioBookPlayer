@@ -21,7 +21,7 @@ from PyQt5.QtWidgets import QMessageBox
 import temp_file
 from database import Books, Book
 from database.tables.books import Status
-from tools import convert_into_seconds
+from tools import convert_into_seconds, get_file_hash
 from . import sliders
 from .book_page import DeleteBookWorker
 
@@ -248,26 +248,12 @@ class Player(QObject):
         if not os.path.isdir(self.book.dir_path):  # Директории нет
             return self.bookIsDamaged.emit()
 
-        for _, _, files in os.walk(self.book.dir_path):
-            for file in files:
-                if file.endswith(".mp3"):
-                    file_paths.append(os.path.join(self.book.dir_path, file))
-            break
-
-        # Неправильное кол-во файлов
-        if len(file_paths) != max(item.file_index for item in self.book.items):
-            return self.bookIsDamaged.emit()
-
-        for i, file_path in enumerate(file_paths):
-            file_duration = round(eyed3.load(file_path).info.time_secs, 0)
-            necessary_duration = sum(
-                item.duration for item in self.book.items if item.file_index == i + 1
-            )
-            # TODO: Можно генерировать хэш каждого файла и сверять их.
-            if (
-                file_duration < necessary_duration
-            ):  # Длительность файла меньше чем нужно
+        for file_name, file_hash in self.book.files.items():
+            file_path = os.path.join(self.book.dir_path, file_name)
+            if not os.path.isfile(file_path) or get_file_hash(file_path) != file_hash:
                 return self.bookIsDamaged.emit()
+            file_paths.append(file_path)
+
         for file_path in file_paths:
             url = QUrl.fromLocalFile(file_path)
             self.playlist.addMedia(QMediaContent(url))
