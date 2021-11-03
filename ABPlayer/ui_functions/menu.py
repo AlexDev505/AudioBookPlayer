@@ -6,11 +6,12 @@
 
 from __future__ import annotations
 
-import os
 import typing as ty
 
 from PyQt5.QtCore import QEasingCurve, QPropertyAnimation
 from PyQt5.QtGui import QIcon
+
+from .settings_page import openDirWithBooks
 
 if ty.TYPE_CHECKING:
     from PyQt5.QtWidgets import QPushButton
@@ -64,4 +65,4 @@ def buttonsHandler(main_window: MainWindow, button: QPushButton) -> None:
     elif button == main_window.settingsBtn:  # Настройки
         main_window.stackedWidget.setCurrentWidget(main_window.settingsPage)
     elif button == main_window.dirWithBooksBtn:  # Папка с книгами
-        os.startfile(os.environ["books_folder"])
+        openDirWithBooks()

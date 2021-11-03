@@ -233,7 +233,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         )
 
         self.openDirWithBooksBtn.clicked.connect(
-            lambda e: os.startfile(os.environ["books_folder"])
+            lambda e: settings_page.openDirWithBooks()
         )
         self.setDirWithBooksBtn.clicked.connect(
             lambda e: settings_page.setDirWithBooks(self)

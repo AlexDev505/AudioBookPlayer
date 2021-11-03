@@ -18,8 +18,6 @@ os.environ["TEMP_PATH"] = os.path.join(os.environ["APP_DIR"], "temp.txt")
 os.environ["DEBUG_PATH"] = os.path.join(os.environ["APP_DIR"], "debug.log")
 # Стандартный путь к директории с книгами
 os.environ["DEFAULT_BOOKS_FOLDER"] = os.path.join(os.environ["APP_DIR"], "Книги")
-if not os.path.exists(os.environ["DEFAULT_BOOKS_FOLDER"]):
-    os.mkdir(os.environ["DEFAULT_BOOKS_FOLDER"])
 # Версия приложения
 os.environ["VERSION"] = "1.0a2"
 # Инициализация конфигурации
