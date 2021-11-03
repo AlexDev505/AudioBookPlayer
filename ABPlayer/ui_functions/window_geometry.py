@@ -114,8 +114,8 @@ def _check_position(window: QMainWindow, event: QEvent) -> None:
     bottom_right = rect.bottomRight()
 
     if event.pos() in QRect(
+        QPoint(bottom_right.x() - 30, bottom_right.y() - 30),
         QPoint(bottom_right.x(), bottom_right.y()),
-        QPoint(bottom_right.x() - 10, bottom_right.y() - 10),
     ):
         window.setCursor(Qt.SizeFDiagCursor)
     else:  # Обычный курсор
@@ -141,8 +141,12 @@ def toggleFullScreen(window: QMainWindow) -> None:
     :param window: Экземпляр окна.
     """
     if not window.isFullScreen():
+        # Скрываем место отведённое для тени
+        window.centralWidget().layout().setContentsMargins(0, 0, 0, 0)
         window.showFullScreen()
         window.resizeWidgetFrame.hide()
     else:
+        # Отображаем место отведённое для тени
+        window.centralWidget().layout().setContentsMargins(15, 15, 15, 15)
         window.showNormal()
         window.resizeWidgetFrame.show()
