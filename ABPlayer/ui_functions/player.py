@@ -4,15 +4,26 @@ import os
 import typing as ty
 from abc import abstractmethod
 
-from PyQt5.QtCore import QObject, QTimer, QUrl, Qt, pyqtSignal
+import eyed3
+from PyQt5.QtCore import (
+    QEasingCurve,
+    QObject,
+    QPropertyAnimation,
+    QTimer,
+    QUrl,
+    Qt,
+    pyqtSignal,
+)
 from PyQt5.QtGui import QIcon
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer, QMediaPlaylist
+from PyQt5.QtWidgets import QMessageBox
 
 import temp_file
-from database import Books
+from database import Books, Book
 from database.tables.books import Status
 from tools import convert_into_seconds
 from . import sliders
+from .book_page import DeleteBookWorker
 
 if ty.TYPE_CHECKING:
     from PyQt5 import QtCore
@@ -45,6 +56,7 @@ class BasePlayerInterface(QObject):
         self.player.player.positionChanged.connect(self._positionChanged)
         self.player.player.stateChanged.connect(self._stateChanged)
         self.player.reloadPlayerInterface.connect(self.reloadPlayerInterface)
+        self.player.bookIsDamaged.connect(self.bookIsDamaged)
 
     def reset_last_save(self) -> None:
         self._last_saved_time = self._last_saved_item = 0
@@ -88,15 +100,17 @@ class BasePlayerInterface(QObject):
     def _stateChanged(self, state: QMediaPlayer.State) -> None:
         if state == QMediaPlayer.StoppedState:
             if (
-                abs(
+                self.player.book is not ...
+                and self.player.book.stop_flag.item == len(self.player.book.items) - 1
+                and abs(
                     self.player.book.items[self.player.book.stop_flag.item].duration
                     - self.player.book.stop_flag.time
                 )
                 <= 10
             ):
                 self.player.finish_book()
+                self.player.book = ...
                 return
-            self.player.book = ...
         self.stateChanged(state)
 
     @abstractmethod
@@ -112,6 +126,13 @@ class BasePlayerInterface(QObject):
         """
         Необходимо реализовать в наследуемом классе.
         Вызывается, когда необходимо обновить интерфейс плеера.
+        """
+
+    @abstractmethod
+    def bookIsDamaged(self) -> None:
+        """
+        Необходимо реализовать в наследуемом классе.
+        Вызывается, когда файлы книги повреждены.
         """
 
 
@@ -145,6 +166,46 @@ class MainWindowPlayer(BasePlayerInterface):
         if self.player.book.url == self.book.url:
             self.loadPlayer()
 
+    def bookIsDamaged(self) -> None:
+        self.openLoadingPage()
+        QMessageBox.information(
+            self, "Внимание", "Файлы повреждены.\nСкачайте книгу заново."  # noqa
+        )
+        downloaded_book = self.player.book
+        book = Book(
+            **{
+                k: v
+                for k, v in downloaded_book.__dict__.items()
+                if k in Book.__annotations__
+            }  # noqa
+        )
+        self.player.book = ...
+
+        # Создаем и запускаем новый поток
+        self.DeleteBookWorker = DeleteBookWorker(self, downloaded_book)  # noqa
+        self.DeleteBookWorker.start()
+        self.DeleteBookWorker.finished.disconnect()  # noqa
+        self.DeleteBookWorker.finished.connect(lambda: self.openBookPage(book))  # noqa
+
+        last_listened_book_id = temp_file.load().get("last_listened_book_id")
+        if last_listened_book_id == downloaded_book.id:
+            temp_file.delete_items("last_listened_book_id")
+            if self.miniPlayerFrame.maximumWidth() != 0:
+                self.miniPlayerFrame.player_animation = QPropertyAnimation(
+                    self.miniPlayerFrame, b"maximumWidth"
+                )
+                self.miniPlayerFrame.player_animation.setStartValue(300)
+                self.miniPlayerFrame.player_animation.setEndValue(0)
+                self.miniPlayerFrame.player_animation.setEasingCurve(
+                    QEasingCurve.InOutQuart
+                )
+                self.miniPlayerFrame.player_animation.finished.connect(
+                    lambda: self.miniPlayerFrame.__dict__.__delitem__(
+                        "player_animation"
+                    )
+                )  # Удаляем анимацию
+                self.miniPlayerFrame.player_animation.start()
+
 
 class Player(QObject):
     """
@@ -152,6 +213,7 @@ class Player(QObject):
     """
 
     reloadPlayerInterface: QtCore.pyqtSignal = pyqtSignal()
+    bookIsDamaged: QtCore.pyqtSignal = pyqtSignal()
 
     def __init__(self):
         super(Player, self).__init__()
@@ -182,13 +244,33 @@ class Player(QObject):
         self.playlist.clear()  # Очищаем плейлист
 
         # Загружаем аудио файлы в плейлист
+        file_paths: ty.List[str] = []
+        if not os.path.isdir(self.book.dir_path):  # Директории нет
+            return self.bookIsDamaged.emit()
+
         for _, _, files in os.walk(self.book.dir_path):
             for file in files:
                 if file.endswith(".mp3"):
-                    file_path = os.path.join(self.book.dir_path, file)
-                    url = QUrl.fromLocalFile(file_path)
-                    self.playlist.addMedia(QMediaContent(url))
+                    file_paths.append(os.path.join(self.book.dir_path, file))
             break
+
+        # Неправильное кол-во файлов
+        if len(file_paths) != max(item.file_index for item in self.book.items):
+            return self.bookIsDamaged.emit()
+
+        for i, file_path in enumerate(file_paths):
+            file_duration = round(eyed3.load(file_path).info.time_secs, 0)
+            necessary_duration = sum(
+                item.duration for item in self.book.items if item.file_index == i + 1
+            )
+            # TODO: Можно генерировать хэш каждого файла и сверять их.
+            if (
+                file_duration < necessary_duration
+            ):  # Длительность файла меньше чем нужно
+                return self.bookIsDamaged.emit()
+        for file_path in file_paths:
+            url = QUrl.fromLocalFile(file_path)
+            self.playlist.addMedia(QMediaContent(url))
 
         self.playlist.setCurrentIndex(
             self.book.items[self.book.stop_flag.item].file_index - 1
@@ -291,6 +373,7 @@ class Player(QObject):
         # Если мы включаем другую книгу
         if self.book is ... or self.book.url != main_window.book.url:
             self.player.stop()  # Останавливаем прослушивание
+            self.book = ...
         self.setState(main_window)
 
     def setState(self, main_window: MainWindow) -> None:
@@ -322,14 +405,10 @@ def selectItem(main_window: MainWindow, event: QEvent, item_widget: Item) -> Non
     if event.pos() not in item_widget.rect() or event.button() != Qt.LeftButton:
         return
 
-    book: Books = main_window.player.book
-    # Если пользователь включает другую книгу
-    if book is ... or book.url != main_window.book.url:
-        main_window.player.player.stop()
-        main_window.player.setState(main_window)
-        book: Books = main_window.player.book
-
-    main_window.player.setPosition(0, book.items.index(item_widget.item), delay=300)
+    main_window.player.playPause(main_window)
+    main_window.player.setPosition(
+        0, main_window.player.book.items.index(item_widget.item), delay=300
+    )
 
 
 def showProgress(main_window: MainWindow, value: int, item_widget: Item) -> None:
@@ -340,13 +419,9 @@ def showProgress(main_window: MainWindow, value: int, item_widget: Item) -> None
     :param value: Позиция.
     :param item_widget: Экземпляр виджета главы.
     """
-    book: Books = main_window.player.book
-    if book is ...:
-        main_window.player.setState(main_window)
-        book: Books = main_window.player.book
-
-    # Отображаем прогресс прослушивания
-    main_window.progressLabel.setText(f"{book.listening_progress} прослушано")
+    main_window.progressLabel.setText(
+        f"{main_window.player.book.listening_progress} прослушано"
+    )
     item_widget.doneTime.setText(convert_into_seconds(value))
 
 
@@ -363,9 +438,5 @@ def sliderMouseReleaseEvent(
 
     if event.button() == Qt.LeftButton:
         position = slider.value()
-        book: Books = main_window.player.book
-        if book is ... or book.url != main_window.book.url:
-            main_window.player.player.stop()
-            main_window.player.setState(main_window)
-
+        main_window.player.playPause(main_window)
         main_window.player.setPosition(position, delay=250)

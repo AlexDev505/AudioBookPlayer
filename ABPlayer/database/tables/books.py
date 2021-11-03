@@ -140,6 +140,8 @@ class Books(Table, Book):
         :return: Прогресс прослушивания. (В процентах)
         """
         total = sum([item.end_time - item.start_time for item in self.items])
+        if not total:
+            return "0%"
         cur = (
             sum(
                 [

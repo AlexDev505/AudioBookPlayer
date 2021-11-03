@@ -457,7 +457,7 @@ def deleteBook(main_window: MainWindow, book: Books = None) -> None:
 
     # Создаем и запускаем новый поток
     main_window.DeleteBookWorker = DeleteBookWorker(main_window, book)
-    QTimer.singleShot(2000, main_window.DeleteBookWorker.start)
+    QTimer.singleShot(1000, main_window.DeleteBookWorker.start)
 
 
 def toggleFavorite(main_window: MainWindow, book: Books = None) -> None:

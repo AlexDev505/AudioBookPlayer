@@ -289,6 +289,8 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         Открывает страницу книги.
         :param book: Экземпляр скачанной или не скачанной книги.
         """
+        if book is ...:
+            return
         self.book = book
 
         book_data = Books(os.environ["DB_PATH"]).filter(
