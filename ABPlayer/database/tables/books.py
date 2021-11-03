@@ -6,7 +6,7 @@ from ast import literal_eval
 from dataclasses import dataclass, field
 
 from sqlite3_api import Table
-from sqlite3_api.field_types import FieldType, List
+from sqlite3_api.field_types import Dict, FieldType, List
 
 from database.tools import replace_quotes
 
@@ -94,6 +94,12 @@ class Bool(FieldType):
         return bool(int(obj.decode("utf-8")))
 
 
+class BookFiles(Dict):
+    """
+    Аудио файлы книги. Словарь: ty.Dict[str, str] {<имя файла>: <хеш>}
+    """
+
+
 @dataclass
 class Book:
     """
@@ -133,6 +139,7 @@ class Books(Table, Book):
     status: Status = Status.new
     stop_flag: StopFlag = StopFlag()
     favorite: Bool = False
+    files: BookFiles = BookFiles()
 
     @property
     def listening_progress(self):

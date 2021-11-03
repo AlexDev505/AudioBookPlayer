@@ -4,12 +4,18 @@
 
 """
 
+from __future__ import annotations
+
+import hashlib
 import os
 import typing as ty
 from abc import abstractmethod
 from datetime import datetime
 
 from PyQt5.QtCore import QObject, QThread
+
+if ty.TYPE_CHECKING:
+    from pathlib import Path
 
 
 class Cache(object):
@@ -99,6 +105,19 @@ def convert_into_bits(bits: int) -> str:
         return f"{round(bits / 2 ** 23, 2)} {postfixes[-2]}"
     elif bits >= 2 ** 13:
         return f"{round(bits / 2 ** 13, 1)} {postfixes[-3]}"
+
+
+def get_file_hash(file_path: ty.Union[str, Path], hash_func=hashlib.sha256) -> str:
+    """
+    :param file_path: Путь к файлу.
+    :param hash_func: Функция хеширования.
+    :return: Хеш файла.
+    """
+    hash_func = hash_func()
+    with open(file_path, "rb") as file:
+        for block in iter(lambda: file.read(65536), b""):
+            hash_func.update(block)
+    return hash_func.hexdigest()
 
 
 def debug(message: ty.Union[str, ty.List[str]]) -> None:

@@ -29,9 +29,9 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
 )
 
-from database.tables.books import Books, Status
+from database.tables.books import BookFiles, Books, Status
 from drivers import BaseDownloadProcessHandler, drivers
-from tools import BaseWorker, Cache, convert_into_bits
+from tools import BaseWorker, Cache, convert_into_bits, get_file_hash
 from .add_book_page import SearchWorker
 
 if ty.TYPE_CHECKING:
@@ -183,9 +183,12 @@ class DownloadBookWorker(BaseWorker):
 
     def worker(self) -> None:
         try:
-            self.drv.download_book(self.book, self.download_process_handler)
+            files = self.drv.download_book(self.book, self.download_process_handler)
             books = Books(os.environ["DB_PATH"])
-            books.insert(**vars(self.book))  # Добавляем книгу в бд
+            books.insert(
+                **vars(self.book),
+                files=BookFiles({file.name: get_file_hash(file) for file in files}),
+            )  # Добавляем книгу в бд
             self.finished.emit()
         except requests.exceptions.ConnectionError:
             self.failed.emit(

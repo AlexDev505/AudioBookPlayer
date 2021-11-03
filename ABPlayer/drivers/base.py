@@ -107,11 +107,12 @@ class Driver(ABC):
         self,
         book: Book,
         process_handler: BaseDownloadProcessHandler = None,
-    ) -> None:
+    ) -> ty.List[Path]:
         """
         Метод, скачивающий аудио файлы книги.
         :param book: Экземпляр книги.
         :param process_handler: Обработчик процесса скачивания.
+        :return: Список путей к файлам.
         """
         item: BookItem
 
@@ -135,6 +136,7 @@ class Driver(ABC):
         if process_handler:
             process_handler.init(total_size)
 
+        files = []
         if merged:
             for i, url in enumerate(urls):
                 file_path = Path(
@@ -143,13 +145,17 @@ class Driver(ABC):
                         f"{str(i + 1).rjust(2, '0')}. {book.author} - {book.name}.mp3",
                     )
                 )
-                self._download_file(file_path, url, process_handler)
+                # self._download_file(file_path, url, process_handler)
+                files.append(file_path)
                 prepare_file_metadata(file_path, book, i)
         else:
             for i, item in enumerate(book.items):
                 file_path = Path(os.path.join(book.dir_path, item.title + ".mp3"))
-                self._download_file(file_path, item.file_url, process_handler)
+                # self._download_file(file_path, item.file_url, process_handler)
+                files.append(file_path)
                 prepare_file_metadata(file_path, book, i, item)
+
+        return files
 
     def _download_file(
         self,
