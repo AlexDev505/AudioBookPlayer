@@ -48,7 +48,7 @@ def setDirWithBooks(main_window: MainWindow) -> None:
 
     # Копируем книги в новую директорию
     for file_path in file_paths:
-        old_file_path = os.path.join(os.environ["books_folder"])
+        old_file_path = os.path.join(os.environ["books_folder"], file_path)
         new_file_path = pathlib.Path(path, file_path)  # Новый путь к файлу
         if not new_file_path.exists():  # Создаем директорию книги
             new_file_path.parent.mkdir(parents=True, exist_ok=True)
@@ -68,6 +68,14 @@ def setDirWithBooks(main_window: MainWindow) -> None:
 
     main_window.stackedWidget.setCurrentWidget(main_window.settingsPage)
     QMessageBox.information(main_window, "Информация", "Папка успешно изменена")
+
+
+def openDirWithBooks() -> None:
+    try:
+        os.startfile(os.environ["books_folder"])
+    except FileNotFoundError:
+        Config.init()
+        os.startfile(os.environ["books_folder"])
 
 
 def changeTheme(main_window: MainWindow) -> None:

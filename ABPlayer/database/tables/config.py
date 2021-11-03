@@ -25,6 +25,13 @@ class Config(Table):
             db.insert()
             config = db.filter()
 
+        if not os.path.isdir(config.books_folder):
+            if not os.path.exists(os.environ["DEFAULT_BOOKS_FOLDER"]):
+                os.mkdir(os.environ["DEFAULT_BOOKS_FOLDER"])
+            if config.books_folder != os.environ["DEFAULT_BOOKS_FOLDER"]:
+                config.update(books_folder=os.environ["DEFAULT_BOOKS_FOLDER"])
+                return
+
         config.add_to_env()
 
     def add_to_env(self) -> None:

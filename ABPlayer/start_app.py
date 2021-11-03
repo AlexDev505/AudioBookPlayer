@@ -8,14 +8,17 @@
 
 from __future__ import annotations
 
+import os
 import typing as ty
 from inspect import isclass
+import warnings
 
 import requests
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QMovie
 from PyQt5.QtWidgets import QMainWindow
 
+from database import Books, Config
 from drivers import chromedriver
 from drivers.exceptions import *
 from tools import BaseWorker
@@ -101,6 +104,8 @@ class Worker(BaseWorker):
             self.status.emit("ConnectionError", ConnectionFail)
             return
 
+        self.check_database_integrity()
+
         try:
             self.status.emit("Проверка наличия браузера", None)
             chromedriver.get_chrome_version()
@@ -114,3 +119,37 @@ class Worker(BaseWorker):
                 self.status.emit(str(err), NotAvailableVersion)
             elif str(err) == "Downloading fail":
                 self.status.emit(str(err), DownloadingFail)
+
+    def check_database_integrity(self):
+        self.status.emit("Проверка целостности базы данных", None)
+
+        for table in (Books, Config):
+            db = table(os.environ["DB_PATH"])
+            fields = db.api.fetchall(f"PRAGMA table_info('{db.table_name}')")
+            necessary_fields = db.get_fields()
+
+            if fields[0] != (0, "id", "INTEGER", 1, None, 1) or len(fields[1:]) != len(
+                necessary_fields.keys()
+            ):
+                warnings.warn(
+                    f"The number of fields in table `{db.table_name}` does not match"
+                )
+                return self._restore_database()
+
+            for field, n_field in zip(fields[1:], necessary_fields):
+                if field[1] != n_field or field[2] != necessary_fields[n_field]:
+                    warnings.warn(
+                        f"The field {field[1]}({field[2]}) was encountered, "
+                        f"but it should be {n_field}({necessary_fields[n_field]})"
+                    )
+                    return self._restore_database()
+
+    def _restore_database(self):
+        self.status.emit("Восстановление базы данных", None)
+        db = Config(os.environ["DB_PATH"])
+        db.api.execute("DROP TABLE config")
+        db.api.execute("DROP TABLE books")
+        db.api.commit()
+        db.create_table()
+        db.init()
+        Books(os.environ["DB_PATH"]).create_table()
