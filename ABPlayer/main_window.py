@@ -12,10 +12,11 @@ import typing as ty
 import webbrowser
 
 from PyQt5.QtCore import QEasingCurve, QPropertyAnimation, QSize, QTimer, Qt
-from PyQt5.QtGui import QCloseEvent, QFontMetrics, QIcon, QMovie
+from PyQt5.QtGui import QCloseEvent, QColor, QFontMetrics, QIcon, QMovie
 from PyQt5.QtMultimedia import QMediaPlayer
 from PyQt5.QtWidgets import (
     QFrame,
+    QGraphicsDropShadowEffect,
     QMainWindow,
     QMessageBox,
     QSizePolicy,
@@ -60,7 +61,16 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
 
         # Окно без рамок
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowMinimizeButtonHint)
+
+        # Тень вокруг окна
         self.setAttribute(Qt.WA_TranslucentBackground)
+        # Оставляем область вокруг окна, в котором будет отображена тень
+        self.centralwidget.layout().setContentsMargins(15, 15, 15, 15)
+        self.shadow = QGraphicsDropShadowEffect(self)
+        self.shadow.setBlurRadius(15)  # Размытие
+        self.shadow.setColor(QColor(0, 0, 0, 100))
+        self.shadow.setOffset(0)  # Смещение
+        self.centralwidget.setGraphicsEffect(self.shadow)
 
         self.downloadable_book: Book = ...  # Книга, которую скачиваем
         self.book: Books = ...  # Открытая книга

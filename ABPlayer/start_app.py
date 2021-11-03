@@ -15,8 +15,8 @@ import warnings
 
 import requests
 from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtGui import QMovie
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtGui import QColor, QMovie
+from PyQt5.QtWidgets import QGraphicsDropShadowEffect, QMainWindow
 
 from database import Books, Config
 from drivers import chromedriver
@@ -41,6 +41,16 @@ class StartAppWindow(QMainWindow, UiStartApp):
         # Окно без рамки
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowMinimizeButtonHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
+
+        # Тень вокруг окна
+        self.setAttribute(Qt.WA_TranslucentBackground)
+        # Оставляем область вокруг окна, в котором будет отображена тень
+        self.centralwidget.layout().setContentsMargins(15, 15, 15, 15)
+        self.shadow = QGraphicsDropShadowEffect(self)
+        self.shadow.setBlurRadius(15)  # Размытие
+        self.shadow.setColor(QColor(0, 0, 0, 100))
+        self.shadow.setOffset(0)  # Смещение
+        self.centralwidget.setGraphicsEffect(self.shadow)
 
         # Анимация загрузки
         self.loading_movie = QMovie(":/other/loading_app.gif")
