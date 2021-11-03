@@ -145,13 +145,13 @@ class Driver(ABC):
                         f"{str(i + 1).rjust(2, '0')}. {book.author} - {book.name}.mp3",
                     )
                 )
-                # self._download_file(file_path, url, process_handler)
+                self._download_file(file_path, url, process_handler)
                 files.append(file_path)
                 prepare_file_metadata(file_path, book, i)
         else:
             for i, item in enumerate(book.items):
                 file_path = Path(os.path.join(book.dir_path, item.title + ".mp3"))
-                # self._download_file(file_path, item.file_url, process_handler)
+                self._download_file(file_path, item.file_url, process_handler)
                 files.append(file_path)
                 prepare_file_metadata(file_path, book, i, item)
 
