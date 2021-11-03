@@ -419,6 +419,9 @@ def showProgress(main_window: MainWindow, value: int, item_widget: Item) -> None
     :param value: Позиция.
     :param item_widget: Экземпляр виджета главы.
     """
+    if main_window.player.book is ...:
+        main_window.player.playPause(main_window)
+
     main_window.progressLabel.setText(
         f"{main_window.player.book.listening_progress} прослушано"
     )

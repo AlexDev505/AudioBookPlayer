@@ -55,6 +55,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         super(MainWindow, self).__init__()
         player.MainWindowPlayer.__init__(self)
         self.setupUi(self)
+        self.overlayBtn.hide()
 
         # Применяем настройки темы
         self.centralwidget.setStyleSheet(styles.get_style_sheet(os.environ["theme"]))
