@@ -2,6 +2,7 @@ venv/
 .idea/
 __pycache__/
 /build/*
+/build/installers/
 !/build/sources/
 !/build/installers/ChromeSetup.exe
 AudioBookPlayer.lnk

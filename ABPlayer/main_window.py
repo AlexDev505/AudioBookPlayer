@@ -11,6 +11,7 @@ import os
 import typing as ty
 import webbrowser
 
+from loguru import logger
 from PyQt5.QtCore import QEasingCurve, QPropertyAnimation, QSize, QTimer, Qt
 from PyQt5.QtGui import QCloseEvent, QColor, QFontMetrics, QIcon, QMovie
 from PyQt5.QtMultimedia import QMediaPlayer
@@ -44,6 +45,7 @@ from ui_functions import (
     sliders,
     window_geometry,
 )
+from tools import pretty_view
 
 if ty.TYPE_CHECKING:
     from PyQt5.QtCore import QEvent, QObject
@@ -52,6 +54,7 @@ if ty.TYPE_CHECKING:
 
 class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
     def __init__(self):
+        logger.trace("Initialization of the main window")
         super(MainWindow, self).__init__()
         player.MainWindowPlayer.__init__(self)
         self.setupUi(self)
@@ -64,6 +67,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowMinimizeButtonHint)
 
         # Тень вокруг окна
+        # TODO: из-за тени приложение фризит.
         self.setAttribute(Qt.WA_TranslucentBackground)
         # Оставляем область вокруг окна, в котором будет отображена тень
         self.centralwidget.layout().setContentsMargins(15, 15, 15, 15)
@@ -95,20 +99,24 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
 
         # Загружаем последнюю прослушиваемую книгу
         if last_listened_book_id is not None:
+            logger.trace(f"Loading last book. Book id: {last_listened_book_id}")
             book = Books(os.environ["DB_PATH"]).filter(id=last_listened_book_id)
             if book:
                 self.book = book
                 self.player.book = book
                 self.loadMiniPlayer()
             else:
+                logger.trace("Book not found")
                 temp_file.delete_items("last_listened_book_id")
 
         # Устанавливаем последнюю громкость воспроизведения
         if last_volume is not None:
+            logger.trace(f"Loading last volume. Value {last_volume}")
             if 0 <= last_volume <= 100:
                 self.player.player.setVolume(last_volume)
                 self.volumeSlider.setValue(last_volume)
             else:
+                logger.trace("Invalid volume")
                 temp_file.delete_items("last_volume")
 
         self.openLibraryPage()  # При запуске приложения открываем библиотеку
@@ -120,6 +128,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         for style in styles.styles:
             self.themeSelecror.addItem(style)
         if not len(styles.styles):
+            logger.debug("No themes found")
             self.themeSelecror.addItem("Тёмная")
             self.themeSelecror.setCurrentIndex(0)
         else:
@@ -145,6 +154,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         self.themeSelecror.setMinimumWidth(max(items))
 
     def setupSignals(self) -> None:
+        logger.trace("Setting signals")
         # APPLICATION
         self.stackedWidget.setCurrentWidget = lambda page: content.setCurrentPage(
             self, page
@@ -250,6 +260,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             lambda e: settings_page.setDirWithBooks(self)
         )
 
+    @logger.catch
     def openInfoPage(
         self,
         text: str = "",
@@ -264,6 +275,18 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         :param btn_text: Текст на кнопке.
         :param btn_function: Функция кнопки.
         """
+        logger.debug("Opening the info page")
+        logger.opt(lazy=True).trace(
+            "Info page content: {content}",
+            content=lambda: pretty_view(
+                dict(
+                    text=text,
+                    movie=True if movie else None,
+                    btn_text=btn_text,
+                    btn_function=True if btn_function else None,
+                )
+            ),
+        )
         self.infoPageMovie.setMovie(movie)
         self.infoPageLabel.clear()
         self.infoPageLabel.setAlignment(Qt.AlignCenter)
@@ -286,6 +309,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         else:
             self.infoPageBtn.hide()
         self.stackedWidget.setCurrentWidget(self.infoPage)
+        logger.debug("Info page is open")
 
     def openLoadingPage(self) -> None:
         """
@@ -295,13 +319,22 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         movie.setScaledSize(QSize(50, 50))
         self.openInfoPage(movie=movie)
 
+    @logger.catch
     def openBookPage(self, book: ty.Union[Book, Books]) -> None:
         """
         Открывает страницу книги.
         :param book: Экземпляр скачанной или не скачанной книги.
         """
+        logger.debug("Opening a book page")
         if book is ...:
+            logger.debug("Book is empty")
             return
+        logger.opt(lazy=True).debug(
+            "Book data: {data}",
+            data=lambda: pretty_view(
+                {k: v for k, v in book.__dict__.items() if not k.startswith("_")}
+            ),
+        )
         self.book = book
 
         book_data = Books(os.environ["DB_PATH"]).filter(
@@ -363,11 +396,14 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         book_page.loadPreview(self, self.bookCoverLg, (230, 230), self.book)
 
         self.stackedWidget.setCurrentWidget(self.bookPage)
+        logger.debug("Book page is open")
 
+    @logger.catch
     def loadPlayer(self) -> None:
         """
         Обновляет плеер.
         """
+        logger.trace("Loading the player")
         # Отображаем прогресс прослушивания
         if self.book.status == Status.finished:
             self.progressLabel.setText("Прослушано")
@@ -410,11 +446,13 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         )
         self.bookItemsLayout.layout().addItem(bookItemsSpacer)
 
+    @logger.catch
     def loadMiniPlayer(self) -> None:
         """
         Открывает мини плеер.
         Обновляет в нем данные.
         """
+        logger.trace("Loading the mini player")
         if self.miniPlayerFrame.maximumWidth() == 0:
             self.miniPlayerFrame.player_animation = QPropertyAnimation(
                 self.miniPlayerFrame, b"maximumWidth"
@@ -433,10 +471,11 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         self.bookAuthorLabel.setText(self.player.book.author)
         book_page.loadPreview(self, self.bookCover, (60, 60), self.player.book)
 
+    @logger.catch
     def openLibraryPage(self, books_ids: ty.List[int] = None) -> None:
         """
         Открывает страницу библиотеки.
-        :param books_ids: ID книг, которые прошли фильтрацию.
+        :param books_ids: ID книг, которые прошли фильтрацию по ключевым словам.
         """
         # Возникает при изменении параметров сортировки во время
         # поиска книг по ключевым словам
@@ -445,6 +484,8 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             return
         if books_ids is None:
             self.searchBookLineEdit.setText("")
+
+        logger.debug("Opening library")
 
         db = Books(os.environ["DB_PATH"])
         all_books = db.filter(return_list=True)  # Все книги
@@ -460,6 +501,11 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         author = self.sortAuthor.currentIndex()
         if author != 0:
             filter_kwargs["author"] = self.sortAuthor.currentText()
+
+        logger.opt(lazy=True).trace(
+            "Filter kwargs: {kws}",
+            kws=lambda: pretty_view({**filter_kwargs, "books_ids": books_ids}),
+        )
 
         books: ty.List[Books] = Books(os.environ["DB_PATH"]).filter(
             return_list=True, **filter_kwargs
@@ -479,6 +525,8 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         # Если нужно, отображаем в обратном порядке
         if self.invertSortBtn.isChecked():
             books.reverse()
+
+        logger.debug("Books: [\n   " + "\n   ".join(map(str, books)) + "\n]")
 
         # Заполняем QComboBox авторами
         self.sortAuthor.currentIndexChanged.disconnect()
@@ -565,7 +613,9 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         if self.stackedWidget.currentWidget() != self.libraryPage:
             self.library.setCurrentWidget(self.allBooksPage)
         self.stackedWidget.setCurrentWidget(self.libraryPage)
+        logger.debug("Book page is open")
 
+    @logger.catch
     def _initBookWidget(self, parent: QWidget, book: Books) -> UiBook:
         """
         Инициализирует виджет книги.
@@ -573,6 +623,10 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         :param book: Экземпляр скачанной книги.
         :return: Экземпляр виджета книги.
         """
+        logger.trace(
+            f"Initialization of the book widget. "
+            f"Parent: {parent.objectName()}. {book.id=}"
+        )
         bookFrame = QFrame(parent)
         bookWidget = UiBook()
         bookWidget.setupUi(bookFrame)
@@ -631,6 +685,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
 
         return super(MainWindow, self).eventFilter(obj, event)
 
+    @logger.catch()
     def closeEvent(self, event: QCloseEvent) -> None:
         if self.downloadable_book is not ...:
             if (
@@ -647,3 +702,6 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
                 event.accept()
             else:
                 event.ignore()
+                return
+
+        logger.info("Closing the application")
