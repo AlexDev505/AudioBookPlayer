@@ -130,6 +130,9 @@ class Book:
             os.path.join(os.environ["books_folder"], self.author, self.name)
         )
 
+    def __repr__(self):
+        return f"Book(name={self.name}, author={self.author}, url={self.url})"
+
 
 class Books(Table, Book):
     """
@@ -160,3 +163,9 @@ class Books(Table, Book):
             + self.stop_flag.time
         )
         return f"{int(round(cur / (total / 100)))}%"
+
+    def __repr__(self):
+        if self.id is not None:
+            return f"Books(id={self.id}, name={self.name}, url={self.url})"
+        else:
+            return f"Books table connection"

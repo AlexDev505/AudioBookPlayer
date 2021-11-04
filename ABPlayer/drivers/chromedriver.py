@@ -10,6 +10,7 @@ from __future__ import annotations
 import os
 import re
 import subprocess
+from loguru import logger
 import typing as ty
 import urllib.error
 import urllib.request
@@ -56,6 +57,7 @@ def get_chrome_version() -> str:
         stdin=subprocess.DEVNULL,
     )
     version = process.communicate()[0].decode("UTF-8").strip().split()[-1]
+    logger.trace(f"Chrome: {version}")
     return version
 
 
@@ -80,6 +82,7 @@ def download_chromedriver(signal: pyqtSignal(bool, str) = None) -> str:
     :return: Путь к chromedriver.
     :raises: "Not available version", "download error"
     """
+    logger.trace("Checking for driver updates")
     chrome_version = get_chrome_version()
     chromedriver_version = get_matched_chromedriver_version(chrome_version)
     if not chromedriver_version:
@@ -91,6 +94,7 @@ def download_chromedriver(signal: pyqtSignal(bool, str) = None) -> str:
     if not os.path.isfile(chromedriver_filepath) or not check_version(
         chromedriver_filepath, chromedriver_version
     ):
+        logger.trace(f"Driver update to {chromedriver_version}")
         if signal:
             signal.emit("Скачивание драйвера", None)
         if not os.path.isdir(chromedriver_dir):
@@ -100,12 +104,16 @@ def download_chromedriver(signal: pyqtSignal(bool, str) = None) -> str:
             f"https://chromedriver.storage.googleapis.com/"
             f"{chromedriver_version}/chromedriver_win32.zip"
         )  # Ссылка на архив с нужным драйвером
+        logger.trace("Downloading the driver")
         response = urllib.request.urlopen(url)  # Скачивание
         if response.getcode() != 200:
+            logger.error(f"download error. code: {response.getcode()}")
             raise urllib.error.URLError("download error")
+        logger.trace("Unzipping the driver")
         archive = BytesIO(response.read())
         with zipfile.ZipFile(archive) as zip_file:  # Разархивация
             zip_file.extract("chromedriver.exe", chromedriver_dir)
+        logger.info(f"Driver updated to version {chromedriver_version}")
     if not os.access(chromedriver_filepath, os.X_OK):
         os.chmod(chromedriver_filepath, 0o744)
     return chromedriver_filepath
@@ -118,6 +126,7 @@ def install(signal: pyqtSignal(bool, str) = None) -> None:
     """
     chromedriver_filepath = download_chromedriver(signal)
     if not chromedriver_filepath:
+        logger.error("Driver not installed")
         raise SystemError("Downloading fail")
     if signal:
         signal.emit("Установка драйвера", None)

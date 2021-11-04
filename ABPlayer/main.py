@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import typing as ty
 from inspect import isclass
+import atexit
 
 # CONFIG SETUP
 # Путь к директории приложения
@@ -26,13 +27,16 @@ from database import Config  # noqa
 
 Config.init()
 
+from loguru import logger  # noqa
 from PyQt5.QtWidgets import QApplication  # noqa
 
+from logger import logging_level  # noqa
 from drivers.exceptions import DriverError  # noqa
 from main_window import MainWindow  # noqa
 from start_app import StartAppWindow  # noqa
 
 
+@logger.catch
 def startApp() -> StartAppWindow:
     """
     Инициализирует окно загрузки.
@@ -42,6 +46,7 @@ def startApp() -> StartAppWindow:
     return window
 
 
+@logger.catch
 def finishLoading(
     window: StartAppWindow, err: ty.Union[ty.Any, ty.Type[DriverError]]
 ) -> None:
@@ -51,6 +56,7 @@ def finishLoading(
     :param window: Окно загрузки.
     :param err: Ошибка.
     """
+    logger.info("Loading is complete")
     window.close()  # Закрываем окно загрузки
     main_window = startMainWindow()
     main_window.show()
@@ -65,6 +71,7 @@ def finishLoading(
         main_window.controlPanel.hide()
 
 
+@logger.catch
 def startMainWindow() -> MainWindow:
     """
     Инициализирует главное окно.
@@ -74,12 +81,21 @@ def startMainWindow() -> MainWindow:
     return window
 
 
+@logger.catch
 def main():
+    logger.info("Create application")
     app = QApplication([])
     window = startApp()
     window.show()
+    logger.info("Start application")
     app.exec()
 
+
+def exit_():
+    logger.info("Application closed")
+
+
+atexit.register(exit_)
 
 if __name__ == "__main__":
     main()

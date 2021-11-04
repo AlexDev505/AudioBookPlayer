@@ -11,12 +11,12 @@ from __future__ import annotations
 import os
 import typing as ty
 from inspect import isclass
-import warnings
 
 import requests
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QColor, QMovie
 from PyQt5.QtWidgets import QGraphicsDropShadowEffect, QMainWindow
+from loguru import logger
 
 from database import Books, Config
 from drivers import chromedriver
@@ -35,6 +35,7 @@ class StartAppWindow(QMainWindow, UiStartApp):
     # :param: ty.Union[ty.Type[DriverError], None]
 
     def __init__(self):
+        logger.trace("Initialization of the launch window")
         super(StartAppWindow, self).__init__()
         self.setupUi(self)
 
@@ -60,7 +61,7 @@ class StartAppWindow(QMainWindow, UiStartApp):
         self.setupSignals()
 
         # Создаём новый поток для обновления
-        self.worker = Worker(self)
+        self.worker = BootWorker(self)
         self.worker.start()
 
     def setupSignals(self):
@@ -88,12 +89,12 @@ class StartAppWindow(QMainWindow, UiStartApp):
         self.status.setAlignment(Qt.AlignCenter)
 
 
-class Worker(BaseWorker):
+class BootWorker(BaseWorker):
     status: QtCore.pyqtBoundSignal = pyqtSignal(str, object)
     finished: QtCore.pyqtBoundSignal = pyqtSignal(bool)
 
     def __init__(self, start_app_window: StartAppWindow):
-        super(Worker, self).__init__()
+        super(BootWorker, self).__init__()
         self.start_app_window = start_app_window
 
     def connectSignals(self) -> None:
@@ -107,11 +108,14 @@ class Worker(BaseWorker):
         Процесс, обновления драйвера.
         Выполняется в отдельном потоке.
         """
+        logger.info("Starting the boot process")
         self.status.emit("Проверка наличия соединения", None)
         try:
             requests.get("https://www.google.com/", timeout=5)
+            logger.trace("Connection established")
         except Exception:  # Нет интернет соединения
             self.status.emit("ConnectionError", ConnectionFail)
+            logger.error("No connection")
             return
 
         self.check_database_integrity()
@@ -119,36 +123,44 @@ class Worker(BaseWorker):
         try:
             self.status.emit("Проверка наличия браузера", None)
             chromedriver.get_chrome_version()
+            logger.trace("Browser found")
             self.status.emit("Проверка обновлений драйвера", None)
             chromedriver.install(signal=self.status)
+            logger.trace("Driver updated")
             self.finished.emit(True)  # Оповещаем о конце загрузки
         except IndexError:
+            logger.error("Chrome Not found")
             self.status.emit("Chrome Not found", ChromeNotFound)
         except Exception as err:
             if str(err) == "Not available version":
+                logger.error(
+                    f"No driver for Chrome({chromedriver.get_chrome_version()})"
+                )
                 self.status.emit(str(err), NotAvailableVersion)
             elif str(err) == "Downloading fail":
                 self.status.emit(str(err), DownloadingFail)
 
     def check_database_integrity(self):
+        logger.trace("Database integrity check")
         self.status.emit("Проверка целостности базы данных", None)
 
         for table in (Books, Config):
             db = table(os.environ["DB_PATH"])
+            logger.trace(f"{db.table_name} table integrity check")
             fields = db.api.fetchall(f"PRAGMA table_info('{db.table_name}')")
             necessary_fields = db.get_fields()
 
             if fields[0] != (0, "id", "INTEGER", 1, None, 1) or len(fields[1:]) != len(
                 necessary_fields.keys()
             ):
-                warnings.warn(
+                logger.warning(
                     f"The number of fields in table `{db.table_name}` does not match"
                 )
                 return self._restore_database()
 
             for field, n_field in zip(fields[1:], necessary_fields):
                 if field[1] != n_field or field[2] != necessary_fields[n_field]:
-                    warnings.warn(
+                    logger.warning(
                         f"The field {field[1]}({field[2]}) was encountered, "
                         f"but it should be {n_field}({necessary_fields[n_field]})"
                     )
@@ -157,9 +169,12 @@ class Worker(BaseWorker):
     def _restore_database(self):
         self.status.emit("Восстановление базы данных", None)
         db = Config(os.environ["DB_PATH"])
+        logger.trace("Dropping tables")
         db.api.execute("DROP TABLE config")
         db.api.execute("DROP TABLE books")
         db.api.commit()
+        logger.trace("Creating tables")
         db.create_table()
         db.init()
         Books(os.environ["DB_PATH"]).create_table()
+        logger.info("Database restored")

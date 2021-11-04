@@ -18,7 +18,8 @@ from __future__ import annotations
 import os
 import re
 import typing as ty
-import warnings
+
+from loguru import logger
 
 
 def load() -> ty.Dict[str, ty.Union[str, int, float, bool]]:
@@ -26,8 +27,10 @@ def load() -> ty.Dict[str, ty.Union[str, int, float, bool]]:
     Считывает данные из файла.
     :return: Словарь с данными.
     """
+    logger.trace("Loading data from temp.txt")
     # Создаём файл
     if not os.path.isfile(os.environ["TEMP_PATH"]):
+        logger.debug("File temp.txt bot found")
         with open(os.environ["TEMP_PATH"], "w", encoding="utf-8"):
             pass
 
@@ -43,7 +46,7 @@ def load() -> ty.Dict[str, ty.Union[str, int, float, bool]]:
                 match.group("value"), match.group("type")
             )
         else:
-            warnings.warn(f"Не удалось извлечь информацию из строки '{item}'")
+            logger.debug(f"Failed to retrieve information from string '{item}'")
     return result
 
 
@@ -52,6 +55,7 @@ def dump(data: ty.Dict[str, ty.Union[str, int, float, bool]]) -> None:
     Сохраняет данные в файл.
     :param data: Словарь с данными.
     """
+    logger.trace("Saving a file temp.txt")
     result = ""
     for key, value in data.items():
         result += f"{key}: {type(value).__name__} = {_convert_value(value)}\n"
@@ -99,9 +103,10 @@ def _adapt_value(value: str, value_type: str) -> ty.Union[str, int, float]:
         elif value_type == "bool":
             return bool(int(value))
     except ValueError:
-        warnings.warn(f"Невозможно преобразовать строку '{value}' к типу {value_type}")
+        logger.debug(f"Unable to convert string '{value}' to type {value_type}")
 
 
+@logger.catch
 def _convert_value(value: ty.Union[str, int, float, bool]) -> str:
     """
     Подготавливает питоновский тип данных для сохранения в файл.
