@@ -17,7 +17,7 @@ SetCompressor lzma
 ; MUI Settings
 !define MUI_ABORTWARNING
 !define MUI_ICON "icon.ico"
-!define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
+!define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\orange-uninstall.ico"
 
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
@@ -61,7 +61,6 @@ SectionEnd
 
 Section "AB Player" SEC01
   SetOutPath "$INSTDIR"
-  SetOverwrite on
   File "build\ABPlayer\ABPlayer.exe"
   File "LICENSE.txt"
   CreateDirectory "$SMPROGRAMS\AB Player"
@@ -85,6 +84,13 @@ Section "AB Player" SEC01
   File "build\ABPlayer\lib\charset_normalizer\utils.pyc"
   File "build\ABPlayer\lib\charset_normalizer\version.pyc"
   File "build\ABPlayer\lib\charset_normalizer\__init__.pyc"
+  SetOutPath "$INSTDIR\lib\colorama"
+  File "build\ABPlayer\lib\colorama\ansi.pyc"
+  File "build\ABPlayer\lib\colorama\ansitowin32.pyc"
+  File "build\ABPlayer\lib\colorama\initialise.pyc"
+  File "build\ABPlayer\lib\colorama\win32.pyc"
+  File "build\ABPlayer\lib\colorama\winterm.pyc"
+  File "build\ABPlayer\lib\colorama\__init__.pyc"
   SetOutPath "$INSTDIR\lib\database\tables"
   File "build\ABPlayer\lib\database\tables\books.pyc"
   File "build\ABPlayer\lib\database\tables\config.pyc"
@@ -3048,8 +3054,8 @@ Section "AB Player" SEC01
   SetOutPath "$LocalAppData\AudioBookPlayer"
   SetOverwrite off
   File "build\sources\database.sqlite"
-  File "build\sources\debug.log"
   File "build\sources\temp.txt"
+  File "build\sources\debug.log"
   SetOutPath "$LocalAppData\AudioBookPlayer\styles"
   SetOverwrite on
   File "build\sources\styles\Светлая.qss"
@@ -3090,11 +3096,11 @@ FunctionEnd
 
 Section Uninstall
   Delete "$INSTDIR\uninst.exe"
-  Delete "$LocalAppData\AudioBookPlayer\temp.txt"
-  Delete "$LocalAppData\AudioBookPlayer\styles\Тёмная.qss"
-  Delete "$LocalAppData\AudioBookPlayer\styles\Светлая.qss"
-  Delete "$LocalAppData\AudioBookPlayer\debug.log"
-  Delete "$LocalAppData\AudioBookPlayer\database.sqlite"
+  Delete "$$LocalAppData\AudioBookPlayer\styles\Тёмная.qss"
+  Delete "$$LocalAppData\AudioBookPlayer\styles\Светлая.qss"
+  Delete "$$LocalAppData\AudioBookPlayer\debug.log"
+  Delete "$$LocalAppData\AudioBookPlayer\temp.txt"
+  Delete "$$LocalAppData\AudioBookPlayer\database.sqlite"
   Delete "$INSTDIR\python39.dll"
   Delete "$INSTDIR\python3.dll"
   Delete "$INSTDIR\LICENSE.txt"
@@ -5839,6 +5845,12 @@ Section Uninstall
   Delete "$INSTDIR\lib\database\tools.pyc"
   Delete "$INSTDIR\lib\database\tables\config.pyc"
   Delete "$INSTDIR\lib\database\tables\books.pyc"
+  Delete "$INSTDIR\lib\colorama\__init__.pyc"
+  Delete "$INSTDIR\lib\colorama\winterm.pyc"
+  Delete "$INSTDIR\lib\colorama\win32.pyc"
+  Delete "$INSTDIR\lib\colorama\initialise.pyc"
+  Delete "$INSTDIR\lib\colorama\ansitowin32.pyc"
+  Delete "$INSTDIR\lib\colorama\ansi.pyc"
   Delete "$INSTDIR\lib\charset_normalizer\__init__.pyc"
   Delete "$INSTDIR\lib\charset_normalizer\version.pyc"
   Delete "$INSTDIR\lib\charset_normalizer\utils.pyc"
@@ -6047,6 +6059,7 @@ Section Uninstall
   RMDir "$INSTDIR\lib\drivers"
   RMDir "$INSTDIR\lib\database\tables"
   RMDir "$INSTDIR\lib\database"
+  RMDir "$INSTDIR\lib\colorama"
   RMDir "$INSTDIR\lib\charset_normalizer\assets"
   RMDir "$INSTDIR\lib\charset_normalizer"
   RMDir "$INSTDIR\lib\certifi"
