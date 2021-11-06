@@ -27,10 +27,12 @@ def load() -> ty.Dict[str, ty.Union[str, int, float, bool]]:
     Считывает данные из файла.
     :return: Словарь с данными.
     """
-    logger.trace("Loading data from temp.txt")
+    logger.opt(colors=True).trace(f"Loading data from <y>{os.environ['TEMP_PATH']}</y>")
     # Создаём файл
     if not os.path.isfile(os.environ["TEMP_PATH"]):
-        logger.debug("File temp.txt bot found")
+        logger.opt(colors=True).debug(
+            f"File <y>{os.environ['TEMP_PATH']}</y> bot found"
+        )
         with open(os.environ["TEMP_PATH"], "w", encoding="utf-8"):
             pass
 
@@ -46,7 +48,7 @@ def load() -> ty.Dict[str, ty.Union[str, int, float, bool]]:
                 match.group("value"), match.group("type")
             )
         else:
-            logger.debug(f"Failed to retrieve information from string '{item}'")
+            logger.debug(f"Failed to retrieve information from string <y>{item}</y>")
     return result
 
 
@@ -55,7 +57,7 @@ def dump(data: ty.Dict[str, ty.Union[str, int, float, bool]]) -> None:
     Сохраняет данные в файл.
     :param data: Словарь с данными.
     """
-    logger.trace("Saving a file temp.txt")
+    logger.opt(colors=True).trace(f"Saving a file <y>{os.environ['TEMP_PATH']}</y>")
     result = ""
     for key, value in data.items():
         result += f"{key}: {type(value).__name__} = {_convert_value(value)}\n"
@@ -103,7 +105,9 @@ def _adapt_value(value: str, value_type: str) -> ty.Union[str, int, float]:
         elif value_type == "bool":
             return bool(int(value))
     except ValueError:
-        logger.debug(f"Unable to convert string '{value}' to type {value_type}")
+        logger.opt(colors=True).debug(
+            f"Unable to convert string <y>{value}</y> to type </y>{value_type}</y>"
+        )
 
 
 @logger.catch

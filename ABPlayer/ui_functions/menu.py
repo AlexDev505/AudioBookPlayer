@@ -10,6 +10,7 @@ import typing as ty
 
 from PyQt5.QtCore import QEasingCurve, QPropertyAnimation
 from PyQt5.QtGui import QIcon
+from loguru import logger
 
 from .settings_page import openDirWithBooks
 
@@ -27,6 +28,7 @@ def toggleMenu(main_window: MainWindow) -> None:
         width = main_window.menuFrame.width()  # Ширина меню сейчас
         # Конечная ширина меню. 200-открытое 65-закрытое
         end_value = 200 if width == 65 else 65
+        logger.opt(colors=True).trace(f"Toggle menu to <y>{end_value}</y>")
 
         main_window.menu_animation = QPropertyAnimation(
             main_window.menuFrame, b"minimumWidth"
@@ -62,7 +64,9 @@ def buttonsHandler(main_window: MainWindow, button: QPushButton) -> None:
     elif button == main_window.addBookBtn:  # Новая книга
         main_window.stackedWidget.setCurrentWidget(main_window.addBookPage)
         main_window.searchNewBookLineEdit.setFocus()
+        logger.debug("Add bok page is open")
     elif button == main_window.settingsBtn:  # Настройки
         main_window.stackedWidget.setCurrentWidget(main_window.settingsPage)
+        logger.debug("Settings page is open")
     elif button == main_window.dirWithBooksBtn:  # Папка с книгами
         openDirWithBooks()

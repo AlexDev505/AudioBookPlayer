@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "AB Player"
-!define PRODUCT_VERSION "1.0a4"
+!define PRODUCT_VERSION "1.0a5"
 !define PRODUCT_PUBLISHER "AlexDev"
 !define PRODUCT_WEB_SITE "https://github.com/AlexDev-py/AudioBookPlayer"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\ABPlayer.exe"

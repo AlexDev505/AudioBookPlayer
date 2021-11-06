@@ -9,6 +9,7 @@ from __future__ import annotations
 import typing as ty
 
 from PyQt5.QtCore import QEvent, QPoint, QRect, Qt
+from loguru import logger
 
 if ty.TYPE_CHECKING:
     from PyQt5.QtWidgets import QMainWindow, QWidget
@@ -99,7 +100,7 @@ def mouseEvent(window: QMainWindow, event: QEvent) -> None:
 
     elif event.type() == QEvent.MouseMove:  # Движение с зажатой кнопкой мыши
         if window.__dict__.get("_start_cursor_pos") is not None:
-            if window.cursor().shape() in [Qt.SizeFDiagCursor]:
+            if window.cursor().shape() in {Qt.SizeFDiagCursor}:
                 _resize_window(window, event)
 
 
@@ -119,7 +120,8 @@ def _check_position(window: QMainWindow, event: QEvent) -> None:
     ):
         window.setCursor(Qt.SizeFDiagCursor)
     else:  # Обычный курсор
-        window.setCursor(Qt.ArrowCursor)
+        if window.cursor() == Qt.SizeFDiagCursor:
+            window.setCursor(Qt.ArrowCursor)
 
 
 def _resize_window(window: QMainWindow, event: QEvent) -> None:
@@ -141,11 +143,13 @@ def toggleFullScreen(window: QMainWindow) -> None:
     :param window: Экземпляр окна.
     """
     if not window.isFullScreen():
+        logger.debug("Switch to full screen mode")
         # Скрываем место отведённое для тени
         window.centralWidget().layout().setContentsMargins(0, 0, 0, 0)
         window.showFullScreen()
         window.resizeWidgetFrame.hide()
     else:
+        logger.debug("Exit full screen mode")
         # Отображаем место отведённое для тени
         window.centralWidget().layout().setContentsMargins(15, 15, 15, 15)
         window.showNormal()

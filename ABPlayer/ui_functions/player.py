@@ -4,7 +4,6 @@ import os
 import typing as ty
 from abc import abstractmethod
 
-import eyed3
 from PyQt5.QtCore import (
     QEasingCurve,
     QObject,
@@ -17,11 +16,12 @@ from PyQt5.QtCore import (
 from PyQt5.QtGui import QIcon
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer, QMediaPlaylist
 from PyQt5.QtWidgets import QMessageBox
+from loguru import logger
 
 import temp_file
 from database import Books, Book
 from database.tables.books import Status
-from tools import convert_into_seconds, get_file_hash
+from tools import convert_into_seconds, get_file_hash, pretty_view
 from . import sliders
 from .book_page import DeleteBookWorker
 
@@ -61,6 +61,7 @@ class BasePlayerInterface(QObject):
     def reset_last_save(self) -> None:
         self._last_saved_time = self._last_saved_item = 0
 
+    @logger.catch
     def _positionChanged(self, value: int) -> None:
         # Я не знаю почему и где, но он может вызваться, когда книга не инициализирована
         if self.player.book is ...:
@@ -68,8 +69,10 @@ class BasePlayerInterface(QObject):
 
         item = self.player.book.items[self.player.book.stop_flag.item]
         value = value // 1000 - item.start_time
+        logger.opt(colors=True).trace(f"Position changed: <y>{value}</y>")
 
         if value >= item.duration:  # Глава закончилась
+            logger.trace("The chapter is over")
             if self.player.book.items.index(item) != len(self.player.book.items) - 1:
                 # Переходим к следующей главе
                 self.player.setPosition(0, self.player.book.stop_flag.item + 1)
@@ -88,6 +91,7 @@ class BasePlayerInterface(QObject):
             self.player.book.save()
             self._last_saved_time = self.player.book.stop_flag.time
             self._last_saved_item = self.player.book.stop_flag.item
+            logger.trace("Stop flag saved")
 
     @abstractmethod
     def positionChanged(self, value: int) -> None:
@@ -97,7 +101,9 @@ class BasePlayerInterface(QObject):
         :param value: Позиция прослушивания в секундах.
         """
 
+    @logger.catch
     def _stateChanged(self, state: QMediaPlayer.State) -> None:
+        logger.opt(colors=True).trace(f"State changed: <y>{state}</y>")
         if state == QMediaPlayer.StoppedState:
             if (
                 self.player.book is not ...
@@ -166,6 +172,7 @@ class MainWindowPlayer(BasePlayerInterface):
         if self.player.book.url == self.book.url:
             self.loadPlayer()
 
+    @logger.catch
     def bookIsDamaged(self) -> None:
         self.openLoadingPage()
         QMessageBox.information(
@@ -224,12 +231,19 @@ class Player(QObject):
         self.playlist = QMediaPlaylist()
         self.player.setPlaylist(self.playlist)
 
+    @logger.catch
     def init_book(self, main_window: MainWindow, book: Books) -> None:
         """
         Загружает книгу в плейлист.
         :param main_window: Экземпляр главного окна.
-        :param book:
+        :param book: Экземпляр скачанной книги.
         """
+        logger.opt(colors=True).debug(
+            "Book initialization. Book:"
+            + pretty_view(
+                {k: v for k, v in book.__dict__.items() if not k.startswith("_")}
+            ),
+        )
         self.book = book
         stop_flag_time = self.book.stop_flag.time
         main_window.reset_last_save()
@@ -246,11 +260,15 @@ class Player(QObject):
         # Загружаем аудио файлы в плейлист
         file_paths: ty.List[str] = []
         if not os.path.isdir(self.book.dir_path):  # Директории нет
+            logger.opt(colors=True).error(
+                f"Directory <y>{self.book.dir_path}<y> does not exist"
+            )
             return self.bookIsDamaged.emit()
 
         for file_name, file_hash in self.book.files.items():
             file_path = os.path.join(self.book.dir_path, file_name)
             if not os.path.isfile(file_path) or get_file_hash(file_path) != file_hash:
+                logger.opt(colors=True).error(f"File <y>{file_path}</y> is damaged.")
                 return self.bookIsDamaged.emit()
             file_paths.append(file_path)
 
@@ -267,18 +285,24 @@ class Player(QObject):
 
         main_window.loadMiniPlayer()
 
+    @logger.catch
     def finish_book(self) -> None:
         """
         Помечает книгу как прочитанную.
         """
+        logger.trace("Completion of the book")
         self.setPosition(0, 0, 250)
         self.book.status = Status.finished
         self.book.stop_flag.item = 0
         self.book.stop_flag.time = 0
         self.book.save()
+        logger.opt(colors=True).debug(
+            f"The book has been listened. book.id=<y>{self.book.id}</y>"
+        )
         QTimer.singleShot(300, self.player.stop)
         self.reloadPlayerInterface.emit()
 
+    @logger.catch
     def setPosition(self, position: int, item: int = None, delay=100) -> None:
         """
         Изменяет позицию прослушивания.
@@ -291,10 +315,18 @@ class Player(QObject):
         self.book.stop_flag.time = position
         item = item if item is not None else self.book.stop_flag.item
         if item != self.book.stop_flag.item:  # Переместились на новую главу.
+            logger.opt(colors=True).debug(
+                f"Chapter change. <y>{self.book.stop_flag.item}</y> -> <y>{item}</y>"
+            )
             self.book.stop_flag.item = item
             self.reloadPlayerInterface.emit()  # Обновляем интерфейс плеера
             # переход к новому файлу
             if self.book.items[item].file_index != self.book.items[item - 1].file_index:
+                logger.opt(colors=True).debug(
+                    "Audio file change. "
+                    f"<y>{self.book.items[item - 1].file_index}</y> "
+                    f"-> <y>{self.book.items[item].file_index}</y>"
+                )
                 self.player.pause()
                 self.playlist.setCurrentIndex(self.book.items[item].file_index - 1)
                 # Если после `self.playlist.setCurrentIndex`
@@ -308,6 +340,7 @@ class Player(QObject):
         self._setPosition((self.book.items[item].start_time + position), delay)
 
     def _setPosition(self, position: int, delay: int) -> None:
+        logger.opt(colors=True).trace(f"Position change to <y>{position}</y>")
         if delay == 0:
             self.player.setPosition(position * 1000)
             self.player.play()
@@ -320,6 +353,7 @@ class Player(QObject):
                 ),
             )
 
+    @logger.catch
     def rewindToPast(self, step: int = 15) -> None:
         """
         Перемещает позицию назад.
@@ -335,6 +369,7 @@ class Player(QObject):
                 time += self.book.items[item].duration
         self.setPosition(time, item)
 
+    @logger.catch
     def rewindToFuture(self, step: int = 15) -> None:
         """
         Перемещает позицию вперед.
@@ -351,6 +386,7 @@ class Player(QObject):
                 item += 1
         self.setPosition(time, item)
 
+    @logger.catch
     def playPause(self, main_window: MainWindow) -> None:
         """
         Обрабатывает нажатие на кнопку play/pause на странице книги.
@@ -362,6 +398,7 @@ class Player(QObject):
             self.book = ...
         self.setState(main_window)
 
+    @logger.catch
     def setState(self, main_window: MainWindow) -> None:
         """
         Обрабатывает нажатие на кнопку play/pause на панели управления.
@@ -391,6 +428,9 @@ def selectItem(main_window: MainWindow, event: QEvent, item_widget: Item) -> Non
     if event.pos() not in item_widget.rect() or event.button() != Qt.LeftButton:
         return
 
+    logger.opt(colors=True).trace(
+        "Changed chapter: " + pretty_view(item_widget.item.__dict__),
+    )
     main_window.player.playPause(main_window)
     main_window.player.setPosition(
         0, main_window.player.book.items.index(item_widget.item), delay=300
@@ -412,6 +452,12 @@ def showProgress(main_window: MainWindow, value: int, item_widget: Item) -> None
         f"{main_window.player.book.listening_progress} прослушано"
     )
     item_widget.doneTime.setText(convert_into_seconds(value))
+    logger.opt(colors=True).trace(
+        f"Listening progress is displayed. "
+        f"Value=<y>{value}</y> "
+        f"Progress=<y>{main_window.progressLabel.text()}</y> "
+        f"Time=<y>{item_widget.doneTime.text()}</y>"
+    )
 
 
 def sliderMouseReleaseEvent(
@@ -427,5 +473,8 @@ def sliderMouseReleaseEvent(
 
     if event.button() == Qt.LeftButton:
         position = slider.value()
+        logger.opt(colors=True).trace(
+            f"Player position changed by slider. Value=<y>{position}</y>"
+        )
         main_window.player.playPause(main_window)
         main_window.player.setPosition(position, delay=250)

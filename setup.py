@@ -14,7 +14,7 @@ import re
 
 import cx_Freeze
 
-__version__ = "1.0a4"
+__version__ = "1.0a5"
 target_dir = rf"build\ABPlayer"
 
 with open(r"ABPlayer\main.py", encoding="utf-8") as file:
@@ -82,13 +82,20 @@ zip_include_packages = [
     "urllib3",
     "concurrent",
     "packaging",
+    "loguru",
 ]  # Библиотеки, помещаемые в архив
 
 cx_Freeze.setup(
     name="AB Player",
     options={
         "build_exe": {
-            "packages": ["PyQt5", "selenium", "requests", "eyed3"],  # Библиотеки
+            "packages": [
+                "PyQt5",
+                "selenium",
+                "requests",
+                "eyed3",
+                "loguru",
+            ],  # Библиотеки
             "excludes": excludes,
             "zip_include_packages": zip_include_packages,
         },
