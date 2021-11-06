@@ -57,7 +57,7 @@ def get_chrome_version() -> str:
         stdin=subprocess.DEVNULL,
     )
     version = process.communicate()[0].decode("UTF-8").strip().split()[-1]
-    logger.trace(f"Chrome: {version}")
+    logger.opt(colors=True).trace(f"Chrome: <y>{version}</y>")
     return version
 
 
@@ -94,7 +94,7 @@ def download_chromedriver(signal: pyqtSignal(bool, str) = None) -> str:
     if not os.path.isfile(chromedriver_filepath) or not check_version(
         chromedriver_filepath, chromedriver_version
     ):
-        logger.trace(f"Driver update to {chromedriver_version}")
+        logger.debug(f"Driver update to {chromedriver_version}")
         if signal:
             signal.emit("Скачивание драйвера", None)
         if not os.path.isdir(chromedriver_dir):
@@ -113,7 +113,9 @@ def download_chromedriver(signal: pyqtSignal(bool, str) = None) -> str:
         archive = BytesIO(response.read())
         with zipfile.ZipFile(archive) as zip_file:  # Разархивация
             zip_file.extract("chromedriver.exe", chromedriver_dir)
-        logger.info(f"Driver updated to version {chromedriver_version}")
+        logger.opt(colors=True).debug(
+            f"Driver updated to version <y>{chromedriver_version}</y>"
+        )
     if not os.access(chromedriver_filepath, os.X_OK):
         os.chmod(chromedriver_filepath, 0o744)
     return chromedriver_filepath

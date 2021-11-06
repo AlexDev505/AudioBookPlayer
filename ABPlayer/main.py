@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+import atexit
 import os
 import typing as ty
 from inspect import isclass
-import atexit
 
 # CONFIG SETUP
 # Путь к директории приложения
@@ -20,7 +20,7 @@ os.environ["DEBUG_PATH"] = os.path.join(os.environ["APP_DIR"], "debug.log")
 # Стандартный путь к директории с книгами
 os.environ["DEFAULT_BOOKS_FOLDER"] = os.path.join(os.environ["APP_DIR"], "Книги")
 # Версия приложения
-os.environ["VERSION"] = "1.0a4"
+os.environ["VERSION"] = "1.0a5"
 # Инициализация конфигурации
 # (хранил бы в json`е, но нужно несколько таблиц в бд, поэтому вот так вот...)
 from database import Config  # noqa
@@ -83,7 +83,7 @@ def startMainWindow() -> MainWindow:
 
 @logger.catch
 def main():
-    logger.info("Create application")
+    logger.debug("Create application")
     app = QApplication([])
     window = startApp()
     window.show()
@@ -92,7 +92,7 @@ def main():
 
 
 def exit_():
-    logger.info("Application closed")
+    logger.info("Application closed\n\n")
 
 
 atexit.register(exit_)

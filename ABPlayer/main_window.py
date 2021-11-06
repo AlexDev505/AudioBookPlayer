@@ -11,7 +11,6 @@ import os
 import typing as ty
 import webbrowser
 
-from loguru import logger
 from PyQt5.QtCore import QEasingCurve, QPropertyAnimation, QSize, QTimer, Qt
 from PyQt5.QtGui import QCloseEvent, QColor, QFontMetrics, QIcon, QMovie
 from PyQt5.QtMultimedia import QMediaPlayer
@@ -25,12 +24,14 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
+from loguru import logger
 
 import styles
 import temp_file
 from database import Books
 from database.tables.books import Status
-from ui import UiMainWindow, UiBook, Item
+from tools import pretty_view
+from ui import Item, UiBook, UiMainWindow
 from ui_functions import (
     add_book_page,
     book_page,
@@ -45,7 +46,6 @@ from ui_functions import (
     sliders,
     window_geometry,
 )
-from tools import pretty_view
 
 if ty.TYPE_CHECKING:
     from PyQt5.QtCore import QEvent, QObject
@@ -106,7 +106,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
                 self.player.book = book
                 self.loadMiniPlayer()
             else:
-                logger.trace("Book not found")
+                logger.debug("The last book is not registered")
                 temp_file.delete_items("last_listened_book_id")
 
         # Устанавливаем последнюю громкость воспроизведения
@@ -116,7 +116,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
                 self.player.player.setVolume(last_volume)
                 self.volumeSlider.setValue(last_volume)
             else:
-                logger.trace("Invalid volume")
+                logger.debug("Invalid last volume")
                 temp_file.delete_items("last_volume")
 
         self.openLibraryPage()  # При запуске приложения открываем библиотеку
@@ -154,7 +154,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         self.themeSelecror.setMinimumWidth(max(items))
 
     def setupSignals(self) -> None:
-        logger.trace("Setting signals")
+        logger.trace("Setting main window signals")
         # APPLICATION
         self.stackedWidget.setCurrentWidget = lambda page: content.setCurrentPage(
             self, page
@@ -207,6 +207,9 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             lambda value: control_panel.speedSliderHandler(self, value)
         )
         sliders.prepareSlider(self.speedSlider)
+        self.speedSlider.mouseReleaseEvent = (
+            lambda e: control_panel.speedSliderMouseReleaseEvent(self, e)
+        )
 
         book_page.prepareProgressBar(self.downloadingProgressBar)
         self.downloadingProgressBar.mousePressEvent = lambda e: self.openBookPage(
@@ -276,9 +279,9 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         :param btn_function: Функция кнопки.
         """
         logger.debug("Opening the info page")
-        logger.opt(lazy=True).trace(
-            "Info page content: {content}",
-            content=lambda: pretty_view(
+        logger.opt(colors=True).debug(
+            "Info page content: "
+            + pretty_view(
                 dict(
                     text=text,
                     movie=True if movie else None,
@@ -329,9 +332,9 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         if book is ...:
             logger.debug("Book is empty")
             return
-        logger.opt(lazy=True).debug(
-            "Book data: {data}",
-            data=lambda: pretty_view(
+        logger.opt(colors=True).debug(
+            "Book data: "
+            + pretty_view(
                 {k: v for k, v in book.__dict__.items() if not k.startswith("_")}
             ),
         )
@@ -341,6 +344,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             author=self.book.author, name=self.book.name
         )  # Получаем информацию о книге из бд
         if not book_data:  # Книга не зарегистрирована в бд
+            logger.debug("Book is not registered")
             self.progressFrame.hide()
             self.toggleFavoriteBtn.hide()
             self.deleteBtn.hide()
@@ -502,9 +506,8 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         if author != 0:
             filter_kwargs["author"] = self.sortAuthor.currentText()
 
-        logger.opt(lazy=True).trace(
-            "Filter kwargs: {kws}",
-            kws=lambda: pretty_view({**filter_kwargs, "books_ids": books_ids}),
+        logger.opt(colors=True).debug(
+            "Filter kwargs: " + pretty_view({**filter_kwargs, "books_ids": books_ids}),
         )
 
         books: ty.List[Books] = Books(os.environ["DB_PATH"]).filter(
@@ -526,7 +529,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         if self.invertSortBtn.isChecked():
             books.reverse()
 
-        logger.debug("Books: [\n   " + "\n   ".join(map(str, books)) + "\n]")
+        logger.opt(colors=True).debug("Books: " + pretty_view(books))
 
         # Заполняем QComboBox авторами
         self.sortAuthor.currentIndexChanged.disconnect()
@@ -613,7 +616,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         if self.stackedWidget.currentWidget() != self.libraryPage:
             self.library.setCurrentWidget(self.allBooksPage)
         self.stackedWidget.setCurrentWidget(self.libraryPage)
-        logger.debug("Book page is open")
+        logger.debug("Library is open")
 
     @logger.catch
     def _initBookWidget(self, parent: QWidget, book: Books) -> UiBook:
@@ -624,7 +627,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         :return: Экземпляр виджета книги.
         """
         logger.trace(
-            f"Initialization of the book widget. "
+            "Initialization of the book widget. "
             f"Parent: {parent.objectName()}. {book.id=}"
         )
         bookFrame = QFrame(parent)

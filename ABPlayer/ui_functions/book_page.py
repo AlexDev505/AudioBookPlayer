@@ -28,6 +28,7 @@ from PyQt5.QtWidgets import (
     QToolTip,
     QVBoxLayout,
 )
+from loguru import logger
 
 from database.tables.books import BookFiles, Books, Status
 from drivers import BaseDownloadProcessHandler, drivers
@@ -74,23 +75,30 @@ class DownloadPreviewWorker(BaseWorker):
 
     def worker(self) -> None:
         try:
-            pixmap = cache.get(self.book.preview)  # Проверяем кэш
-            if not pixmap:
-                if not self.book.preview:  # Если у книги нет обложки
-                    raise ValueError
-                # Скачивание
-                context = ssl.SSLContext()
-                data = urllib.request.urlopen(self.book.preview, context=context).read()
-                pixmap = QPixmap()
-                pixmap.loadFromData(data)
-                cache.set(self.book.preview, pixmap)  # Заносим в кэш
+            if not self.book.preview:  # Если у книги нет обложки
+                raise ValueError
+            # Скачивание
+            logger.opt(colors=True).debug(
+                f"Start downloading cover for QLabel <y>{id(self.cover_label)}</y>"
+            )
+            context = ssl.SSLContext()
+            data = urllib.request.urlopen(self.book.preview, context=context).read()
+            pixmap = QPixmap()
+            pixmap.loadFromData(data)
+            cache.set(self.book.preview, pixmap)  # Заносим в кэш
             self.finished.emit(pixmap)
         except Exception:
             self.failed.emit()
+            logger.opt(colors=True).exception(
+                f"Cover for QLabel <y>{id(self.cover_label)}</y> download failed."
+            )
         self.main_window.download_cover_thread_count -= 1
 
     def finish(self, pixmap: QPixmap) -> None:
         try:
+            logger.opt(colors=True).debug(
+                f"Cover for QLabel <y>{id(self.cover_label)}</y> has been downloaded"
+            )
             self.cover_label.setMovie(None)  # Отключаем анимацию загрузки
             if os.path.isdir(self.book.dir_path):  # Если книга скачана
                 # Сохраняем обложку
@@ -99,14 +107,18 @@ class DownloadPreviewWorker(BaseWorker):
             pixmap = pixmap.scaled(*self.size, Qt.KeepAspectRatio)
             self.cover_label.setPixmap(pixmap)
         except RuntimeError:  # cover_label может быть удалён
-            pass
+            logger.opt(colors=True).debug(
+                f"QLabel <y>{id(self.cover_label)}</y> is deleted"
+            )
 
     def fail(self) -> None:
         try:
             self.cover_label.setMovie(None)  # Отключаем анимацию загрузки
             self.cover_label.hide()  # Скрываем элемент
         except RuntimeError:  # cover_label может быть удалён
-            pass
+            logger.opt(colors=True).debug(
+                f"QLabel <y>{id(self.cover_label)}</y> is deleted"
+            )
 
 
 def loadPreview(
@@ -126,6 +138,7 @@ def loadPreview(
     try:
         cover_label.show()
     except RuntimeError:  # cover_label может быть удалён
+        logger.opt(colors=True).debug(f"QLabel <y>{id(cover_label)}</y> is deleted")
         return
 
     cover_path = os.path.join(book.dir_path, "cover.jpg")
@@ -134,6 +147,8 @@ def loadPreview(
         pixmap.load(cover_path)
         pixmap = pixmap.scaled(*size, Qt.KeepAspectRatio)
         cover_label.setPixmap(pixmap)
+    elif cache.get(book.preview):  # Проверяем кэш
+        cover_label.setPixmap(cache.get(book.preview))
     else:
         # Анимация загрузки
         if not cover_label.movie():
@@ -181,21 +196,29 @@ class DownloadBookWorker(BaseWorker):
         self.finished.connect(self.finish)
         self.failed.connect(lambda text: self.fail(text))
 
+    @logger.catch
     def worker(self) -> None:
+        logger.opt(colors=True).debug(
+            f"Starting the book download process: <y>{self.book.url}</y>"
+        )
         try:
             files = self.drv.download_book(self.book, self.download_process_handler)
+            logger.debug("Audio files downloaded")
             books = Books(os.environ["DB_PATH"])
             books.insert(
                 **vars(self.book),
                 files=BookFiles({file.name: get_file_hash(file) for file in files}),
             )  # Добавляем книгу в бд
+            logger.debug("Book registered")
             self.finished.emit()
         except requests.exceptions.ConnectionError:
+            logger.error("The connection to the server has been lost")
             self.failed.emit(
                 "Соединение с сервером потеряно.\n" "Проверьте интернет соединение."
             )
         except Exception as err:
             self.failed.emit(f"Ошибка при скачивании книги\n{str(err)}")
+            logger.exception("Downloading error")
         self.main_window.downloadable_book = ...
 
     def finish(self) -> None:
@@ -242,6 +265,7 @@ class DownloadBookWorker(BaseWorker):
         self.thread.terminate()
         self.thread.wait()
         self.main_window.downloadable_book = ...
+        logger.debug("The book download process has been stopped")
         return downloadable_book
 
 
@@ -360,7 +384,12 @@ class DeleteBookWorker(BaseWorker):
         self.finished.connect(self.finish)
         self.failed.connect(lambda text: self.fail(text))
 
+    @logger.catch
     def worker(self) -> None:
+        logger.opt(colors=True).debug(
+            "Starting the process of deleting a book. "
+            f"Book id=<y>{self.book.__dict__.get('id')}</y>"
+        )
         self.main_window.setLock(True)
         try:
             # Удаление книги из бд
@@ -368,6 +397,7 @@ class DeleteBookWorker(BaseWorker):
                 books = Books(os.environ["DB_PATH"])
                 books.api.execute("""DELETE FROM books WHERE id=?""", self.book.id)
                 books.api.commit()
+                logger.debug("The book has been removed from the database")
             # Удаление файлов книги
             if os.path.isdir(self.book.dir_path):
                 for root, dirs, files in os.walk(self.book.dir_path):
@@ -378,12 +408,14 @@ class DeleteBookWorker(BaseWorker):
                 author_dir = os.path.dirname(self.book.dir_path)
                 if len(os.listdir(author_dir)) == 0:
                     os.rmdir(author_dir)
+                logger.debug("Audio files deleted")
             self.finished.emit()
         except PermissionError:  # Файл занят другим процессом
             # TODO: Можно удалять такие файлы после закрытия приложения
             self.finished.emit()
         except Exception as err:
             self.failed.emit(f"Возникла ошибка во время удаления книги.\n{str(err)}")
+            logger.exception("Delete error")
         self.main_window.setLock(False)
 
     def finish(self) -> None:
@@ -472,6 +504,9 @@ def toggleFavorite(main_window: MainWindow, book: Books = None) -> None:
     """
     book = book or main_window.book
     book.favorite = not book.favorite
+    logger.opt(colors=True).debug(
+        f"Book <y>{book.id}</y> favorite: <y>{book.favorite}</y>"
+    )
     icon = QIcon(":/other/star_fill.svg" if book.favorite else ":/other/star.svg")
     main_window.sender().setIcon(icon)
     book.save()
@@ -581,6 +616,10 @@ def changeDriver(main_window: MainWindow) -> None:
     main_window.openLoadingPage()
 
     drv = [drv for drv in drivers if url.startswith(drv().site_url)][0]()
+    logger.opt(colors=True).debug(
+        f"Book <y>{main_window.book.id}</y> driver change. "
+        f"<y>{main_window.book.driver}</y> -> <y>{drv.driver_name}</y>"
+    )
 
     # Создаём и запускаем новый поток для поиска книги
     main_window.SearchWorker = SearchWorker(main_window, drv, url)
@@ -626,12 +665,14 @@ def listeningProgressTools(main_window: MainWindow) -> None:
         if answer == QMessageBox.No:
             return
 
-        listening_progress = main_window.book.listening_progress
-        if listening_progress == "0%":
+        if main_window.book.listening_progress == "0%":
             main_window.book.update(status=Status.new)
         else:
             main_window.book.update(status=Status.started)
         main_window.loadPlayer()
+        logger.opt(colors=True).debug(
+            f"Book <y>{main_window.book.id}</y> mark as no listened"
+        )
     else:
         answer = QMessageBox.question(
             main_window,
@@ -651,3 +692,7 @@ def listeningProgressTools(main_window: MainWindow) -> None:
         else:
             main_window.book.update(status=Status.finished)
             main_window.loadPlayer()
+
+        logger.opt(colors=True).debug(
+            f"Book <y>{main_window.book.id}</y> mark as listened"
+        )

@@ -9,6 +9,7 @@ from pathlib import Path
 import eyed3
 import requests
 from selenium import webdriver
+from loguru import logger
 
 if ty.TYPE_CHECKING:
     from database.tables.books import Book, BookItem
@@ -136,6 +137,9 @@ class Driver(ABC):
         if process_handler:
             process_handler.init(total_size)
 
+        logger.opt(colors=True).debug(f"Audio files merged: <y>{merged}</y>")
+        logger.opt(colors=True, lazy=True).debug(f"Total size: <y>{total_size} bit</y>")
+
         files = []
         if merged:
             for i, url in enumerate(urls):
@@ -169,6 +173,7 @@ class Driver(ABC):
         :param url: Ссылка на файл.
         :param process_handler: Обработчик процесса скачивания.
         """
+        logger.opt(colors=True).debug(f"Download the file <y>{file_path}</y>({url})")
         if not file_path.exists():
             file_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -176,6 +181,9 @@ class Driver(ABC):
         # Иначе, при остановке скачивания, возникает ошибка.
         self._file = open(file_path, "wb")
         resp = requests.get(str(url), timeout=10, stream=True)
+        logger.opt(colors=True).debug(
+            f"File size: <y>{resp.headers.get('content-length')}</y>"
+        )
         if resp.headers.get("content-length") is None:
             self._file.write(resp.content)
         else:

@@ -10,6 +10,7 @@ import typing as ty
 import webbrowser
 
 from PyQt5.QtCore import pyqtSignal
+from loguru import logger
 
 from drivers import drivers
 from tools import BaseWorker
@@ -38,11 +39,16 @@ class SearchWorker(BaseWorker):
         self.failed.connect(lambda message: self.fail(message))
 
     def worker(self) -> None:
+        logger.opt(colors=True).debug(
+            "Starting the search process. "
+            f'Url=<y>{self.url}</y> Drv=<y>{self.drv.driver_name}</y>"'
+        )
         self.main_window.setLock(True)
         try:
             book = self.drv.get_book(self.url)
             self.finished.emit(book)
         except Exception as err:
+            logger.exception("Search failed")
             if "ERR_INTERNET_DISCONNECTED" in str(err):
                 self.failed.emit(
                     "Не удалось подключиться к серверу.\n"

@@ -1,5 +1,6 @@
 import dataclasses
 import os
+import re
 import sys
 
 from loguru import logger
@@ -44,12 +45,21 @@ def formatter(record) -> str:
     )
 
 
+def file_formatter(record) -> str:
+    # Удаляем окраску текста
+    record["message"] = re.sub(r"\033\[.+?m", "", record["message"])
+    return formatter(record)
+
+
 # Считываем уровень логирования(по умолчанию DEBUG)
 logging_level = temp_file.load().get("logging_level") or "DEBUG"
 if logging_level not in {"TRACE", "DEBUG", "INFO"}:
     logging_level = "DEBUG"
     temp_file.delete_items("logging_level")
 level_handler = LoggingLevel(logging_level)
+
+# TODO: delete this!
+os.environ["CONSOLE"] = "1"
 
 if os.environ.get("CONSOLE"):
     console_logger_handler = logger.add(
@@ -63,10 +73,11 @@ if os.environ.get("CONSOLE"):
 file_logger_handler = logger.add(
     os.environ["DEBUG_PATH"],
     colorize=False,
-    format=formatter,
+    format=file_formatter,
     filter=level_handler,
-    level=0,
+    level=6,
 )
 
-logger.level("TRACE", color="<w>")
+logger.level("TRACE", color="<e>")
+logger.level("DEBUG", color="<w>")
 logger.level("INFO", color="<c>")

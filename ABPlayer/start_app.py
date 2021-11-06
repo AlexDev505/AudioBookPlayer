@@ -76,6 +76,11 @@ class StartAppWindow(QMainWindow, UiStartApp):
         :param text: Сообщение.
         :param err: Ошибка.
         """
+        logger.opt(colors=True).trace(
+            "New status. "
+            f'Text: <y>"{text}"</y>. '
+            f"Err: <y>{err.__class__.__name__ if err else None}</y>"
+        )
         self.setStatus(text)
 
         if isclass(err) and issubclass(err, DriverError):
@@ -108,11 +113,11 @@ class BootWorker(BaseWorker):
         Процесс, обновления драйвера.
         Выполняется в отдельном потоке.
         """
-        logger.info("Starting the boot process")
+        logger.debug("Starting the boot process")
         self.status.emit("Проверка наличия соединения", None)
         try:
             requests.get("https://www.google.com/", timeout=5)
-            logger.trace("Connection established")
+            logger.debug("Connection established")
         except Exception:  # Нет интернет соединения
             self.status.emit("ConnectionError", ConnectionFail)
             logger.error("No connection")
@@ -123,10 +128,10 @@ class BootWorker(BaseWorker):
         try:
             self.status.emit("Проверка наличия браузера", None)
             chromedriver.get_chrome_version()
-            logger.trace("Browser found")
+            logger.debug("Browser found")
             self.status.emit("Проверка обновлений драйвера", None)
             chromedriver.install(signal=self.status)
-            logger.trace("Driver updated")
+            logger.debug("Driver updated")
             self.finished.emit(True)  # Оповещаем о конце загрузки
         except IndexError:
             logger.error("Chrome Not found")
@@ -146,21 +151,23 @@ class BootWorker(BaseWorker):
 
         for table in (Books, Config):
             db = table(os.environ["DB_PATH"])
-            logger.trace(f"{db.table_name} table integrity check")
+            logger.opt(colors=True).trace(
+                f"<y>{db.table_name}</y> table integrity check"
+            )
             fields = db.api.fetchall(f"PRAGMA table_info('{db.table_name}')")
             necessary_fields = db.get_fields()
 
             if fields[0] != (0, "id", "INTEGER", 1, None, 1) or len(fields[1:]) != len(
                 necessary_fields.keys()
             ):
-                logger.warning(
+                logger.debug(
                     f"The number of fields in table `{db.table_name}` does not match"
                 )
                 return self._restore_database()
 
             for field, n_field in zip(fields[1:], necessary_fields):
                 if field[1] != n_field or field[2] != necessary_fields[n_field]:
-                    logger.warning(
+                    logger.debug(
                         f"The field {field[1]}({field[2]}) was encountered, "
                         f"but it should be {n_field}({necessary_fields[n_field]})"
                     )
@@ -177,4 +184,4 @@ class BootWorker(BaseWorker):
         db.create_table()
         db.init()
         Books(os.environ["DB_PATH"]).create_table()
-        logger.info("Database restored")
+        logger.debug("Database restored")

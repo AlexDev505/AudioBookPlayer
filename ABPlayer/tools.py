@@ -7,13 +7,10 @@
 from __future__ import annotations
 
 import hashlib
-import json
 import threading
 import typing as ty
 from abc import abstractmethod
 
-import pygments.formatters
-import pygments.lexers
 from PyQt5.QtCore import QObject, QThread
 
 if ty.TYPE_CHECKING:
@@ -127,38 +124,80 @@ def get_file_hash(file_path: ty.Union[str, Path], hash_func=hashlib.sha256) -> s
     return hash_func.hexdigest()
 
 
-def prepare_data(data: ty.Any) -> ty.Any:
-    if isinstance(data, dict):
-        return {k: prepare_data(v) for k, v in data.items()}
-    elif isinstance(data, list):
-        return [prepare_data(obj) for obj in data]
-    elif isinstance(data, bool):
-        return str(data).lower()
-    elif data is None:
-        return "null"
-    elif isinstance(data, (int, float, str)):
+def _adapt_value(data: ty.Any) -> ty.Any:
+    if isinstance(data, (int, float, bool, dict)) or data is None:
         return data
+    elif data.__repr__().startswith("{"):
+        return data.__dict__
+    elif data.__repr__().startswith("["):
+        return list(data)
     else:
-        if data.__repr__().startswith("{"):
-            return data.__dict__
-        return f'"{str(data)}"'
+        return str(data)
 
 
-def pretty_view(data: ty.Union[dict, list], colorize=True) -> str:
+def pretty_view(data: ty.Union[dict, list], _indent=0) -> str:
     """
     Преобразовывает `data` в более удобный для восприятия вид.
     """
-    data = prepare_data(data)
-    if isinstance(data, dict):
-        data = json.dumps(data, ensure_ascii=False, indent=4)
-    elif isinstance(data, list):
-        data = ",\n".join(f"    {line}" for line in data)
-        data = f"[\n{data}\n]"
 
-    if colorize:
-        return pygments.highlight(
-            data,
-            pygments.lexers.JsonLexer(),  # noqa
-            pygments.formatters.TerminalFormatter(bg="light"),  # noqa
-        ).rstrip()
-    return data
+    def tag(t: str, content: ty.Any) -> str:
+        return f"<{t}>{content}</{t}>"
+
+    def dict_(content: dict) -> ty.List[str]:
+        values = []
+        for k, v in content.items():
+            k = tag("le", f'"{k}"' if isinstance(k, str) else k)
+            v = _adapt_value(v)
+            if isinstance(v, str):
+                v = tag("y", f'"{v}"')
+            elif isinstance(v, (dict, list)):
+                v = pretty_view(v, _indent=_indent + 1)
+            else:
+                v = tag("lc", v)
+            values.append(f"{k}: {v}")
+        return values
+
+    def list_(content: list) -> ty.List[str]:
+        items = []
+        for item in content:
+            item = _adapt_value(item)
+            if isinstance(item, str):
+                items.append(tag("y", f'"{item}"'))
+            elif isinstance(item, (dict, list)):
+                items.append(pretty_view(item, _indent=_indent + 1))
+            else:
+                items.append(tag("lc", item))
+        return items
+
+    result = ""
+
+    if isinstance(data, dict):
+        if len(data) > 2 or not all(
+            isinstance(x, (str, int, float, bool)) or x is None for x in data.values()
+        ):
+            result = (
+                "{\n"
+                + "    " * (_indent + 1)
+                + f",\n{'    ' * (_indent + 1)}".join(dict_(data))
+                + "\n"
+                + "    " * _indent
+                + "}"
+            )
+        else:
+            result = "{" + ", ".join(dict_(data)) + "}"
+    elif isinstance(data, list):
+        if len(data) > 15 or not all(
+            isinstance(x, (str, int, float, bool)) for x in data
+        ):
+            result = (
+                "[\n"
+                + "    " * (_indent + 1)
+                + f",\n{'    ' * (_indent + 1)}".join(list_(data))
+                + "\n"
+                + "    " * _indent
+                + "]"
+            )
+        else:
+            result = "[" + ", ".join(list_(data)) + "]"
+
+    return tag("w", result)
