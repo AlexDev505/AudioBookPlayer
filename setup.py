@@ -85,7 +85,7 @@ zip_include_packages = [
 ]  # Библиотеки, помещаемые в архив
 
 cx_Freeze.setup(
-    name="Журнал термометрии",
+    name="AB Player",
     options={
         "build_exe": {
             "packages": ["PyQt5", "selenium", "requests", "eyed3"],  # Библиотеки
@@ -95,7 +95,8 @@ cx_Freeze.setup(
         "build": {"build_exe": target_dir},  # Место назначения
     },
     version=__version__,
-    description="Приложение для ведения журнала термометрии.",
+    description="Приложение для Windows,"
+    " которое позволит вам бесплатно слушать и скачивать аудио книги.",
     author="AlexDev",
     executables=executables,
 )
