@@ -14,7 +14,7 @@ import re
 
 import cx_Freeze
 
-__version__ = "1.0b0"
+__version__ = "1.0b1"
 target_dir = rf"build\ABPlayer"
 
 # Изменяем версию в main.py
