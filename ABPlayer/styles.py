@@ -403,6 +403,7 @@ def get_style_sheet(name: str) -> str:
     """
     file_path = styles.get(name)
     if file_path:
+        # Читаем таблицу стилей
         with open(file_path, encoding="utf-8") as f:
             return f.read()
     return DEFAULT_STYLESHEET

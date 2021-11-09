@@ -14,8 +14,7 @@ logger.remove(0)
 @dataclasses.dataclass
 class LoggingLevel:
     """
-    Вспомогательный класс для фильтрации
-    логов по их уровню.
+    Вспомогательный класс для фильтрации логов по их уровню.
     """
 
     level: str
@@ -45,12 +44,6 @@ def formatter(record) -> str:
     )
 
 
-def file_formatter(record) -> str:
-    # Удаляем окраску текста
-    record["message"] = re.sub(r"\033\[.+?m", "", record["message"])
-    return formatter(record)
-
-
 # Считываем уровень логирования(по умолчанию DEBUG)
 logging_level = temp_file.load().get("logging_level") or "DEBUG"
 if logging_level not in {"TRACE", "DEBUG", "INFO"}:
@@ -73,11 +66,11 @@ if os.environ.get("CONSOLE"):
 file_logger_handler = logger.add(
     os.environ["DEBUG_PATH"],
     colorize=False,
-    format=file_formatter,
+    format=formatter,
     filter=level_handler,
-    level=6,
+    level=6,  # Больше, чем TRACE
 )
 
-logger.level("TRACE", color="<e>")
-logger.level("DEBUG", color="<w>")
-logger.level("INFO", color="<c>")
+logger.level("TRACE", color="<e>")  # TRACE - синий
+logger.level("DEBUG", color="<w>")  # DEBUG - белый
+logger.level("INFO", color="<c>")  # INFO - бирюзовый

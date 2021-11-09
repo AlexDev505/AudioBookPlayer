@@ -117,28 +117,29 @@ def get_file_hash(file_path: ty.Union[str, Path], hash_func=hashlib.sha256) -> s
     :param hash_func: Функция хеширования.
     :return: Хеш файла.
     """
-    hash_func = hash_func()
+    hash_func = hash_func()  # Инициализируем хеш функцию
     with open(file_path, "rb") as file:
+        # Читаем файл по блокам в 64кб,
+        # для избежания загрузки больших файлов в оперативную память
         for block in iter(lambda: file.read(65536), b""):
             hash_func.update(block)
     return hash_func.hexdigest()
-
-
-def _adapt_value(data: ty.Any) -> ty.Any:
-    if isinstance(data, (int, float, bool, dict)) or data is None:
-        return data
-    elif data.__repr__().startswith("{"):
-        return data.__dict__
-    elif data.__repr__().startswith("["):
-        return list(data)
-    else:
-        return str(data)
 
 
 def pretty_view(data: ty.Union[dict, list], _indent=0) -> str:
     """
     Преобразовывает `data` в более удобный для восприятия вид.
     """
+
+    def adapt_value(obj: ty.Any) -> ty.Any:
+        if isinstance(obj, (int, float, bool, dict)) or obj is None:
+            return obj
+        elif obj.__repr__().startswith("{"):
+            return obj.__dict__
+        elif obj.__repr__().startswith("["):
+            return list(obj)
+        else:
+            return str(obj)
 
     def tag(t: str, content: ty.Any) -> str:
         return f"<{t}>{content}</{t}>"
@@ -147,7 +148,7 @@ def pretty_view(data: ty.Union[dict, list], _indent=0) -> str:
         values = []
         for k, v in content.items():
             k = tag("le", f'"{k}"' if isinstance(k, str) else k)
-            v = _adapt_value(v)
+            v = adapt_value(v)
             if isinstance(v, str):
                 v = tag("y", f'"{v}"')
             elif isinstance(v, (dict, list)):
@@ -160,7 +161,7 @@ def pretty_view(data: ty.Union[dict, list], _indent=0) -> str:
     def list_(content: list) -> ty.List[str]:
         items = []
         for item in content:
-            item = _adapt_value(item)
+            item = adapt_value(item)
             if isinstance(item, str):
                 items.append(tag("y", f'"{item}"'))
             elif isinstance(item, (dict, list)):
