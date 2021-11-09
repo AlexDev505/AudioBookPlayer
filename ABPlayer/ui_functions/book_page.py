@@ -148,7 +148,7 @@ def loadPreview(
         pixmap = pixmap.scaled(*size, Qt.KeepAspectRatio)
         cover_label.setPixmap(pixmap)
     elif cache.get(book.preview):  # Проверяем кэш
-        cover_label.setPixmap(cache.get(book.preview))
+        cover_label.setPixmap(cache.get(book.preview).scaled(*size, Qt.KeepAspectRatio))
     else:
         # Анимация загрузки
         if not cover_label.movie():
@@ -561,9 +561,9 @@ def changeDriver(main_window: MainWindow) -> None:
         # Создаем и запускаем новый поток для удаления старой книги
         main_window.DeleteBookWorker = DeleteBookWorker(main_window, main_window.book)
         # По завершению удаления, запускается скачивание
+        main_window.DeleteBookWorker.start()
         main_window.DeleteBookWorker.finished.disconnect()
         main_window.DeleteBookWorker.finished.connect(lambda: download(book))
-        main_window.DeleteBookWorker.start()
 
     def download(book: Book) -> None:
         """
@@ -624,9 +624,9 @@ def changeDriver(main_window: MainWindow) -> None:
     # Создаём и запускаем новый поток для поиска книги
     main_window.SearchWorker = SearchWorker(main_window, drv, url)
     # По завершению поиска, запускается удаление старой книги
+    main_window.SearchWorker.start()
     main_window.SearchWorker.finished.disconnect()  # noqa
     main_window.SearchWorker.finished.connect(lambda book: delete(book))  # noqa
-    main_window.SearchWorker.start()
 
 
 def _get_url(main_window: MainWindow, dlg: InputDialog) -> ty.Union[None, False, str]:
