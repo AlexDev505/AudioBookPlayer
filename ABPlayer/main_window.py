@@ -328,10 +328,6 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         :param book: Экземпляр скачанной или не скачанной книги.
         """
         logger.debug("Opening a book page")
-        # TODO: Возникает при открытии прослушанной книги с панели управления
-        if book is ...:
-            logger.debug("Book is empty")
-            return
         logger.opt(colors=True).debug(
             "Book data: "
             + pretty_view(
@@ -474,6 +470,19 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         self.bookNameLabel.setText(self.player.book.name)
         self.bookAuthorLabel.setText(self.player.book.author)
         book_page.loadPreview(self, self.bookCover, (60, 60), self.player.book)
+
+    def closeMiniPlayer(self) -> None:
+        self.miniPlayerFrame.player_animation = QPropertyAnimation(
+            self.miniPlayerFrame, b"maximumWidth"
+        )
+        self.miniPlayerFrame.player_animation.setStartValue(300)
+        self.miniPlayerFrame.player_animation.setEndValue(0)
+        self.miniPlayerFrame.player_animation.setEasingCurve(QEasingCurve.InOutQuart)
+        self.miniPlayerFrame.player_animation.finished.connect(
+            lambda: self.miniPlayerFrame.__dict__.__delitem__("player_animation")
+        )  # Удаляем анимацию
+        self.miniPlayerFrame.player_animation.start()
+        temp_file.delete_items("last_listened_book_id")
 
     @logger.catch
     def openLibraryPage(self, books_ids: ty.List[int] = None) -> None:

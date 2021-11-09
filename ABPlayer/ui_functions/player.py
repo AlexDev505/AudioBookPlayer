@@ -5,9 +5,7 @@ import typing as ty
 from abc import abstractmethod
 
 from PyQt5.QtCore import (
-    QEasingCurve,
     QObject,
-    QPropertyAnimation,
     QTimer,
     QUrl,
     Qt,
@@ -57,6 +55,7 @@ class BasePlayerInterface(QObject):
         self.player.player.stateChanged.connect(self._stateChanged)
         self.player.reloadPlayerInterface.connect(self.reloadPlayerInterface)
         self.player.bookIsDamaged.connect(self.bookIsDamaged)
+        self.player.closePlayer.connect(self.closePlayer)
 
     def reset_last_save(self) -> None:
         self._last_saved_time = self._last_saved_item = 0
@@ -141,6 +140,13 @@ class BasePlayerInterface(QObject):
         Вызывается, когда файлы книги повреждены.
         """
 
+    @abstractmethod
+    def closePlayer(self) -> None:
+        """
+        Необходимо реализовать в наследуемом классе.
+        Вызывается, для закрытия плеера.
+        """
+
 
 class MainWindowPlayer(BasePlayerInterface):
     """
@@ -196,22 +202,10 @@ class MainWindowPlayer(BasePlayerInterface):
 
         last_listened_book_id = temp_file.load().get("last_listened_book_id")
         if last_listened_book_id == downloaded_book.id:
-            temp_file.delete_items("last_listened_book_id")
-            if self.miniPlayerFrame.maximumWidth() != 0:
-                self.miniPlayerFrame.player_animation = QPropertyAnimation(
-                    self.miniPlayerFrame, b"maximumWidth"
-                )
-                self.miniPlayerFrame.player_animation.setStartValue(300)
-                self.miniPlayerFrame.player_animation.setEndValue(0)
-                self.miniPlayerFrame.player_animation.setEasingCurve(
-                    QEasingCurve.InOutQuart
-                )
-                self.miniPlayerFrame.player_animation.finished.connect(
-                    lambda: self.miniPlayerFrame.__dict__.__delitem__(
-                        "player_animation"
-                    )
-                )  # Удаляем анимацию
-                self.miniPlayerFrame.player_animation.start()
+            self.closePlayer()
+
+    def closePlayer(self) -> None:
+        self.closeMiniPlayer()
 
 
 class Player(QObject):
@@ -221,6 +215,7 @@ class Player(QObject):
 
     reloadPlayerInterface: QtCore.pyqtSignal = pyqtSignal()
     bookIsDamaged: QtCore.pyqtSignal = pyqtSignal()
+    closePlayer: QtCore.pyqtSignal = pyqtSignal()
 
     def __init__(self):
         super(Player, self).__init__()
@@ -301,6 +296,7 @@ class Player(QObject):
         )
         QTimer.singleShot(300, self.player.stop)
         self.reloadPlayerInterface.emit()
+        self.closePlayer.emit()
 
     @logger.catch
     def setPosition(self, position: int, item: int = None, delay=100) -> None:
