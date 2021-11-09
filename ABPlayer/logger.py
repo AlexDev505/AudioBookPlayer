@@ -7,8 +7,10 @@ from loguru import logger
 
 import temp_file
 
-# Удаление настроек логгера по умолчанию
-logger.remove(0)
+try:  # Удаление настроек логгера по умолчанию
+    logger.remove(0)
+except ValueError:
+    pass
 
 
 @dataclasses.dataclass
@@ -50,9 +52,6 @@ if logging_level not in {"TRACE", "DEBUG", "INFO"}:
     logging_level = "DEBUG"
     temp_file.delete_items("logging_level")
 level_handler = LoggingLevel(logging_level)
-
-# TODO: delete this!
-os.environ["CONSOLE"] = "1"
 
 if os.environ.get("CONSOLE"):
     console_logger_handler = logger.add(

@@ -14,9 +14,10 @@ import re
 
 import cx_Freeze
 
-__version__ = "1.0a5"
+__version__ = "1.0b0"
 target_dir = rf"build\ABPlayer"
 
+# Изменяем версию в main.py
 with open(r"ABPlayer\main.py", encoding="utf-8") as file:
     text = file.read()
 text = re.sub(
@@ -25,6 +26,7 @@ text = re.sub(
 with open(r"ABPlayer\main.py", "w", encoding="utf-8") as file:
     file.write(text)
 
+# Изменяем версию в установщике
 with open("installer.nsi") as file:
     text = file.read()
 text = re.sub(
@@ -37,7 +39,7 @@ with open("installer.nsi", "w") as file:
 executables = [
     cx_Freeze.Executable(
         script=r"ABPlayer\run.py",  # Запускаемый файл
-        # base="Win32GUI",  # Использует pythonw.exe
+        base="Win32GUI",  # Использует pythonw.exe
         targetName="ABPlayer.exe",  # Имя exe
         icon=r"interface\resources\icon.ico",
     )
@@ -108,5 +110,4 @@ cx_Freeze.setup(
     executables=executables,
 )
 
-# python setup.py bdist_msi  # Сборка msi установщика
 # python setup.py build  # Сборка exe
