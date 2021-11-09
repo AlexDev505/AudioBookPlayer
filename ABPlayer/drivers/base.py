@@ -8,8 +8,10 @@ from pathlib import Path
 
 import eyed3
 import requests
-from selenium import webdriver
 from loguru import logger
+from selenium import webdriver
+
+from .chromedriver import HiddenChromeWebDriver
 
 if ty.TYPE_CHECKING:
     from database.tables.books import Book, BookItem
@@ -198,7 +200,7 @@ class Driver(ABC):
         """
         :returns: Нужный драйвер браузера.
         """
-        return webdriver.Chrome
+        return HiddenChromeWebDriver
 
     @property
     def driver_options(self) -> webdriver.ChromeOptions:
