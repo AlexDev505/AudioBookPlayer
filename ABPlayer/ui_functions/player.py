@@ -256,7 +256,7 @@ class Player(QObject):
         file_paths: ty.List[str] = []
         if not os.path.isdir(self.book.dir_path):  # Директории нет
             logger.opt(colors=True).error(
-                f"Directory <y>{self.book.dir_path}<y> does not exist"
+                f"Directory <y>{self.book.dir_path}</y> does not exist"
             )
             return self.bookIsDamaged.emit()
 
