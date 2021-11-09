@@ -173,11 +173,7 @@ class UiBook(object):
         self.toggleFavoriteBtn.setMinimumSize(QtCore.QSize(45, 45))
         self.toggleFavoriteBtn.setMaximumSize(QtCore.QSize(45, 45))
         self.toggleFavoriteBtn.setText("")
-        icon = QtGui.QIcon()
-        icon.addPixmap(
-            QtGui.QPixmap(":/other/star.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
-        )
-        self.toggleFavoriteBtn.setIcon(icon)
+        self.toggleFavoriteBtn.setIcon(QtGui.QIcon(":/other/star.svg"))
         self.toggleFavoriteBtn.setIconSize(QtCore.QSize(30, 30))
         self.toggleFavoriteBtn.setObjectName("toggleFavoriteBtn")
         self.horizontalLayout_5.addWidget(self.toggleFavoriteBtn)
@@ -192,11 +188,7 @@ class UiBook(object):
         self.deleteBtn.setMinimumSize(QtCore.QSize(45, 45))
         self.deleteBtn.setMaximumSize(QtCore.QSize(45, 45))
         self.deleteBtn.setText("")
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(
-            QtGui.QPixmap(":/other/trash.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off
-        )
-        self.deleteBtn.setIcon(icon1)
+        self.deleteBtn.setIcon(QtGui.QIcon(":/other/trash.svg"))
         self.deleteBtn.setIconSize(QtCore.QSize(30, 30))
         self.deleteBtn.setObjectName("deleteBtn")
         self.horizontalLayout_5.addWidget(self.deleteBtn)
