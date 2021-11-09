@@ -67,7 +67,6 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowMinimizeButtonHint)
 
         # Тень вокруг окна
-        # TODO: из-за тени приложение фризит.
         self.setAttribute(Qt.WA_TranslucentBackground)
         # Оставляем область вокруг окна, в котором будет отображена тень
         self.centralwidget.layout().setContentsMargins(15, 15, 15, 15)
@@ -290,9 +289,9 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
                 )
             ),
         )
-        self.infoPageMovie.setMovie(movie)
-        self.infoPageLabel.clear()
-        self.infoPageLabel.setAlignment(Qt.AlignCenter)
+        self.infoPageMovie.setMovie(movie)  # Устанавливаем анимацию
+        self.infoPageLabel.clear()  # Очищаем текстовое поле
+        self.infoPageLabel.setAlignment(Qt.AlignCenter)  # Центрирование текста
         self.infoPageLabel.insertPlainText(text)
         if movie:
             self.infoPageLabel.hide()
@@ -303,9 +302,9 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             self.infoPageLabel.show()
         self.infoPageBtn.setText(btn_text)
         if btn_function:
-            try:
+            try:  # Отключаем обработчик нажатия на кнопку
                 self.infoPageBtn.clicked.disconnect()
-            except TypeError:
+            except TypeError:  # Возникает если обработчик не установлен
                 pass
             self.infoPageBtn.clicked.connect(lambda: btn_function())
             self.infoPageBtn.show()
@@ -329,6 +328,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         :param book: Экземпляр скачанной или не скачанной книги.
         """
         logger.debug("Opening a book page")
+        # TODO: Возникает при открытии прослушанной книги с панели управления
         if book is ...:
             logger.debug("Book is empty")
             return
@@ -708,3 +708,8 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
                 return
 
         logger.info("Closing the application")
+
+        # При закрытии приложения, плеер сбрасывает позицию на 0,
+        # из-за этого точка остановки сохраняется в бд.
+        # Так же сбрасываем последнее сохранение, тогда точка остановки не сохранится.
+        self.reset_last_save()
