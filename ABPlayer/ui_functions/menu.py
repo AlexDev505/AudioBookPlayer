@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+import os
 import typing as ty
 
 from PyQt5.QtCore import QEasingCurve, QPropertyAnimation
@@ -27,7 +28,7 @@ def toggleMenu(main_window: MainWindow) -> None:
     if not main_window.__dict__.get("menu_animation"):
         width = main_window.menuFrame.width()  # Ширина меню сейчас
         # Конечная ширина меню. 200-открытое 65-закрытое
-        end_value = 200 if width == 65 else 65
+        end_value = int(os.environ["MENU_WIDTH"]) if width == 65 else 65
         logger.opt(colors=True).trace(f"Toggle menu to <y>{end_value}</y>")
 
         main_window.menu_animation = QPropertyAnimation(

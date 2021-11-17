@@ -152,6 +152,10 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             items.append(fm.width(self.themeSelecror.itemText(i)) + 80)
         self.themeSelecror.setMinimumWidth(max(items))
 
+        fm = QFontMetrics(self.dirWithBooksBtn.font())
+        os.environ["MENU_WIDTH"] = str(int(fm.width(self.dirWithBooksBtn.text()) * 1.5))
+        self.menuFrame.setMinimumWidth(int(os.environ["MENU_WIDTH"]))
+
     def setupSignals(self) -> None:
         logger.trace("Setting main window signals")
         # APPLICATION
@@ -219,6 +223,9 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         self.searchNewBookBtn.clicked.connect(lambda e: add_book_page.search(self))
         self.searchNewBookLineEdit.returnPressed.connect(
             lambda: add_book_page.search(self)
+        )
+        self.openSiteBtn.clicked.connect(
+            lambda: webbrowser.open_new_tab("https://knigavuhe.org/")
         )
 
         # BOOK PAGE
