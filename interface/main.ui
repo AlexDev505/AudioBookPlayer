@@ -1229,7 +1229,7 @@ Line {
                                  <property name="font">
                                   <font>
                                    <family>Arial</family>
-                                   <pointsize>10</pointsize>
+                                   <pointsize>8</pointsize>
                                   </font>
                                  </property>
                                  <item>
@@ -1344,7 +1344,7 @@ Line {
                                  <property name="font">
                                   <font>
                                    <family>Arial</family>
-                                   <pointsize>10</pointsize>
+                                   <pointsize>8</pointsize>
                                   </font>
                                  </property>
                                  <item>
@@ -3103,18 +3103,62 @@ p, li { white-space: pre-wrap; }
                         </spacer>
                        </item>
                        <item>
-                        <widget class="QLabel" name="label_4">
-                         <property name="font">
-                          <font>
-                           <family>Arial</family>
-                           <pointsize>20</pointsize>
-                           <weight>75</weight>
-                           <bold>true</bold>
-                          </font>
+                        <widget class="QFrame" name="frame_9">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
                          </property>
-                         <property name="text">
-                          <string>Поиск книги</string>
+                         <property name="frameShape">
+                          <enum>QFrame::StyledPanel</enum>
                          </property>
+                         <property name="frameShadow">
+                          <enum>QFrame::Raised</enum>
+                         </property>
+                         <layout class="QHBoxLayout" name="horizontalLayout_43">
+                          <property name="spacing">
+                           <number>10</number>
+                          </property>
+                          <property name="leftMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="topMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="rightMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="bottomMargin">
+                           <number>0</number>
+                          </property>
+                          <item>
+                           <widget class="QLabel" name="label_4">
+                            <property name="font">
+                             <font>
+                              <family>Arial</family>
+                              <pointsize>20</pointsize>
+                              <weight>75</weight>
+                              <bold>true</bold>
+                             </font>
+                            </property>
+                            <property name="text">
+                             <string>Поиск книги</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QPushButton" name="openSiteBtn">
+                            <property name="toolTip">
+                             <string>Открыть сайт</string>
+                            </property>
+                            <property name="icon">
+                             <iconset resource="resources/icons.qrc">
+                              <normaloff>:/other/box-arrow-up-right.svg</normaloff>:/other/box-arrow-up-right.svg</iconset>
+                            </property>
+                           </widget>
+                          </item>
+                         </layout>
                         </widget>
                        </item>
                        <item>
@@ -3165,7 +3209,7 @@ p, li { white-space: pre-wrap; }
                              <string/>
                             </property>
                             <property name="placeholderText">
-                             <string>Введите название книги или вставьте ссылку</string>
+                             <string>Вставьте ссылку на книгу</string>
                             </property>
                            </widget>
                           </item>
@@ -4786,7 +4830,7 @@ QPushButton:hover {
  </resources>
  <connections/>
  <buttongroups>
-  <buttongroup name="controlPanelButtons"/>
   <buttongroup name="menuButtons"/>
+  <buttongroup name="controlPanelButtons"/>
  </buttongroups>
 </ui>
