@@ -20,7 +20,7 @@ os.environ["DEBUG_PATH"] = os.path.join(os.environ["APP_DIR"], "debug.log")
 # Стандартный путь к директории с книгами
 os.environ["DEFAULT_BOOKS_FOLDER"] = os.path.join(os.environ["APP_DIR"], "Книги")
 # Версия приложения
-os.environ["VERSION"] = "1.0b2"
+os.environ["VERSION"] = "1.0b3"
 # Инициализация конфигурации
 # (хранил бы в json`е, но нужно несколько таблиц в бд, поэтому вот так вот...)
 from database import Config  # noqa
