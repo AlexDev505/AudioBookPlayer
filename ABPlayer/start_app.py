@@ -114,16 +114,16 @@ class BootWorker(BaseWorker):
         Выполняется в отдельном потоке.
         """
         logger.debug("Starting the boot process")
+        self.check_database_integrity()
+
         self.status.emit("Проверка наличия соединения", None)
         try:
             requests.get("https://www.google.com/", timeout=5)
             logger.debug("Connection established")
         except Exception:  # Нет интернет соединения
-            self.status.emit("ConnectionError", ConnectionFail)
             logger.error("No connection")
+            self.finished.emit(True)
             return
-
-        self.check_database_integrity()
 
         try:
             self.status.emit("Проверка наличия браузера", None)

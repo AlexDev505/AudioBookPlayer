@@ -74,14 +74,9 @@ class DownloadingFail(DriverError):
     text = "Ошибка при загрузке драйвера.\nПовторите позже."
 
 
-class ConnectionFail(DriverError):
-    text = "Не удалось подключиться к сети.\nПроверьте интернет соединение."
-
-
 __all__ = [
     "DriverError",
     "ChromeNotFound",
     "NotAvailableVersion",
     "DownloadingFail",
-    "ConnectionFail",
 ]
