@@ -87,11 +87,17 @@ class DownloadPreviewWorker(BaseWorker):
             pixmap.loadFromData(data)
             cache.set(self.book.preview, pixmap)  # Заносим в кэш
             self.finished.emit(pixmap)
-        except Exception:
+        except Exception as err:
             self.failed.emit()
-            logger.opt(colors=True).exception(
-                f"Cover for QLabel <y>{id(self.cover_label)}</y> download failed."
-            )
+            if "[Errno 11001] getaddrinfo failed" in str(err):
+                logger.opt(colors=True).error(
+                    f"Cover for QLabel <y>{id(self.cover_label)}</y> download failed. "
+                    "Connection error"
+                )
+            else:
+                logger.opt(colors=True).exception(
+                    f"Cover for QLabel <y>{id(self.cover_label)}</y> download failed."
+                )
         self.main_window.download_cover_thread_count -= 1
 
     def finish(self, pixmap: QPixmap) -> None:

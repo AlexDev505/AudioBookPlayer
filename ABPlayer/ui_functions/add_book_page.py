@@ -48,17 +48,22 @@ class SearchWorker(BaseWorker):
             book = self.drv.get_book(self.url)
             self.finished.emit(book)
         except Exception as err:
-            logger.exception("Search failed")
             if "ERR_INTERNET_DISCONNECTED" in str(err):
                 self.failed.emit(
                     "Не удалось подключиться к серверу.\n"
                     "Проверьте интернет соединение."
+                )
+            elif "chromedriver" in str(err):
+                self.failed.emit(
+                    "Не удалось получить данные об этой книге.\n"
+                    "Проверьте интернет соединение и перезапустите приложение."
                 )
             else:
                 self.failed.emit(
                     "Не удалось получить данные об этой книге.\n"
                     "Проверьте правильность введенной ссылки."
                 )
+                logger.exception("Search failed")
         self.main_window.setLock(False)
 
     def finish(self, book: Book) -> None:
