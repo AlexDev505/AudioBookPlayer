@@ -12,7 +12,7 @@ import typing as ty
 import webbrowser
 
 from PyQt5.QtCore import QEasingCurve, QPropertyAnimation, QSize, QTimer, Qt
-from PyQt5.QtGui import QCloseEvent, QColor, QFontMetrics, QIcon, QMovie
+from PyQt5.QtGui import QCloseEvent, QColor, QFontMetrics, QIcon, QMovie, QKeySequence
 from PyQt5.QtMultimedia import QMediaPlayer
 from PyQt5.QtWidgets import (
     QFrame,
@@ -22,6 +22,7 @@ from PyQt5.QtWidgets import (
     QSizePolicy,
     QSpacerItem,
     QVBoxLayout,
+    QShortcut,
     QWidget,
 )
 from loguru import logger
@@ -251,6 +252,8 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         self.futureBtn.clicked.connect(lambda e: self.player.rewindToFuture())
         self.playPauseBtnLg.clicked.connect(lambda e: self.player.playPause(self))
         self.playPauseBtn.clicked.connect(lambda e: self.player.setState(self))
+        shortcut = QShortcut(QKeySequence("Space"), self)
+        shortcut.activated.connect(lambda: self.player.setState(self))
 
         # SETTINGS PAGE
         self.developerBtn.clicked.connect(
