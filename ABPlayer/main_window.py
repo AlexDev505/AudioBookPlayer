@@ -89,6 +89,12 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
 
         self.setupSignals()
 
+        # Определяем горячие клавиши
+        self.CtrlPShortcut = QShortcut(QKeySequence("Ctrl+P"), self)
+        self.CtrlFShortcut = QShortcut(QKeySequence("Ctrl+F"), self)
+        self.CtrlBShortcut = QShortcut(QKeySequence("Ctrl+B"), self)
+        self.hotkeys = False
+
         # Модифицируем QLabel, превращая его в marquee
         marquee.prepareLabel(self, self.bookNameLabel)
 
@@ -156,13 +162,6 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         fm = QFontMetrics(self.dirWithBooksBtn.font())
         os.environ["MENU_WIDTH"] = str(int(fm.width(self.dirWithBooksBtn.text()) * 1.5))
         self.menuFrame.setMinimumWidth(int(os.environ["MENU_WIDTH"]))
-
-        # Определяем горячие клавиши
-        self.CtrlPShortcut = QShortcut(QKeySequence("Ctrl+P"), self)
-        self.CtrlFShortcut = QShortcut(QKeySequence("Ctrl+F"), self)
-        self.CtrlBShortcut = QShortcut(QKeySequence("Ctrl+B"), self)
-        if self.player.book is not ...:
-            self.setupHotKeys()
 
     def setupSignals(self) -> None:
         logger.trace("Setting main window signals")
@@ -473,6 +472,10 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         Обновляет в нем данные.
         """
         logger.trace("Loading the mini player")
+        if not self.hotkeys:
+            self.setupHotKeys()
+            self.hotkeys = True
+
         if self.miniPlayerFrame.maximumWidth() == 0:
             self.miniPlayerFrame.player_animation = QPropertyAnimation(
                 self.miniPlayerFrame, b"maximumWidth"
