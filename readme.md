@@ -29,7 +29,7 @@
 
 ## Установка
 
-Для начала скачайте установочный файл по этой [ссылке](https://github.com/AlexDev-py/AudioBookPlayer/releases/tag/v1.0b3).
+Для начала скачайте установочный файл по этой [ссылке](https://github.com/AlexDev-py/AudioBookPlayer/releases/tag/v1.0b4).
 
 После запуска Вас поприветствует мастер установки и попросит нажать "Далее". Сделайте это.
 
