@@ -1825,6 +1825,7 @@ class UiMainWindow(object):
         self.playPauseBtn.setIcon(QtGui.QIcon(":/other/play.svg"))
         self.playPauseBtn.setIconSize(QtCore.QSize(40, 40))
         self.playPauseBtn.setObjectName("playPauseBtn")
+        self.playPauseBtn.setToolTip("Ctrl + P")
         self.controlPanelButtons = QtWidgets.QButtonGroup(MainWindow)
         self.controlPanelButtons.setObjectName("controlPanelButtons")
         self.controlPanelButtons.addButton(self.playPauseBtn)
@@ -2032,9 +2033,13 @@ class UiMainWindow(object):
         self.saveBtn.setToolTip(_translate("MainWindow", "Скачать книгу"))
         self.deleteBtn.setToolTip(_translate("MainWindow", "Удалить книгу"))
         self.changeDriverBtn.setToolTip(_translate("MainWindow", "Изменить источник"))
-        self.pastBtn.setToolTip(_translate("MainWindow", "Вернуться на 15 секунд"))
+        self.pastBtn.setToolTip(
+            _translate("MainWindow", "Вернуться на 15 секунд (Ctrl + B)")
+        )
         self.pastBtn.setText(_translate("MainWindow", "15 c"))
-        self.futureBtn.setToolTip(_translate("MainWindow", "Вперед на 15 секунд"))
+        self.futureBtn.setToolTip(
+            _translate("MainWindow", "Вперед на 15 секунд (Ctrl + F)")
+        )
         self.futureBtn.setText(_translate("MainWindow", "15 c"))
         self.label_6.setText(
             _translate("MainWindow", "Для прослушивания книги, необходимо скачать её")

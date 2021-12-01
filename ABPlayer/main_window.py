@@ -157,6 +157,13 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         os.environ["MENU_WIDTH"] = str(int(fm.width(self.dirWithBooksBtn.text()) * 1.5))
         self.menuFrame.setMinimumWidth(int(os.environ["MENU_WIDTH"]))
 
+        # Определяем горячие клавиши
+        self.CtrlPShortcut = QShortcut(QKeySequence("Ctrl+P"), self)
+        self.CtrlFShortcut = QShortcut(QKeySequence("Ctrl+F"), self)
+        self.CtrlBShortcut = QShortcut(QKeySequence("Ctrl+B"), self)
+        if self.player.book is not ...:
+            self.setupHotKeys()
+
     def setupSignals(self) -> None:
         logger.trace("Setting main window signals")
         # APPLICATION
@@ -252,8 +259,6 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         self.futureBtn.clicked.connect(lambda e: self.player.rewindToFuture())
         self.playPauseBtnLg.clicked.connect(lambda e: self.player.playPause(self))
         self.playPauseBtn.clicked.connect(lambda e: self.player.setState(self))
-        shortcut = QShortcut(QKeySequence("Space"), self)
-        shortcut.activated.connect(lambda: self.player.setState(self))
 
         # SETTINGS PAGE
         self.developerBtn.clicked.connect(
@@ -271,6 +276,11 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         self.setDirWithBooksBtn.clicked.connect(
             lambda e: settings_page.setDirWithBooks(self)
         )
+
+    def setupHotKeys(self) -> None:
+        self.CtrlPShortcut.activated.connect(lambda: self.player.setState(self))
+        self.CtrlFShortcut.activated.connect(lambda: self.player.rewindToFuture())
+        self.CtrlBShortcut.activated.connect(lambda: self.player.rewindToPast())
 
     @logger.catch
     def openInfoPage(
