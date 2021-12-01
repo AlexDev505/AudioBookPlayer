@@ -400,6 +400,9 @@ class Player(QObject):
         Обрабатывает нажатие на кнопку play/pause на панели управления.
         :param main_window: Экземпляр главного окна.
         """
+        if main_window.book is ... and self.book is ...:
+            return
+
         if self.player.state() == QMediaPlayer.StoppedState:
             self.init_book(
                 main_window,
