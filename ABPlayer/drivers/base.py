@@ -121,7 +121,7 @@ class Driver(ABC):
 
         urls = []  # Ссылки на файлы
         merged = False  # Если True, то в 1-ом файле присутствует несколько глав
-        total_size = 0  # Общий размер книги(в битах)
+        total_size = 0  # Общий размер книги(в байтах)
 
         # Устанавливаем значение флага `merged` и определяем общий размер
         for item in book.items:
@@ -140,7 +140,9 @@ class Driver(ABC):
             process_handler.init(total_size)
 
         logger.opt(colors=True).debug(f"Audio files merged: <y>{merged}</y>")
-        logger.opt(colors=True, lazy=True).debug(f"Total size: <y>{total_size} bit</y>")
+        logger.opt(colors=True, lazy=True).debug(
+            f"Total size: <y>{total_size} bytes</y>"
+        )
 
         files = []
         if merged:
