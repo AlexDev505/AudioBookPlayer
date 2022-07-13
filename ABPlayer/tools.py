@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import hashlib
+import math
 import threading
 import typing as ty
 from abc import abstractmethod
@@ -97,18 +98,18 @@ def convert_into_seconds(seconds: int) -> str:
     )
 
 
-def convert_into_bits(bits: int) -> str:
+def convert_into_bytes(bytes_value: int) -> str:
     """
-    :param bits: Число битов.
+    :param bytes_value: Число байт.
     :return: Строка вида <Число> <Единица измерения>
     """
-    postfixes = ["КБ", "МБ", "ГБ"]
-    if bits >= 2 ** 33:
-        return f"{round(bits / 2 ** 33, 3)} {postfixes[-1]}"
-    elif bits >= 2 ** 23:
-        return f"{round(bits / 2 ** 23, 2)} {postfixes[-2]}"
-    elif bits >= 2 ** 13:
-        return f"{round(bits / 2 ** 13, 1)} {postfixes[-3]}"
+    if bytes_value == 0:
+        return "0B"
+    size_name = ("б", "КБ", "МБ", "ГБ", "ТБ", "ПБ", "EB", "ZB", "YB")
+    i = int(math.floor(math.log(bytes_value, 1024)))
+    p = math.pow(1024, i)
+    s = round(bytes_value / p, 2)
+    return "%s %s" % (s, size_name[i])
 
 
 def get_file_hash(file_path: ty.Union[str, Path], hash_func=hashlib.sha256) -> str:

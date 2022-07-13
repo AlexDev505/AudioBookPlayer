@@ -32,7 +32,7 @@ from loguru import logger
 
 from database.tables.books import BookFiles, Books, Status
 from drivers import BaseDownloadProcessHandler, drivers
-from tools import BaseWorker, Cache, convert_into_bits, get_file_hash
+from tools import BaseWorker, Cache, convert_into_bytes, get_file_hash
 from .add_book_page import SearchWorker
 
 if ty.TYPE_CHECKING:
@@ -302,7 +302,7 @@ class DownloadProcessHandler(QObject, BaseDownloadProcessHandler):
         self.main_window.downloadingProgressBarLg.setValue(progress)
         self.main_window.downloadingProgressBar.setValue(progress)
         self.main_window.downloadingProgressBar.setToolTip(
-            f"{convert_into_bits(self.done_size)} / {convert_into_bits(self.total_size)}",
+            f"{convert_into_bytes(self.done_size)} / {convert_into_bytes(self.total_size)}",
         )  # Изменяем всплывающую подсказку
 
 
