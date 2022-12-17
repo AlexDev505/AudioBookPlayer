@@ -31,7 +31,7 @@ import styles
 import temp_file
 from database import Books
 from database.tables.books import Status
-from tools import pretty_view
+from tools import pretty_view, trace_book_data, debug_book_data
 from ui import Item, UiBook, UiMainWindow
 from ui_functions import (
     add_book_page,
@@ -347,12 +347,8 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         :param book: Экземпляр скачанной или не скачанной книги.
         """
         logger.debug("Opening a book page")
-        logger.opt(colors=True).debug(
-            "Book data: "
-            + pretty_view(
-                {k: v for k, v in book.__dict__.items() if not k.startswith("_")}
-            ),
-        )
+        logger.opt(colors=True).trace(trace_book_data(book))
+        logger.opt(colors=True).debug(debug_book_data(book))
         self.book = book
 
         book_data = Books(os.environ["DB_PATH"]).filter(
@@ -561,7 +557,8 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         if self.invertSortBtn.isChecked():
             books.reverse()
 
-        logger.opt(colors=True).debug("Books: " + pretty_view(books))
+        logger.opt(colors=True).trace("Books: " + pretty_view(books))
+        logger.opt(colors=True).debug(f"Books: <y><list ({len(books)} objects)></y>")
 
         # Заполняем QComboBox авторами
         self.sortAuthor.currentIndexChanged.disconnect()

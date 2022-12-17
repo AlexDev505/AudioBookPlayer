@@ -19,7 +19,13 @@ from loguru import logger
 import temp_file
 from database import Books, Book
 from database.tables.books import Status
-from tools import convert_into_seconds, get_file_hash, pretty_view
+from tools import (
+    convert_into_seconds,
+    get_file_hash,
+    pretty_view,
+    debug_book_data,
+    trace_book_data,
+)
 from . import sliders
 from .book_page import DeleteBookWorker
 
@@ -233,12 +239,8 @@ class Player(QObject):
         :param main_window: Экземпляр главного окна.
         :param book: Экземпляр скачанной книги.
         """
-        logger.opt(colors=True).debug(
-            "Book initialization. Book:"
-            + pretty_view(
-                {k: v for k, v in book.__dict__.items() if not k.startswith("_")}
-            ),
-        )
+        logger.opt(colors=True).trace(trace_book_data(book))
+        logger.opt(colors=True).debug(debug_book_data(book))
         self.book = book
         stop_flag_time = self.book.stop_flag.time
         main_window.reset_last_save()

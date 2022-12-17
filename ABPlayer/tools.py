@@ -16,6 +16,7 @@ from PyQt5.QtCore import QObject, QThread
 
 if ty.TYPE_CHECKING:
     from pathlib import Path
+    from database import Books, Book
 
 
 class Cache(object):
@@ -151,7 +152,7 @@ def pretty_view(data: ty.Union[dict, list], _indent=0) -> str:
             k = tag("le", f'"{k}"' if isinstance(k, str) else k)
             v = adapt_value(v)
             if isinstance(v, str):
-                v = tag("y", f'"{v}"')
+                v = tag("y", '"%s"' % v.replace("\n", "\\n"))
             elif isinstance(v, (dict, list)):
                 v = pretty_view(v, _indent=_indent + 1)
             else:
@@ -203,3 +204,21 @@ def pretty_view(data: ty.Union[dict, list], _indent=0) -> str:
             result = "[" + ", ".join(list_(data)) + "]"
 
     return tag("w", result)
+
+
+def debug_book_data(book: Books | Book) -> str:
+    data = {k: v for k, v in book.__dict__.items() if not k.startswith("_")}
+    if 'items' in data:
+        data["items"] = f"<list ({len(data['items'])} objects)>"
+    if 'files' in data:
+        data["files"] = f"<list ({len(data['files'])} objects)>"
+    if len(data.get('description') or '') > 100:
+        data["description"] = data["description"][:100] + "..."
+
+    return "Book data: " + pretty_view(data)
+
+
+def trace_book_data(book: Books | Book) -> str:
+    return "Book data: " + pretty_view(
+        {k: v for k, v in book.__dict__.items() if not k.startswith("_")}
+    )
