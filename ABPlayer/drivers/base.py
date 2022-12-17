@@ -15,6 +15,7 @@ from .chromedriver import HiddenChromeWebDriver
 
 if ty.TYPE_CHECKING:
     from database.tables.books import Book, BookItem
+    from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
 
 
 def prepare_file_metadata(
@@ -69,15 +70,43 @@ class BaseDownloadProcessHandler:
 
 class Driver(ABC):
     drivers: ty.List[ty.Type[Driver]] = []  # Все доступные драйверы
+    _driver: RemoteWebDriver = ...
+    _driver_opener: int = ...
 
     def __init_subclass__(cls, **kwargs):
         Driver.drivers.append(cls)
 
-    def get_driver(self) -> webdriver.Chrome:
+    def __enter__(self):
+        self.get_driver()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self.__class__._driver_opener == id(self):
+            self.__class__.quit_driver()
+
+    def get_driver(self) -> RemoteWebDriver:
         """
         :returns: Драйвер, для работы с браузером.
         """
-        return self.driver(options=self.driver_options)
+        logger.opt(colors=True).debug(
+            f"Driver <e>{self.driver_name}</e> <y>{id(self)}</y> getting driver"
+        )
+        if self.__class__.__base__._driver is ...:
+            self.__class__.__base__._driver = self.__class__._get_driver()(
+                options=self.__class__._get_driver_options()
+            )
+            self.__class__.__base__._driver_opener = id(self)
+            logger.opt(colors=True).debug(
+                f"Driver created by <e>{self.driver_name}</e> <y>{id(self)}</y>"
+            )
+        return self.__class__.__base__._driver
+
+    @classmethod
+    def quit_driver(cls) -> None:
+        cls.__base__._driver.quit()
+        cls.__base__._driver = ...
+        cls.__base__._driver_opener = ...
+        logger.debug(f"Driver closed")
 
     def get_page(self, url: str) -> webdriver.Chrome:
         """
@@ -197,15 +226,16 @@ class Driver(ABC):
                 self._file.write(data)
         self._file.close()
 
-    @property
-    def driver(self) -> ty.Type[webdriver.Chrome]:
+    # Работает на python 3.9
+    @classmethod
+    def _get_driver(cls) -> ty.Type[RemoteWebDriver]:
         """
         :returns: Нужный драйвер браузера.
         """
         return HiddenChromeWebDriver
 
-    @property
-    def driver_options(self) -> webdriver.ChromeOptions:
+    @classmethod
+    def _get_driver_options(cls) -> webdriver.ChromeOptions:
         """
         :returns: Настройки драйвера браузера.
         """
@@ -215,13 +245,26 @@ class Driver(ABC):
         options.add_experimental_option("excludeSwitches", ["enable-logging"])
         return options
 
+    @classmethod
     @property
     @abstractmethod
-    def site_url(self):
+    def site_url(cls):
         """
         :returns: Ссылка на сайт, с которым работает браузер.
         """
 
+    @classmethod
     @property
-    def driver_name(self):
-        return self.__class__.__name__
+    def driver_name(cls):
+        return cls.__name__
+
+    def __del__(self):
+        logger.opt(colors=True).debug(
+            f"Deleting <e>{self.driver_name}</e> <y>{id(self)}</y>"
+        )
+        if (
+            self.__class__._driver_opener is ...
+            or id(self) == self.__class__._driver_opener
+        ):
+            if self.__class__._driver is not ...:
+                self.__class__.quit_driver()

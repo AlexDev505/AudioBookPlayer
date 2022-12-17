@@ -5,6 +5,7 @@ import typing as ty
 from ast import literal_eval
 from dataclasses import dataclass, field
 
+import msgspec
 from sqlite3_api import Table
 from sqlite3_api.field_types import Dict, FieldType, List
 
@@ -109,26 +110,40 @@ class Book:
 
     author: str = ""
     name: str = ""
+    series_name: str = ""
+    number_in_series: str = ""
     description: str = ""  # Описание
     reader: str = ""  # Чтец
     duration: str = ""  # Длительность
     url: str = ""  # Ссылка на книгу
     preview: str = ""  # Ссылка на превью(обложку) книги
     driver: str = ""  # Драйвер, с которым работает сайт
-    items: BookItems[BookItem] = field(default_factory=BookItems)  # Список глав
+    items: BookItems = field(default_factory=BookItems)  # Список глав
 
     def __post_init__(self):
         self.author = replace_quotes(self.author)
         self.name = replace_quotes(self.name)
 
     @property
+    def book_path(self) -> str:
+        """
+        :return: Путь относительный путь к книге в библиотеке.
+        """
+        if self.series_name:
+            return os.path.join(
+                "./",
+                self.author,
+                self.series_name,
+                f"{self.number_in_series.rjust(2, '0')}. {self.name}",
+            )
+        return os.path.join("./", self.author, self.name)
+
+    @property
     def dir_path(self) -> str:
         """
-        :return: Путь к директории, в которой храниться книга.
+        :return: Абсолютный путь к директории, в которой храниться книга.
         """
-        return os.path.abspath(
-            os.path.join(os.environ["books_folder"], self.author, self.name)
-        )
+        return os.path.abspath(os.path.join(os.environ["books_folder"], self.book_path))
 
     def __repr__(self):
         return f"Book(name={self.name}, author={self.author}, url={self.url})"
@@ -143,6 +158,7 @@ class Books(Table, Book):
     stop_flag: StopFlag = StopFlag()
     favorite: Bool = False
     files: BookFiles = BookFiles()
+    file_path: str = ''
 
     @property
     def listening_progress(self):
@@ -163,6 +179,35 @@ class Books(Table, Book):
             + self.stop_flag.time
         )
         return f"{int(round(cur / (total / 100)))}%"
+
+    @classmethod
+    def load_from_storage(cls, file_path: str) -> dict:
+        with open(file_path, 'rb') as file:
+            data = dict(**msgspec.json.decode(file.read()), file_path=file_path)
+        data['items'] = BookItems(data['items'])
+        data['stop_flag'] = StopFlag(**data['stop_flag'])
+        data['files'] = BookFiles(data['files'])
+        return data
+
+    def save_to_storage(self) -> None:
+        with open(self.file_path, 'wb') as file:
+            msgspec.json.encode(dict(
+                author=self.author,
+                name=self.name,
+                series_name=self.series_name,
+                number_in_series=self.number_in_series,
+                description=self.description,
+                reader=self.reader,
+                duration=self.duration,
+                url=self.url,
+                preview=self.preview,
+                driver=self.driver,
+                items=self.items,
+                status=self.status,
+                stop_flag=self.stop_flag,
+                favorite=self.favorite,
+                files=self.files,
+            ))
 
     def __repr__(self):
         if self.id is not None:

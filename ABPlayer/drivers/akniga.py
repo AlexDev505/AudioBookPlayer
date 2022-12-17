@@ -1,6 +1,8 @@
 import json
 import typing as ty
 
+from selenium.common.exceptions import NoSuchElementException
+
 from database import Book, BookItems, BookItem
 from .base import Driver
 
@@ -34,6 +36,22 @@ class AKnigaDriver(Driver):
             .text.replace("ОПИСАНИЕ", "")
             .strip()
         )
+        try:
+            series_name = page.find_element_by_css_selector(
+                "span.caption__article-main--book:"
+                "has(+ div.content__main__book--item--series-list) > a"
+            ).text.strip()
+            number_in_series = (
+                page.find_element_by_css_selector(
+                    "div.content__main__book--item--series-list > a.current > b"
+                )
+                .text.strip()
+                .strip(".")
+            )
+        except NoSuchElementException:
+            series_name = ''
+            number_in_series = ''
+
         duration = " ".join(
             [
                 obj.text
@@ -59,11 +77,11 @@ class AKnigaDriver(Driver):
                 )
             )
 
-        page.quit()
-
         return Book(
             author=author,
             name=name,
+            series_name=series_name,
+            number_in_series=number_in_series,
             description=description,
             reader=reader,
             duration=duration,
@@ -103,6 +121,7 @@ class AKnigaDriver(Driver):
 
         return books
 
+    @classmethod
     @property
-    def site_url(self):
+    def site_url(cls):
         return "https://akniga.org/"
