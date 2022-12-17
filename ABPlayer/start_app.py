@@ -115,6 +115,7 @@ class BootWorker(BaseWorker):
         """
         logger.debug("Starting the boot process")
         self.check_database_integrity()
+        self.load_library()
 
         self.status.emit("Проверка наличия соединения", None)
         try:
@@ -145,43 +146,63 @@ class BootWorker(BaseWorker):
             elif str(err) == "Downloading fail":
                 self.status.emit(str(err), DownloadingFail)
 
+    def load_library(self) -> None:
+        logger.trace("Loading library")
+        self.status.emit("Загрузка библиотеки", None)
+
+        db = Books(os.environ["DB_PATH"])
+        logger.trace('Dropping library table')
+        db.api.execute('DROP TABLE IF EXISTS books')
+        logger.trace('Creating library table')
+        db.create_table()
+        logger.trace('Library table created')
+
+        abp_files: list[str] = []
+        for root, _, files in os.walk(os.environ['books_folder']):
+            if '.abp' in files:
+                abp_files.append(os.path.join(root, '.abp'))
+
+        logger.debug(f'{len(abp_files)} abp files found')
+
+        for abp in abp_files:
+            logger.trace(f'Loading {abp}')
+            book = Books.load_from_storage(abp)
+            db.insert(**book)
+
     def check_database_integrity(self):
         logger.trace("Database integrity check")
         self.status.emit("Проверка целостности базы данных", None)
 
-        for table in (Books, Config):
-            db = table(os.environ["DB_PATH"])
-            logger.opt(colors=True).trace(
-                f"<y>{db.table_name}</y> table integrity check"
-            )
-            fields = db.api.fetchall(f"PRAGMA table_info('{db.table_name}')")
-            necessary_fields = db.get_fields()
+        db = Config(os.environ["DB_PATH"])
+        logger.opt(colors=True).trace(
+            f"<y>{db.table_name}</y> table integrity check"
+        )
+        fields = db.api.fetchall(f"PRAGMA table_info('{db.table_name}')")
+        necessary_fields = db.get_fields()
 
-            if fields[0] != (0, "id", "INTEGER", 1, None, 1) or len(fields[1:]) != len(
-                necessary_fields.keys()
-            ):
+        if fields[0] != (0, "id", "INTEGER", 1, None, 1) or len(fields[1:]) != len(
+            necessary_fields.keys()
+        ):
+            logger.debug(
+                f"The number of fields in table `{db.table_name}` does not match"
+            )
+            return self._restore_database()
+
+        for field, n_field in zip(fields[1:], necessary_fields):
+            if field[1] != n_field or field[2] != necessary_fields[n_field]:
                 logger.debug(
-                    f"The number of fields in table `{db.table_name}` does not match"
+                    f"The field {field[1]}({field[2]}) was encountered, "
+                    f"but it should be {n_field}({necessary_fields[n_field]})"
                 )
                 return self._restore_database()
-
-            for field, n_field in zip(fields[1:], necessary_fields):
-                if field[1] != n_field or field[2] != necessary_fields[n_field]:
-                    logger.debug(
-                        f"The field {field[1]}({field[2]}) was encountered, "
-                        f"but it should be {n_field}({necessary_fields[n_field]})"
-                    )
-                    return self._restore_database()
 
     def _restore_database(self):
         self.status.emit("Восстановление базы данных", None)
         db = Config(os.environ["DB_PATH"])
-        logger.trace("Dropping tables")
+        logger.trace("Dropping configuration table")
         db.api.execute("DROP TABLE config")
-        db.api.execute("DROP TABLE books")
         db.api.commit()
-        logger.trace("Creating tables")
+        logger.trace("Creating configuration table")
         db.create_table()
         db.init()
-        Books(os.environ["DB_PATH"]).create_table()
-        logger.debug("Database restored")
+        logger.debug("Configuration table restored")

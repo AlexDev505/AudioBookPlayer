@@ -215,12 +215,18 @@ class DownloadBookWorker(BaseWorker):
                 **vars(self.book),
                 files=BookFiles({file.name: get_file_hash(file) for file in files}),
             )  # Добавляем книгу в бд
+            # Сохраняем обложку
+            if not os.path.isfile(
+                cover_path := os.path.join(self.book.dir_path, "cover.jpg")
+            ):
+                if pixmap := cache.get(self.book.preview):  # Берем её из кэша
+                    pixmap.save(cover_path, "jpeg")
             logger.debug("Book registered")
             self.finished.emit()
         except requests.exceptions.ConnectionError:
             logger.error("The connection to the server has been lost")
             self.failed.emit(
-                "Соединение с сервером потеряно.\n" "Проверьте интернет соединение."
+                "Соединение с сервером потеряно.\nПроверьте интернет соединение."
             )
         except Exception as err:
             self.failed.emit(f"Ошибка при скачивании книги\n{str(err)}")

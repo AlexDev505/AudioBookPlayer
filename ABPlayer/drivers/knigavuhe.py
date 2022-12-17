@@ -1,6 +1,8 @@
 import json
 import typing as ty
 
+from selenium.common.exceptions import NoSuchElementException
+
 from database.tables.books import Book, BookItems, BookItem
 from .base import Driver
 
@@ -50,6 +52,21 @@ class KnigaVUhe(Driver):
         author = page.find_elements_by_css_selector("span.book_title_elem > span > a")[
             0
         ].text.strip()
+        try:
+            series_name = page.find_element_by_css_selector(
+                "div.book_serie_block_title > a"
+            ).text.strip()
+            number_in_series = (
+                page.find_element_by_css_selector(
+                    "div.book_serie_block_item > span:has(+ strong)"
+                )
+                .text.strip()
+                .strip(".")
+            )
+        except NoSuchElementException:
+            series_name = ''
+            number_in_series = ''
+
         description = page.find_elements_by_css_selector("div.book_description")[
             0
         ].text.strip()
@@ -71,6 +88,7 @@ class KnigaVUhe(Driver):
         preview = page.find_elements_by_css_selector("div.book_cover > img")[
             0
         ].get_attribute("src")
+
         items = BookItems()
         for i, item in enumerate(playlist):
             items.append(
@@ -83,11 +101,11 @@ class KnigaVUhe(Driver):
                 )
             )
 
-        page.quit()
-
         return Book(
             author=author,
             name=name,
+            series_name=series_name,
+            number_in_series=number_in_series,
             description=description,
             reader=reader,
             duration=duration,
@@ -97,6 +115,7 @@ class KnigaVUhe(Driver):
             items=items,
         )
 
+    @classmethod
     @property
-    def site_url(self):
+    def site_url(cls):
         return "https://knigavuhe.org/"

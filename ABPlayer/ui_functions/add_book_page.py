@@ -65,6 +65,7 @@ class SearchWorker(BaseWorker):
                 )
                 logger.exception("Search failed")
         self.main_window.setLock(False)
+        self.drv.quit_driver()
 
     def finish(self, book: Book) -> None:
         self.main_window.openBookPage(book)
@@ -91,7 +92,7 @@ def search(main_window: MainWindow) -> None:
     main_window.openLoadingPage()
 
     # Драйвер не найден
-    if not any(url.startswith(drv().site_url) for drv in drivers):
+    if not any(url.startswith(drv.site_url) for drv in drivers):
         main_window.openInfoPage(
             text="Драйвер для данного сайта не найден",
             btn_text="Вернуться",
@@ -101,7 +102,7 @@ def search(main_window: MainWindow) -> None:
         )
         return
 
-    drv = [drv for drv in drivers if url.startswith(drv().site_url)][0]()
+    drv = [drv for drv in drivers if url.startswith(drv.site_url)][0]()
 
     # Создаём и запускаем новый поток
     main_window.searchWorker = SearchWorker(main_window, drv, url)
