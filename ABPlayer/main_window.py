@@ -87,6 +87,11 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         # Число запущенных потоков, скачивающих обложки книг
         self.download_cover_thread_count = 0
 
+        self.cur_books_in_all_container_count = 0
+        self.cur_books_in_progress_container_count = 0
+        self.cur_books_in_listened_container_count = 0
+        self.cur_books = []
+
         self.setupSignals()
 
         # Определяем горячие клавиши
@@ -199,6 +204,32 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         self.sortAuthor.currentIndexChanged.connect(lambda e: self.openLibraryPage())
         self.searchBookBtn.clicked.connect(lambda e: filter_panel.search(self))
         self.searchBookLineEdit.returnPressed.connect(lambda: filter_panel.search(self))
+
+        self.allBooksContainer.verticalScrollBar().valueChanged.connect(
+            lambda x: (
+                self.addBooksToContainer(self.allBooksContainer, self.allBooksLayout)
+            )
+            if self.allBooksContainer.verticalScrollBar().maximum() == x
+            else None
+        )
+        self.inProgressBooksContainer.verticalScrollBar().valueChanged.connect(
+            lambda x: (
+                self.addBooksToContainer(
+                    self.inProgressBooksContainer, self.inProgressBooksLayout
+                )
+            )
+            if self.allBooksContainer.verticalScrollBar().maximum() == x
+            else None
+        )
+        self.listenedBooksContainer.verticalScrollBar().valueChanged.connect(
+            lambda x: (
+                self.addBooksToContainer(
+                    self.listenedBooksContainer, self.listenedBooksLayout
+                )
+            )
+            if self.allBooksContainer.verticalScrollBar().maximum() == x
+            else None
+        )
 
         # CONTROL PANEL
         self.controlPanelButtons.buttonClicked.connect(
@@ -518,9 +549,39 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             self.searchBookLineEdit.setText("")
 
         logger.debug("Opening library")
+        self.libraryBtn.setDisabled(True)
 
         db = Books(os.environ["DB_PATH"])
         all_books = db.filter(return_list=True)  # Все книги
+
+        # Заполняем QComboBox авторами
+        self.sortAuthor.currentIndexChanged.disconnect()
+        current_author = self.sortAuthor.currentText()
+        self.sortAuthor.clear()
+        self.sortAuthor.addItem("Все")
+        authors = sorted(set(obj.author for obj in all_books))
+        for author in authors:
+            self.sortAuthor.addItem(author)
+        if current_author in authors:
+            self.sortAuthor.setCurrentIndex(authors.index(current_author) + 1)
+        self.sortAuthor.currentIndexChanged.connect(lambda e: self.openLibraryPage())
+
+        self.allBooksContainer.verticalScrollBar().setValue(0)
+
+        # Удаляем старые элементы
+        for layout in [
+            self.allBooksLayout,
+            self.inProgressBooksLayout,
+            self.listenedBooksLayout,
+        ]:
+            for children in layout.children():
+                if not isinstance(children, QVBoxLayout):
+                    children.hide()
+                    children.deleteLater()
+            for i in reversed(range(layout.layout().count())):
+                item = layout.layout().itemAt(i)
+                if isinstance(item, QSpacerItem):
+                    layout.layout().removeItem(item)
 
         # Фильтруем и сортируем книги
         filter_kwargs = {}
@@ -557,95 +618,91 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         if self.invertSortBtn.isChecked():
             books.reverse()
 
+        self.cur_books = books
         logger.opt(colors=True).trace("Books: " + pretty_view(books))
         logger.opt(colors=True).debug(f"Books: <y><list ({len(books)} objects)></y>")
 
-        # Заполняем QComboBox авторами
-        self.sortAuthor.currentIndexChanged.disconnect()
-        self.sortAuthor.clear()
-        self.sortAuthor.addItem("Все")
-        authors = sorted(set(obj.author for obj in all_books))
-        for author in authors:
-            self.sortAuthor.addItem(author)
-        if filter_kwargs.get("author"):
-            self.sortAuthor.setCurrentIndex(
-                authors.index(filter_kwargs.get("author")) + 1
-            )
-        self.sortAuthor.currentIndexChanged.connect(lambda e: self.openLibraryPage())
+        self.cur_books_in_all_container_count = 0
+        self.cur_books_in_listened_container_count = 0
+        self.cur_books_in_progress_container_count = 0
 
-        # Удаляем старые элементы
-        for layout in [
-            self.allBooksLayout,
-            self.inProgressBooksLayout,
-            self.listenedBooksLayout,
-        ]:
-            for children in layout.children():
-                if not isinstance(children, QVBoxLayout):
-                    children.hide()
-                    children.deleteLater()
-            for i in reversed(range(layout.layout().count())):
-                item = layout.layout().itemAt(i)
-                if isinstance(item, QSpacerItem):
-                    layout.layout().removeItem(item)
+        self.addBooksToContainer(self.allBooksContainer, self.allBooksLayout)
+        self.addBooksToContainer(
+            self.inProgressBooksContainer, self.inProgressBooksLayout
+        )
+        self.addBooksToContainer(self.listenedBooksContainer, self.listenedBooksLayout)
 
-        sizes = []  # Размеры всех элементов
+        QTimer.singleShot(150, lambda: self.libraryBtn.setDisabled(False))
+
+        logger.debug("Library is open")
+
+    def addBooksToContainer(self, container: QWidget, layout: QWidget):
+        if layout == self.inProgressBooksLayout:
+            books = [book for book in self.cur_books if book.status == Status.started]
+        elif layout == self.listenedBooksLayout:
+            books = [book for book in self.cur_books if book.status == Status.finished]
+        else:
+            books = self.cur_books
+
+        if layout == self.inProgressBooksLayout:
+            start = self.cur_books_in_progress_container_count
+            if self.cur_books_in_progress_container_count >= len(books):
+                return
+            self.cur_books_in_progress_container_count += 6
+        elif layout == self.listenedBooksLayout:
+            start = self.cur_books_in_listened_container_count
+            if self.cur_books_in_listened_container_count >= len(books):
+                return
+            self.cur_books_in_listened_container_count += 6
+        else:
+            start = self.cur_books_in_all_container_count
+            if self.cur_books_in_all_container_count >= len(books):
+                return
+            self.cur_books_in_all_container_count += 6
+        books = books[start : start + 6]
+
+        widths = [self.library.sizeHint().width()]  # Ширина всех элементов
         # Инициализируем элементы
         for book in books:
             if self.player.book is not ...:
                 if book.url == self.player.book.url:
                     book = self.player.book
-            bookWidget = self._initBookWidget(self.allBooksLayout, book)
-            sizes.append(
+            print(layout, book)
+            bookWidget = self._initBookWidget(layout, book)
+            widths.append(
                 bookWidget.titleLabel.sizeHint().width()
                 + bookWidget.btnsFtame.sizeHint().width()
                 + 300
             )
-            if book.status == Status.started:
-                self._initBookWidget(self.inProgressBooksLayout, book)
-            elif book.status == Status.finished:
-                self._initBookWidget(self.listenedBooksLayout, book)
 
         if not len(books):
-            self.allBooksContainer.hide()
-            self.allBooksPageNothing.show()
+            container.hide()
+            if container == self.inProgressBooksContainer:
+                self.inProsessBooksPageNothing.show()
+            elif container == self.listenedBooksContainer:
+                self.listenedBooksPageNothing.show()
+            else:
+                self.allBooksPageNothing.show()
         else:
-            self.library.setMinimumWidth(max(sizes))  # Устанавливаем минимальный размер
-            self.allBooksContainer.show()
-            self.allBooksPageNothing.hide()
+            self.library.setMinimumWidth(
+                max(widths)
+            )  # Устанавливаем минимальный размер
+            container.show()
+            if container == self.inProgressBooksContainer:
+                self.inProsessBooksPageNothing.hide()
+            elif container == self.listenedBooksContainer:
+                self.listenedBooksPageNothing.hide()
+            else:
+                self.allBooksPageNothing.hide()
             # Прижимаем элементы к верхнему краю
             allBooksContainerSpacer = QSpacerItem(
                 40, 20, QSizePolicy.Expanding, QSizePolicy.Expanding
             )
-            self.allBooksLayout.layout().addItem(allBooksContainerSpacer)
-
-        if len(self.inProgressBooksLayout.children()) < 2:
-            self.inProgressBooksContainer.hide()
-            self.inProsessBooksPageNothing.show()
-        else:
-            self.inProgressBooksContainer.show()
-            self.inProsessBooksPageNothing.hide()
-            # Прижимаем элементы к верхнему краю
-            inProgressBooksContainerSpacer = QSpacerItem(
-                40, 20, QSizePolicy.Expanding, QSizePolicy.Expanding
-            )
-            self.inProgressBooksLayout.layout().addItem(inProgressBooksContainerSpacer)
-
-        if len(self.listenedBooksLayout.children()) < 2:
-            self.listenedBooksContainer.hide()
-            self.listenedBooksPageNothing.show()
-        else:
-            self.listenedBooksContainer.show()
-            self.listenedBooksPageNothing.hide()
-            # Прижимаем элементы к верхнему краю
-            listenedBooksContainerSpacer = QSpacerItem(
-                40, 20, QSizePolicy.Expanding, QSizePolicy.Expanding
-            )
-            self.listenedBooksLayout.layout().addItem(listenedBooksContainerSpacer)
+            layout.layout().addItem(allBooksContainerSpacer)
 
         if self.stackedWidget.currentWidget() != self.libraryPage:
             self.library.setCurrentWidget(self.allBooksPage)
         self.stackedWidget.setCurrentWidget(self.libraryPage)
-        logger.debug("Library is open")
 
     @logger.catch
     def _initBookWidget(self, parent: QWidget, book: Books) -> UiBook:
@@ -737,8 +794,8 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
                 return
 
         # Удаляем таблицу с книгами
-        db = Books(os.environ['DB_PATH'])
-        db.api.execute('DROP TABLE books')
+        db = Books(os.environ["DB_PATH"])
+        db.api.execute("DROP TABLE books")
         db.api.commit()
 
         logger.info("Closing the application")
