@@ -736,6 +736,11 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
                 event.ignore()
                 return
 
+        # Удаляем таблицу с книгами
+        db = Books(os.environ['DB_PATH'])
+        db.api.execute('DROP TABLE books')
+        db.api.commit()
+
         logger.info("Closing the application")
 
         # При закрытии приложения, плеер сбрасывает позицию на 0,
