@@ -224,6 +224,7 @@ class Driver(ABC):
                 if process_handler:
                     process_handler.progress(len(data))
                 self._file.write(data)
+                self._file.flush()
         self._file.close()
 
     # Работает на python 3.9
