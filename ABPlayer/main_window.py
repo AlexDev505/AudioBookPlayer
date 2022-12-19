@@ -650,7 +650,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         # Сортировка
         sort_by = self.sortBy.currentIndex()
         if sort_by == 0:  # По дате добавления
-            books.reverse()  # Новые сверху
+            books.sort(key=lambda obj: obj.adding_date, reverse=True)  # Новые сверху
         elif sort_by == 1:  # По названию
             books.sort(key=lambda obj: obj.name)
         elif sort_by == 2:  # По автору

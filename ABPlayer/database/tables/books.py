@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import typing as ty
 from ast import literal_eval
+from datetime import datetime
 from dataclasses import dataclass, field
 
 import msgspec
@@ -95,6 +96,16 @@ class Bool(FieldType):
         return bool(int(obj.decode("utf-8")))
 
 
+class DateTime(FieldType, datetime):
+    format = '%Y-%m-%d %H:%M:%S'
+    @staticmethod
+    def adapter(obj: DateTime) -> bytes:
+        return obj.strftime(obj.format).encode()
+    @classmethod
+    def converter(cls, obj: bytes) -> DateTime:
+        return cls.strptime(obj.decode("utf-8"), cls.format)
+
+
 class BookFiles(Dict):
     """
     Аудио файлы книги. Словарь: ty.Dict[str, str] {<имя файла>: <хеш>}
@@ -158,6 +169,7 @@ class Books(Table, Book):
     stop_flag: StopFlag = StopFlag()
     favorite: Bool = False
     files: BookFiles = BookFiles()
+    adding_date: DateTime = DateTime(2007, 5, 23)
     file_path: str = ""
 
     @property
@@ -187,6 +199,7 @@ class Books(Table, Book):
         data["items"] = BookItems(data["items"])
         data["stop_flag"] = StopFlag(**data["stop_flag"])
         data["files"] = BookFiles(data["files"])
+        data["adding_date"] = DateTime.strptime(data["adding_date"], DateTime.format)
         return data
 
     def save_to_storage(self) -> None:
@@ -209,6 +222,7 @@ class Books(Table, Book):
                         stop_flag=self.stop_flag,
                         favorite=self.favorite,
                         files=self.files,
+                        adding_date=self.adding_date.strftime(DateTime.format)
                     )
                 )
             )
