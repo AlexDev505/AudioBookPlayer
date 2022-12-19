@@ -4,7 +4,7 @@ import os
 import ssl
 import typing as ty
 import urllib.request
-from plyer import notification
+from datetime import datetime
 
 import requests.exceptions
 from PyQt5.QtCore import (
@@ -31,7 +31,7 @@ from PyQt5.QtWidgets import (
 )
 from loguru import logger
 
-from database.tables.books import BookFiles, Books, Status
+from database.tables.books import BookFiles, DateTime, Books, Status
 from drivers import BaseDownloadProcessHandler, drivers
 from tools import (
     BaseWorker,
@@ -222,6 +222,7 @@ class DownloadBookWorker(BaseWorker):
                 **vars(self.book),
                 files=BookFiles({file.name: get_file_hash(file) for file in files}),
                 file_path=os.path.join(self.book.dir_path, ".abp"),
+                adding_date=DateTime.now()
             )  # Добавляем книгу в бд
             book = books.filter(url=self.book.url)
             book.save_to_storage()
