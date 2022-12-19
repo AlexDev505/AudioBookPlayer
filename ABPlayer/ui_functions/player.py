@@ -206,8 +206,10 @@ class MainWindowPlayer(BasePlayerInterface):
         self.DeleteBookWorker.finished.disconnect()  # noqa
         self.DeleteBookWorker.finished.connect(lambda: self.openBookPage(book))  # noqa
 
-        last_listened_book_id = temp_file.load().get("last_listened_book_id")
-        if last_listened_book_id == downloaded_book.id:
+        last_listened_book_abp_file_path = temp_file.load().get(
+            "last_listened_book_abp_file_path"
+        )
+        if last_listened_book_abp_file_path == downloaded_book.file_path:
             self.closePlayer()
 
     def closePlayer(self) -> None:
@@ -246,7 +248,7 @@ class Player(QObject):
         main_window.reset_last_save()
 
         # Обновляем данные о последней прослушиваемой книги
-        temp_file.update(last_listened_book_id=self.book.id)
+        temp_file.update(last_listened_book_abp_file_path=self.book.file_path)
 
         # Изменяем статс книги
         self.book.status = Status.started

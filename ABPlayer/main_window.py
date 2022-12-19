@@ -105,20 +105,24 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
 
         # Загружаем данные из прошлой сессии
         temp = temp_file.load()
-        last_listened_book_id = temp.get("last_listened_book_id")
+        last_listened_book_abp_file_path = temp.get("last_listened_book_abp_file_path")
         last_volume = temp.get("last_volume")
 
         # Загружаем последнюю прослушиваемую книгу
-        if last_listened_book_id is not None:
-            logger.trace(f"Loading last book. Book id: {last_listened_book_id}")
-            book = Books(os.environ["DB_PATH"]).filter(id=last_listened_book_id)
+        if last_listened_book_abp_file_path is not None:
+            logger.trace(
+                f"Loading last book. abp file path: {last_listened_book_abp_file_path}"
+            )
+            book = Books(os.environ["DB_PATH"]).filter(
+                file_path=last_listened_book_abp_file_path
+            )
             if book:
                 self.book = book
                 self.player.book = book
                 self.loadMiniPlayer()
             else:
                 logger.debug("The last book is not registered")
-                temp_file.delete_items("last_listened_book_id")
+                temp_file.delete_items("last_listened_book_abp_file_path")
 
         # Устанавливаем последнюю громкость воспроизведения
         if last_volume is not None:
