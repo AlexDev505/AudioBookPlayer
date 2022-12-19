@@ -642,6 +642,8 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             self.library.setCurrentWidget(self.allBooksPage)
         self.stackedWidget.setCurrentWidget(self.libraryPage)
 
+        self.library.setMinimumWidth(780)
+
         logger.debug("Library is open")
 
     def addBooksToContainer(self, container: QWidget, layout: QWidget):
@@ -669,19 +671,12 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             self.cur_books_in_all_container_count += 6
         books = books[start : start + 6]
 
-        widths = [self.library.sizeHint().width()]  # Ширина всех элементов
         # Инициализируем элементы
         for book in books:
             if self.player.book is not ...:
                 if book.url == self.player.book.url:
                     book = self.player.book
-            print(layout, book)
-            bookWidget = self._initBookWidget(layout, book)
-            widths.append(
-                bookWidget.titleLabel.sizeHint().width()
-                + bookWidget.btnsFtame.sizeHint().width()
-                + 300
-            )
+            self._initBookWidget(layout, book)
 
         if not len(books):
             container.hide()
@@ -692,9 +687,6 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             else:
                 self.allBooksPageNothing.show()
         else:
-            self.library.setMinimumWidth(
-                max(widths)
-            )  # Устанавливаем минимальный размер
             container.show()
             if container == self.inProgressBooksContainer:
                 self.inProsessBooksPageNothing.hide()
@@ -724,15 +716,22 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         bookWidget = UiBook()
         bookWidget.setupUi(bookFrame)
 
-        bookWidget.titleLabel.setText(f"{book.author} - {book.name}")
+        bookWidget.titleLabel.setText(book.name)
         description = book.description.replace("\n", "")
-        if len(description) > 250:
-            description = description[:250]
+        if len(description) > 170:
+            description = description[:170]
             description = description[: description.rfind(" ")] + "..."
         bookWidget.description.setText(description)
         bookWidget.authorLabel.setText(book.author)
         bookWidget.readerLabel.setText(book.reader)
         bookWidget.durationLabel.setText(book.duration)
+
+        if book.series_name:
+            bookWidget.seriesLabel.setText(
+                f"{book.series_name} ({book.number_in_series})"
+            )
+        else:
+            bookWidget.seriesFrame.hide()
 
         # Устанавливаем иконку на кнопку "Добавить в избранное"
         icon = QIcon(":/other/star_fill.svg" if book.favorite else ":/other/star.svg")
@@ -750,6 +749,22 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
 
         # Загрузка обложки
         book_page.loadPreview(self, bookWidget.cover, (200, 200), book)
+
+        QTimer.singleShot(
+            100,
+            lambda: (
+                font := bookWidget.titleLabel.font(),
+                font.setPointSize(14),
+                bookWidget.titleLabel.setFont(font),
+            )
+            if (
+                bookWidget.titleLabel.sizeHint().width()
+                + bookWidget.btnsFtame.sizeHint().width()
+                + 300
+            )
+            > self.library.width()
+            else None,
+        )
 
         # Настройка кнопок
         bookWidget.deleteBtn.clicked.connect(lambda e: book_page.deleteBook(self, book))
