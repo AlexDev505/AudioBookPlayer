@@ -6,11 +6,13 @@
 
 from __future__ import annotations
 
+import os
 import hashlib
 import math
 import threading
 import typing as ty
 from abc import abstractmethod
+from plyer import notification
 
 from PyQt5.QtCore import QObject, QThread
 
@@ -208,11 +210,11 @@ def pretty_view(data: ty.Union[dict, list], _indent=0) -> str:
 
 def debug_book_data(book: Books | Book) -> str:
     data = {k: v for k, v in book.__dict__.items() if not k.startswith("_")}
-    if 'items' in data:
+    if "items" in data:
         data["items"] = f"<list ({len(data['items'])} objects)>"
-    if 'files' in data:
+    if "files" in data:
         data["files"] = f"<list ({len(data['files'])} objects)>"
-    if len(data.get('description') or '') > 100:
+    if len(data.get("description") or "") > 100:
         data["description"] = data["description"][:100] + "..."
 
     return "Book data: " + pretty_view(data)
@@ -221,4 +223,14 @@ def debug_book_data(book: Books | Book) -> str:
 def trace_book_data(book: Books | Book) -> str:
     return "Book data: " + pretty_view(
         {k: v for k, v in book.__dict__.items() if not k.startswith("_")}
+    )
+
+
+def send_system_notification(title: str, message: str = "") -> None:
+    notification.notify(
+        title=title,
+        message=message,
+        app_name="AB Player",
+        ticker="AB Player",
+        app_icon=os.path.join(os.environ["APP_DIR"], "icon.ico"),
     )
