@@ -7,6 +7,7 @@
 
 from __future__ import annotations
 
+from contextlib import suppress
 import os
 import typing as ty
 import webbrowser
@@ -218,8 +219,8 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             lambda e: filter_panel.toggleInvertSort(self)
         )
         self.sortBy.currentIndexChanged.connect(lambda e: self.openLibraryPage())
-        self.sortAuthor.currentIndexChanged.connect(lambda e: self.openLibraryPage())
-        self.sortSeries.currentIndexChanged.connect(lambda e: self.openLibraryPage())
+        self.sortAuthor.currentIndexChanged.connect(lambda e: None)
+        self.sortSeries.currentIndexChanged.connect(lambda e: None)
         self.searchBookBtn.clicked.connect(lambda e: filter_panel.search(self))
         self.searchBookLineEdit.returnPressed.connect(lambda: filter_panel.search(self))
 
@@ -601,7 +602,17 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             self.sortSeries.addItem(series)
         if current_series in all_series:
             self.sortSeries.setCurrentIndex(all_series.index(current_series) + 1)
-        self.sortSeries.currentIndexChanged.connect(lambda e: self.openLibraryPage())
+        self.sortSeries.currentIndexChanged.connect(
+            lambda e: (
+                (
+                    (self.sortBy.addItem("Позиции в цикле"))
+                    if self.sortBy.count() == 3
+                    else None
+                ),
+                self.sortBy.setCurrentIndex(3),
+                self.openLibraryPage(),
+            )
+        )
 
         self.allBooksContainer.verticalScrollBar().setValue(0)
 
@@ -633,9 +644,15 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             filter_kwargs["author"] = self.sortAuthor.currentText()
 
         # Фильтрация по серии
-        author = self.sortSeries.currentIndex()
-        if author != 0:
+        series = self.sortSeries.currentIndex()
+        if series != 0:
             filter_kwargs["series_name"] = self.sortSeries.currentText()
+            if self.sortBy.count() == 3:
+                self.sortBy.addItem("Позиции в цикле")
+        else:
+            if self.sortBy.currentIndex() == 3:
+                self.sortBy.setCurrentIndex(0)
+            self.sortBy.removeItem(3)
 
         logger.opt(colors=True).debug(
             "Filter kwargs: " + pretty_view({**filter_kwargs, "books_ids": books_ids}),
@@ -655,6 +672,8 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             books.sort(key=lambda obj: obj.name)
         elif sort_by == 2:  # По автору
             books.sort(key=lambda obj: obj.author)
+        elif sort_by == 3:  # По позиции в цикле
+            books.sort(key=lambda obj: obj.number_in_series.rjust(2, "0"))
 
         # Если нужно, отображаем в обратном порядке
         if self.invertSortBtn.isChecked():
@@ -789,19 +808,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         book_page.loadPreview(self, bookWidget.cover, (200, 200), book)
 
         QTimer.singleShot(
-            100,
-            lambda: (
-                font := bookWidget.titleLabel.font(),
-                font.setPointSize(14),
-                bookWidget.titleLabel.setFont(font),
-            )
-            if (
-                bookWidget.titleLabel.sizeHint().width()
-                + bookWidget.btnsFtame.sizeHint().width()
-                + 300
-            )
-            > self.library.width()
-            else None,
+            100, lambda: library.compareBookTitleFontSize(self, bookWidget)
         )
 
         # Настройка кнопок

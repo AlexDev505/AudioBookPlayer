@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import typing as ty
+from contextlib import suppress
 
 from PyQt5.QtCore import QEasingCurve, QPropertyAnimation
 from PyQt5.QtGui import QIcon
@@ -14,6 +15,7 @@ from loguru import logger
 
 if ty.TYPE_CHECKING:
     from main_window import MainWindow
+    from ui.book import UiBook
 
 
 def toggleFiltersPanelWithoutAnimation(main_window: MainWindow) -> None:
@@ -67,3 +69,20 @@ def toggleFiltersPanel(main_window: MainWindow) -> None:
             ":/other/angle_left.svg" if end_value == 25 else ":/other/angle_right.svg"
         )
         main_window.toggleBooksFilterPanelBtn.setIcon(icon)
+
+
+def compareBookTitleFontSize(main_window: MainWindow, bookWidget: UiBook) -> None:
+    """
+    Уменьшает размер шрифта заголовка книги, если он не помещается.
+    :param main_window: Экземпляр главного окна.
+    :param bookWidget: Виджет книги.
+    """
+    with suppress(RuntimeError):  # Возникает если виджет уже удален
+        if (
+            bookWidget.titleLabel.sizeHint().width()
+            + bookWidget.btnsFtame.sizeHint().width()
+            + 300
+        ) > main_window.library.width():
+            font = bookWidget.titleLabel.font()
+            font.setPointSize(14)
+            bookWidget.titleLabel.setFont(font)
