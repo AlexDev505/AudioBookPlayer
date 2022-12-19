@@ -437,7 +437,12 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
 
         self.titleLabel.setText(f"{self.book.author} - {self.book.name}")
         self.authorLabel.setText(self.book.author)
-        self.nameLabel.setText(self.book.name)
+        if book.series_name:
+            self.seriesLabel.setText(
+                f"{self.book.series_name} ({self.book.number_in_series})"
+            )
+        else:
+            self.seriesFrame.hide()
         self.readerLabel.setText(self.book.reader)
         self.durationLabel.setText(self.book.duration)
         self.description.setText(self.book.description)
