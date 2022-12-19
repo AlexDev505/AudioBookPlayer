@@ -146,26 +146,27 @@ class BootWorker(BaseWorker):
             elif str(err) == "Downloading fail":
                 self.status.emit(str(err), DownloadingFail)
 
+    @logger.catch
     def load_library(self) -> None:
         logger.trace("Loading library")
         self.status.emit("Загрузка библиотеки", None)
 
         db = Books(os.environ["DB_PATH"])
-        logger.trace('Dropping library table')
-        db.api.execute('DROP TABLE IF EXISTS books')
-        logger.trace('Creating library table')
+        logger.trace("Dropping library table")
+        db.api.execute("DROP TABLE IF EXISTS books")
+        logger.trace("Creating library table")
         db.create_table()
-        logger.trace('Library table created')
+        logger.trace("Library table created")
 
         abp_files: list[str] = []
-        for root, _, files in os.walk(os.environ['books_folder']):
-            if '.abp' in files:
-                abp_files.append(os.path.join(root, '.abp'))
+        for root, _, files in os.walk(os.environ["books_folder"]):
+            if ".abp" in files:
+                abp_files.append(os.path.join(root, ".abp"))
 
-        logger.debug(f'{len(abp_files)} abp files found')
+        logger.debug(f"{len(abp_files)} abp files found")
 
         for abp in abp_files:
-            logger.trace(f'Loading {abp}')
+            logger.trace(f"Loading {abp}")
             book = Books.load_from_storage(abp)
             db.insert(**book)
 
@@ -174,9 +175,7 @@ class BootWorker(BaseWorker):
         self.status.emit("Проверка целостности базы данных", None)
 
         db = Config(os.environ["DB_PATH"])
-        logger.opt(colors=True).trace(
-            f"<y>{db.table_name}</y> table integrity check"
-        )
+        logger.opt(colors=True).trace(f"<y>{db.table_name}</y> table integrity check")
         fields = db.api.fetchall(f"PRAGMA table_info('{db.table_name}')")
         necessary_fields = db.get_fields()
 

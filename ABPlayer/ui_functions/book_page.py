@@ -33,7 +33,13 @@ from loguru import logger
 
 from database.tables.books import BookFiles, Books, Status
 from drivers import BaseDownloadProcessHandler, drivers
-from tools import BaseWorker, Cache, convert_into_bytes, get_file_hash, send_system_notification
+from tools import (
+    BaseWorker,
+    Cache,
+    convert_into_bytes,
+    get_file_hash,
+    send_system_notification,
+)
 from .add_book_page import SearchWorker
 
 if ty.TYPE_CHECKING:
@@ -215,7 +221,10 @@ class DownloadBookWorker(BaseWorker):
             books.insert(
                 **vars(self.book),
                 files=BookFiles({file.name: get_file_hash(file) for file in files}),
+                file_path=os.path.join(self.book.dir_path, ".abp"),
             )  # Добавляем книгу в бд
+            book = books.filter(url=self.book.url)
+            book.save_to_storage()
             # Сохраняем обложку
             if not os.path.isfile(
                 cover_path := os.path.join(self.book.dir_path, "cover.jpg")
@@ -236,7 +245,7 @@ class DownloadBookWorker(BaseWorker):
 
     def finish(self) -> None:
         send_system_notification(
-            title='Скачивание книги завершено!',
+            title="Скачивание книги завершено!",
             message=f'Книга "{self.book.author} - {self.book.name}" скачана',
         )
         # Если пользователь находится на странице скачиваемой книги
@@ -264,7 +273,7 @@ class DownloadBookWorker(BaseWorker):
 
     def fail(self, text: str) -> None:
         send_system_notification(
-            title='Ошибка при скачивание книги!',
+            title="Ошибка при скачивание книги!",
             message=f'Книга "{self.book.author} - {self.book.name}" не скачана',
         )
         self.main_window.openInfoPage(
@@ -531,6 +540,7 @@ def toggleFavorite(main_window: MainWindow, book: Books = None) -> None:
     icon = QIcon(":/other/star_fill.svg" if book.favorite else ":/other/star.svg")
     main_window.sender().setIcon(icon)
     book.save()
+    book.save_to_storage()
 
 
 class InputDialog(QDialog):
