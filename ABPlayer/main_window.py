@@ -211,11 +211,15 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         self.clearSortAuthorBtn.clicked.connect(
             lambda e: filter_panel.resetAuthor(self)
         )
+        self.clearSortSeriesBtn.clicked.connect(
+            lambda e: filter_panel.resetseries(self)
+        )
         self.invertSortBtn.clicked.connect(
             lambda e: filter_panel.toggleInvertSort(self)
         )
         self.sortBy.currentIndexChanged.connect(lambda e: self.openLibraryPage())
         self.sortAuthor.currentIndexChanged.connect(lambda e: self.openLibraryPage())
+        self.sortSeries.currentIndexChanged.connect(lambda e: self.openLibraryPage())
         self.searchBookBtn.clicked.connect(lambda e: filter_panel.search(self))
         self.searchBookLineEdit.returnPressed.connect(lambda: filter_panel.search(self))
 
@@ -585,6 +589,18 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             self.sortAuthor.setCurrentIndex(authors.index(current_author) + 1)
         self.sortAuthor.currentIndexChanged.connect(lambda e: self.openLibraryPage())
 
+        # Заполняем QComboBox циклами
+        self.sortSeries.currentIndexChanged.disconnect()
+        current_series = self.sortSeries.currentText()
+        self.sortSeries.clear()
+        self.sortSeries.addItem("Все")
+        all_series = sorted(set(obj.series_name for obj in all_books if obj.series_name))
+        for series in all_series:
+            self.sortSeries.addItem(series)
+        if current_series in all_series:
+            self.sortSeries.setCurrentIndex(all_series.index(current_series) + 1)
+        self.sortSeries.currentIndexChanged.connect(lambda e: self.openLibraryPage())
+
         self.allBooksContainer.verticalScrollBar().setValue(0)
 
         # Удаляем старые элементы
@@ -613,6 +629,11 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         author = self.sortAuthor.currentIndex()
         if author != 0:
             filter_kwargs["author"] = self.sortAuthor.currentText()
+
+        # Фильтрация по серии
+        author = self.sortSeries.currentIndex()
+        if author != 0:
+            filter_kwargs["series_name"] = self.sortSeries.currentText()
 
         logger.opt(colors=True).debug(
             "Filter kwargs: " + pretty_view({**filter_kwargs, "books_ids": books_ids}),
