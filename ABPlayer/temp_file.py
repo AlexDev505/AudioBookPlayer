@@ -41,7 +41,7 @@ def load() -> ty.Dict[str, ty.Union[str, int, float, bool]]:
     result = {}
     for item in data:
         match = re.fullmatch(
-            r"(?P<key>\w+): (?P<type>str|int|float) = (?P<value>.+)", item.strip()
+            r"(?P<key>\w+): (?P<type>str|int|float|bool) = (?P<value>.+)", item.strip()
         )  # Проверка шаблона
         if match:
             result[match.group("key")] = _adapt_value(
@@ -117,11 +117,11 @@ def _convert_value(value: ty.Union[str, int, float, bool]) -> str:
     :param value: Исходное значение.
     :return: Преобразованное значение.
     """
-    if isinstance(value, (str, int, float)):
-        return str(value).replace("\n", "\\n")
-    elif isinstance(value, bool):
+    if isinstance(value, bool):
         return str(int(value))
+    elif isinstance(value, (str, int, float)):
+        return str(value).replace("\n", "\\n")
     raise ValueError(
         f"Недопустимый тип данных {type(value).__name__}, "
-        "можно хранить только str, int, float"
+        "можно хранить только str, int, float, bool"
     )

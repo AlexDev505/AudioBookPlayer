@@ -20,6 +20,17 @@ if ty.TYPE_CHECKING:
     from main_window import MainWindow
 
 
+def toggleMenuWithoutAnimation(main_window: MainWindow) -> None:
+    width = main_window.menuFrame.width()  # Ширина меню сейчас
+    # Конечная ширина меню. 200-открытое 65-закрытое
+    end_value = int(os.environ["MENU_WIDTH"]) if width == 65 else 65
+    main_window.menuFrame.setMinimumWidth(end_value)
+    logger.opt(colors=True).trace(f"Toggle menu to <y>{end_value}</y>")
+    # Изменяем иконку кнопки
+    icon = QIcon(":/menu/menu.svg" if end_value == 65 else ":/other/angle_left.svg")
+    main_window.menuBtn.setIcon(icon)
+
+
 def toggleMenu(main_window: MainWindow) -> None:
     """
     Открывает/закрывает меню.

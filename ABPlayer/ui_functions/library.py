@@ -16,6 +16,23 @@ if ty.TYPE_CHECKING:
     from main_window import MainWindow
 
 
+def toggleFiltersPanelWithoutAnimation(main_window: MainWindow) -> None:
+    width = main_window.libraryFiltersPanel.width()  # Ширина меню сейчас
+    # Конечная ширина меню 225-открытое 25-закрытое
+    end_value = 225 if width == 25 else 25
+    main_window.libraryFiltersPanel.setMinimumWidth(end_value)
+    if end_value == 25:  # Скрываем содержимое
+        main_window.libraryFiltersFrame.hide()
+    elif end_value == 225:
+        main_window.libraryFiltersFrame.show()
+    logger.opt(colors=True).trace(f"Toggle filters panel to <y>{end_value}</y>")
+    # Изменяем иконку кнопки
+    icon = QIcon(
+        ":/other/angle_left.svg" if end_value == 25 else ":/other/angle_right.svg"
+    )
+    main_window.toggleBooksFilterPanelBtn.setIcon(icon)
+
+
 def toggleFiltersPanel(main_window: MainWindow) -> None:
     """
     Открывает/закрывает меню фильтров.
