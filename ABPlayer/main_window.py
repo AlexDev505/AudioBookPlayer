@@ -634,6 +634,10 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
 
         QTimer.singleShot(150, lambda: self.libraryBtn.setDisabled(False))
 
+        if self.stackedWidget.currentWidget() != self.libraryPage:
+            self.library.setCurrentWidget(self.allBooksPage)
+        self.stackedWidget.setCurrentWidget(self.libraryPage)
+
         logger.debug("Library is open")
 
     def addBooksToContainer(self, container: QWidget, layout: QWidget):
@@ -699,10 +703,6 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
                 40, 20, QSizePolicy.Expanding, QSizePolicy.Expanding
             )
             layout.layout().addItem(allBooksContainerSpacer)
-
-        if self.stackedWidget.currentWidget() != self.libraryPage:
-            self.library.setCurrentWidget(self.allBooksPage)
-        self.stackedWidget.setCurrentWidget(self.libraryPage)
 
     @logger.catch
     def _initBookWidget(self, parent: QWidget, book: Books) -> UiBook:
