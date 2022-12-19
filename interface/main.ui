@@ -1072,10 +1072,7 @@ Line {
                          <property name="frameShadow">
                           <enum>QFrame::Raised</enum>
                          </property>
-                         <layout class="QVBoxLayout" name="verticalLayout_16">
-                          <property name="spacing">
-                           <number>20</number>
-                          </property>
+                         <layout class="QVBoxLayout" name="verticalLayout_43">
                           <item>
                            <widget class="QFrame" name="searchField">
                             <property name="frameShape">
@@ -1356,6 +1353,108 @@ Line {
                                </item>
                                <item>
                                 <widget class="QPushButton" name="clearSortAuthorBtn">
+                                 <property name="minimumSize">
+                                  <size>
+                                   <width>35</width>
+                                   <height>35</height>
+                                  </size>
+                                 </property>
+                                 <property name="maximumSize">
+                                  <size>
+                                   <width>35</width>
+                                   <height>35</height>
+                                  </size>
+                                 </property>
+                                 <property name="icon">
+                                  <iconset resource="resources/icons.qrc">
+                                   <normaloff>:/other/x.svg</normaloff>:/other/x.svg</iconset>
+                                 </property>
+                                 <property name="iconSize">
+                                  <size>
+                                   <width>28</width>
+                                   <height>28</height>
+                                  </size>
+                                 </property>
+                                </widget>
+                               </item>
+                              </layout>
+                             </widget>
+                            </item>
+                           </layout>
+                          </item>
+                          <item>
+                           <layout class="QVBoxLayout" name="sortSeriesContainerLayout">
+                            <property name="spacing">
+                             <number>3</number>
+                            </property>
+                            <item>
+                             <widget class="QLabel" name="sortSeriesLabel">
+                              <property name="font">
+                               <font>
+                                <family>Arial</family>
+                                <pointsize>10</pointsize>
+                                <weight>75</weight>
+                                <bold>true</bold>
+                               </font>
+                              </property>
+                              <property name="text">
+                               <string>Цикл</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QFrame" name="sortSeriesFrame">
+                              <property name="frameShape">
+                               <enum>QFrame::StyledPanel</enum>
+                              </property>
+                              <property name="frameShadow">
+                               <enum>QFrame::Raised</enum>
+                              </property>
+                              <layout class="QHBoxLayout" name="sortSeriesLayout">
+                               <property name="spacing">
+                                <number>0</number>
+                               </property>
+                               <property name="leftMargin">
+                                <number>0</number>
+                               </property>
+                               <property name="topMargin">
+                                <number>0</number>
+                               </property>
+                               <property name="rightMargin">
+                                <number>0</number>
+                               </property>
+                               <property name="bottomMargin">
+                                <number>0</number>
+                               </property>
+                               <item>
+                                <widget class="QComboBox" name="sortseries">
+                                 <property name="minimumSize">
+                                  <size>
+                                   <width>0</width>
+                                   <height>35</height>
+                                  </size>
+                                 </property>
+                                 <property name="maximumSize">
+                                  <size>
+                                   <width>16777215</width>
+                                   <height>35</height>
+                                  </size>
+                                 </property>
+                                 <property name="font">
+                                  <font>
+                                   <family>Arial</family>
+                                   <pointsize>8</pointsize>
+                                  </font>
+                                 </property>
+                                 <item>
+                                  <property name="text">
+                                   <string>Все</string>
+                                  </property>
+                                 </item>
+                                </widget>
+                               </item>
+                               <item>
+                                <widget class="QPushButton" name="clearSortSeriesBtn">
                                  <property name="minimumSize">
                                   <size>
                                    <width>35</width>
@@ -3505,8 +3604,8 @@ p, li { white-space: pre-wrap; }
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>1050</width>
-                         <height>697</height>
+                         <width>371</width>
+                         <height>310</height>
                         </rect>
                        </property>
                        <layout class="QVBoxLayout" name="verticalLayout_42">

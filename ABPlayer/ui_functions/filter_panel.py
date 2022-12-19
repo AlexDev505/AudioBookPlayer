@@ -31,6 +31,15 @@ def resetAuthor(main_window: MainWindow) -> None:
     logger.debug("Sorting by author has been reset")
 
 
+def resetseries(main_window: MainWindow) -> None:
+    """
+    Сбрасывает фильтрацию по циклу.
+    :param main_window: Экземпляр главного окна.
+    """
+    main_window.sortSeries.setCurrentIndex(0)
+    logger.debug("Sorting by series has been reset")
+
+
 def toggleInvertSort(main_window: MainWindow) -> None:
     """
     Обрабатывает нажатие на кнопку инверсии сортировки.
