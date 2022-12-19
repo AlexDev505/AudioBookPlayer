@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import atexit
 import os
+import sys
+import traceback
 import typing as ty
 from inspect import isclass
 
@@ -34,6 +36,14 @@ from logger import logging_level  # noqa
 from drivers.exceptions import DriverError  # noqa
 from main_window import MainWindow  # noqa
 from start_app import StartAppWindow  # noqa
+
+
+@logger.catch
+def exception_hook(_, value, __):
+    raise Exception from value
+
+
+sys.excepthook = exception_hook
 
 
 @logger.catch
