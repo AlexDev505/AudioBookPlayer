@@ -594,7 +594,9 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         current_series = self.sortSeries.currentText()
         self.sortSeries.clear()
         self.sortSeries.addItem("Все")
-        all_series = sorted(set(obj.series_name for obj in all_books if obj.series_name))
+        all_series = sorted(
+            set(obj.series_name for obj in all_books if obj.series_name)
+        )
         for series in all_series:
             self.sortSeries.addItem(series)
         if current_series in all_series:

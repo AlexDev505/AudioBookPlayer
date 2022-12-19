@@ -158,7 +158,7 @@ class Books(Table, Book):
     stop_flag: StopFlag = StopFlag()
     favorite: Bool = False
     files: BookFiles = BookFiles()
-    file_path: str = ''
+    file_path: str = ""
 
     @property
     def listening_progress(self):
@@ -182,32 +182,36 @@ class Books(Table, Book):
 
     @classmethod
     def load_from_storage(cls, file_path: str) -> dict:
-        with open(file_path, 'rb') as file:
+        with open(file_path, "rb") as file:
             data = dict(**msgspec.json.decode(file.read()), file_path=file_path)
-        data['items'] = BookItems(data['items'])
-        data['stop_flag'] = StopFlag(**data['stop_flag'])
-        data['files'] = BookFiles(data['files'])
+        data["items"] = BookItems(data["items"])
+        data["stop_flag"] = StopFlag(**data["stop_flag"])
+        data["files"] = BookFiles(data["files"])
         return data
 
     def save_to_storage(self) -> None:
-        with open(self.file_path, 'wb') as file:
-            msgspec.json.encode(dict(
-                author=self.author,
-                name=self.name,
-                series_name=self.series_name,
-                number_in_series=self.number_in_series,
-                description=self.description,
-                reader=self.reader,
-                duration=self.duration,
-                url=self.url,
-                preview=self.preview,
-                driver=self.driver,
-                items=self.items,
-                status=self.status,
-                stop_flag=self.stop_flag,
-                favorite=self.favorite,
-                files=self.files,
-            ))
+        with open(self.file_path, "wb") as file:
+            file.write(
+                msgspec.json.encode(
+                    dict(
+                        author=self.author,
+                        name=self.name,
+                        series_name=self.series_name,
+                        number_in_series=self.number_in_series,
+                        description=self.description,
+                        reader=self.reader,
+                        duration=self.duration,
+                        url=self.url,
+                        preview=self.preview,
+                        driver=self.driver,
+                        items=self.items,
+                        status=self.status,
+                        stop_flag=self.stop_flag,
+                        favorite=self.favorite,
+                        files=self.files,
+                    )
+                )
+            )
 
     def __repr__(self):
         if self.id is not None:

@@ -94,6 +94,7 @@ class BasePlayerInterface(QObject):
             or self._last_saved_item != self.player.book.stop_flag.item
         ):
             self.player.book.save()
+            self.player.book.save_to_storage()
             self._last_saved_time = self.player.book.stop_flag.time
             self._last_saved_item = self.player.book.stop_flag.item
             logger.trace("Stop flag saved")
@@ -253,6 +254,7 @@ class Player(QObject):
         # Изменяем статс книги
         self.book.status = Status.started
         self.book.save()
+        self.book.save_to_storage()
 
         self.playlist.clear()  # Очищаем плейлист
 
@@ -295,6 +297,7 @@ class Player(QObject):
         self.book.stop_flag.item = 0
         self.book.stop_flag.time = 0
         self.book.save()
+        self.book.save_to_storage()
         logger.opt(colors=True).debug(
             f"The book has been listened. book.id=<y>{self.book.id}</y>"
         )
