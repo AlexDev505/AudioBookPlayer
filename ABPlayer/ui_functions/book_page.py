@@ -4,6 +4,7 @@ import os
 import ssl
 import typing as ty
 import urllib.request
+from plyer import notification
 
 import requests.exceptions
 from PyQt5.QtCore import (
@@ -32,7 +33,7 @@ from loguru import logger
 
 from database.tables.books import BookFiles, Books, Status
 from drivers import BaseDownloadProcessHandler, drivers
-from tools import BaseWorker, Cache, convert_into_bytes, get_file_hash
+from tools import BaseWorker, Cache, convert_into_bytes, get_file_hash, send_system_notification
 from .add_book_page import SearchWorker
 
 if ty.TYPE_CHECKING:
@@ -234,6 +235,10 @@ class DownloadBookWorker(BaseWorker):
         self.main_window.downloadable_book = ...
 
     def finish(self) -> None:
+        send_system_notification(
+            title='Скачивание книги завершено!',
+            message=f'Книга "{self.book.author} - {self.book.name}" скачана',
+        )
         # Если пользователь находится на странице скачиваемой книги
         if self.main_window.pbFrame.minimumWidth() == 0:
             self.main_window.openBookPage(self.book)  # Обновляем страницу
@@ -258,6 +263,10 @@ class DownloadBookWorker(BaseWorker):
                 self.main_window.openLibraryPage()
 
     def fail(self, text: str) -> None:
+        send_system_notification(
+            title='Ошибка при скачивание книги!',
+            message=f'Книга "{self.book.author} - {self.book.name}" не скачана',
+        )
         self.main_window.openInfoPage(
             text=text,
             btn_text="Вернуться в библиотеку",
