@@ -13,6 +13,7 @@
     <file>settings.svg</file>
   </qresource>
   <qresource prefix="other">
+    <file>tag.svg</file>
     <file>box-arrow-up-right.svg</file>
     <file>icon.ico</file>
     <file>icon.png</file>
