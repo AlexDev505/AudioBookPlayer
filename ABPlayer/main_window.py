@@ -107,6 +107,8 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         temp = temp_file.load()
         last_listened_book_abp_file_path = temp.get("last_listened_book_abp_file_path")
         last_volume = temp.get("last_volume")
+        is_menu_panel_closed = temp.get("is_menu_panel_closed")
+        is_filter_panel_closed = temp.get("is_filter_panel_closed")
 
         # Загружаем последнюю прослушиваемую книгу
         if last_listened_book_abp_file_path is not None:
@@ -133,6 +135,14 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             else:
                 logger.debug("Invalid last volume")
                 temp_file.delete_items("last_volume")
+
+        if is_menu_panel_closed:
+            QTimer.singleShot(50, lambda: menu.toggleMenuWithoutAnimation(self))
+
+        if is_filter_panel_closed:
+            QTimer.singleShot(
+                50, lambda: library.toggleFiltersPanelWithoutAnimation(self)
+            )
 
         self.openLibraryPage()  # При запуске приложения открываем библиотеку
 
@@ -816,6 +826,17 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             else:
                 event.ignore()
                 return
+
+        is_filter_panel_closed = False
+        is_menu_panel_closed = False
+        if self.libraryFiltersFrame.isHidden():
+            is_filter_panel_closed = True
+        if self.menuFrame.width() != int(os.environ["MENU_WIDTH"]):
+            is_menu_panel_closed = True
+        temp_file.update(
+            is_filter_panel_closed=is_filter_panel_closed,
+            is_menu_panel_closed=is_menu_panel_closed,
+        )
 
         # Удаляем таблицу с книгами
         db = Books(os.environ["DB_PATH"])
