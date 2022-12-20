@@ -3,8 +3,8 @@ from __future__ import annotations
 import os
 import typing as ty
 from ast import literal_eval
-from datetime import datetime
 from dataclasses import dataclass, field
+from datetime import datetime
 
 import msgspec
 from sqlite3_api import Table
@@ -97,10 +97,12 @@ class Bool(FieldType):
 
 
 class DateTime(FieldType, datetime):
-    format = '%Y-%m-%d %H:%M:%S'
+    format = "%Y-%m-%d %H:%M:%S"
+
     @staticmethod
     def adapter(obj: DateTime) -> bytes:
         return obj.strftime(obj.format).encode()
+
     @classmethod
     def converter(cls, obj: bytes) -> DateTime:
         return cls.strptime(obj.decode("utf-8"), cls.format)
@@ -172,6 +174,10 @@ class Books(Table, Book):
     adding_date: DateTime = DateTime(2007, 5, 23)
     file_path: str = ""
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        super().__post_init__()
+
     @property
     def listening_progress(self):
         """
@@ -222,7 +228,7 @@ class Books(Table, Book):
                         stop_flag=self.stop_flag,
                         favorite=self.favorite,
                         files=self.files,
-                        adding_date=self.adding_date.strftime(DateTime.format)
+                        adding_date=self.adding_date.strftime(DateTime.format),
                     )
                 )
             )

@@ -7,7 +7,6 @@
 
 from __future__ import annotations
 
-from contextlib import suppress
 import os
 import typing as ty
 import webbrowser
@@ -91,7 +90,11 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         self.cur_books_in_all_container_count = 0
         self.cur_books_in_progress_container_count = 0
         self.cur_books_in_listened_container_count = 0
-        self.cur_books = []
+
+        self.current_book_ids: list[int] = []
+        self.filter_kwargs: dict[str, ty.Any] = {}
+        self.order_by: str = ""
+        self.invert_sorting: bool = False
 
         self.setupSignals()
 
@@ -559,7 +562,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         temp_file.delete_items("last_listened_book_id")
 
     @logger.catch
-    def openLibraryPage(self, books_ids: ty.List[int] = None) -> None:
+    def openLibraryPage(self, books_ids: list[int] = None) -> None:
         """
         Открывает страницу библиотеки.
         :param books_ids: ID книг, которые прошли фильтрацию по ключевым словам.
@@ -573,17 +576,25 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             self.searchBookLineEdit.setText("")
 
         logger.debug("Opening library")
+
+        # Отключаем кнопку открытия библиотеки
         self.libraryBtn.setDisabled(True)
+        # Прокручиваем страницу вверх
+        self.allBooksContainer.verticalScrollBar().setValue(0)
 
         db = Books(os.environ["DB_PATH"])
-        all_books = db.filter(return_list=True)  # Все книги
 
         # Заполняем QComboBox авторами
         self.sortAuthor.currentIndexChanged.disconnect()
         current_author = self.sortAuthor.currentText()
         self.sortAuthor.clear()
         self.sortAuthor.addItem("Все")
-        authors = sorted(set(obj.author for obj in all_books))
+        authors = [
+            x[0]
+            for x in db.api.fetchall(
+                "SELECT DISTINCT author FROM books ORDER BY author"
+            )
+        ]
         for author in authors:
             self.sortAuthor.addItem(author)
         if current_author in authors:
@@ -595,9 +606,14 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         current_series = self.sortSeries.currentText()
         self.sortSeries.clear()
         self.sortSeries.addItem("Все")
-        all_series = sorted(
-            set(obj.series_name for obj in all_books if obj.series_name)
-        )
+        all_series = [
+            x[0]
+            for x in db.api.fetchall(
+                "SELECT DISTINCT series_name FROM books "
+                "WHERE series_name != '' ORDER BY series_name"
+            )
+            if x[0]
+        ]
         for series in all_series:
             self.sortSeries.addItem(series)
         if current_series in all_series:
@@ -614,8 +630,6 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             )
         )
 
-        self.allBooksContainer.verticalScrollBar().setValue(0)
-
         # Удаляем старые элементы
         for layout in [
             self.allBooksLayout,
@@ -631,7 +645,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
                 if isinstance(item, QSpacerItem):
                     layout.layout().removeItem(item)
 
-        # Фильтруем и сортируем книги
+        # Подготавливаем параметры фильтрации
         filter_kwargs = {}
 
         # Только избранные
@@ -654,79 +668,117 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
                 self.sortBy.setCurrentIndex(0)
             self.sortBy.removeItem(3)
 
-        logger.opt(colors=True).debug(
-            "Filter kwargs: " + pretty_view({**filter_kwargs, "books_ids": books_ids}),
-        )
+        self.filter_kwargs = filter_kwargs
+        self.current_book_ids = books_ids
 
-        books: ty.List[Books] = Books(os.environ["DB_PATH"]).filter(
-            return_list=True, **filter_kwargs
-        )  # Запрос к бд
-        if books_ids is not None:
-            books = [book for book in books if book.id in books_ids]
-
-        # Сортировка
-        sort_by = self.sortBy.currentIndex()
-        if sort_by == 0:  # По дате добавления
-            books.sort(key=lambda obj: obj.adding_date, reverse=True)  # Новые сверху
-        elif sort_by == 1:  # По названию
-            books.sort(key=lambda obj: obj.name)
-        elif sort_by == 2:  # По автору
-            books.sort(key=lambda obj: obj.author)
-        elif sort_by == 3:  # По позиции в цикле
-            books.sort(key=lambda obj: obj.number_in_series.rjust(2, "0"))
+        self.order_by = "adding_date"
+        if self.sortBy.currentIndex() == 1:  # По названию
+            self.order_by = "name"
+        elif self.sortBy.currentIndex() == 2:  # По автору
+            self.order_by = "author"
 
         # Если нужно, отображаем в обратном порядке
+        self.invert_sorting = False
         if self.invertSortBtn.isChecked():
-            books.reverse()
+            self.invert_sorting = not self.invert_sorting
+        if self.sortBy.currentIndex() == 0:
+            self.invert_sorting = not self.invert_sorting
 
-        self.cur_books = books
-        logger.opt(colors=True).trace("Books: " + pretty_view(books))
-        logger.opt(colors=True).debug(f"Books: <y><list ({len(books)} objects)></y>")
-
+        # Сбрасываем счетчики
         self.cur_books_in_all_container_count = 0
         self.cur_books_in_listened_container_count = 0
         self.cur_books_in_progress_container_count = 0
 
+        # Добавляем книги на страницы
         self.addBooksToContainer(self.allBooksContainer, self.allBooksLayout)
         self.addBooksToContainer(
             self.inProgressBooksContainer, self.inProgressBooksLayout
         )
         self.addBooksToContainer(self.listenedBooksContainer, self.listenedBooksLayout)
 
+        # Разблокируем кнопку
         QTimer.singleShot(150, lambda: self.libraryBtn.setDisabled(False))
 
+        # Переключаемся на страницу библиотеки
         if self.stackedWidget.currentWidget() != self.libraryPage:
             self.library.setCurrentWidget(self.allBooksPage)
         self.stackedWidget.setCurrentWidget(self.libraryPage)
 
+        # Восстанавливаем минимальный размер библиотеки
         self.library.setMinimumWidth(780)
 
         logger.debug("Library is open")
 
     def addBooksToContainer(self, container: QWidget, layout: QWidget):
-        if layout == self.inProgressBooksLayout:
-            books = [book for book in self.cur_books if book.status == Status.started]
-        elif layout == self.listenedBooksLayout:
-            books = [book for book in self.cur_books if book.status == Status.finished]
-        else:
-            books = self.cur_books
+        query = "SELECT * FROM books %s ORDER BY %s %s LIMIT 6 OFFSET %s"
+        filter_conditions = []
+        filter_values = []
 
-        if layout == self.inProgressBooksLayout:
-            start = self.cur_books_in_progress_container_count
-            if self.cur_books_in_progress_container_count >= len(books):
-                return
-            self.cur_books_in_progress_container_count += 6
-        elif layout == self.listenedBooksLayout:
-            start = self.cur_books_in_listened_container_count
-            if self.cur_books_in_listened_container_count >= len(books):
-                return
-            self.cur_books_in_listened_container_count += 6
-        else:
-            start = self.cur_books_in_all_container_count
-            if self.cur_books_in_all_container_count >= len(books):
-                return
-            self.cur_books_in_all_container_count += 6
-        books = books[start : start + 6]
+        if self.current_book_ids:
+            filter_conditions.append(f"id IN {tuple(self.current_book_ids)}")
+        for filter_key, filter_value in self.filter_kwargs.items():
+            filter_conditions.append(f"{filter_key}=?")
+            filter_values.append(filter_value)
+        if container == self.inProgressBooksContainer:
+            filter_conditions.append("status=?")
+            filter_values.append(Status.started)
+        elif container == self.listenedBooksContainer:
+            filter_conditions.append("status=?")
+            filter_values.append(Status.finished)
+
+        counter_name = "cur_books_in_all_container_count"
+        if container == self.inProgressBooksContainer:
+            counter_name = "cur_books_in_progress_container_count"
+        elif container == self.listenedBooksContainer:
+            counter_name = "cur_books_in_listened_container_count"
+
+        offset = self.__getattribute__(counter_name)
+
+        query = query % (
+            ("WHERE " + " AND ".join(filter_conditions)) if filter_conditions else "",
+            self.order_by,
+            "DESC" if self.invert_sorting else "ASC",
+            offset,
+        )
+
+        logger.opt(colors=True).debug(
+            f"Filtering query: <y>{query}</y>. "
+            f"Values: {pretty_view(filter_values)}",
+        )
+
+        db = Books(os.environ["DB_PATH"])
+        books = db.api.fetchall(query, *filter_values)
+        books = [db.get_class(book) for book in books]
+
+        if self.sortBy.currentIndex() == 3:  # По позиции в цикле
+            int_numbers: list[Books] = []
+            not_int_numbers: list[Books] = []
+            for book in books:
+                try:
+                    float(book.number_in_series.replace(",", "."))
+                    int_numbers.append(book)
+                except ValueError:
+                    not_int_numbers.append(book)
+            books = [
+                *sorted(
+                    int_numbers,
+                    key=lambda book: float(book.number_in_series),
+                    reverse=self.invert_sorting,
+                ),
+                *sorted(
+                    not_int_numbers,
+                    key=lambda book: book.number_in_series,
+                    reverse=self.invert_sorting,
+                ),
+            ]
+
+        if not len(books):
+            return
+
+        self.__setattr__(counter_name, offset + 6)
+
+        logger.opt(colors=True).trace("Books: " + pretty_view(books))
+        logger.opt(colors=True).debug(f"Books: <y><list ({len(books)} objects)></y>")
 
         # Инициализируем элементы
         for book in books:
