@@ -3,7 +3,6 @@ from __future__ import annotations
 import atexit
 import os
 import sys
-import traceback
 import typing as ty
 from inspect import isclass
 
@@ -39,7 +38,9 @@ from start_app import StartAppWindow  # noqa
 
 
 @logger.catch
-def exception_hook(_, value, __):
+def exception_hook(exception_type, value, __):
+    if exception_type is KeyboardInterrupt:
+        sys.exit()
     raise Exception from value
 
 
