@@ -64,8 +64,8 @@ class KnigaVUhe(Driver):
                 .strip(".")
             )
         except NoSuchElementException:
-            series_name = ''
-            number_in_series = ''
+            series_name = ""
+            number_in_series = ""
 
         description = page.find_elements_by_css_selector("div.book_description")[
             0

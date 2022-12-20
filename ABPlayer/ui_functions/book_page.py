@@ -4,7 +4,6 @@ import os
 import ssl
 import typing as ty
 import urllib.request
-from datetime import datetime
 
 import requests.exceptions
 from PyQt5.QtCore import (
@@ -222,7 +221,7 @@ class DownloadBookWorker(BaseWorker):
                 **vars(self.book),
                 files=BookFiles({file.name: get_file_hash(file) for file in files}),
                 file_path=os.path.join(self.book.dir_path, ".abp"),
-                adding_date=DateTime.now()
+                adding_date=DateTime.now(),
             )  # Добавляем книгу в бд
             book = books.filter(url=self.book.url)
             book.save_to_storage()

@@ -49,8 +49,8 @@ class AKnigaDriver(Driver):
                 .strip(".")
             )
         except NoSuchElementException:
-            series_name = ''
-            number_in_series = ''
+            series_name = ""
+            number_in_series = ""
 
         duration = " ".join(
             [
