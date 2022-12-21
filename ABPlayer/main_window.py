@@ -27,6 +27,7 @@ from PyQt5.QtWidgets import (
 )
 from loguru import logger
 
+import delete_later
 import styles
 import temp_file
 from database import Books
@@ -920,14 +921,17 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             is_menu_panel_closed=is_menu_panel_closed,
         )
 
+        # При закрытии приложения, плеер сбрасывает позицию на 0,
+        # из-за этого точка остановки сохраняется в бд.
+        # Так же сбрасываем последнее сохранение, тогда точка остановки не сохранится.
+        self.reset_last_save()
+
         # Удаляем таблицу с книгами
         db = Books(os.environ["DB_PATH"])
         db.api.execute("DROP TABLE books")
         db.api.commit()
 
-        logger.info("Closing the application")
+        if delete_later.get_files_count():
+            delete_later.start_subprocess()
 
-        # При закрытии приложения, плеер сбрасывает позицию на 0,
-        # из-за этого точка остановки сохраняется в бд.
-        # Так же сбрасываем последнее сохранение, тогда точка остановки не сохранится.
-        self.reset_last_save()
+        logger.info("Closing the application")

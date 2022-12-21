@@ -16,6 +16,8 @@ if not os.path.exists(os.environ["APP_DIR"]):
 os.environ["DB_PATH"] = os.path.join(os.environ["APP_DIR"], "database.sqlite")
 # Путь к файлу с временными данными
 os.environ["TEMP_PATH"] = os.path.join(os.environ["APP_DIR"], "temp.txt")
+# Путь к файлу с временными данными
+os.environ["TEMP_PATH"] = os.path.join(os.environ["APP_DIR"], "temp.txt")
 # Путь к файлу отладки
 os.environ["DEBUG_PATH"] = os.path.join(os.environ["APP_DIR"], "debug.log")
 # Стандартный путь к директории с книгами
