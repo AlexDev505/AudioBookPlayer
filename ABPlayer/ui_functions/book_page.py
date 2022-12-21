@@ -4,6 +4,7 @@ import os
 import ssl
 import typing as ty
 import urllib.request
+from contextlib import suppress
 
 import requests.exceptions
 from PyQt5.QtCore import (
@@ -30,6 +31,7 @@ from PyQt5.QtWidgets import (
 )
 from loguru import logger
 
+import delete_later
 from database.tables.books import BookFiles, DateTime, Books, Status
 from drivers import BaseDownloadProcessHandler, drivers
 from tools import (
@@ -432,16 +434,23 @@ class DeleteBookWorker(BaseWorker):
             if os.path.isdir(self.book.dir_path):
                 for root, dirs, files in os.walk(self.book.dir_path):
                     for file in files:
-                        os.remove(os.path.join(root, file))
-                    os.rmdir(root)
+                        file_path = os.path.join(root, file)
+                        try:
+                            os.remove(file_path)
+                        except PermissionError:  # Файл занят другим процессом
+                            # TODO: Ошибка возникает из-за того,
+                            #  что плеер не освобождает файлы.
+                            logger.opt(colors=True).error(
+                                f"Can't delete file <y>{file_path}</y>"
+                            )
+                            delete_later.add_file(file_path)
+                    with suppress(PermissionError, OSError):
+                        os.rmdir(root)
                 # Удаляем папку автора, если она пуста
                 author_dir = os.path.dirname(self.book.dir_path)
                 if len(os.listdir(author_dir)) == 0:
                     os.rmdir(author_dir)
                 logger.debug("Audio files deleted")
-            self.finished.emit()
-        except PermissionError:  # Файл занят другим процессом
-            # TODO: Можно удалять такие файлы после закрытия приложения
             self.finished.emit()
         except Exception as err:
             self.failed.emit(f"Возникла ошибка во время удаления книги.\n{str(err)}")
@@ -496,16 +505,6 @@ def deleteBook(main_window: MainWindow, book: Books = None) -> None:
     """
     book = book or main_window.book
 
-    # TODO: Удаление прослушиваемой книги
-    if main_window.player.book is not ... and main_window.player.book.url == book.url:
-        main_window.openInfoPage(
-            text="Невозможно удалить книгу, пока вы её слушаете.\n"
-            "Начните слушать другую книгу и повторите попытку.",
-            btn_text="В библиотеку",
-            btn_function=main_window.openLibraryPage,
-        )
-        return
-
     if (
         QMessageBox.question(
             main_window,
@@ -517,6 +516,12 @@ def deleteBook(main_window: MainWindow, book: Books = None) -> None:
         != QMessageBox.Yes
     ):
         return
+
+    if main_window.player.book is not ... and main_window.player.book.url == book.url:
+        main_window.player.player.stop()
+        main_window.player.playlist.clear()
+        main_window.player.closePlayer.emit()
+        main_window.player.book = ...
 
     main_window.openLoadingPage()
 
@@ -623,18 +628,14 @@ def changeDriver(main_window: MainWindow) -> None:
         )
         return
 
-    # TODO: Удаление прослушиваемой книги
     if (
         main_window.player.book is not ...
         and main_window.player.book.url == main_window.book.url
     ):
-        main_window.openInfoPage(
-            text="Невозможно удалить книгу, пока вы её слушаете.\n"
-            "Начните слушать другую книгу и повторите попытку.",
-            btn_text="В библиотеку",
-            btn_function=main_window.openLibraryPage,
-        )
-        return
+        main_window.player.player.stop()
+        main_window.player.playlist.clear()
+        main_window.player.closePlayer.emit()
+        main_window.player.book = ...
 
     # Создаём диалог и получаем ссылку
     dlg = InputDialog(main_window)

@@ -78,6 +78,7 @@ class BasePlayerInterface(QObject):
 
         if value >= item.duration:  # Глава закончилась
             logger.trace("The chapter is over")
+            # TODO: Новая глава может не начинаться.
             if self.player.book.items.index(item) != len(self.player.book.items) - 1:
                 # Переходим к следующей главе
                 self.player.setPosition(0, self.player.book.stop_flag.item + 1)
@@ -283,6 +284,12 @@ class Player(QObject):
         if stop_flag_time != 0:
             # Перемещаемся в точку остановки
             self.setPosition(stop_flag_time, delay=250)
+
+        QMessageBox.warning(
+            main_window,
+            "Предупреждение",
+            "Аудио плеер может работать некорректно в данной версии приложения.",
+        )
 
         main_window.loadMiniPlayer()
 
