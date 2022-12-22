@@ -70,50 +70,85 @@ class BaseDownloadProcessHandler:
 
 class Driver(ABC):
     drivers: ty.List[ty.Type[Driver]] = []  # Все доступные драйверы
-    _driver: RemoteWebDriver = ...
-    _driver_opener: int = ...
+    _browser: RemoteWebDriver | None = None
+    _browser_connections: list[int] = []
+
+    def __init__(self, user_shared_browser: bool = False):
+        logger.opt(colors=True).debug(
+            f"Creating driver <e>{self.driver_name}</e> <y>{id(self)} "
+            f"</y> user_shared_browser=<y>{user_shared_browser}</y>"
+        )
+        self._browser: RemoteWebDriver | None = None
+        self.user_shared_browser = user_shared_browser
 
     def __init_subclass__(cls, **kwargs):
         Driver.drivers.append(cls)
 
-    def __enter__(self):
-        self.get_driver()
+    def __enter__(self) -> Driver:
+        self.get_browser()
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        if self.__class__._driver_opener == id(self):
-            self.__class__.quit_driver()
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        self.quit_browser()
 
-    def get_driver(self) -> RemoteWebDriver:
+    def _get_shared_browser(self) -> RemoteWebDriver:
+        logger.opt(colors=True).debug(
+            f"Driver <e>{self.__class__.driver_name}</e> <y>{id(self)}</y> "
+            f"getting shared browser"
+        )
+        self.__class__._browser_connections.append(id(self))
+        if self.__class__.__base__._browser is None:
+            self.__class__.__base__._browser = self.__class__._get_driver()(
+                options=self.__class__._get_driver_options()
+            )
+            logger.opt(colors=True).debug(
+                f"Drover <e>{self.__class__.driver_name}</e> <y>{id(self)}</y> "
+                "created Shared browser"
+            )
+        return self.__class__.__base__._browser
+
+    def _quit_shared_browser(self) -> None:
+        if self.__class__.__base__._browser is not None:
+            self.__class__.__base__._browser.quit()
+            self.__class__.__base__._browser = None
+            logger.opt(colors=True).debug(
+                f"Driver <e>{self.driver_name}</e> <y>{id(self)}</y> "
+                "closed Shared browser"
+            )
+
+    def get_browser(self) -> RemoteWebDriver:
         """
         :returns: Драйвер, для работы с браузером.
         """
-        logger.opt(colors=True).debug(
-            f"Driver <e>{self.driver_name}</e> <y>{id(self)}</y> getting driver"
-        )
-        if self.__class__.__base__._driver is ...:
-            self.__class__.__base__._driver = self.__class__._get_driver()(
-                options=self.__class__._get_driver_options()
-            )
-            self.__class__.__base__._driver_opener = id(self)
-            logger.opt(colors=True).debug(
-                f"Driver created by <e>{self.driver_name}</e> <y>{id(self)}</y>"
-            )
-        return self.__class__.__base__._driver
+        if self.user_shared_browser:
+            return self._get_shared_browser()
 
-    @classmethod
-    def quit_driver(cls) -> None:
-        cls.__base__._driver.quit()
-        cls.__base__._driver = ...
-        cls.__base__._driver_opener = ...
-        logger.debug(f"Driver closed")
+        if self._browser is None:
+            logger.opt(colors=True).debug(
+                f"Driver <e>{self.driver_name}</e> <y>{id(self)}</y> "
+                "created Local browser"
+            )
+            self._browser = self._get_driver()(options=self._get_driver_options())
+        return self._browser
+
+    def quit_browser(self) -> None:
+        if self.user_shared_browser:
+            self._quit_shared_browser()
+        else:
+            if self._browser is not None:
+                self._browser.quit()
+                self._browser = None
+                logger.opt(colors=True).debug(
+                    f"Driver <e>{self.driver_name}</e> <y>{id(self)}</y> "
+                    "closed Local browser"
+                )
 
     def get_page(self, url: str) -> webdriver.Chrome:
         """
         :param url: Ссылка на книгу.
         :returns: Загруженную в драйвер страницу.
         """
-        driver = self.get_driver()
+        driver = self.get_browser()
         driver.get(url)
         return driver
 
@@ -249,23 +284,24 @@ class Driver(ABC):
     @classmethod
     @property
     @abstractmethod
-    def site_url(cls):
+    def site_url(cls) -> str:
         """
         :returns: Ссылка на сайт, с которым работает браузер.
         """
 
     @classmethod
     @property
-    def driver_name(cls):
+    def driver_name(cls) -> str:
         return cls.__name__
 
     def __del__(self):
         logger.opt(colors=True).debug(
-            f"Deleting <e>{self.driver_name}</e> <y>{id(self)}</y>"
+            f"Deleting driver <e>{self.driver_name}</e> <y>{id(self)}</y>"
         )
-        if (
-            self.__class__._driver_opener is ...
-            or id(self) == self.__class__._driver_opener
-        ):
-            if self.__class__._driver is not ...:
-                self.__class__.quit_driver()
+        if self.user_shared_browser:
+            if id(self) in self.__class__._browser_connections:
+                self.__class__._browser_connections.remove(id(self))
+            if not self.__class__._browser_connections:
+                self.quit_browser()
+        else:
+            self.quit_browser()

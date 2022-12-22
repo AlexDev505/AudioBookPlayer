@@ -117,7 +117,7 @@ class UiMainWindow(object):
         self.line.setSizePolicy(sizePolicy)
         self.line.setMinimumSize(QtCore.QSize(0, 0))
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
-        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line.setFrameShadow(QtWidgets.QFrame.Plain)
         self.line.setObjectName("line")
         self.horizontalLayout_4.addWidget(self.line)
         self.verticalLayout.addWidget(self.splitLine)
@@ -743,6 +743,42 @@ class UiMainWindow(object):
         self.bookPageBtnsFrame.setObjectName("bookPageBtnsFrame")
         self.horizontalLayout_28 = QtWidgets.QHBoxLayout(self.bookPageBtnsFrame)
         self.horizontalLayout_28.setObjectName("horizontalLayout_28")
+        self.openInBrowserBtn = QtWidgets.QPushButton(self.bookPageBtnsFrame)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.openInBrowserBtn.sizePolicy().hasHeightForWidth()
+        )
+
+        self.openInBrowserBtn.setSizePolicy(sizePolicy)
+        self.openInBrowserBtn.setMinimumSize(QtCore.QSize(45, 45))
+        self.openInBrowserBtn.setMaximumSize(QtCore.QSize(45, 45))
+        self.openInBrowserBtn.setText("")
+        self.openInBrowserBtn.setIcon(QtGui.QIcon(":/other/box-arrow-up-right.svg"))
+        self.openInBrowserBtn.setIconSize(QtCore.QSize(30, 30))
+        self.openInBrowserBtn.setObjectName("openInBrowserBtn")
+        self.horizontalLayout_28.addWidget(self.openInBrowserBtn)
+        self.openBookSeriesBtn = QtWidgets.QPushButton(self.bookPageBtnsFrame)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.openBookSeriesBtn.sizePolicy().hasHeightForWidth()
+        )
+        self.openBookSeriesBtn.setSizePolicy(sizePolicy)
+        self.openBookSeriesBtn.setMinimumSize(QtCore.QSize(45, 45))
+        self.openBookSeriesBtn.setMaximumSize(QtCore.QSize(45, 45))
+        self.openBookSeriesBtn.setText("")
+        self.openBookSeriesBtn.setIcon(QtGui.QIcon(":/other/tag.svg"))
+        self.openBookSeriesBtn.setIconSize(QtCore.QSize(30, 30))
+        self.openBookSeriesBtn.setObjectName("openBookSeriesBtn")
+        self.horizontalLayout_28.addWidget(self.openBookSeriesBtn)
+
         self.toggleFavoriteBtn = QtWidgets.QPushButton(self.bookPageBtnsFrame)
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
@@ -965,6 +1001,34 @@ class UiMainWindow(object):
         )
         self.horizontalLayout_32.addItem(spacerItem7)
         self.verticalLayout_23.addLayout(self.horizontalLayout_32)
+
+        self.downloadBookSeriesFrame = QtWidgets.QFrame(self.needDownloadingPage)
+        self.downloadBookSeriesFrame.setObjectName("downloadBookSeriesFrame")
+        self.downloadBookSeriesFrameLayout = QtWidgets.QHBoxLayout(
+            self.downloadBookSeriesFrame
+        )
+        self.downloadBookSeriesFrameLayout.setObjectName(
+            "downloadBookSeriesFrameLayout"
+        )
+        downloadBookSeriesFrameHS1 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
+        self.downloadBookSeriesFrameLayout.addItem(downloadBookSeriesFrameHS1)
+        self.downloadBookSeriesBtn = QtWidgets.QPushButton(self.downloadBookSeriesFrame)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(9)
+        font.setBold(True)
+        font.setWeight(75)
+        self.downloadBookSeriesBtn.setFont(font)
+        self.downloadBookSeriesBtn.setObjectName("downloadBookSeriesBtn")
+        self.downloadBookSeriesFrameLayout.addWidget(self.downloadBookSeriesBtn)
+        downloadBookSeriesFrameHS2 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
+        self.downloadBookSeriesFrameLayout.addItem(downloadBookSeriesFrameHS2)
+        self.verticalLayout_23.addWidget(self.downloadBookSeriesFrame)
+
         spacerItem8 = QtWidgets.QSpacerItem(
             20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
         )
@@ -1231,6 +1295,148 @@ class UiMainWindow(object):
         self.verticalLayout_30.addWidget(self.descriptionFrame)
         self.horizontalLayout_26.addWidget(self.bookPageContent)
         self.stackedWidget.addWidget(self.bookPage)
+
+        self.bookSeriesPage = QtWidgets.QWidget()
+        self.bookSeriesPage.setObjectName("bookSeriesPage")
+        self.bookSeriesPageLayout = QtWidgets.QHBoxLayout(self.bookSeriesPage)
+        self.bookSeriesPageLayout.setSpacing(0)
+        self.bookSeriesPageLayout.setObjectName("bookSeriesPageLayout")
+        self.bookSeriesPageLayout.setContentsMargins(0, 0, 0, 0)
+        self.bookSeriesPageContent = QtWidgets.QFrame(self.bookSeriesPage)
+        self.bookSeriesPageContent.setObjectName("bookSeriesPageContent")
+        self.bookSeriesPageContent.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.bookSeriesPageContent.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.verticalLayout_50 = QtWidgets.QVBoxLayout(self.bookSeriesPageContent)
+        self.verticalLayout_50.setSpacing(15)
+        self.verticalLayout_50.setObjectName("verticalLayout_4")
+        self.bookSeriesTitleFrame = QtWidgets.QFrame(self.bookSeriesPageContent)
+        self.bookSeriesTitleFrame.setObjectName("bookSeriesTitleFrame")
+        self.bookSeriesTitleFrameLayout = QtWidgets.QHBoxLayout(
+            self.bookSeriesTitleFrame
+        )
+        self.bookSeriesTitleFrameLayout.setObjectName("bookSeriesTitleFrameLayout")
+        self.bookSeriesTitleFrameLayout.setSpacing(9)
+        self.returnToBookPageBtn = QtWidgets.QPushButton(self.bookSeriesTitleFrame)
+        self.returnToBookPageBtn.setObjectName("returnToBookPageBtn")
+        sizePolicy6 = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
+        )
+        sizePolicy6.setHorizontalStretch(0)
+        sizePolicy6.setVerticalStretch(0)
+        sizePolicy6.setHeightForWidth(
+            self.toggleFavoriteBtn.sizePolicy().hasHeightForWidth()
+        )
+        sizePolicy6.setHeightForWidth(
+            self.returnToBookPageBtn.sizePolicy().hasHeightForWidth()
+        )
+        self.returnToBookPageBtn.setSizePolicy(sizePolicy6)
+        self.returnToBookPageBtn.setMinimumSize(QtCore.QSize(45, 45))
+        self.returnToBookPageBtn.setMaximumSize(QtCore.QSize(45, 45))
+        self.returnToBookPageBtn.setIcon(QtGui.QIcon(":/other/angle_left.svg"))
+        self.returnToBookPageBtn.setIconSize(QtCore.QSize(30, 30))
+
+        self.bookSeriesTitleFrameLayout.addWidget(self.returnToBookPageBtn)
+
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(18)
+        font.setBold(True)
+        font.setWeight(75)
+
+        self.bookSeriesTitleLayout2 = QtWidgets.QVBoxLayout()
+        self.bookSeriesTitleLayout2.setObjectName("bookSeriesTitleLayout2")
+        self.bookSeriesTitle = QtWidgets.QLabel(self.bookSeriesTitleFrame)
+        self.bookSeriesTitle.setObjectName("bookSeriesTitle")
+        self.bookSeriesTitle.setFont(font)
+
+        self.bookSeriesTitleLayout2.addWidget(self.bookSeriesTitle)
+
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(10)
+
+        self.bookSeriesTitleLayout3 = QtWidgets.QHBoxLayout()
+        self.bookSeriesTitleLayout3.setObjectName("bookSeriesTitleLayout3")
+        self.bookSeriesCountLabel = QtWidgets.QLabel(self.bookSeriesTitleFrame)
+        self.bookSeriesCountLabel.setObjectName("bookSeriesCountLabel")
+        self.bookSeriesCountLabel.setFont(font)
+
+        self.bookSeriesTitleLayout3.addWidget(self.bookSeriesCountLabel)
+
+        self.horizontalSpacer_17 = QtWidgets.QSpacerItem(
+            28, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
+
+        self.bookSeriesTitleLayout3.addItem(self.horizontalSpacer_17)
+
+        self.bookSeriesTitleLayout2.addLayout(self.bookSeriesTitleLayout3)
+
+        self.bookSeriesTitleFrameLayout.addLayout(self.bookSeriesTitleLayout2)
+
+        self.horizontalSpacer_18 = QtWidgets.QSpacerItem(
+            758, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
+
+        self.bookSeriesTitleFrameLayout.addItem(self.horizontalSpacer_18)
+
+        self.verticalLayout_50.addWidget(self.bookSeriesTitleFrame)
+
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(9)
+        font.setBold(True)
+        font.setWeight(75)
+
+        self.bookSeriesPageButtonsLayout = QtWidgets.QHBoxLayout()
+        self.bookSeriesPageButtonsLayout.setObjectName("bookSeriesPageButtonsLayout")
+        self.selectAllBooksBtn = QtWidgets.QPushButton(self.bookSeriesPageContent)
+        self.selectAllBooksBtn.setObjectName("selectAllBooksBtn")
+        self.selectAllBooksBtn.setFont(font)
+
+        self.bookSeriesPageButtonsLayout.addWidget(self.selectAllBooksBtn)
+
+        self.unselectAllBooksBtn = QtWidgets.QPushButton(self.bookSeriesPageContent)
+        self.unselectAllBooksBtn.setObjectName("unselectAllBooksBtn")
+        self.unselectAllBooksBtn.setFont(font)
+
+        self.bookSeriesPageButtonsLayout.addWidget(self.unselectAllBooksBtn)
+
+        self.downloadBookSeriesBtn2 = QtWidgets.QPushButton(self.bookSeriesPageContent)
+        self.downloadBookSeriesBtn2.setObjectName("downloadBookSeriesBtn2")
+        self.downloadBookSeriesBtn2.setFont(font)
+
+        self.bookSeriesPageButtonsLayout.addWidget(self.downloadBookSeriesBtn2)
+
+        self.horizontalSpacer_19 = QtWidgets.QSpacerItem(
+            508, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
+
+        self.bookSeriesPageButtonsLayout.addItem(self.horizontalSpacer_19)
+
+        self.verticalLayout_50.addLayout(self.bookSeriesPageButtonsLayout)
+
+        self.booksInSeriesContainer = QtWidgets.QScrollArea(self.bookSeriesPageContent)
+        self.booksInSeriesContainer.setObjectName("booksInSeriesContainer")
+        self.booksInSeriesContainer.setWidgetResizable(True)
+        self.booksInSeriesContainerContent = QtWidgets.QWidget()
+        self.booksInSeriesContainerContent.setObjectName(
+            "booksInSeriesContainerContent"
+        )
+        self.booksInSeriesContainerContent.setGeometry(QtCore.QRect(0, 0, 1052, 574))
+        self.booksInSeriesContainerContentLayout = QtWidgets.QVBoxLayout(
+            self.booksInSeriesContainerContent
+        )
+        self.booksInSeriesContainerContentLayout.setObjectName(
+            "booksInSeriesContainerContentLayout"
+        )
+        self.booksInSeriesContainer.setWidget(self.booksInSeriesContainerContent)
+
+        self.verticalLayout_50.addWidget(self.booksInSeriesContainer)
+
+        self.bookSeriesPageLayout.addWidget(self.bookSeriesPageContent)
+
+        self.stackedWidget.addWidget(self.bookSeriesPage)
+
         self.addBookPage = QtWidgets.QWidget()
         self.addBookPage.setObjectName("addBookPage")
         self.horizontalLayout_14 = QtWidgets.QHBoxLayout(self.addBookPage)
@@ -1964,6 +2170,22 @@ class UiMainWindow(object):
         self.horizontalLayout_9.addWidget(self.volumeLabel)
         self.horizontalLayout_10.addWidget(self.volumeFrame)
         self.horizontalLayout_8.addWidget(self.volumeBox)
+        self.downloadableBookSeriesBtn = QtWidgets.QPushButton(self.toolsFrame)
+        self.downloadableBookSeriesBtn.hide()
+        self.downloadableBookSeriesBtn.setMinimumSize(QtCore.QSize(40, 40))
+        self.downloadableBookSeriesBtn.setMaximumSize(QtCore.QSize(40, 40))
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(13)
+        font.setBold(True)
+        font.setWeight(75)
+        self.downloadableBookSeriesBtn.setFont(font)
+        self.downloadableBookSeriesBtn.setText("")
+        self.downloadableBookSeriesBtn.setIcon(QtGui.QIcon(":/other/download.svg"))
+        self.downloadableBookSeriesBtn.setIconSize(QtCore.QSize(28, 28))
+        self.downloadableBookSeriesBtn.setObjectName("downloadableBookSeriesBtn")
+        self.controlPanelButtons.addButton(self.downloadableBookSeriesBtn)
+        self.horizontalLayout_8.addWidget(self.downloadableBookSeriesBtn)
         self.overlayBtn = QtWidgets.QPushButton(self.toolsFrame)
         self.overlayBtn.setMinimumSize(QtCore.QSize(40, 40))
         self.overlayBtn.setMaximumSize(QtCore.QSize(40, 40))
@@ -2086,6 +2308,14 @@ class UiMainWindow(object):
             _translate("MainWindow", "Для прослушивания книги, необходимо скачать её")
         )
         self.downloadBookBtn.setText(_translate("MainWindow", "Скачать аудиокнигу"))
+        self.downloadBookSeriesBtn.setText(
+            _translate("MainWindow", "Скачать цикл аудиокниг")
+        )
+        self.bookSeriesTitle.setText("Автор - Цикл")
+        self.bookSeriesCountLabel.setText("Всего книг: num")
+        self.downloadBookSeriesBtn2.setText("Скачать выбранные книги")
+        self.selectAllBooksBtn.setText("Выбрать все")
+        self.unselectAllBooksBtn.setText("Отменить выбор")
         self.label_7.setText(_translate("MainWindow", "Скачивание книги"))
         self.label_10.setText(_translate("MainWindow", "Автор"))
         self.authorLabel.setText(_translate("MainWindow", "author"))

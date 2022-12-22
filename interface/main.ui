@@ -239,6 +239,7 @@ Line {
 #stackedWidget,
 #libraryPage,
 #bookPage,
+#bookSeriesPage,
 #addBookPage,
 #infoPage,
 #settingsPage {
@@ -246,6 +247,7 @@ Line {
 }
 #libraryPageContent,
 #bookPageContent,
+#bookSeriesPageContent,
 #addBookPageContent,
 #infoPageContent,
 #settingsPageContent {
@@ -255,6 +257,7 @@ Line {
 /* BUTTONS */
 #infoPageContent QPushButton,
 #needDownloadingPage QPushButton,
+#bookSeriesPageContent QPushButton,
 #settingsPageContent QPushButton {
     padding: 10px;
     background-color: rgb(47, 49, 54);
@@ -263,6 +266,7 @@ Line {
 }
 #infoPageContent QPushButton:hover,
 #needDownloadingPage QPushButton:hover,
+#bookSeriesPageContent QPushButton:hover,
 #settingsPageContent QPushButton:hover {
     border-color: rgb(142, 146, 151);
 }
@@ -289,6 +293,10 @@ Line {
 }
 #bookPageContent QPushButton:pressed {
     margin-bottom: -1px;
+}
+/* BOOK SERIES PAGE CONTENT */
+#bookSeriesPageContent * {
+    background-color: rgb(54, 57, 63);
 }
 /* SETTINGS PAGE CONTENT */
 #settingsContent {
@@ -399,7 +407,7 @@ Line {
 }
 </string>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout_4">
+   <layout class="QVBoxLayout" name="centralwidgetLayout">
     <property name="spacing">
      <number>0</number>
     </property>
@@ -578,7 +586,7 @@ Line {
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <layout class="QHBoxLayout" name="centralLayout">
        <property name="spacing">
         <number>0</number>
        </property>
@@ -674,12 +682,6 @@ Line {
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>0</height>
-                </size>
                </property>
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
@@ -892,7 +894,7 @@ Line {
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_7">
+         <layout class="QVBoxLayout" name="contentBoxLayout">
           <property name="spacing">
            <number>0</number>
           </property>
@@ -919,7 +921,7 @@ Line {
             <property name="lineWidth">
              <number>1</number>
             </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <layout class="QHBoxLayout" name="contentLayout">
              <property name="spacing">
               <number>0</number>
              </property>
@@ -941,7 +943,7 @@ Line {
                 <number>0</number>
                </property>
                <widget class="QWidget" name="libraryPage">
-                <layout class="QHBoxLayout" name="horizontalLayout_21">
+                <layout class="QHBoxLayout" name="libraryPageLayout">
                  <property name="spacing">
                   <number>0</number>
                  </property>
@@ -965,7 +967,7 @@ Line {
                    <property name="frameShadow">
                     <enum>QFrame::Raised</enum>
                    </property>
-                   <layout class="QHBoxLayout" name="horizontalLayout_19">
+                   <layout class="QHBoxLayout" name="libraryPageContentLayout">
                     <property name="spacing">
                      <number>0</number>
                     </property>
@@ -1244,6 +1246,11 @@ Line {
                                    <string>Автору</string>
                                   </property>
                                  </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Позиции в цикле</string>
+                                  </property>
+                                 </item>
                                 </widget>
                                </item>
                                <item>
@@ -1511,7 +1518,7 @@ Line {
                       <property name="frameShadow">
                        <enum>QFrame::Raised</enum>
                       </property>
-                      <layout class="QVBoxLayout" name="verticalLayout_3">
+                      <layout class="QVBoxLayout" name="libraryBoxLayout">
                        <property name="leftMargin">
                         <number>8</number>
                        </property>
@@ -1525,7 +1532,7 @@ Line {
                         <number>0</number>
                        </property>
                        <item>
-                        <widget class="QLabel" name="label">
+                        <widget class="QLabel" name="libraryLabel">
                          <property name="font">
                           <font>
                            <family>Arial</family>
@@ -1547,7 +1554,7 @@ Line {
                          <property name="frameShadow">
                           <enum>QFrame::Raised</enum>
                          </property>
-                         <layout class="QHBoxLayout" name="horizontalLayout_13">
+                         <layout class="QHBoxLayout" name="libraryLayout">
                           <property name="spacing">
                            <number>0</number>
                           </property>
@@ -1589,7 +1596,7 @@ Line {
                              <cursorShape>ArrowCursor</cursorShape>
                             </property>
                             <property name="currentIndex">
-                             <number>0</number>
+                             <number>2</number>
                             </property>
                             <widget class="QWidget" name="allBooksPage">
                              <property name="sizePolicy">
@@ -1601,7 +1608,7 @@ Line {
                              <attribute name="title">
                               <string>Все</string>
                              </attribute>
-                             <layout class="QVBoxLayout" name="verticalLayout_12">
+                             <layout class="QVBoxLayout" name="allBooksPageLayout">
                               <property name="spacing">
                                <number>0</number>
                               </property>
@@ -1625,9 +1632,9 @@ Line {
                                 <property name="frameShadow">
                                  <enum>QFrame::Raised</enum>
                                 </property>
-                                <layout class="QVBoxLayout" name="verticalLayout_9">
+                                <layout class="QVBoxLayout" name="allBooksPageNothingLayout">
                                  <item>
-                                  <widget class="QLabel" name="label_13">
+                                  <widget class="QLabel" name="allBooksPageNothingLabel">
                                    <property name="font">
                                     <font>
                                      <family>Arial</family>
@@ -1685,7 +1692,7 @@ Line {
                                    <verstretch>0</verstretch>
                                   </sizepolicy>
                                  </property>
-                                 <layout class="QVBoxLayout" name="verticalLayout_38"/>
+                                 <layout class="QVBoxLayout" name="allBooksLayoutL"/>
                                 </widget>
                                </widget>
                               </item>
@@ -1701,7 +1708,7 @@ Line {
                              <attribute name="title">
                               <string>В процессе</string>
                              </attribute>
-                             <layout class="QVBoxLayout" name="verticalLayout_32">
+                             <layout class="QVBoxLayout" name="inProsessBooksPageLayout">
                               <property name="spacing">
                                <number>0</number>
                               </property>
@@ -1725,9 +1732,9 @@ Line {
                                 <property name="frameShadow">
                                  <enum>QFrame::Raised</enum>
                                 </property>
-                                <layout class="QVBoxLayout" name="verticalLayout_14">
+                                <layout class="QVBoxLayout" name="inProsessBooksPageNothingLayout">
                                  <item>
-                                  <widget class="QLabel" name="label_14">
+                                  <widget class="QLabel" name="inProsessBooksPageNothingLabel">
                                    <property name="font">
                                     <font>
                                      <family>Arial</family>
@@ -1773,7 +1780,7 @@ Line {
                                    <verstretch>0</verstretch>
                                   </sizepolicy>
                                  </property>
-                                 <layout class="QVBoxLayout" name="verticalLayout_11"/>
+                                 <layout class="QVBoxLayout" name="inProgressBooksLayoutL"/>
                                 </widget>
                                </widget>
                               </item>
@@ -1789,7 +1796,7 @@ Line {
                              <attribute name="title">
                               <string>Прослушанные</string>
                              </attribute>
-                             <layout class="QVBoxLayout" name="verticalLayout_34">
+                             <layout class="QVBoxLayout" name="listenedBooksPageLayout">
                               <property name="spacing">
                                <number>0</number>
                               </property>
@@ -1813,9 +1820,9 @@ Line {
                                 <property name="frameShadow">
                                  <enum>QFrame::Raised</enum>
                                 </property>
-                                <layout class="QVBoxLayout" name="verticalLayout_33">
+                                <layout class="QVBoxLayout" name="listenedBooksPageNothingLayout">
                                  <item>
-                                  <widget class="QLabel" name="label_15">
+                                  <widget class="QLabel" name="listenedBooksPageNothingLabel">
                                    <property name="font">
                                     <font>
                                      <family>Arial</family>
@@ -1861,7 +1868,7 @@ Line {
                                    <verstretch>0</verstretch>
                                   </sizepolicy>
                                  </property>
-                                 <layout class="QVBoxLayout" name="verticalLayout_13"/>
+                                 <layout class="QVBoxLayout" name="listenedBooksLayoutL"/>
                                 </widget>
                                </widget>
                               </item>
@@ -2065,7 +2072,83 @@ Line {
                         <property name="frameShadow">
                          <enum>QFrame::Raised</enum>
                         </property>
-                        <layout class="QHBoxLayout" name="horizontalLayout_28">
+                        <layout class="QHBoxLayout" name="horizontalLayout_5">
+                         <item>
+                          <widget class="QPushButton" name="openInBrowserBtn">
+                           <property name="sizePolicy">
+                            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                             <horstretch>0</horstretch>
+                             <verstretch>0</verstretch>
+                            </sizepolicy>
+                           </property>
+                           <property name="minimumSize">
+                            <size>
+                             <width>45</width>
+                             <height>45</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>45</width>
+                             <height>45</height>
+                            </size>
+                           </property>
+                           <property name="toolTip">
+                            <string>Добавить в избранное</string>
+                           </property>
+                           <property name="text">
+                            <string/>
+                           </property>
+                           <property name="icon">
+                            <iconset resource="resources/icons.qrc">
+                             <normaloff>:/other/box-arrow-up-right.svg</normaloff>:/other/box-arrow-up-right.svg</iconset>
+                           </property>
+                           <property name="iconSize">
+                            <size>
+                             <width>30</width>
+                             <height>30</height>
+                            </size>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QPushButton" name="openBookSeriesBtn">
+                           <property name="sizePolicy">
+                            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                             <horstretch>0</horstretch>
+                             <verstretch>0</verstretch>
+                            </sizepolicy>
+                           </property>
+                           <property name="minimumSize">
+                            <size>
+                             <width>45</width>
+                             <height>45</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>45</width>
+                             <height>45</height>
+                            </size>
+                           </property>
+                           <property name="toolTip">
+                            <string>Добавить в избранное</string>
+                           </property>
+                           <property name="text">
+                            <string/>
+                           </property>
+                           <property name="icon">
+                            <iconset resource="resources/icons.qrc">
+                             <normaloff>:/other/tag.svg</normaloff>:/other/tag.svg</iconset>
+                           </property>
+                           <property name="iconSize">
+                            <size>
+                             <width>30</width>
+                             <height>30</height>
+                            </size>
+                           </property>
+                          </widget>
+                         </item>
                          <item>
                           <widget class="QPushButton" name="toggleFavoriteBtn">
                            <property name="sizePolicy">
@@ -2502,40 +2585,22 @@ Line {
                           </layout>
                          </widget>
                          <widget class="QWidget" name="needDownloadingPage">
-                          <layout class="QHBoxLayout" name="horizontalLayout_33">
-                           <property name="spacing">
-                            <number>0</number>
-                           </property>
-                           <property name="leftMargin">
-                            <number>0</number>
-                           </property>
-                           <property name="topMargin">
-                            <number>0</number>
-                           </property>
-                           <property name="rightMargin">
-                            <number>0</number>
-                           </property>
-                           <property name="bottomMargin">
-                            <number>0</number>
-                           </property>
+                          <layout class="QHBoxLayout" name="horizontalLayout_3">
                            <item>
-                            <spacer name="horizontalSpacer_10">
+                            <spacer name="horizontalSpacer_11">
                              <property name="orientation">
                               <enum>Qt::Horizontal</enum>
                              </property>
                              <property name="sizeHint" stdset="0">
                               <size>
-                               <width>138</width>
+                               <width>137</width>
                                <height>20</height>
                               </size>
                              </property>
                             </spacer>
                            </item>
                            <item>
-                            <layout class="QVBoxLayout" name="verticalLayout_23">
-                             <property name="spacing">
-                              <number>10</number>
-                             </property>
+                            <layout class="QVBoxLayout" name="verticalLayout_3">
                              <item>
                               <spacer name="verticalSpacer_10">
                                <property name="orientation">
@@ -2544,7 +2609,7 @@ Line {
                                <property name="sizeHint" stdset="0">
                                 <size>
                                  <width>20</width>
-                                 <height>40</height>
+                                 <height>43</height>
                                 </size>
                                </property>
                               </spacer>
@@ -2610,6 +2675,53 @@ Line {
                               </layout>
                              </item>
                              <item>
+                              <widget class="QFrame" name="downloadBookSeriesFrame">
+                               <layout class="QHBoxLayout" name="downloadBookSeriesFrameLayout">
+                                <item>
+                                 <spacer name="downloadBookSeriesFrameHS1">
+                                  <property name="orientation">
+                                   <enum>Qt::Horizontal</enum>
+                                  </property>
+                                  <property name="sizeHint" stdset="0">
+                                   <size>
+                                    <width>40</width>
+                                    <height>20</height>
+                                   </size>
+                                  </property>
+                                 </spacer>
+                                </item>
+                                <item>
+                                 <widget class="QPushButton" name="downloadBookSeriesBtn">
+                                  <property name="font">
+                                   <font>
+                                    <family>Arial</family>
+                                    <pointsize>9</pointsize>
+                                    <weight>75</weight>
+                                    <bold>true</bold>
+                                   </font>
+                                  </property>
+                                  <property name="text">
+                                   <string>Скачать цикл аудиокниг</string>
+                                  </property>
+                                 </widget>
+                                </item>
+                                <item>
+                                 <spacer name="downloadBookSeriesFrameHS2">
+                                  <property name="orientation">
+                                   <enum>Qt::Horizontal</enum>
+                                  </property>
+                                  <property name="sizeHint" stdset="0">
+                                   <size>
+                                    <width>40</width>
+                                    <height>20</height>
+                                   </size>
+                                  </property>
+                                 </spacer>
+                                </item>
+                               </layout>
+                              </widget>
+                             </item>
+                             <item>
                               <spacer name="verticalSpacer_11">
                                <property name="orientation">
                                 <enum>Qt::Vertical</enum>
@@ -2617,7 +2729,7 @@ Line {
                                <property name="sizeHint" stdset="0">
                                 <size>
                                  <width>20</width>
-                                 <height>40</height>
+                                 <height>17</height>
                                 </size>
                                </property>
                               </spacer>
@@ -2625,13 +2737,13 @@ Line {
                             </layout>
                            </item>
                            <item>
-                            <spacer name="horizontalSpacer_11">
+                            <spacer name="horizontalSpacer_10">
                              <property name="orientation">
                               <enum>Qt::Horizontal</enum>
                              </property>
                              <property name="sizeHint" stdset="0">
                               <size>
-                               <width>137</width>
+                               <width>138</width>
                                <height>20</height>
                               </size>
                              </property>
@@ -3124,6 +3236,234 @@ p, li { white-space: pre-wrap; }
                         </layout>
                        </item>
                       </layout>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+               <widget class="QWidget" name="bookSeriesPage">
+                <layout class="QHBoxLayout" name="bookSeriesPageLayout">
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QFrame" name="bookSeriesPageContent">
+                   <property name="styleSheet">
+                    <string notr="true">QScrollArea QFrame {
+	background-color: #fff;
+}</string>
+                   </property>
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                   <layout class="QVBoxLayout" name="verticalLayout_4">
+                    <property name="spacing">
+                     <number>15</number>
+                    </property>
+                    <item>
+                     <widget class="QFrame" name="bookSeriesTitleFrame">
+                      <layout class="QHBoxLayout" name="bookSeriesTitleFrameLayout">
+                       <property name="spacing">
+                        <number>9</number>
+                       </property>
+                       <item>
+                        <widget class="QPushButton" name="returnToBookPageBtn">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>45</width>
+                           <height>45</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>45</width>
+                           <height>45</height>
+                          </size>
+                         </property>
+                         <property name="toolTip">
+                          <string>Назад</string>
+                         </property>
+                         <property name="text">
+                          <string/>
+                         </property>
+                         <property name="icon">
+                          <iconset resource="resources/icons.qrc">
+                           <normaloff>:/other/angle_left.svg</normaloff>:/other/angle_left.svg</iconset>
+                         </property>
+                         <property name="iconSize">
+                          <size>
+                           <width>30</width>
+                           <height>30</height>
+                          </size>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <layout class="QVBoxLayout" name="bookSeriesTitleLayout2">
+                         <item>
+                          <widget class="QLabel" name="bookSeriesTitle">
+                           <property name="font">
+                            <font>
+                             <family>Arial</family>
+                             <pointsize>18</pointsize>
+                             <weight>75</weight>
+                             <bold>true</bold>
+                            </font>
+                           </property>
+                           <property name="text">
+                            <string>Автор - Цикл</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <layout class="QHBoxLayout" name="bookSeriesTitleLayout3">
+                           <item>
+                            <widget class="QLabel" name="bookSeriesCountLabel">
+                             <property name="font">
+                              <font>
+                               <family>Arial</family>
+                               <pointsize>10</pointsize>
+                              </font>
+                             </property>
+                             <property name="text">
+                              <string>Всего книг: num</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item>
+                            <spacer name="horizontalSpacer_17">
+                             <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                             </property>
+                             <property name="sizeHint" stdset="0">
+                              <size>
+                               <width>28</width>
+                               <height>20</height>
+                              </size>
+                             </property>
+                            </spacer>
+                           </item>
+                          </layout>
+                         </item>
+                        </layout>
+                       </item>
+                       <item>
+                        <spacer name="horizontalSpacer_18">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>758</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item>
+                     <layout class="QHBoxLayout" name="bookSeriesPageButtonsLayout">
+                      <item>
+                       <widget class="QPushButton" name="selectAllBooksBtn">
+                        <property name="font">
+                         <font>
+                          <family>Arial</family>
+                          <pointsize>9</pointsize>
+                          <weight>75</weight>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>Выбрать все</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="unselectAllBooksBtn">
+                        <property name="font">
+                         <font>
+                          <family>Arial</family>
+                          <pointsize>9</pointsize>
+                          <weight>75</weight>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>Отменить выбор</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="downloadBookSeriesBtn2">
+                        <property name="font">
+                         <font>
+                          <family>Arial</family>
+                          <pointsize>9</pointsize>
+                          <weight>75</weight>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>Скачать выбранные книги</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <spacer name="horizontalSpacer_19">
+                        <property name="orientation">
+                         <enum>Qt::Horizontal</enum>
+                        </property>
+                        <property name="sizeHint" stdset="0">
+                         <size>
+                          <width>508</width>
+                          <height>20</height>
+                         </size>
+                        </property>
+                       </spacer>
+                      </item>
+                     </layout>
+                    </item>
+                    <item>
+                     <widget class="QScrollArea" name="booksInSeriesContainer">
+                      <property name="widgetResizable">
+                       <bool>true</bool>
+                      </property>
+                      <widget class="QWidget" name="booksInSeriesContainerContent">
+                       <property name="geometry">
+                        <rect>
+                         <x>0</x>
+                         <y>0</y>
+                         <width>100</width>
+                         <height>30</height>
+                        </rect>
+                       </property>
+                       <layout class="QVBoxLayout" name="booksInSeriesContainerContentLayout"/>
+                      </widget>
                      </widget>
                     </item>
                    </layout>
@@ -4480,21 +4820,6 @@ QPushButton:hover {
                 </sizepolicy>
                </property>
                <layout class="QHBoxLayout" name="horizontalLayout_8">
-                <property name="spacing">
-                 <number>5</number>
-                </property>
-                <property name="leftMargin">
-                 <number>0</number>
-                </property>
-                <property name="topMargin">
-                 <number>0</number>
-                </property>
-                <property name="rightMargin">
-                 <number>5</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>0</number>
-                </property>
                 <item>
                  <widget class="QFrame" name="speedBox">
                   <layout class="QHBoxLayout" name="horizontalLayout_11">
@@ -4750,6 +5075,46 @@ QPushButton:hover {
                  </widget>
                 </item>
                 <item>
+                 <widget class="QPushButton" name="downloadableBookSeriesBtn">
+                  <property name="minimumSize">
+                   <size>
+                    <width>40</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>40</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <family>Arial</family>
+                    <pointsize>13</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="toolTip">
+                   <string>Открыть поверх всех окон</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="resources/icons.qrc">
+                    <normaloff>:/other/download.svg</normaloff>:/other/download.svg</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>28</width>
+                    <height>28</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item>
                  <widget class="QPushButton" name="overlayBtn">
                   <property name="minimumSize">
                    <size>
@@ -4929,7 +5294,7 @@ QPushButton:hover {
  </resources>
  <connections/>
  <buttongroups>
-  <buttongroup name="menuButtons"/>
   <buttongroup name="controlPanelButtons"/>
+  <buttongroup name="menuButtons"/>
  </buttongroups>
 </ui>

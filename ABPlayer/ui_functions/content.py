@@ -10,6 +10,7 @@ import typing as ty
 
 from PyQt5.QtCore import QTimer, QPropertyAnimation, QEasingCurve
 from PyQt5.QtWidgets import QStackedWidget
+
 from database.tables.books import Book
 
 if ty.TYPE_CHECKING:
@@ -73,3 +74,9 @@ def setCurrentPage(main_window: MainWindow, page: QWidget) -> None:
         )  # Меняем страницу через 1 миллисекунду
     else:
         QStackedWidget.setCurrentWidget(main_window.stackedWidget, page)
+
+    if main_window.downloadable_book_series is not ...:
+        if page == main_window.bookSeriesPage:
+            main_window.downloadableBookSeriesBtn.hide()
+        else:
+            main_window.downloadableBookSeriesBtn.show()

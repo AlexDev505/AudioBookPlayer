@@ -201,7 +201,7 @@ class DownloadBookWorker(BaseWorker):
         """
         super(DownloadBookWorker, self).__init__()
         self.main_window, self.book = main_window, book
-        self.drv = [drv for drv in drivers if self.book.url.startswith(drv().site_url)][
+        self.drv = [drv for drv in drivers if self.book.driver == drv.driver_name][
             0
         ]()  # Драйвер, который нужно использовать для скачивания
         self.download_process_handler = DownloadProcessHandler(self.main_window)
@@ -244,6 +244,7 @@ class DownloadBookWorker(BaseWorker):
             self.failed.emit(f"Ошибка при скачивании книги\n{str(err)}")
             logger.exception("Downloading error")
         self.main_window.downloadable_book = ...
+        del self.drv
 
     def finish(self) -> None:
         send_system_notification(
@@ -380,7 +381,10 @@ def downloadBook(main_window: MainWindow, book: Book) -> None:
     :param main_window: Экземпляр главного окна.
     :param book: Экземпляр книги.
     """
-    if main_window.downloadable_book is not ...:
+    if (
+        main_window.downloadable_book is not ...
+        or main_window.downloadable_book_series is not ...
+    ):
         QMessageBox.information(
             main_window,
             "Предупреждение",

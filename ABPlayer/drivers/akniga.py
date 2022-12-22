@@ -93,31 +93,27 @@ class AKnigaDriver(Driver):
 
     def get_book_series(self, url: str) -> ty.List[Book]:
         page = self.get_page(url)
+        series_name = page.find_element_by_css_selector(
+            "span.caption__article-main--book:"
+            "has(+ div.content__main__book--item--series-list) > a"
+        ).text.strip()
 
-        books = [
-            Book(
-                url=book.get_attribute("href"),
-                name=book.find_elements_by_css_selector(".caption")[0].get_attribute(
-                    "innerHTML"
-                ),
+        books = []
+        for book in page.find_elements_by_css_selector(
+            ".content__main__book--item--series-list > a"
+        ):
+            number = book.find_element_by_tag_name("b").get_attribute("innerHTML")
+            if number.endswith("."):
+                number = number[:-1]
+            name = book.find_element_by_css_selector(".caption").get_attribute(
+                "innerHTML"
             )
-            for book in page.find_elements_by_css_selector(
-                ".content__main__book--item--series-list > a"
-            )
-        ]
-
-        # Книга может быть одной из серии
-        if not len(books):
-            books = [
+            url = book.get_attribute("href")
+            books.append(
                 Book(
-                    url=url,
-                    name=page.find_elements_by_css_selector(".caption__article-main")[
-                        0
-                    ].text,
+                    name=name, url=url, series_name=series_name, number_in_series=number
                 )
-            ]
-
-        page.quit()
+            )
 
         return books
 

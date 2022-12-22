@@ -8,6 +8,7 @@
 from __future__ import annotations
 
 import os
+import time
 import typing as ty
 import webbrowser
 
@@ -33,10 +34,11 @@ import temp_file
 from database import Books
 from database.tables.books import Status
 from tools import pretty_view, trace_book_data, debug_book_data
-from ui import Item, UiBook, UiMainWindow
+from ui import Item, UiBook, UiBookSeriesItem, UiMainWindow
 from ui_functions import (
     add_book_page,
     book_page,
+    book_series_page,
     content,
     control_panel,
     filter_panel,
@@ -96,6 +98,13 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         self.filter_kwargs: dict[str, ty.Any] = {}
         self.order_by: str = ""
         self.invert_sorting: bool = False
+
+        self.book_series_item_widgets: list[UiBookSeriesItem] = []
+        self.downloadable_book_series: list[Book | Books] = ...
+        self.downloading_book_series_status: dict[str, dict[str, ty.Any]] = dict()
+        # {<url>: {
+        #   'status': <str>, 'done_size': <float>, 'total_size': <float>,
+        # }}
 
         self.setupSignals()
 
@@ -255,6 +264,12 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         )
 
         # CONTROL PANEL
+        self.downloadableBookSeriesBtn.clicked.connect(
+            lambda e: book_series_page.open_book_series_page(
+                self, self.downloadable_book_series
+            )
+        )
+
         self.controlPanelButtons.buttonClicked.connect(
             lambda btn: control_panel.buttonsHandler(self, btn)
         )
@@ -297,6 +312,13 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         self.downloadBookBtn.clicked.connect(
             lambda e: book_page.downloadBook(self, self.book)
         )
+        self.downloadBookSeriesBtn.clicked.connect(
+            lambda e: book_series_page.open_book_series_page(self)
+        )
+        self.openInBrowserBtn.clicked.connect(lambda e: webbrowser.open(self.book.url))
+        self.openBookSeriesBtn.clicked.connect(
+            lambda e: book_series_page.open_book_series_page(self)
+        )
         self.deleteBtn.clicked.connect(lambda e: book_page.deleteBook(self))
         self.toggleFavoriteBtn.clicked.connect(lambda e: book_page.toggleFavorite(self))
         self.changeDriverBtn.clicked.connect(lambda e: book_page.changeDriver(self))
@@ -306,6 +328,16 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         self.bookPreview.mousePressEvent = (
             lambda e: control_panel.bookPreviewMousePressEvent(self, e)
         )
+
+        # BOOK SERIES PAGE
+        self.returnToBookPageBtn.clicked.connect(lambda e: self.openBookPage(self.book))
+        self.selectAllBooksBtn.clicked.connect(
+            lambda e: book_series_page.toggleAll(self)
+        )
+        self.unselectAllBooksBtn.clicked.connect(
+            lambda e: book_series_page.unToggleAll(self)
+        )
+        self.downloadBookSeriesBtn2.clicked.connect(lambda e: None)
 
         # PLAYER
         self.pastBtn.clicked.connect(lambda e: self.player.rewindToPast())
@@ -471,6 +503,61 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
 
         self.stackedWidget.setCurrentWidget(self.bookPage)
         logger.debug("Book page is open")
+
+    def openBookSeriesPage(self, books: list[Book]) -> None:
+        if self.downloadable_book_series is ...:
+            self.selectAllBooksBtn.show()
+            self.unselectAllBooksBtn.show()
+            self.downloadBookSeriesBtn2.show()
+        self.bookSeriesTitle.setText(self.book.series_name)
+        self.bookSeriesCountLabel.setText(f"Всего книг: {len(books)}")
+
+        self.book_series_item_widgets.clear()
+        # Удаляем старые элементы
+        for children in self.booksInSeriesContainerContent.children():
+            if not isinstance(children, QVBoxLayout):
+                children.hide()
+                children.deleteLater()
+        for i in reversed(range(self.booksInSeriesContainerContent.layout().count())):
+            item = self.booksInSeriesContainerContent.layout().itemAt(i)
+            if isinstance(item, QSpacerItem):
+                self.booksInSeriesContainerContent.layout().removeItem(item)
+
+        db = Books(os.environ["DB_PATH"])
+        this_series_book_urls = [
+            book.url
+            for book in db.filter(series_name=self.book.series_name, return_list=True)
+        ]
+
+        for book_series_item in books:
+            item: UiBookSeriesItem = self._initBookSeriesItemWidget(
+                book_series_item,
+                always_disables=book_series_item.url in this_series_book_urls,
+            )
+            self.book_series_item_widgets.append(item)
+            if self.downloadable_book_series is not ...:
+                item.checkboxBtn.hide()
+        self.downloadBookSeriesBtn2.clicked.disconnect()
+        self.downloadBookSeriesBtn2.clicked.connect(
+            lambda e: book_series_page.downloadBookSeries(self, books)
+        )
+
+        # Прижимаем элементы к верхнему краю
+        booksInSeriesContaineSpacer = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Expanding
+        )
+        self.booksInSeriesContainerContent.layout().addItem(booksInSeriesContaineSpacer)
+
+        self.stackedWidget.setCurrentWidget(self.bookSeriesPage)
+        if self.downloadable_book_series is not ...:
+            self.BookSeriesDownloader.update_status.emit(
+                [
+                    i
+                    for i, book in enumerate(self.downloadable_book_series)
+                    if book.url in self.downloading_book_series_status
+                ]
+            )
+        logger.debug("Book series page is open")
 
     @logger.catch
     def loadPlayer(self) -> None:
@@ -874,6 +961,52 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         parent.layout().addWidget(bookFrame)
         return bookWidget
 
+    @logger.catch
+    def _initBookSeriesItemWidget(
+        self, book: Book, always_disables: bool = False
+    ) -> UiBookSeriesItem:
+        """
+        Инициализирует виджет книги из серии.
+        :param book: Экземпляр скачанной книги.
+        :return: Экземпляр виджета книги.
+        """
+        logger.trace(
+            f"Initialization of the book series item widget. name: {book.name=}"
+        )
+        bookFrame = QFrame(self.booksInSeriesContainerContent)
+        bookWidget = UiBookSeriesItem()
+        bookWidget.setupUi(bookFrame)
+
+        bookWidget.titleLabel.setText(
+            f"{book.number_in_series.rjust(2, '0')}. {book.name}"
+        )
+
+        if book.reader:
+            bookWidget.readerLabel.setText(book.reader)
+        else:
+            bookWidget.readerFrame.hide()
+
+        if always_disables:
+            bookWidget.checkboxBtn.hide()
+            bookWidget.downloadingProgressBar.hide()
+            bookWidget.stopDownloadingBtn.hide()
+            bookWidget.downloadingStatusLabel.setText("Книга уже скачана")
+        else:
+            bookWidget.downloadingFrame.hide()
+            bookWidget.splitLine.hide()
+            bookWidget.checkboxBtn.clicked.connect(
+                lambda e: book_series_page.toggleBookSeriesItem(bookWidget)
+            )
+            bookWidget.stopDownloadingBtn.clicked.connect(
+                lambda e: (
+                    self.BookSeriesDownloader.stop_downloading(book),
+                    bookWidget.stopDownloadingBtn.setDisabled(True),
+                )
+            )
+
+        self.booksInSeriesContainerContent.layout().addWidget(bookFrame)
+        return bookWidget
+
     def setLock(self, value: bool) -> None:
         """
         Блокирует/разблокирует интерфейс.
@@ -920,6 +1053,16 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             is_filter_panel_closed=is_filter_panel_closed,
             is_menu_panel_closed=is_menu_panel_closed,
         )
+
+        abpd_dir = os.path.join(os.environ["APP_DIR"], "abpd")
+        if os.path.isdir(abpd_dir):
+            for _, _, files in os.walk(abpd_dir):
+                for file in files:
+                    fp = os.path.join(abpd_dir, file)
+                    while os.path.exists(fp):
+                        os.remove(fp)
+                        time.sleep(0.1)
+            os.rmdir(abpd_dir)
 
         # При закрытии приложения, плеер сбрасывает позицию на 0,
         # из-за этого точка остановки сохраняется в бд.
