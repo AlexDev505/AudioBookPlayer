@@ -10,26 +10,52 @@ from .base import Driver
 class KnigaVUhe(Driver):
     def get_book_series(self, url: str) -> ty.List[Book]:
         page = self.get_page(url)
+        series_page_link = page.find_element_by_css_selector(
+            "div.book_serie_block_title > a"
+        ).get_attribute("href")
+        series_name = page.find_element_by_css_selector(
+            "div.book_serie_block_title > a"
+        ).text
+        page = self.get_page(series_page_link)
 
-        books = [
-            Book(name=book.text, url=book.get_attribute("href"))
-            for book in page.find_elements_by_css_selector(
-                "div.book_serie_block_item > a"
-            )
-        ]
-
-        # Книга может быть одной из серии
-        if not len(books):
-            books = [
+        books = []
+        for book in page.find_elements_by_css_selector("div.bookkitem_right"):
+            number: str = book.find_element_by_css_selector(
+                "span.bookkitem_serie_index"
+            ).text
+            elem = book.find_element_by_css_selector("div.bookkitem_name > a")
+            url = elem.get_attribute("href")
+            name: str = elem.text
+            if name.startswith(number):
+                name = name[len(number) :].strip()
+            if number.endswith("."):
+                number = number[:-1]
+            try:
+                reader = book.find_element_by_css_selector(
+                    "div.bookkitem_meta_block:has(span.-reader) > span.single_reader > a"
+                ).text
+            except NoSuchElementException:
+                reader = book.find_element_by_css_selector(
+                    "div.bookkitem_meta_block:has(span.-reader) > a"
+                ).text
+            books.append(
                 Book(
+                    name=name,
                     url=url,
-                    name=page.find_elements_by_css_selector("span.book_title_name")[
-                        0
-                    ].text,
+                    reader=reader,
+                    series_name=series_name,
+                    number_in_series=number,
                 )
-            ]
+            )
 
-        page.quit()
+            for elem in book.find_elements_by_css_selector(
+                "div.bookkitem_other_versions_list"
+            ):
+                link, reader = elem.find_elements_by_tag_name("a")
+                url, name, reader = link.get_attribute("href"), link.text, reader.text
+                books.append(
+                    Book(name=name, url=url, reader=reader, number_in_series=number)
+                )
 
         return books
 

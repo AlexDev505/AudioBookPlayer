@@ -65,7 +65,7 @@ class SearchWorker(BaseWorker):
                 )
                 logger.exception("Search failed")
         self.main_window.setLock(False)
-        self.drv.quit_driver()
+        del self.drv
 
     def finish(self, book: Book) -> None:
         self.main_window.openBookPage(book)

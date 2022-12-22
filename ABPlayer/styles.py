@@ -229,6 +229,7 @@ Line {
 #stackedWidget,
 #libraryPage,
 #bookPage,
+#bookSeriesPage,
 #addBookPage,
 #infoPage,
 #settingsPage {
@@ -236,6 +237,7 @@ Line {
 }
 #libraryPageContent,
 #bookPageContent,
+#bookSeriesPageContent,
 #addBookPageContent,
 #infoPageContent,
 #settingsPageContent {
@@ -245,6 +247,7 @@ Line {
 /* BUTTONS */
 #infoPageContent QPushButton,
 #needDownloadingPage QPushButton,
+#bookSeriesPage QPushButton,
 #settingsPageContent QPushButton {
     padding: 10px;
     background-color: rgb(47, 49, 54);
@@ -253,6 +256,7 @@ Line {
 }
 #infoPageContent QPushButton:hover,
 #needDownloadingPage QPushButton:hover,
+#bookSeriesPage QPushButton:hover,
 #settingsPageContent QPushButton:hover {
     border-color: rgb(142, 146, 151);
 }
@@ -279,6 +283,33 @@ Line {
 }
 #bookPageContent QPushButton:pressed {
     margin-bottom: -1px;
+}
+/* BOOK SERIES PAGE CONTENT */
+#bookSeriesPageContent * {
+    background: transparent;
+}
+#bookSeriesPageContent #frame {
+    background-color: rgb(47, 49, 54);
+    border-radius:10px;
+}
+#bookSeriesPageContent #frame QPushButton {
+    border-width:3px;
+}
+#bookSeriesPageContent #frame #stopDownloadingBtn {
+    background-color: rgba(0, 0, 0, 0);
+    color: rgb(142, 146, 151);
+    border-radius: 5px;
+    border: none;
+}
+#bookSeriesPageContent #frame #stopDownloadingBtn:hover {
+    background-color: rgb(52, 55, 60);
+    border-radius: 5px;
+}
+#bookSeriesPageContent #frame #stopDownloadingBtn:pressed {
+    background-color: rgb(55, 57, 63);
+}
+#bookSeriesPageContent #frame QProgressBar {
+    background-color: rgb(64, 68, 75);
 }
 /* SETTINGS PAGE CONTENT */
 #settingsContent {

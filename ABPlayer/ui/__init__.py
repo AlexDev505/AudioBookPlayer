@@ -5,8 +5,9 @@
 """
 
 from . import icons_rc
-from .main import UiMainWindow
 from .book import UiBook
+from .book_series_item import UiBookSeriesItem
 from .item import Item
+from .main import UiMainWindow
 
-__all__ = ["UiMainWindow", "UiBook", "Item"]
+__all__ = ["UiMainWindow", "UiBook", "UiBookSeriesItem", "Item"]
