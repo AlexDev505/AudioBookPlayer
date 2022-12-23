@@ -100,80 +100,85 @@ class UpdateWorker(BaseWorker):
         self.status.emit("Обновление формата библиотеки")
 
         book: Books
-        db = Books(os.environ["DB_PATH"])
-        all_books = db.filter(return_list=True)
-        with drivers[0](use_shared_browser=True):
-            for i, book in enumerate(all_books):
-                self.status.emit(f"Обновление формата библиотеки\t{i}/{len(all_books)}")
-                driver = [drv for drv in drivers if book.driver == drv.driver_name][0](
-                    use_shared_browser=True
-                )
-                new_book = driver.get_book(book.url)
-                data = dict(
-                    author=new_book["author"],
-                    name=new_book["name"],
-                    series_name=new_book["series_name"],
-                    number_in_series=new_book["number_in_series"],
-                    description=new_book["description"],
-                    reader=new_book["reader"],
-                    duration=new_book["duration"],
-                    url=new_book["url"],
-                    preview=new_book["preview"],
-                    driver=new_book["driver"],
-                    items=new_book["items"],
-                    status=book.status,
-                    stop_flag=book.stop_flag,
-                    favorite=book.favorite,
-                    adding_date=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                    files=book.files,
-                )
-                book_path = os.path.join(
-                    os.environ["books_folder"], data["author"], data["name"]
-                )
-
-                if data["series_name"]:
-                    new_book_path = pathlib.Path(
-                        os.environ["books_folder"],
-                        data["author"],
-                        data["series_name"],
-                        f"{data['number_in_series'].rjust(2, '0')}. {data['name']}",
+        with suppress(Exception):
+            db = Books(os.environ["DB_PATH"])
+            all_books = db.filter(return_list=True)
+            with drivers[0](use_shared_browser=True):
+                for i, book in enumerate(all_books):
+                    self.status.emit(
+                        f"Обновление формата библиотеки\t{i}/{len(all_books)}"
                     )
-                    if os.path.isdir(new_book_path):
-                        pass
+                    driver = [drv for drv in drivers if book.driver == drv.driver_name][
+                        0
+                    ](use_shared_browser=True)
+                    new_book = driver.get_book(book.url)
+                    data = dict(
+                        author=new_book["author"],
+                        name=new_book["name"],
+                        series_name=new_book["series_name"],
+                        number_in_series=new_book["number_in_series"],
+                        description=new_book["description"],
+                        reader=new_book["reader"],
+                        duration=new_book["duration"],
+                        url=new_book["url"],
+                        preview=new_book["preview"],
+                        driver=new_book["driver"],
+                        items=new_book["items"],
+                        status=book.status,
+                        stop_flag=book.stop_flag,
+                        favorite=book.favorite,
+                        adding_date=datetime.datetime.now().strftime(
+                            "%Y-%m-%d %H:%M:%S"
+                        ),
+                        files=book.files,
+                    )
+                    book_path = os.path.join(
+                        os.environ["books_folder"], data["author"], data["name"]
+                    )
+
+                    if data["series_name"]:
+                        new_book_path = pathlib.Path(
+                            os.environ["books_folder"],
+                            data["author"],
+                            data["series_name"],
+                            f"{data['number_in_series'].rjust(2, '0')}. {data['name']}",
+                        )
+                        if os.path.isdir(new_book_path):
+                            pass
+                        else:
+                            if not os.path.isdir(book_path):
+                                continue
+
+                            files: list[str] = []
+                            for _, _, files in os.walk(book_path):
+                                break
+                            if not files:
+                                continue
+
+                            new_book_path.mkdir(parents=True, exist_ok=True)
+                            for file in files:
+                                old_fp = os.path.join(book_path, file)
+                                new_fp = os.path.join(new_book_path, file)
+                                shutil.copyfile(old_fp, new_fp)
+                                with suppress(Exception):
+                                    os.remove(old_fp)
+
+                            with suppress(Exception):
+                                os.mkdir(book_path)
+
+                        book_path = new_book_path
+
                     else:
                         if not os.path.isdir(book_path):
                             continue
 
-                        files: list[str] = []
-                        for _, _, files in os.walk(book_path):
-                            break
-                        if not files:
-                            continue
+                    file_path = os.path.join(book_path, ".abp")
 
-                        new_book_path.mkdir(parents=True, exist_ok=True)
-                        for file in files:
-                            old_fp = os.path.join(book_path, file)
-                            new_fp = os.path.join(new_book_path, file)
-                            shutil.copyfile(old_fp, new_fp)
-                            with suppress(Exception):
-                                os.remove(old_fp)
+                    with open(file_path, "wb") as file:
+                        file.write(msgspec.json.encode(data))
 
-                        with suppress(Exception):
-                            os.mkdir(book_path)
-
-                    book_path = new_book_path
-
-                else:
-                    if not os.path.isdir(book_path):
-                        continue
-
-                file_path = os.path.join(book_path, ".abp")
-
-                with open(file_path, "wb") as file:
-                    file.write(msgspec.json.encode(data))
-
-        db.api.execute("DROP TABLE books")
-        db.api.commit()
+            db.api.execute("DROP TABLE books")
+            db.api.commit()
 
         self.status.emit("Готово")
         self.finished.emit()
