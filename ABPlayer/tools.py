@@ -6,15 +6,15 @@
 
 from __future__ import annotations
 
-import os
 import hashlib
 import math
+import os
 import threading
 import typing as ty
 from abc import abstractmethod
-from plyer import notification
 
 from PyQt5.QtCore import QObject, QThread
+from plyer import notification
 
 if ty.TYPE_CHECKING:
     from pathlib import Path

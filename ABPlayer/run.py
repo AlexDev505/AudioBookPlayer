@@ -24,6 +24,7 @@ if args.delete_later:
     time.sleep(2)
     delete_later.delete_files()
     sys.exit()
+
 if args.download_book:
     from ui_functions import book_series_page
 

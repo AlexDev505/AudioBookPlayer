@@ -1,3 +1,9 @@
+"""
+
+    Модуль для работы с файлами, которые не удалось удалить сразу.
+
+"""
+
 from __future__ import annotations
 
 import os
@@ -12,6 +18,10 @@ import temp_file
 
 
 def add_file(file_path: str) -> None:
+    """
+    Добавляет файл в список на удаление.
+    :param file_path: Путь к файлу.
+    """
     data = temp_file.load()
     if "delete_later" not in data:
         data["delete_later"] = ""
@@ -20,12 +30,18 @@ def add_file(file_path: str) -> None:
 
 
 def get_files_count() -> int:
+    """
+    :return: Кол-во файлов, которые нужно удалить.
+    """
     data = temp_file.load()
     return len((data.get("delete_later") or "").split(";"))
 
 
 @logger.catch
 def delete_files() -> None:
+    """
+    Удаляет файлы.
+    """
     data = temp_file.load()
     for file_path in (data.get("delete_later") or "").split(";"):
         try:
@@ -43,4 +59,7 @@ def delete_files() -> None:
 
 
 def start_subprocess() -> None:
+    """
+    Запускает удаления файлов в другом процессе.
+    """
     subprocess.Popen([sys.executable, *sys.argv, "--delete-later"])
