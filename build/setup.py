@@ -15,15 +15,15 @@ import re
 import cx_Freeze
 
 __version__ = "1.0b5"
-target_dir = rf"build\ABPlayer"
+target_dir = rf"ABPlayer"
 
 # Изменяем версию в main.py
-with open(r"ABPlayer\main.py", encoding="utf-8") as file:
+with open(r"../ABPlayer/main.py", encoding="utf-8") as file:
     text = file.read()
 text = re.sub(
     r'os.environ\["VERSION"] = ".+"', f'os.environ["VERSION"] = "{__version__}"', text
 )
-with open(r"ABPlayer\main.py", "w", encoding="utf-8") as file:
+with open(r"../ABPlayer/main.py", "w", encoding="utf-8") as file:
     file.write(text)
 
 # Изменяем версию в установщике
