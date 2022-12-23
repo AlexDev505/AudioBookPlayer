@@ -789,6 +789,8 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             self.order_by = "name"
         elif self.sortBy.currentIndex() == 2:  # По автору
             self.order_by = "author"
+        elif self.sortBy.currentIndex() == 3:  # По позиции в цикле
+            self.order_by = "number_in_series"
 
         # Если нужно, отображаем в обратном порядке
         self.invert_sorting = False
@@ -862,28 +864,6 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         db = Books(os.environ["DB_PATH"])
         books = db.api.fetchall(query, *filter_values)
         books = [db.get_class(book) for book in books]
-
-        if self.sortBy.currentIndex() == 3:  # По позиции в цикле
-            int_numbers: list[Books] = []
-            not_int_numbers: list[Books] = []
-            for book in books:
-                try:
-                    float(book.number_in_series.replace(",", "."))
-                    int_numbers.append(book)
-                except ValueError:
-                    not_int_numbers.append(book)
-            books = [
-                *sorted(
-                    int_numbers,
-                    key=lambda book: float(book.number_in_series),
-                    reverse=self.invert_sorting,
-                ),
-                *sorted(
-                    not_int_numbers,
-                    key=lambda book: book.number_in_series,
-                    reverse=self.invert_sorting,
-                ),
-            ]
 
         if not len(books):
             return
