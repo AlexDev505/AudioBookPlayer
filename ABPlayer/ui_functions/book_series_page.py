@@ -164,14 +164,16 @@ def toggleBookSeriesItem(bookWidget: UiBookSeriesItem) -> None:
 
 def toggleAll(main_window: MainWindow) -> None:
     for bookWidget in main_window.book_series_item_widgets:
-        if not bookWidget.checkboxBtn.isChecked():
-            bookWidget.checkboxBtn.click()
+        if bookWidget.checkboxBtn.isEnabled():
+            if not bookWidget.checkboxBtn.isChecked():
+                bookWidget.checkboxBtn.click()
 
 
 def unToggleAll(main_window: MainWindow) -> None:
     for bookWidget in main_window.book_series_item_widgets:
-        if bookWidget.checkboxBtn.isChecked():
-            bookWidget.checkboxBtn.click()
+        if bookWidget.checkboxBtn.isEnabled():
+            if bookWidget.checkboxBtn.isChecked():
+                bookWidget.checkboxBtn.click()
 
 
 class BookSeriesDownloader(BaseWorker):
