@@ -1013,6 +1013,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
 
         if always_disables:
             bookWidget.checkboxBtn.hide()
+            bookWidget.checkboxBtn.setEnabled(False)
             bookWidget.downloadingProgressBar.hide()
             bookWidget.stopDownloadingBtn.hide()
             bookWidget.downloadingStatusLabel.setText("Книга уже скачана")
