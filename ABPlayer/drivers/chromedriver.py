@@ -81,7 +81,13 @@ def get_matched_chromedriver_version(version: str) -> str:
     :param version: Версия браузера Chrome.
     :return: Версия chromedriver.
     """
-    doc = urllib.request.urlopen("https://chromedriver.storage.googleapis.com").read()
+    req = urllib.request.Request("https://chromedriver.storage.googleapis.com")
+    req.add_header(
+        "user-agent",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+        "(KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36=",
+    )
+    doc = urllib.request.urlopen(req, timeout=10).read()
     root = elemTree.fromstring(doc)
     for k in root.iter("{http://doc.s3.amazonaws.com/2006-03-01}Key"):
         if k.text.find(version.split(".")[0] + ".") == 0:

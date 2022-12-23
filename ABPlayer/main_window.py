@@ -525,7 +525,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             self.unselectAllBooksBtn.show()
             self.downloadBookSeriesBtn2.show()
 
-        self.bookSeriesTitle.setText(self.book.series_name)
+        self.bookSeriesTitle.setText(books[0].series_name)
         self.bookSeriesCountLabel.setText(f"Всего книг: {len(books)}")
 
         # Удаляем старые элементы

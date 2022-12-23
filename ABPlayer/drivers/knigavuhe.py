@@ -1,5 +1,6 @@
 import json
 import typing as ty
+from contextlib import suppress
 
 from selenium.common.exceptions import NoSuchElementException
 
@@ -20,9 +21,12 @@ class KnigaVUhe(Driver):
 
         books = []
         for book in page.find_elements_by_css_selector("div.bookkitem_right"):
-            number: str = book.find_element_by_css_selector(
-                "span.bookkitem_serie_index"
-            ).text
+            try:
+                number = book.find_element_by_css_selector(
+                    "span.bookkitem_serie_index"
+                ).text
+            except NoSuchElementException:
+                number = ""
             elem = book.find_element_by_css_selector("div.bookkitem_name > a")
             url = elem.get_attribute("href")
             name: str = elem.text
@@ -47,15 +51,32 @@ class KnigaVUhe(Driver):
                     number_in_series=number,
                 )
             )
-
-            for elem in book.find_elements_by_css_selector(
-                "div.bookkitem_other_versions_list"
-            ):
-                link, reader = elem.find_elements_by_tag_name("a")
-                url, name, reader = link.get_attribute("href"), link.text, reader.text
-                books.append(
-                    Book(name=name, url=url, reader=reader, number_in_series=number)
-                )
+            with suppress(NoSuchElementException):
+                url = name = reader = ""
+                for elem in book.find_elements_by_css_selector(
+                    "div.bookkitem_other_versions_list > *"
+                ):
+                    if elem.tag_name == "a":
+                        if url == "":
+                            url = elem.get_attribute("href")
+                            name = elem.text
+                        elif reader == "":
+                            reader = elem.text
+                    else:
+                        if url and reader:
+                            books.append(
+                                Book(
+                                    name=name,
+                                    url=url,
+                                    reader=reader,
+                                    number_in_series=number,
+                                )
+                            )
+                        url = reader = ""
+                if url and reader:
+                    books.append(
+                        Book(name=name, url=url, reader=reader, number_in_series=number)
+                    )
 
         return books
 
@@ -82,6 +103,9 @@ class KnigaVUhe(Driver):
             series_name = page.find_element_by_css_selector(
                 "div.book_serie_block_title > a"
             ).text.strip()
+        except NoSuchElementException:
+            series_name = ""
+        try:
             number_in_series = (
                 page.find_element_by_css_selector(
                     "div.book_serie_block_item > span:has(+ strong)"
@@ -90,7 +114,6 @@ class KnigaVUhe(Driver):
                 .strip(".")
             )
         except NoSuchElementException:
-            series_name = ""
             number_in_series = ""
 
         description = page.find_elements_by_css_selector("div.book_description")[
