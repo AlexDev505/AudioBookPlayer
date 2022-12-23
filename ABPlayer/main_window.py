@@ -54,6 +54,8 @@ from ui_functions import (
 if ty.TYPE_CHECKING:
     from PyQt5.QtCore import QEvent, QObject
     from database.tables.books import Book
+    from ui_functions.book_series_page import BookSeriesDownloader
+    from ui_functions.book_page import DownloadBookWorker
 
 
 class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
@@ -195,6 +197,9 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         fm = QFontMetrics(self.dirWithBooksBtn.font())
         os.environ["MENU_WIDTH"] = str(int(fm.width(self.dirWithBooksBtn.text()) * 1.5))
         self.menuFrame.setMinimumWidth(int(os.environ["MENU_WIDTH"]))
+
+        self.BookSeriesDownloader: BookSeriesDownloader = ...
+        self.DownloadBookWorker: DownloadBookWorker = ...
 
     def setupSignals(self) -> None:
         logger.trace("Setting main window signals")
@@ -505,15 +510,22 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         logger.debug("Book page is open")
 
     def openBookSeriesPage(self, books: list[Book]) -> None:
+        """
+        Открывает страницу серии книг.
+        :param books: Список экземпляров книг из серии.
+        """
+        # Книги уже скачиваются
         if self.downloadable_book_series is ...:
+            # Скрываем кнопки управления
             self.selectAllBooksBtn.show()
             self.unselectAllBooksBtn.show()
             self.downloadBookSeriesBtn2.show()
+
         self.bookSeriesTitle.setText(self.book.series_name)
         self.bookSeriesCountLabel.setText(f"Всего книг: {len(books)}")
 
-        self.book_series_item_widgets.clear()
         # Удаляем старые элементы
+        self.book_series_item_widgets.clear()
         for children in self.booksInSeriesContainerContent.children():
             if not isinstance(children, QVBoxLayout):
                 children.hide()
@@ -523,12 +535,14 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             if isinstance(item, QSpacerItem):
                 self.booksInSeriesContainerContent.layout().removeItem(item)
 
+        # Ищем книги из этой серии в бд
         db = Books(os.environ["DB_PATH"])
         this_series_book_urls = [
             book.url
             for book in db.filter(series_name=self.book.series_name, return_list=True)
         ]
 
+        # Создаем виджеты книг
         for book_series_item in books:
             item: UiBookSeriesItem = self._initBookSeriesItemWidget(
                 book_series_item,
@@ -537,18 +551,25 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             self.book_series_item_widgets.append(item)
             if self.downloadable_book_series is not ...:
                 item.checkboxBtn.hide()
+
+        # Подключаем обработчик нажатия на кнопку скачивания
         self.downloadBookSeriesBtn2.clicked.disconnect()
         self.downloadBookSeriesBtn2.clicked.connect(
             lambda e: book_series_page.downloadBookSeries(self, books)
         )
 
         # Прижимаем элементы к верхнему краю
-        booksInSeriesContaineSpacer = QSpacerItem(
+        booksInSeriesContainerSpacer = QSpacerItem(
             40, 20, QSizePolicy.Expanding, QSizePolicy.Expanding
         )
-        self.booksInSeriesContainerContent.layout().addItem(booksInSeriesContaineSpacer)
+        self.booksInSeriesContainerContent.layout().addItem(
+            booksInSeriesContainerSpacer
+        )
 
+        # Открываем страницу
         self.stackedWidget.setCurrentWidget(self.bookSeriesPage)
+
+        # Обновляем виджеты, если книги скачиваются
         if self.downloadable_book_series is not ...:
             self.BookSeriesDownloader.update_status.emit(
                 [
@@ -1043,6 +1064,31 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
                 event.ignore()
                 return
 
+        elif self.downloadable_book_series is not ...:
+            if (
+                QMessageBox.question(
+                    self,
+                    "Выход",
+                    "Прогресс скачивания книг сброситься.\n"
+                    "Вы действительно хотите закрыть приложение?",
+                )
+                == QMessageBox.Yes
+            ):
+                abpd_dir = os.path.join(os.environ["APP_DIR"], "abpd")
+                if os.path.isdir(abpd_dir):
+                    for _, _, files in os.walk(abpd_dir):
+                        for file in files:
+                            fp = os.path.join(abpd_dir, file)
+                            while os.path.exists(fp):
+                                os.remove(fp)
+                                time.sleep(0.1)
+                    os.rmdir(abpd_dir)
+                event.accept()
+            else:
+                event.ignore()
+                return
+
+        # Сохраняем положение меню и фильтр панелей
         is_filter_panel_closed = False
         is_menu_panel_closed = False
         if self.libraryFiltersFrame.isHidden():
@@ -1054,16 +1100,6 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             is_menu_panel_closed=is_menu_panel_closed,
         )
 
-        abpd_dir = os.path.join(os.environ["APP_DIR"], "abpd")
-        if os.path.isdir(abpd_dir):
-            for _, _, files in os.walk(abpd_dir):
-                for file in files:
-                    fp = os.path.join(abpd_dir, file)
-                    while os.path.exists(fp):
-                        os.remove(fp)
-                        time.sleep(0.1)
-            os.rmdir(abpd_dir)
-
         # При закрытии приложения, плеер сбрасывает позицию на 0,
         # из-за этого точка остановки сохраняется в бд.
         # Так же сбрасываем последнее сохранение, тогда точка остановки не сохранится.
@@ -1074,6 +1110,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         db.api.execute("DROP TABLE books")
         db.api.commit()
 
+        # Запускаем удаление файлов
         if delete_later.get_files_count():
             delete_later.start_subprocess()
 

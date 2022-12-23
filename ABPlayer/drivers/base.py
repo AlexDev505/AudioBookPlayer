@@ -73,13 +73,13 @@ class Driver(ABC):
     _browser: RemoteWebDriver | None = None
     _browser_connections: list[int] = []
 
-    def __init__(self, user_shared_browser: bool = False):
+    def __init__(self, use_shared_browser: bool = False):
         logger.opt(colors=True).debug(
             f"Creating driver <e>{self.driver_name}</e> <y>{id(self)} "
-            f"</y> user_shared_browser=<y>{user_shared_browser}</y>"
+            f"</y> use_shared_browser=<y>{use_shared_browser}</y>"
         )
         self._browser: RemoteWebDriver | None = None
-        self.user_shared_browser = user_shared_browser
+        self.use_shared_browser = use_shared_browser
 
     def __init_subclass__(cls, **kwargs):
         Driver.drivers.append(cls)
@@ -120,7 +120,7 @@ class Driver(ABC):
         """
         :returns: Драйвер, для работы с браузером.
         """
-        if self.user_shared_browser:
+        if self.use_shared_browser:
             return self._get_shared_browser()
 
         if self._browser is None:
@@ -132,7 +132,7 @@ class Driver(ABC):
         return self._browser
 
     def quit_browser(self) -> None:
-        if self.user_shared_browser:
+        if self.use_shared_browser:
             self._quit_shared_browser()
         else:
             if self._browser is not None:
@@ -298,7 +298,7 @@ class Driver(ABC):
         logger.opt(colors=True).debug(
             f"Deleting driver <e>{self.driver_name}</e> <y>{id(self)}</y>"
         )
-        if self.user_shared_browser:
+        if self.use_shared_browser:
             if id(self) in self.__class__._browser_connections:
                 self.__class__._browser_connections.remove(id(self))
             if not self.__class__._browser_connections:

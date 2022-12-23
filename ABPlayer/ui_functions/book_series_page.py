@@ -179,8 +179,8 @@ class BookSeriesDownloader(BaseWorker):
     Класс реализующий поиск книг из той же серии.
     """
 
-    finished: QtCore.pyqtSignal = pyqtSignal()  # Поиск завершен
-    update_status: QtCore.pyqtSignal = pyqtSignal(object)
+    finished: QtCore.pyqtBoundSignal = pyqtSignal()  # Поиск завершен
+    update_status: QtCore.pyqtBoundSignal = pyqtSignal(object)
 
     def __init__(self, main_window: MainWindow, books: list[Book], drv: Driver):
         super(BookSeriesDownloader, self).__init__()

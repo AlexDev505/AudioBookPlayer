@@ -7,7 +7,6 @@
 import os
 import typing as ty
 
-__all__ = ["get_style_sheet"]
 
 DEFAULT_STYLESHEET = """QWidget {
     color: rgb(215, 214, 217);
@@ -438,3 +437,6 @@ def get_style_sheet(name: str) -> str:
         with open(file_path, encoding="utf-8") as f:
             return f.read()
     return DEFAULT_STYLESHEET
+
+
+__all__ = ["get_style_sheet"]

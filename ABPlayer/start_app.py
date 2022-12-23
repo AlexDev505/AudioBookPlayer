@@ -32,7 +32,7 @@ if ty.TYPE_CHECKING:
 class StartAppWindow(QMainWindow, UiStartApp):
     finished: QtCore.pyqtBoundSignal = pyqtSignal(object)
     # Уведомляет о завершении загрузки.
-    # :param: ty.Union[ty.Type[DriverError], None]
+    # :param_type: ty.Type[DriverError] | None
 
     def __init__(self):
         logger.trace("Initialization of the launch window")
@@ -69,7 +69,7 @@ class StartAppWindow(QMainWindow, UiStartApp):
         window_geometry.prepareDragZone(self, self.centralwidget)
 
     def workerChangeStatusHandler(
-        self, text: str, err: ty.Union[ty.Type[DriverError], None]
+        self, text: str, err: ty.Type[DriverError] | None
     ) -> None:
         """
         Обрабатывает изменения статуса загрузки.
@@ -110,8 +110,12 @@ class BootWorker(BaseWorker):
 
     def worker(self) -> None:
         """
-        Процесс, обновления драйвера.
+        Процесс запуска приложения.
         Выполняется в отдельном потоке.
+        - Проверка целостности базы данных.
+        - Загрузка библиотеки.
+        - Проверка интернет соединения.
+        - Обновление драйвера.
         """
         logger.debug("Starting the boot process")
         self.check_database_integrity()
