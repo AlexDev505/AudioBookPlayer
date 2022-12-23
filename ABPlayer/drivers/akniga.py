@@ -41,6 +41,9 @@ class AKnigaDriver(Driver):
                 "span.caption__article-main--book:"
                 "has(+ div.content__main__book--item--series-list) > a"
             ).text.strip()
+        except NoSuchElementException:
+            series_name = ""
+        try:
             number_in_series = (
                 page.find_element_by_css_selector(
                     "div.content__main__book--item--series-list > a.current > b"
@@ -49,7 +52,6 @@ class AKnigaDriver(Driver):
                 .strip(".")
             )
         except NoSuchElementException:
-            series_name = ""
             number_in_series = ""
 
         duration = " ".join(
@@ -102,9 +104,12 @@ class AKnigaDriver(Driver):
         for book in page.find_elements_by_css_selector(
             ".content__main__book--item--series-list > a"
         ):
-            number = book.find_element_by_tag_name("b").get_attribute("innerHTML")
-            if number.endswith("."):
-                number = number[:-1]
+            try:
+                number = book.find_element_by_tag_name("b").get_attribute("innerHTML")
+                if number.endswith("."):
+                    number = number[:-1]
+            except NoSuchElementException:
+                number = ""
             name = book.find_element_by_css_selector(".caption").get_attribute(
                 "innerHTML"
             )
