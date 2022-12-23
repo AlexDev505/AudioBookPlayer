@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import typing as ty
 from ast import literal_eval
+from contextlib import suppress
 from dataclasses import dataclass, field
 from datetime import datetime
 
@@ -96,6 +97,21 @@ class Bool(FieldType):
         return bool(int(obj.decode("utf-8")))
 
 
+class Real(FieldType, str):
+    @staticmethod
+    def adapter(obj: str) -> bytes:
+        return str(obj).encode()
+
+    @classmethod
+    def converter(cls, obj: bytes):
+        obj = obj.decode("utf-8")
+        with suppress(ValueError):
+            obj = float(obj)
+            if int(obj) == obj:
+                obj = int(obj)
+        return str(obj)
+
+
 class DateTime(FieldType, datetime):
     format = "%Y-%m-%d %H:%M:%S"
 
@@ -124,7 +140,7 @@ class Book:
     author: str = ""
     name: str = ""
     series_name: str = ""
-    number_in_series: str = ""
+    number_in_series: Real = ""
     description: str = ""  # Описание
     reader: str = ""  # Чтец
     duration: str = ""  # Длительность
