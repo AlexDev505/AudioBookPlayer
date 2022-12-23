@@ -497,8 +497,12 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
             self.seriesLabel.setText(
                 f"{self.book.series_name} ({self.book.number_in_series})"
             )
+            self.downloadBookSeriesBtn.show()
+            self.openBookSeriesBtn.show()
         else:
             self.seriesFrame.hide()
+            self.downloadBookSeriesBtn.hide()
+            self.openBookSeriesBtn.hide()
         self.readerLabel.setText(self.book.reader)
         self.durationLabel.setText(self.book.duration)
         self.description.setText(self.book.description)
@@ -1111,7 +1115,7 @@ class MainWindow(QMainWindow, UiMainWindow, player.MainWindowPlayer):
         db.api.commit()
 
         # Запускаем удаление файлов
-        if delete_later.get_files_count():
+        if delete_later.get_paths_count():
             delete_later.start_subprocess()
 
         logger.info("Closing the application")
