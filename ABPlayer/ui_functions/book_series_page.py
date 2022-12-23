@@ -276,7 +276,15 @@ class BookSeriesDownloader(BaseWorker):
                         continue
                     if len(self.launched) < 5:
                         subprocess.Popen(
-                            [sys.executable, *sys.argv, f"--download-book={book.url}"]
+                            [
+                                sys.executable,
+                                *(
+                                    sys.argv[1:]
+                                    if sys.argv[0] == sys.executable
+                                    else sys.argv
+                                ),
+                                f"--download-book={book.url}",
+                            ]
                         )
                         self.launched.append(index)
                         continue

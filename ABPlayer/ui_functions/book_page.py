@@ -436,6 +436,7 @@ class DeleteBookWorker(BaseWorker):
                 logger.debug("The book has been removed from the database")
             # Удаление файлов книги
             if os.path.isdir(self.book.dir_path):
+                cant_delete = False
                 for root, dirs, files in os.walk(self.book.dir_path):
                     for file in files:
                         file_path = os.path.join(root, file)
@@ -447,13 +448,32 @@ class DeleteBookWorker(BaseWorker):
                             logger.opt(colors=True).error(
                                 f"Can't delete file <y>{file_path}</y>"
                             )
-                            delete_later.add_file(file_path)
-                    with suppress(PermissionError, OSError):
-                        os.rmdir(root)
+                            cant_delete = True
+                            delete_later.add_path(file_path)
+                    if cant_delete:
+                        delete_later.add_path(root)
+                    else:
+                        with suppress(PermissionError, OSError):
+                            os.rmdir(root)
                 # Удаляем папку автора, если она пуста
-                author_dir = os.path.dirname(self.book.dir_path)
-                if len(os.listdir(author_dir)) == 0:
-                    os.rmdir(author_dir)
+                if self.book.series_name:
+                    series_dir = os.path.dirname(self.book.dir_path)
+                    author_dir = os.path.dirname(series_dir)
+                    if cant_delete:
+                        delete_later.add_path(series_dir)
+                        delete_later.add_path(author_dir)
+                    else:
+                        with suppress(Exception):
+                            os.rmdir(series_dir)
+                        with suppress(Exception):
+                            os.rmdir(author_dir)
+                else:
+                    author_dir = os.path.dirname(self.book.dir_path)
+                    if cant_delete:
+                        delete_later.add_path(author_dir)
+                    else:
+                        with suppress(Exception):
+                            os.rmdir(author_dir)
                 logger.debug("Audio files deleted")
             self.finished.emit()
         except Exception as err:
