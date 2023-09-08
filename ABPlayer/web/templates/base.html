@@ -18,7 +18,22 @@
   </div>
 
   <div id="central-frame">
-    {% block body %}{% endblock %}
+    <div id="side-menu">
+      <div>
+        <div id="menu-btn" class="menu-btn" onclick="toggleMenu()"><span>скрыть меню</span></div>
+        <hr>
+        <div id="library-btn" class="menu-btn"><span>мои книги</span></div>
+        <div id="favorite-btn" class="menu-btn"><span>избранные</span></div>
+        <div id="add-book-btn" class="menu-btn"><span>новая книга</span></div>
+      </div>
+      <div>
+        <div id="library-dir-btn" class="menu-btn"><span>папка с книгами</span></div>
+        <div id="settings-btn" class="menu-btn"><span>настройки</span></div>
+      </div>
+    </div>
+    <div id="content-frame">
+      {% block body %}{% endblock %}
+    </div>
   </div>
 
   <div class="size-grip corner-grip" data-place="top-left"></div>
