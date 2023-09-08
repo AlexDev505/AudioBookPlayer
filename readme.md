@@ -1,3 +1,5 @@
+<h1 style="color:red">! Временно не функционирует.</h1>
+
 # AudioBook Player [![Python 3.8+](https://badgen.net/badge/Python/3.8+/blue)](https://www.python.org/downloads/) [![License: MIT](https://badgen.net/badge/License/MIT/blue)](https://github.com/AlexDev-py/AudioBookPlayer/blob/master/LICENSE) [![Platform: Windows](https://badgen.net/badge/Platform/windows/blue?icon=windows)]()
 
 **Audio Book Player** - приложение для Windows, которое позволит вам бесплатно слушать и скачивать аудио книги.
