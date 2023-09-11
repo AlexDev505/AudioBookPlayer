@@ -40,3 +40,33 @@ function toggleMenu() {
         sideMenu.classList.remove("collapsed")
     menu_opened = !menu_opened
 }
+
+var current_page = null
+class Page {
+    constructor(el) {
+        this.el = el
+        this.shown = false
+        this.onShow = null
+        this.onHide = null
+        this.hide()
+    }
+    show() {
+        if (current_page) current_page.hide()
+        current_page = this
+        this.el.style = "display: block"
+        this.shown = true
+        if (this.onShow) this.onShow(this.el)
+    }
+    hide() {
+        this.el.style = "display: none"
+        this.shown = false
+        if (this.onHide) this.onHide(this.el)
+    }
+}
+
+var pages = {}
+for (page_el of document.getElementsByClassName("page")) {
+    pages[page_el.id] = new Page(page_el)
+}
+function page(el_id) {return pages[el_id]}
+page("search-page").show()
