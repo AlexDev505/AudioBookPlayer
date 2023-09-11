@@ -4,16 +4,14 @@
   <meta charset="UTF-8">
   <link rel="stylesheet" href="{{url_for('static', filename='css/base.css')}}">
   <script defer src="{{url_for('static', filename='js/base.js')}}"></script>
-  {% block head %}{% endblock %}
 </head>
 <body>
   <div id="top-bar">
     <div id="logo">AB PLayer</div>
     <div id="window-controls">
-      {% block window_controls %}{% endblock %}
-      <button class="line-btn" onclick="pywebview.api.minimize_app()"><span></span></button>
-      <button id="win_fullscreen_btn" class="window-btn" onclick="pywebview.api.toggle_full_screen_app()"><span></span></button>
-      <button class="cross-btn" onclick="pywebview.api.close_app()"><span></span></button>
+      <button class="icon-btn line-btn" onclick="pywebview.api.minimize_app()"></button>
+      <button id="win_fullscreen_btn" class="icon-btn window-btn" onclick="pywebview.api.toggle_full_screen_app()"></button>
+      <button class="icon-btn cross-btn" onclick="pywebview.api.close_app()"></button>
     </div>
   </div>
 
@@ -22,9 +20,9 @@
       <div>
         <div id="menu-btn" class="menu-btn" onclick="toggleMenu()"><span>скрыть меню</span></div>
         <hr>
-        <div id="library-btn" class="menu-btn"><span>мои книги</span></div>
+        <div id="library-btn" class="menu-btn" onclick="page('library-page').show()"><span>мои книги</span></div>
         <div id="favorite-btn" class="menu-btn"><span>избранные</span></div>
-        <div id="add-book-btn" class="menu-btn"><span>новая книга</span></div>
+        <div id="add-book-btn" class="menu-btn" onclick="page('search-page').show()"><span>новая книга</span></div>
       </div>
       <div>
         <div id="library-dir-btn" class="menu-btn"><span>папка с книгами</span></div>
@@ -32,7 +30,12 @@
       </div>
     </div>
     <div id="content-frame">
-      {% block body %}{% endblock %}
+      <div class="page" id="library-page">
+        {% include "library.html" %}
+      </div>
+      <div class="page" id="search-page">
+        {% include "search.html" %}
+      </div>
     </div>
   </div>
 

@@ -1,0 +1,25 @@
+#search-page {
+  width: 100%;
+  height: 100%;
+}
+#search-page-content {
+  display:flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+#search-input-line-container {min-width: 40vw}
+#search-label-container {
+  display: flex;
+  font-size: large;
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+.open-browser-btn::after {
+  background: url(../images/box-arrow-up-right.svg);
+}
+
+#search-input-line {width: 100%; font-size: medium}
+.search-btn::after {background: url(../images/search.svg)}
