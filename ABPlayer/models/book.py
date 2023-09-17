@@ -34,7 +34,7 @@ class BookItems(list):
 
     def __init__(self, items: list[BookItem | dict[str, str | int]] = ()):
         super().__init__(
-            BookItem(**item) if isinstance(BookItem, dict) else item for item in items
+            BookItem(**item) if isinstance(item, dict) else item for item in items
         )
 
     def __getitem__(self, item) -> BookItem:
