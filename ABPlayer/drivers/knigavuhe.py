@@ -164,7 +164,7 @@ class KnigaVUhe(Driver):
 
         return books
 
-    def search_books(self, query: str, limit: int = 10) -> list[Book]:
+    def search_books(self, query: str, limit: int = 10, offset: int = 0) -> list[Book]:
         books = []
         page_number = 1
 
@@ -179,6 +179,14 @@ class KnigaVUhe(Driver):
             )
             if not elements:
                 break
+
+            if offset:
+                if offset > len(elements):
+                    offset -= len(elements)
+                    elements.clear()
+                else:
+                    elements = elements[offset:]
+                    offset = 0
 
             for el in elements:
                 url = el.select_one("a.bookkitem_cover").attrs["href"]

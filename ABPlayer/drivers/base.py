@@ -155,12 +155,13 @@ class Driver(ABC):
         """
 
     @abstractmethod
-    def search_books(self, query: str, limit: int = 10) -> list[Book]:
+    def search_books(self, query: str, limit: int = 10, offset: int = 0) -> list[Book]:
         """
         Метод, выполняющий поиск книг по запросу.
         Должен быть реализован для каждого драйвера отдельно.
         :param query: Поисковый запрос.
         :param limit: Кол-во книг, которое нужно вернуть.
+        :param offset: Будет пропущено `offset` первых книг.
         :returns: Список неполных экземпляров книг.
         """
 
