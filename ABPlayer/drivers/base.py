@@ -1,50 +1,49 @@
 from __future__ import annotations
 
-import os
-import sys
 import typing as ty
 from abc import ABC, abstractmethod
-from pathlib import Path
+from enum import Enum
 
-import eyed3
 import requests
-from loguru import logger
 
-from models.book import Book, BookItem
+from .tools import NotImplementedVariable
 
 
-def prepare_file_metadata(
-    file_path: ty.Union[str, Path],
-    book: Book,
-    item_index: int,
-    item: BookItem = None,
-) -> None:
+if ty.TYPE_CHECKING:
+    from pathlib import Path
+    from models.book import Book
+
+
+class DownloadProcessStatus(Enum):
     """
-    Изменяет метаданные аудио файла.
-    :param file_path: Путь к аудио файлу.
-    :param book: Экземпляр книги.
-    :param item_index: Порядковый номер файла.
-    :param item: Экземпляр главы(optional)
+    Статусы прогресса скачивания.
     """
-    file = eyed3.load(file_path)
-    file.initTag()
-    file.tag.title = item.title if item else f"{book.author} - {book.name}"
-    file.tag.artist = book.author
-    file.tag.track_num = item_index + 1
-    file.tag.save()
+
+    WAITING = "waiting"
+    PREPARING = "preparing"
+    DOWNLOADING = "downloading"
+    FINISHED = "finished"
 
 
-class BaseDownloadProcessHandler:
+class BaseDownloadProcessHandler(ABC):
     """
     Обработчик процесса скачивания.
-    Визуализирует процесс скачивания книги в пользовательском интерфейсе.
+    Визуализирует процесс скачивания книги.
+    >>> N = 10
+    >>> process_handler = BaseDownloadProcessHandler()
+    >>> process_handler.init(N, status=DownloadProcessStatus.DOWNLOADING)
+    >>> for _ in range(N):
+    >>>     process_handler.progress(1)
+    >>> process_handler.finish()
     """
 
     def __init__(self):
+        self.status = DownloadProcessStatus.WAITING
         self.total_size: int = ...
         self.done_size: int = ...
 
-    def init(self, total_size: int) -> None:
+    def init(self, total_size: int, status: DownloadProcessStatus) -> None:
+        self.status = status
         self.total_size = total_size
         self.done_size = 0
 
@@ -52,24 +51,79 @@ class BaseDownloadProcessHandler:
         self.done_size += size
         self.show_progress()
 
+    def finish(self) -> None:
+        self.status = DownloadProcessStatus.FINISHED
+        self.done_size = self.total_size
+        self.show_progress()
+
+    @abstractmethod
     def show_progress(self) -> None:
         """
         Отображает прогресс.
         """
-        sys.stdout.write(
-            f"\r{self.done_size}/{self.total_size}\t"
-            f"{round(self.done_size / (self.total_size / 100), 2)} %"
-        )
-        sys.stdout.flush()
+
+
+class BaseDownloader(ABC):
+    """
+    Загрузчик файлов.
+    """
+
+    def __init__(
+        self, book: Book, process_handler: BaseDownloadProcessHandler | None = None
+    ):
+        self.book = book
+        self.process_handler = process_handler
+
+        # Общий размер файлов(в байтах)
+        # Определяется, только если передан `process_handler`
+        self.total_size: int | None = None
+
+        self._file: ty.TextIO | None = None
+        self._file_stream: requests.Response | None = None
+        self._terminated: bool = False
+
+    @abstractmethod
+    def _prepare(self) -> None:
+        """
+        Подготавливает загрузчик к скачиванию.
+        Должно быть переопределено в наследуемом классе.
+        """
+
+    @abstractmethod
+    def _download_book(self) -> list[Path]:
+        """
+        Скачивает файлы.
+        Должно быть переопределено в наследуемом классе.
+        """
+
+    def download_book(self) -> list[Path]:
+        """
+        Скачивает файлы книги.
+        :returns: Список с путями к скачанным файлам.
+        """
+        self._prepare()
+        return self._download_book()
+
+    def terminate(self) -> None:
+        """
+        Прерывает загрузку.
+        """
+        self._terminated = True
+        if self._file:
+            if not self._file.closed:
+                self._file.close()
+        if self._file_stream:
+            self._file_stream.close()
 
 
 class Driver(ABC):
-    drivers: ty.List[ty.Type[Driver]] = []  # Все доступные драйверы
+    drivers: list[ty.Type[Driver]] = []  # Все доступные драйверы
+
+    site_url = NotImplementedVariable()
+    downloader_factory = NotImplementedVariable()
 
     def __init__(self):
-        logger.opt(colors=True).debug(
-            f"Creating driver <e>{self.driver_name}</e> <y>{id(self)}</y>"
-        )
+        self.downloader: BaseDownloader | None = None
 
     def __init_subclass__(cls, **kwargs):
         Driver.drivers.append(cls)
@@ -92,7 +146,7 @@ class Driver(ABC):
         """
 
     @abstractmethod
-    def get_book_series(self, url: str) -> ty.List[Book]:
+    def get_book_series(self, url: str) -> list[Book]:
         """
         Метод, получающий информацию о книгах из серии.
         Должен быть реализован для каждого драйвера отдельно.
@@ -101,104 +155,16 @@ class Driver(ABC):
         """
 
     def download_book(
-        self,
-        book: Book,
-        process_handler: BaseDownloadProcessHandler = None,
-    ) -> ty.List[Path]:
+        self, book: Book, process_handler: BaseDownloadProcessHandler | None = None
+    ) -> list[Path]:
         """
         Метод, скачивающий аудио файлы книги.
         :param book: Экземпляр книги.
         :param process_handler: Обработчик процесса скачивания.
         :return: Список путей к файлам.
         """
-        item: BookItem
-
-        urls = []  # Ссылки на файлы
-        merged = False  # Если True, то в 1-ом файле присутствует несколько глав
-        total_size = 0  # Общий размер книги(в байтах)
-
-        # Устанавливаем значение флага `merged` и определяем общий размер
-        for item in book.items:
-            if (url := item.file_url) not in urls:
-                urls.append(url)
-                if (
-                    content_length := requests.get(url, stream=True).headers.get(
-                        "content-length"
-                    )
-                ) is not None:
-                    total_size += int(content_length)
-            else:
-                merged = True
-
-        if process_handler:
-            process_handler.init(total_size)
-
-        logger.opt(colors=True).debug(f"Audio files merged: <y>{merged}</y>")
-        logger.opt(colors=True, lazy=True).debug(
-            f"Total size: <y>{total_size} bytes</y>"
-        )
-
-        files = []
-        if merged:
-            for i, url in enumerate(urls):
-                file_path = Path(
-                    os.path.join(
-                        book.dir_path,
-                        f"{str(i + 1).rjust(2, '0')}. {book.author} - {book.name}.mp3",
-                    )
-                )
-                self._download_file(file_path, url, process_handler)
-                files.append(file_path)
-                prepare_file_metadata(file_path, book, i)
-        else:
-            for i, item in enumerate(book.items):
-                file_path = Path(os.path.join(book.dir_path, item.title + ".mp3"))
-                self._download_file(file_path, item.file_url, process_handler)
-                files.append(file_path)
-                prepare_file_metadata(file_path, book, i, item)
-
-        return files
-
-    def _download_file(
-        self,
-        file_path: Path,
-        url: str,
-        process_handler: BaseDownloadProcessHandler,
-    ) -> None:
-        """
-        Метод, скачивающий аудио файл.
-        :param file_path: Путь для сохранения.
-        :param url: Ссылка на файл.
-        :param process_handler: Обработчик процесса скачивания.
-        """
-        logger.opt(colors=True).debug(f"Download the file <y>{file_path}</y>({url})")
-        if not file_path.exists():
-            file_path.parent.mkdir(parents=True, exist_ok=True)
-
-        # Храним файл в переменной, чтобы можно было закрыть его из другой части кода.
-        # Иначе, при остановке скачивания, возникает ошибка.
-        self._file = open(file_path, "wb")
-        resp = requests.get(str(url), timeout=10, stream=True)
-        logger.opt(colors=True).debug(
-            f"File size: <y>{resp.headers.get('content-length')}</y>"
-        )
-        if resp.headers.get("content-length") is None:
-            self._file.write(resp.content)
-        else:
-            for data in resp.iter_content(chunk_size=5120):
-                if process_handler:
-                    process_handler.progress(len(data))
-                self._file.write(data)
-                self._file.flush()
-        self._file.close()
-
-    @classmethod
-    @property
-    @abstractmethod
-    def site_url(cls) -> str:
-        """
-        :returns: Ссылка на сайт, с которым работает браузер.
-        """
+        self.downloader = self.downloader_factory(book, process_handler)
+        return self.downloader.download_book()
 
     @classmethod
     @property
