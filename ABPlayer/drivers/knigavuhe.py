@@ -163,3 +163,52 @@ class KnigaVUhe(Driver):
                     )
 
         return books
+
+    def search_books(self, query: str, limit: int = 10) -> list[Book]:
+        books = []
+        page_number = 1
+
+        while True:
+            url = self.site_url + f"/search/?q={query}&page={page_number}"
+
+            page = self.get_page(url)
+            soup = BeautifulSoup(page.text, "html.parser")
+
+            elements = soup.select(
+                "div#books_list > div.bookkitem:not(:has(span.bookkitem_litres_icon))"
+            )
+            if not elements:
+                break
+
+            for el in elements:
+                url = el.select_one("a.bookkitem_cover").attrs["href"]
+                preview = el.select_one("img.bookkitem_cover_img").attrs["src"]
+                name = el.select_one("a.bookkitem_name").text.strip()
+                author = el.select_one("span.bookkitem_author > a").text.strip()
+                reader = el.select_one(
+                    "div.bookkitem_meta_block:has(span.-reader) a"
+                ).text.strip()
+                duration = el.select_one("span.bookkitem_meta_time").text.strip()
+                try:
+                    series_name = el.select_one(
+                        "div.bookkitem_meta_block:has(span.-serie) a"
+                    ).text.strip()
+                except AttributeError:
+                    series_name = ""
+                books.append(
+                    Book(
+                        author=safe_name(author),
+                        name=safe_name(name),
+                        series_name=safe_name(series_name),
+                        reader=reader,
+                        duration=duration,
+                        url=self.site_url + url,
+                        preview=preview,
+                    )
+                )
+                if len(books) == limit:
+                    break
+
+            page_number += 1
+
+        return books

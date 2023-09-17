@@ -154,6 +154,16 @@ class Driver(ABC):
         :returns: Список неполных экземпляров книг.
         """
 
+    @abstractmethod
+    def search_books(self, query: str, limit: int = 10) -> list[Book]:
+        """
+        Метод, выполняющий поиск книг по запросу.
+        Должен быть реализован для каждого драйвера отдельно.
+        :param query: Поисковый запрос.
+        :param limit: Кол-во книг, которое нужно вернуть.
+        :returns: Список неполных экземпляров книг.
+        """
+
     def download_book(
         self, book: Book, process_handler: BaseDownloadProcessHandler | None = None
     ) -> list[Path]:
