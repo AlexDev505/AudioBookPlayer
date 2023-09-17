@@ -182,7 +182,7 @@ class AKnigaDriver(Driver):
 
         return books
 
-    def search_books(self, query: str, limit: int = 10) -> list[Book]:
+    def search_books(self, query: str, limit: int = 10, offset: int = 0) -> list[Book]:
         books = []
         page_number = 1
 
@@ -192,9 +192,19 @@ class AKnigaDriver(Driver):
             page = self.get_page(url)
             soup = BeautifulSoup(page.text, "html.parser")
 
-            elements = soup.select("div.content__main__articles--item")
+            elements = soup.select(
+                "div.content__main__articles--item:not(:has(svg[class*='biblio']))"
+            )
             if not elements:
                 break
+
+            if offset:
+                if offset > len(elements):
+                    offset -= len(elements)
+                    elements.clear()
+                else:
+                    elements = elements[offset:]
+                    offset = 0
 
             for el in elements:
                 url = el.select_one("div.article--cover > a").attrs["href"]
