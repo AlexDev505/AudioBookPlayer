@@ -6,11 +6,36 @@ from ctypes import windll, Structure, c_long, byref
 
 from loguru import logger
 
+from .js_api import JSApi
 from .tools import ttl_cache
 
 
 if ty.TYPE_CHECKING:
     import webview
+
+
+class WindowControlsApi(JSApi):
+    def __init__(self):
+        self._full_screen = False
+
+    def close_app(self) -> None:
+        self._window.destroy()
+
+    def minimize_app(self) -> None:
+        self._window.minimize()
+
+    def toggle_full_screen_app(self) -> None:
+        self._window.toggle_fullscreen()
+        self._full_screen = not self._full_screen
+
+    def drag_window(self) -> None:
+        if self._full_screen:
+            self.toggle_full_screen_app()
+            move_to_cursor(self._window)
+        drag_window(self._window)
+
+    def resize_drag(self, size_grip: str) -> None:
+        resize_handler(self._window, size_grip)
 
 
 class POINT(Structure):
@@ -124,3 +149,6 @@ def drag_window(window: webview.Window) -> None:
         move(window, start_win_x + delta_x, start_win_y + delta_y)
 
         time.sleep(0.005)
+
+
+WindowControlsApi()

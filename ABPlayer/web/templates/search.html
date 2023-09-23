@@ -9,9 +9,11 @@
     <button class="icon-btn open-browser-btn"></button>
   </div>
   <div id="search-input-line" class="input-line">
-    <input placeholder="начните писать или вставьте ссылку">
+    <input placeholder="начните писать или вставьте ссылку" oninput="searchBooks()">
     <button class="icon-btn search-btn"></button>
   </div>
 </div>
+
+<div id="search-results-container" onscrollend="onSearchResultContainerScroll()"></div>
 
 </div>

@@ -2,6 +2,7 @@ import re
 import time
 import typing as ty
 from abc import ABC, abstractmethod
+from contextlib import suppress
 
 import webview
 from bs4 import BeautifulSoup
@@ -187,6 +188,9 @@ class AKnigaDriver(Driver):
         page_number = 1
 
         while True:
+            if len(books) == limit:
+                break
+
             url = self.site_url + f"/search/books/page{page_number}/?q={query}"
 
             page = self.get_page(url)
@@ -207,46 +211,55 @@ class AKnigaDriver(Driver):
                     offset = 0
 
             for el in elements:
-                url = el.select_one("div.article--cover > a").attrs["href"]
-                preview = el.select_one("div.article--cover > a > img").attrs["src"]
-                author = el.select_one(
-                    "span.link__action--author"
-                    r'> svg:has(use[xlink\:href="#author"]) ~ a'
-                ).text.strip()
-                try:
-                    name = el.select_one("div.article--cover > a > img").attrs["alt"]
-                except AttributeError:
-                    name = (
-                        el.select_one(".caption__article-main")
-                        .text.replace(f"{author} - ", "")
-                        .strip()
-                    )
-                reader = el.select_one(
-                    "span.link__action--author"
-                    r'> svg:has(use[xlink\:href="#performer"]) ~ a'
-                ).text.strip()
-                duration = el.select_one("span.link__action--label--time").text.strip()
-                try:
-                    series_name = el.select_one(
+                with suppress(AttributeError):
+                    url = el.select_one("div.article--cover > a").attrs["href"]
+                    preview = el.select_one("div.article--cover > a > img").attrs["src"]
+                    author = el.select_one(
                         "span.link__action--author"
-                        r'> svg:has(use[xlink\:href="#series"]) ~ a'
+                        r'> svg:has(use[xlink\:href="#author"]) ~ a'
                     ).text.strip()
-                    series_name = re.sub(r" \(\d+\)$", "", series_name)
-                except AttributeError:
-                    series_name = ""
-                books.append(
-                    Book(
-                        author=safe_name(author),
-                        name=safe_name(name),
-                        series_name=safe_name(series_name),
-                        reader=reader,
-                        duration=duration,
-                        url=self.site_url + url,
-                        preview=preview,
+                    try:
+                        name = el.select_one("div.article--cover > a > img").attrs[
+                            "alt"
+                        ]
+                    except AttributeError:
+                        name = (
+                            el.select_one(".caption__article-main")
+                            .text.replace(f"{author} - ", "")
+                            .strip()
+                        )
+                    try:
+                        reader = el.select_one(
+                            "span.link__action--author"
+                            r'> svg:has(use[xlink\:href="#performer"]) ~ a'
+                        ).text.strip()
+                    except AttributeError:
+                        reader = "нет данных"
+                    duration = el.select_one(
+                        "span.link__action--label--time"
+                    ).text.strip()
+                    try:
+                        series_name = el.select_one(
+                            "span.link__action--author"
+                            r'> svg:has(use[xlink\:href="#series"]) ~ a'
+                        ).text.strip()
+                        series_name = re.sub(r" \(\d+\)$", "", series_name)
+                    except AttributeError:
+                        series_name = ""
+                    books.append(
+                        Book(
+                            author=safe_name(author),
+                            name=safe_name(name),
+                            series_name=safe_name(series_name),
+                            reader=reader,
+                            duration=duration,
+                            url=self.site_url + url,
+                            preview=preview,
+                            driver=self.driver_name,
+                        )
                     )
-                )
-                if len(books) == limit:
-                    break
+                    if len(books) == limit:
+                        break
 
             page_number += 1
 
