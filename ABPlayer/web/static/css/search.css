@@ -42,6 +42,7 @@
 }
 #search-results-container.shown {flex: 1 1 auto}
 .search-result-item {
+  position: relative;
   width:100%;
   height: fit-content;
   flex: 0 0 100%;
@@ -112,3 +113,38 @@
 .item-duration::before {content: url(../images/clock.svg)}
 .item-driver::before {content: url(../images/hdd.svg)}
 .item-series-name::before {content: url(../images/book.svg)}
+
+.add-book-btn {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  right: 4px;
+  max-width: 1.1em;
+  padding: 4px 4px 10px 10px;
+  background-color: var(--side-menu-bg);
+  color: transparent;
+  border-bottom-left-radius: 55%;
+  font-size: 1.2em;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-width .2s ease-in-out, color .2s cubic-bezier(1, 0, 0, 1);
+}
+.search-result-item:hover .add-book-btn {opacity: 1}
+.add-book-btn:hover {
+  border-bottom-left-radius: 20%;
+  max-width: 100%;
+  color: inherit;
+}
+.add-book-btn::after {
+  position: absolute;
+  right: 4px;
+  content: url(../images/plus.svg);
+}
+.add-book-btn span {
+  color: inherit;
+  font-weight: bold;
+  text-wrap: nowrap;
+  margin-right: 1.2em;
+  transition: color .1s cubic-bezier(0, 0.9, 0.0, 0);
+}
