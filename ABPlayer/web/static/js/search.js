@@ -56,6 +56,7 @@ function onSearchCompleted(resp, clear=true) {
               </div>
             </div>
           </div>
+          <div class="icon-btn add-book-btn"><span>в библиотеку</span></div>
         </div>`
     }
     if (!resp.length && clear) html = '<div id="no-search-result">Ничего не найдено</div>'
