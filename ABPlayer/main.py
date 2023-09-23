@@ -55,7 +55,7 @@ def main() -> None:
     window.events.closed += _on_closed
     window.events.shown += _on_shown
 
-    webview.start(debug=bool(os.environ["DEBUG"]))
+    webview.start(js_api.init, debug=bool(os.environ["DEBUG"]))
 
 
 if __name__ == "__main__":

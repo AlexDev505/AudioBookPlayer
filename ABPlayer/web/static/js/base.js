@@ -70,3 +70,7 @@ for (page_el of document.getElementsByClassName("page")) {
 }
 function page(el_id) {return pages[el_id]}
 page("search-page").show()
+
+function delay(time) {
+    return new Promise(resolve => setTimeout(resolve, time));
+}
