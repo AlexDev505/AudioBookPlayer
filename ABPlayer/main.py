@@ -1,11 +1,16 @@
 import os
+import sys
 
 
 # CONFIG SETUP
 # Путь к директории приложения
-os.environ["APP_DIR"] = os.path.join(os.environ["LOCALAPPDATA"], "AniTogether")
+os.environ["APP_DIR"] = os.path.join(os.environ["LOCALAPPDATA"], "AudioBookPlayer")
 if not os.path.exists(os.environ["APP_DIR"]):
     os.mkdir(os.environ["APP_DIR"])
+# Путь к файлу конфигурации
+os.environ["CONFIG_PATH"] = os.path.join(os.environ["APP_DIR"], "config.json")
+# Путь к файлу базы данных библиотеки
+os.environ["DATABASE_PATH"] = os.path.join(os.environ["APP_DIR"], "library.sqlite")
 # Путь к файлу отладки
 os.environ["DEBUG_PATH"] = os.path.join(os.environ["APP_DIR"], "debug.log")
 # Путь к файлу с временными данными
@@ -25,6 +30,13 @@ def main() -> None:
     import webview
     from js_api import JSApi
     from web.app import app
+
+    import config
+    from database import Database
+
+    config.init()
+    with Database() as db:
+        db.create_library()
 
     def _on_loaded():
         logger.info(f"Loading {window.get_current_url()}")

@@ -117,30 +117,34 @@
 .add-book-btn {
   display: flex;
   align-items: center;
+  justify-content: end;
   position: absolute;
   top: 0;
   right: 4px;
   max-width: 1.1em;
   padding: 4px 4px 10px 10px;
-  background-color: var(--side-menu-bg);
+  background-color: var(--ui-element-bg);
   color: transparent;
-  border-bottom-left-radius: 55%;
+  border-bottom-left-radius: 25px;
   font-size: 1.2em;
   overflow: hidden;
   opacity: 0;
-  transition: max-width .2s ease-in-out, color .2s cubic-bezier(1, 0, 0, 1);
+  transition: all .2s ease-in-out, color .2s cubic-bezier(1, 0, 0, 1);
 }
-.search-result-item:hover .add-book-btn {opacity: 1}
-.add-book-btn:hover {
-  border-bottom-left-radius: 20%;
+.search-result-item:hover .add-book-btn,
+.add-book-btn.loading {opacity: 1}
+.add-book-btn:not(.added):not(.loading):hover {
+  border-bottom-left-radius: 15px;
   max-width: 100%;
   color: inherit;
 }
 .add-book-btn::after {
   position: absolute;
   right: 4px;
-  content: url(../images/plus.svg);
+  background-image: url(../images/plus.svg);
 }
+.add-book-btn.loading::after {background-image: url(../images/loading.gif)}
+.add-book-btn.added::after {background-image: url(../images/check.svg)}
 .add-book-btn span {
   color: inherit;
   font-weight: bold;

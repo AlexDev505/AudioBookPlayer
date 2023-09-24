@@ -21,3 +21,26 @@ class JSApi:
     @property
     def _window(self) -> webview.Window:
         return webview.windows[0]
+
+    @staticmethod
+    def make_answer(data: ty.Any = ()) -> dict:
+        return dict(status="ok", data=data)
+
+    @staticmethod
+    def error(exception: JSApiError) -> dict:
+        return dict(status="fail", **exception.as_dict())
+
+
+class JSApiError(Exception):
+    code: int
+    message: str
+    extra: dict = {}
+
+    def __init__(self, **kwargs):
+        self.extra.update(kwargs)
+        super().__init__(
+            f"[{self.code}] {self.message} {self.extra if self.extra else ''}"
+        )
+
+    def as_dict(self) -> dict:
+        return dict(code=self.code, message=self.message, extra=self.extra)
