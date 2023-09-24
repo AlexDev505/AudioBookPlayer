@@ -1,3 +1,17 @@
+page("search-page").onHide = function() {
+    document.getElementById("search-results-container").innerHTML = ""
+    document.querySelector("#search-input-line input").value = ""
+    document.getElementById("search-results-container").classList.remove("shown")
+    urlParams.delete("search")
+}
+page("search-page").onShow = function() {
+    q = urlParams.get("search")
+    if (q) {
+        document.querySelector("#search-input-line input").value = q
+        searchBooks()
+    }
+}
+
 search_offset = 0
 lastSearch = 0
 async function searchBooks() {
@@ -11,6 +25,7 @@ async function searchBooks() {
         return
 
     lastSearch = Date.now()
+    addUrlParams({"search": query})
 
     pywebview.api.search_books(query, limit=20).then(onSearchCompleted)
 }
@@ -39,10 +54,15 @@ function onSearchResultContainerScroll() {
 }
 
 function onSearchCompleted(resp, clear=true) {
+    if (!page("search-page").shown) return
     searching = false
+    if (resp["status"] != "ok") return
+    resp = resp["data"]
     html = ""
+    urls = []
     for (book of resp) {
-        html = html + `<div class="search-result-item">
+        urls.push(book.url)
+        html = html + `<div class="search-result-item" data-url="${book.url}">
           <div class="search-result-item-card">
             <div class="item-cover" style="background-image: url(${book.preview})"></div>
             <div>
@@ -56,7 +76,7 @@ function onSearchCompleted(resp, clear=true) {
               </div>
             </div>
           </div>
-          <div class="icon-btn add-book-btn"><span>в библиотеку</span></div>
+          <div class="icon-btn add-book-btn" onclick="addBook(this)"><span>в библиотеку</span></div>
         </div>`
     }
     if (!resp.length && clear) html = '<div id="no-search-result">Ничего не найдено</div>'
@@ -74,5 +94,28 @@ function onSearchCompleted(resp, clear=true) {
         if (resp.length < 10)
             can_get_next = false
     }
+    pywebview.api.check_is_books_exists(urls).then(onCheckIsBooksExistsCompleted)
     hideSearchAnimation()
+}
+
+function onCheckIsBooksExistsCompleted(resp) {
+    for (url of resp["data"]) {
+        item = document.querySelector(`.search-result-item[data-url="${url}"]`)
+        if (item)
+            item.querySelector(".add-book-btn").classList.add("added")
+    }
+}
+
+function addBook(el) {
+    if (el.classList.contains("added") || el.classList.contains("loading")) return
+    el.classList.add("loading")
+    pywebview.api.add_book_to_library(el.parentElement.dataset.url).then(
+        (response) => {
+            el.classList.remove("loading")
+            if (response["status"] != "ok") {
+                console.log(response)
+            } else
+                el.classList.add("added")
+        }
+    )
 }

@@ -157,6 +157,7 @@ html, body {margin: 0; height: 100%; background-color: var(--root-bg)}
   height: 100%;
   background-color: var(--central-frame-bg);
   border-top-left-radius: 10px;
+  overflow: hidden;
 }
 
 

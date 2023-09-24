@@ -128,6 +128,12 @@ class Driver(ABC):
     def __init_subclass__(cls, **kwargs):
         Driver.drivers.append(cls)
 
+    @classmethod
+    def get_suitable_driver(cls, url: str) -> ty.Type[Driver] | None:
+        for driver in cls.drivers:
+            if url.startswith(driver.site_url):
+                return driver
+
     @staticmethod
     def get_page(url: str) -> requests.Response:
         """

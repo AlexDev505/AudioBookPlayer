@@ -3,6 +3,6 @@ venv/
 __pycache__/
 /build/installers/
 /build/ABPlayer/
-AudioBookPlayer.lnk
+AudioBookPlayerAppData.lnk
 ABPlayer/drivers/chromedriver.exe
 build/updater/drivers/chromedriver.exe

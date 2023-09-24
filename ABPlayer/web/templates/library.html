@@ -1,4 +1,28 @@
 <link rel="stylesheet" href="{{url_for('static', filename='css/library.css')}}">
-<script src="{{url_for('static', filename='js/library.js')}}"></script>
+<script defer src="{{url_for('static', filename='js/library.js')}}"></script>
 
-<span>Библиотека</span>
+<div id="library-page-content">
+
+<div id="filter-menu">
+
+</div>
+
+<div id="library">
+  <div id="library-title">Библиотека</div>
+  <div id="library-sections">
+    <div id="library-sections-buttons">
+      <div id="all-books-section-btn" class="section-button" onclick="section('all-books-section').show()">все</div>
+      <div id="new-books-section-btn" class="section-button" onclick="section('new-books-section').show()">новые</div>
+      <div id="in-progress-books-section-btn" class="section-button" onclick="section('in-progress-books-section').show()">в процессе</div>
+      <div id="listened-books-section-btn" class="section-button" onclick="section('listened-books-section').show()">прослушанные</div>
+    </div>
+    <div id="library-sections-container">
+      <div id="all-books-section" class="books-section"></div>
+      <div id="new-books-section" class="books-section"></div>
+      <div id="in-progress-books-section" class="books-section"></div>
+      <div id="listened-books-section" class="books-section"></div>
+    </div>
+  </div>
+</div>
+
+</div>

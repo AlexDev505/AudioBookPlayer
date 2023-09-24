@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import sqlite3
 import typing as ty
+from loguru import logger
 
 from models.book import Book
 from .field_types import get_signature, convert_value, adapt_value
@@ -38,6 +39,7 @@ class Database:
         self._execute(query, *args)
         return self._cursor.fetchall()
 
+    @logger.catch
     def _execute(self, query: str, *args) -> None:
         self._cursor.execute(query, args)
 
@@ -55,9 +57,17 @@ class Database:
     def get_libray(self) -> list[Book]:
         return [_convert_book(data) for data in self._fetchall("SELECT * FROM books")]
 
-    def get_book(self, bid: int) -> Book | None:
+    def get_book_by_bid(self, bid: int) -> Book | None:
         if books := self._fetchall("SELECT * FROM books WHERE id=?", bid):
             return _convert_book(books[0])
+
+    def check_is_books_exists(self, urls: list[str]) -> list[str]:
+        return [
+            url[0]
+            for url in self._fetchall(
+                f"SELECT url FROM books WHERE url IN ({','.join('?'*len(urls))})", *urls
+            )
+        ]
 
     def add_book(self, book: Book) -> None:
         fields = {

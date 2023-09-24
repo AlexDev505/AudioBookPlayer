@@ -253,7 +253,7 @@ class AKnigaDriver(Driver):
                             series_name=safe_name(series_name),
                             reader=reader,
                             duration=duration,
-                            url=self.site_url + url,
+                            url=url,
                             preview=preview,
                             driver=self.driver_name,
                         )

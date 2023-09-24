@@ -1,3 +1,5 @@
+var urlParams = new URLSearchParams(window.location.search);
+
 for (size_grip of document.getElementsByClassName("size-grip")) {
     size_grip.addEventListener("mousedown", event => {
     if (event.button == 0)
@@ -56,6 +58,7 @@ class Page {
         this.el.style = "display: block"
         this.shown = true
         if (this.onShow) this.onShow(this.el)
+        addUrlParams({"page": this.el.id})
     }
     hide() {
         this.el.style = "display: none"
@@ -69,7 +72,30 @@ for (page_el of document.getElementsByClassName("page")) {
     pages[page_el.id] = new Page(page_el)
 }
 function page(el_id) {return pages[el_id]}
-page("search-page").show()
+
+function addUrlParams(params) {
+    var refresh = window.location.protocol + "//" + window.location.host + "?";
+    for ([name, value] of Object.entries(params)) {
+        urlParams.set(name, value)
+    }
+    urlParams.forEach((v, k) => {
+        refresh = refresh + `${k}=${v}&`
+    })
+    window.history.pushState({path: refresh}, '', refresh)
+}
+
+function parseUrlParams() {
+    page_name = urlParams.get("page")
+    if (page_name) {
+        page_obj = page(page_name)
+        if (page_obj) {
+            page_obj.show()
+            return
+        }
+    }
+    page("search-page").show()
+}
+window.addEventListener("pywebviewready", parseUrlParams)
 
 function delay(time) {
     return new Promise(resolve => setTimeout(resolve, time));
