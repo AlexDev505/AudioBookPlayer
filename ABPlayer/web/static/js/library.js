@@ -1,3 +1,13 @@
+filterMenu = document.getElementById("filter-menu")
+var filter_menu_opened = true
+function toggleFilterMenu() {
+    if (filter_menu_opened)
+        filterMenu.classList.add("collapsed")
+    else
+        filterMenu.classList.remove("collapsed")
+    filter_menu_opened = !filter_menu_opened
+}
+
 var current_section = null
 class Section {
     constructor(el) {
