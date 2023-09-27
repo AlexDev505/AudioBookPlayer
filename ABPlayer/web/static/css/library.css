@@ -67,3 +67,67 @@
 }
 #library-sections-container {}
 .books-section {}
+.book-card {
+  display: flex;
+  max-height: 200px;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  background-color: var(--cards-bg);
+  transition: box-shadow .2s ease-in-out;
+  cursor: pointer;
+}
+.book-card:hover {box-shadow: -1px 1px 5px 1px rgba(0, 0, 0, 0.1)}
+.book-preview {
+  background-image: url(https://s4.knigavuhe.org/1/covers/10208/2-2.jpg?2);
+  background-size: cover;
+  min-width: 145px;
+  min-height: 180px;
+  border-radius: 4px;
+}
+.book-content {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  margin-left: 10px;
+  overflow: hidden;
+}
+.book-main-info-container {
+  display: flex;
+  justify-content: space-between;
+}
+.book-main-info {}
+.book-title {font-size: larger; font-weight: bold}
+.book-listening-progress {
+  display: flex;
+  align-items: center;
+  font-size: small;
+}
+.book-listening-progress::before {
+  content: "";
+  width: 1em;
+  height: 1em;
+  margin-right: 4px;
+  background-image: url(../images/clock.svg)
+}
+.book-actions {display: flex;align-items: center}
+.book-actions > * {padding: 4px; border-radius: 4px;}
+.book-actions > *:not(:first-child):not(:last-child) {margin-left: 12px; margin-right: 12px;}
+.book-actions > *:hover {transform: scale(1.1)}
+.book-actions > *:active {margin-bottom: -4px}
+.book-actions .icon-btn::after {width: 1.5em; height: 1.5em}
+.toggle-favorite-btn::after {background-image: url(../images/star.svg)}
+.download-btn::after {background-image: url(../images/download.svg)}
+.delete-btn::after {background-image: url(../images/trash.svg)}
+.book-description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+}
+.book-additional-info {
+  display: flex;
+  text-wrap: nowrap;
+  flex-wrap: wrap;
+}

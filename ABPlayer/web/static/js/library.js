@@ -32,3 +32,22 @@ for (section_el of document.getElementsByClassName("books-section")) {
 }
 function section(el_id) {return sections[el_id]}
 section("all-books-section").show()
+
+page("library-page").onHide = function() {
+}
+page("library-page").onShow = function() {
+    sort = urlParams.get("sort")
+    author = urlParams.get("author")
+    series = urlParams.get("series")
+    favorite = urlParams.get("favorite")
+    pywebview.api.get_library(
+        20, 0, sort, author, series, favorite
+    ).then(showBooks)
+}
+
+function showBooks(response) {
+    if (response["status"] != "ok") {console.log(response); return}
+    for (book of response["data"]) {
+        console.log(book)
+    }
+}

@@ -43,7 +43,7 @@ def convert_datetime(obj: bytes) -> datetime:
     return datetime.strptime(obj.decode("utf-8"), DATETIME_FORMAT)
 
 
-sqlite3.register_adapter(lambda obj: obj, adapt_datetime)
+sqlite3.register_adapter(datetime, adapt_datetime)
 sqlite3.register_converter("datetime", convert_datetime)
 
 

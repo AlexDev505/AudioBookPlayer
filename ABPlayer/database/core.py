@@ -22,7 +22,9 @@ class Database:
         self._cursor: sqlite3.Cursor | None = None
 
     def _connect(self) -> None:
-        self.conn = sqlite3.connect(self.database_path)
+        self.conn = sqlite3.connect(
+            self.database_path, detect_types=sqlite3.PARSE_DECLTYPES
+        )
         self._cursor = self.conn.cursor()
 
     def __enter__(self) -> ty.Self:
@@ -54,8 +56,43 @@ class Database:
             "(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, %s)" % (", ".join(fields))
         )
 
-    def get_libray(self) -> list[Book]:
-        return [_convert_book(data) for data in self._fetchall("SELECT * FROM books")]
+    def get_libray(
+        self,
+        limit: int,
+        offset: int,
+        sort: str | None,
+        author: str | None,
+        series: str | None,
+        favorite: bool | None,
+        status: str | None,
+    ) -> list[Book]:
+        q = "SELECT * FROM books"
+        args = []
+
+        conditions = []
+        if author is not None:
+            conditions.append("author=?")
+            args.append(author)
+        if series is not None:
+            conditions.append("series_name=?")
+            args.append(series)
+        if favorite is not None:
+            conditions.append("favorite=?")
+            args.append(favorite)
+        if status is not None:
+            conditions.append("status=?")
+            args.append(status)
+        if conditions:
+            q += " WHERE " + " AND ".join(conditions)
+
+        if sort is not None:
+            q += f" ORDER BY {sort}"
+
+        q += " LIMIT ?"
+        q += " OFFSET ?"
+        args.extend([limit, offset])
+
+        return [_convert_book(data) for data in self._fetchall(q, *args)]
 
     def get_book_by_bid(self, bid: int) -> Book | None:
         if books := self._fetchall("SELECT * FROM books WHERE id=?", bid):

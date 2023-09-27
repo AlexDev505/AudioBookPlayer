@@ -20,7 +20,35 @@
       <div id="listened-books-section-btn" class="section-button" onclick="section('listened-books-section').show()">прослушанные</div>
     </div>
     <div id="library-sections-container">
-      <div id="all-books-section" class="books-section"></div>
+      <div id="all-books-section" class="books-section">
+        {% for i in range(20) %}
+        <div class="book-card">
+          <div class="book-preview"></div>
+          <div class="book-content">
+            <div class="book-main-info-container">
+              <div class="book-main-info">
+                <div class="book-title">abooooooooooba {{ i }}</div>
+                <div class="book-listening-progress">0% listened</div>
+              </div>
+              <div class="book-actions">
+                <div class="icon-btn toggle-favorite-btn"></div>
+                <div class="icon-btn download-btn"></div>
+                <div class="icon-btn delete-btn"></div>
+              </div>
+            </div>
+            <div class="book-description">{% for i in range(100) %}aboba {{i}} {% endfor %}</div>
+            <div class="book-additional-info">
+              <div class="book-author">aboooba</div>
+              <div class="book-reader">boooooba</div>
+              <div class="book-duration">1 year 1 hours</div>
+              <div class="book-series">abooooooooooooooooooooba</div>
+              <div class="book-driver">akniga</div>
+              <div class="book-adding-date">2077.16.02</div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
       <div id="new-books-section" class="books-section"></div>
       <div id="in-progress-books-section" class="books-section"></div>
       <div id="listened-books-section" class="books-section"></div>
