@@ -5,9 +5,10 @@ from datetime import datetime
 
 import requests.exceptions
 
-from drivers import Driver
-from .js_api import JSApi, JSApiError
 from database import Database
+from drivers import Driver
+from models.book import DATETIME_FORMAT
+from .js_api import JSApi, JSApiError
 
 
 if ty.TYPE_CHECKING:
@@ -15,6 +16,40 @@ if ty.TYPE_CHECKING:
 
 
 class BooksApi(JSApi):
+    def get_library(
+        self,
+        limit: int,
+        offset: int = 0,
+        sort: str | None = None,
+        author: str | None = None,
+        series: str | None = None,
+        favorite: bool | None = None,
+        status: str | None = None,
+    ):
+        with Database() as db:
+            books = db.get_libray(limit, offset, sort, author, series, favorite, status)
+        return self.make_answer(
+            [
+                dict(
+                    author=book.author,
+                    name=book.name,
+                    series_name=book.series_name,
+                    number_in_series=book.number_in_series,
+                    description=book.description,
+                    reader=book.reader,
+                    duration=book.duration,
+                    preview=book.preview,
+                    driver=book.driver,
+                    status=book.status.value,
+                    listening_progress=book.listening_progress,
+                    favorite=book.favorite,
+                    adding_date=book.adding_date.strftime(DATETIME_FORMAT),
+                    downloaded=bool(book.files),
+                )
+                for book in books
+            ]
+        )
+
     def search_books(self, query: str, limit: int = 10, offset: int = 0):
         result: list[dict] = []
         limit_per_one_driver = limit // len(Driver.drivers)

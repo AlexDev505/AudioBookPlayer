@@ -1,5 +1,5 @@
 import os
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, asdict
 from datetime import datetime
 from enum import Enum
 
@@ -39,6 +39,9 @@ class BookItems(list):
 
     def __getitem__(self, item) -> BookItem:
         return super().__getitem__(item)
+
+    def to_dump(self) -> list[dict]:
+        return [asdict(item) for item in self]
 
 
 class Status(Enum):
@@ -147,28 +150,27 @@ class Book:
 
     def save_to_storage(self) -> None:
         with open(self.abp_file_path, "wb") as file:
-            file.write(
-                orjson.dumps(
-                    dict(
-                        author=self.author,
-                        name=self.name,
-                        series_name=self.series_name,
-                        number_in_series=self.number_in_series,
-                        description=self.description,
-                        reader=self.reader,
-                        duration=self.duration,
-                        url=self.url,
-                        preview=self.preview,
-                        driver=self.driver,
-                        items=self.items,
-                        status=self.status,
-                        stop_flag=self.stop_flag,
-                        favorite=self.favorite,
-                        files=self.files,
-                        adding_date=self.adding_date.strftime(DATETIME_FORMAT),
-                    )
-                )
-            )
+            file.write(orjson.dumps(self.to_dump()))
+
+    def to_dump(self) -> dict:
+        return dict(
+            author=self.author,
+            name=self.name,
+            series_name=self.series_name,
+            number_in_series=self.number_in_series,
+            description=self.description,
+            reader=self.reader,
+            duration=self.duration,
+            url=self.url,
+            preview=self.preview,
+            driver=self.driver,
+            items=self.items.to_dump(),
+            status=self.status.value,
+            stop_flag=asdict(self.stop_flag),
+            favorite=self.favorite,
+            files=self.files,
+            adding_date=self.adding_date.strftime(DATETIME_FORMAT),
+        )
 
     def __repr__(self):
         return f"Books(id={self.id}, name={self.name}, url={self.url})"
