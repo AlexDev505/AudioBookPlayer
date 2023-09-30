@@ -65,8 +65,28 @@
   font-weight: bold;
   border-top-color: var(--dim-fg);
 }
-#library-sections-container {}
-.books-section {}
+#library-sections-container {
+  max-height: 90%;
+  padding-right: 8px;
+  overflow-y: auto;
+}
+.books-section.empty {
+  margin-top: 40%;
+  text-align: center;
+  width: 100%;
+}
+.books-section.empty::after {
+  content: "Ничего не найдено";
+}
+.books-section.loading::after {
+  content: "";
+  display: block;
+  height: 3em;
+  background-image: url(../images/loading.gif);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
 .book-card {
   display: flex;
   max-height: 200px;
@@ -79,16 +99,17 @@
 }
 .book-card:hover {box-shadow: -1px 1px 5px 1px rgba(0, 0, 0, 0.1)}
 .book-preview {
-  background-image: url(https://s4.knigavuhe.org/1/covers/10208/2-2.jpg?2);
   background-size: cover;
-  min-width: 145px;
+  min-width: 130px;
   min-height: 180px;
+  max-height: 180px;
   border-radius: 4px;
 }
 .book-content {
   display: flex;
   justify-content: space-between;
   flex-direction: column;
+  max-height: 180px;
   margin-left: 10px;
   overflow: hidden;
 }
@@ -96,20 +117,27 @@
   display: flex;
   justify-content: space-between;
 }
-.book-main-info {}
 .book-title {font-size: larger; font-weight: bold}
-.book-listening-progress {
+.book-state {
   display: flex;
-  align-items: center;
   font-size: small;
+  text-wrap: nowrap;
+  flex-wrap: wrap;
 }
-.book-listening-progress::before {
+.book-state > * {display: flex}
+.book-state > *::before {
   content: "";
   width: 1em;
   height: 1em;
-  margin-right: 4px;
-  background-image: url(../images/clock.svg)
+  margin-right: 4px
 }
+.book-listening-progress {
+  align-items: center;
+  margin-right: 8px;
+  margin-bottom: 2px;
+}
+.book-listening-progress::before {background-image: url(../images/clock.svg)}
+.book-adding-date::before {background-image: url(../images/calendar.svg)}
 .book-actions {display: flex;align-items: center}
 .book-actions > * {padding: 4px; border-radius: 4px;}
 .book-actions > *:not(:first-child):not(:last-child) {margin-left: 12px; margin-right: 12px;}
@@ -130,4 +158,20 @@
   display: flex;
   text-wrap: nowrap;
   flex-wrap: wrap;
+  font-size: small;
 }
+.book-additional-info > div {
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+}
+.book-additional-info > div::before {
+  width: 1em;
+  height: 1em;
+  margin-right: 4px
+}
+.book-author::before {content: url(../images/person.svg)}
+.book-reader::before {content: url(../images/mic.svg)}
+.book-duration::before {content: url(../images/clock.svg)}
+.book-series::before {content: url(../images/tag.svg)}
+.book-driver::before {content: url(../images/hdd.svg)}

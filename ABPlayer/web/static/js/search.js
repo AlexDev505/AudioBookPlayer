@@ -4,7 +4,8 @@ page("search-page").onHide = function() {
     document.getElementById("search-results-container").classList.remove("shown")
     urlParams.delete("search")
 }
-page("search-page").onShow = function() {
+page("search-page").onShow = function(el) {
+    addUrlParams({"page": el.id})
     q = urlParams.get("search")
     if (q) {
         document.querySelector("#search-input-line input").value = q
@@ -38,9 +39,9 @@ function showSearchAnimation() {
 }
 
 searching = false
-can_get_next = true
+can_search_next = true
 function onSearchResultContainerScroll() {
-    if (!can_get_next || searching) return
+    if (!can_search_next || searching) return
     container = document.getElementById("search-results-container")
     if (container.scrollHeight - container.offsetHeight - container.scrollTop < 100) {
         searching = true
@@ -56,8 +57,8 @@ function onSearchResultContainerScroll() {
 function onSearchCompleted(resp, clear=true) {
     if (!page("search-page").shown) return
     searching = false
-    if (resp["status"] != "ok") return
-    resp = resp["data"]
+    if (resp.status != "ok") return
+    resp = resp.data
     html = ""
     urls = []
     for (book of resp) {
@@ -87,19 +88,19 @@ function onSearchCompleted(resp, clear=true) {
         container.scrollTop = 0
         search_offset = resp.length
         searching = false
-        can_get_next = true
+        can_search_next = true
     } else {
         container.innerHTML = container.innerHTML + html
         search_offset += resp.length
         if (resp.length < 10)
-            can_get_next = false
+            can_search_next = false
     }
     pywebview.api.check_is_books_exists(urls).then(onCheckIsBooksExistsCompleted)
     hideSearchAnimation()
 }
 
 function onCheckIsBooksExistsCompleted(resp) {
-    for (url of resp["data"]) {
+    for (url of resp.data) {
         item = document.querySelector(`.search-result-item[data-url="${url}"]`)
         if (item)
             item.querySelector(".add-book-btn").classList.add("added")
@@ -112,7 +113,7 @@ function addBook(el) {
     pywebview.api.add_book_to_library(el.parentElement.dataset.url).then(
         (response) => {
             el.classList.remove("loading")
-            if (response["status"] != "ok") {
+            if (response.status != "ok") {
                 console.log(response)
             } else
                 el.classList.add("added")

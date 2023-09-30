@@ -105,7 +105,7 @@
 }
 .item-info > *::before {
   height: 1.2em;
-  width: 1.2em;;
+  width: 1.2em;
   margin-right: 4px;
 }
 .item-author::before {content: url(../images/person.svg)}

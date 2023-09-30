@@ -43,22 +43,25 @@ function toggleMenu() {
     menu_opened = !menu_opened
 }
 
-var current_page = null
 class Page {
+    current = null
+
     constructor(el) {
         this.el = el
         this.shown = false
         this.onShow = null
         this.onHide = null
-        this.hide()
     }
     show() {
-        if (current_page) current_page.hide()
-        current_page = this
+        if (this.constructor.current == this) return
+        if (
+            this.constructor.current &&
+            this.constructor.current.constructor == this.constructor
+        ) this.constructor.current.hide()
+        this.constructor.current = this
         this.el.style = "display: block"
         this.shown = true
         if (this.onShow) this.onShow(this.el)
-        addUrlParams({"page": this.el.id})
     }
     hide() {
         this.el.style = "display: none"
@@ -69,7 +72,9 @@ class Page {
 
 var pages = {}
 for (page_el of document.getElementsByClassName("page")) {
-    pages[page_el.id] = new Page(page_el)
+    page_ = new Page(page_el)
+    pages[page_el.id] = page_
+    page_.hide()
 }
 function page(el_id) {return pages[el_id]}
 
