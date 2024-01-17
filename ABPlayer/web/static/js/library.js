@@ -53,6 +53,10 @@ function onOpenLibrary(el) {
     addUrlParams({"page": el.id})
     if (Section.current) Section.current.hide()
     section("all-books-section").show()
+    if (urlParams.get("favorite"))
+        document.getElementById("library-title").innerHTML = "Библиотека: Избранное"
+    else
+        document.getElementById("library-title").innerHTML = "Библиотека"
 }
 
 page("library-page").onHide = function() {
@@ -206,6 +210,7 @@ function deleteBook(el, bid, name) {
 }
 
 function openBookPage(bid) {
+    if (window.event.srcElement.classList.contains("icon-btn")) return
     loadBookData(bid)
     addUrlParams({"bid": bid})
     page('book-page').show()

@@ -5,6 +5,7 @@ page("book-page").onShow = function(el) {
 }
 page("book-page").onHide = function() {
     document.getElementById("book-loading").style = "display: block;"
+    urlParams.delete("bid")
 }
 
 
