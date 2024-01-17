@@ -69,6 +69,7 @@ class Database:
         series: str | None,
         favorite: bool | None,
         status: str | None,
+        bids: list[int] | None,
     ) -> list[Book]:
         q = "SELECT * FROM books"
         args = []
@@ -86,6 +87,9 @@ class Database:
         if status is not None:
             conditions.append("status=?")
             args.append(status)
+        if bids is not None:
+            conditions.append(f"id IN ({','.join(['?'] * len(bids))})")
+            args.extend(bids)
         if conditions:
             q += " WHERE " + " AND ".join(conditions)
 
@@ -105,6 +109,21 @@ class Database:
     def get_book_by_bid(self, bid: int) -> Book | None:
         if books := self._fetchall("SELECT * FROM books WHERE id=?", bid):
             return _convert_book(books[0])
+
+    def get_books_by_bid(self, *bids: int) -> list[Book] | None:
+        if books := self._fetchall(
+            f"SELECT * FROM books WHERE id IN [{','.join(['?'] * len(bids))}]", *bids
+        ):
+            return [_convert_book(book) for book in books]
+
+    def get_books_keywords(self) -> dict[int, list[ty.Any]]:
+        result = {}
+        for book in self._fetchall("SELECT id, name, author, series_name FROM books"):
+            result[book[0]] = []
+            for field in book[1:]:
+                if field:
+                    result[book[0]].extend(field.lower().split())
+        return result
 
     def check_is_books_exists(self, urls: list[str]) -> list[str]:
         return [

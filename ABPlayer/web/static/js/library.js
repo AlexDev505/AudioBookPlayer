@@ -8,6 +8,50 @@ function toggleFilterMenu() {
     filter_menu_opened = !filter_menu_opened
 }
 
+function clearLibraryFilters() {
+    urlParams.delete("sort")
+    urlParams.delete("author")
+    urlParams.delete("series")
+    urlParams.delete("favorite")
+    urlParams.delete("search_query")
+}
+
+function applyFilters() {
+    clearLibrary()
+    onOpenLibrary(page("library-page").el)
+}
+
+function toggleReverse() {
+    if (urlParams.get("reverse")) urlParams.delete("reverse")
+    else addUrlParams({"reverse": 1})
+    applyFilters()
+}
+function toggleReverseCheckbox(value) {
+    option = document.getElementById("reverse-checkbox")
+    if (!value) option.classList.remove("checked")
+    else option.classList.add("checked")
+}
+
+lastSearch = 0
+async function searchBooksInLibrary() {
+    var query = String(document.querySelector("#search-in-library-input-line input").value.trim())
+    if (query.length == 0 && urlParams.get("search_query")) {
+        urlParams.delete("search_query")
+        applyFilters()
+        return
+    }
+    if (query.length < 3) return
+    if (Date.now() - lastSearch < 1000)
+        await delay(1000)
+    if (document.querySelector("#search-in-library-input-line input").value.trim() != query)
+        return
+
+    lastSearch = Date.now()
+    addUrlParams({"search_query": query})
+    applyFilters()
+
+}
+
 class Section extends Page {
     constructor(el) {
         super(el)
@@ -34,13 +78,6 @@ for (section_el of document.getElementsByClassName("books-section")) {
 }
 function section(el_id) {return sections[el_id]}
 
-function clearLibraryFilters() {
-    urlParams.delete("sort")
-    urlParams.delete("author")
-    urlParams.delete("series")
-    urlParams.delete("favorite")
-}
-
 function clearLibrary() {
     for ([_, container] of Object.entries(sections))
         container.el.innerHTML = ""
@@ -57,6 +94,8 @@ function onOpenLibrary(el) {
         document.getElementById("library-title").innerHTML = "Библиотека: Избранное"
     else
         document.getElementById("library-title").innerHTML = "Библиотека"
+    if (urlParams.get("reverse")) toggleReverseCheckbox(1)
+    else toggleReverseCheckbox(0)
 }
 
 page("library-page").onHide = function() {
@@ -92,10 +131,11 @@ function addBooks(el) {
     let author = urlParams.get("author")
     let series = urlParams.get("series")
     let favorite = urlParams.get("favorite")
+    let search_query = urlParams.get("search_query")
     if (favorite != null)
         favorite = Boolean(Number(favorite))
     pywebview.api.get_library(
-        10, books_in_section, sort, reverse, author, series, favorite, status
+        10, books_in_section, sort, reverse, author, series, favorite, status, search_query
     ).then((response) => showBooks(response, status))
 }
 

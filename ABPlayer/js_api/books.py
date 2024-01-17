@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import difflib
 import os
 import typing as ty
 from datetime import datetime
@@ -22,6 +23,10 @@ class BooksApi(JSApi):
     _download_processes: dict[int, Driver] = {}
     _download_queue: list[int] = []
 
+    def __init__(self):
+        self.search_query: str | None = None
+        self.matched_books_bids: list[int] | None = None
+
     def get_available_drivers(self):
         return self.make_answer([driver.driver_name for driver in Driver.drivers])
 
@@ -41,14 +46,40 @@ class BooksApi(JSApi):
         series: str | None = None,
         favorite: bool | None = None,
         status: str | None = None,
+        search_query: str | None = None,
     ):
         sort = sort if sort else "adding_date"
-        reverse = reverse if reverse is not None else True
+        reverse = not reverse if reverse is not None else True
+        if search_query is not None and search_query != self.search_query:
+            self.search_in_library(search_query)
+        if search_query is None and self.search_query is not None:
+            self.search_query = None
+            self.matched_books_bids = None
+        bids = self.matched_books_bids
+
+        print(limit, offset, sort, reverse, author, series, favorite, status, bids)
         with Database() as db:
             books = db.get_libray(
-                limit, offset, sort, reverse, author, series, favorite, status
+                limit, offset, sort, reverse, author, series, favorite, status, bids
             )
         return self.make_answer([self._answer_book(book) for book in books])
+
+    def search_in_library(self, query: str):
+        self.search_query = query
+        with Database() as db:
+            search_array = db.get_books_keywords()
+            logger.opt(colors=True).trace(f"search_array: {search_array}")
+            search_words = query.lower().split()
+            logger.opt(colors=True).trace(f"search_words: {search_words}")
+            matched_books_bids = []  # Идентификаторы найденных книг
+            # Поиск
+            for i, array in search_array.items():
+                for search_word in search_words:
+                    if difflib.get_close_matches(search_word, array):
+                        matched_books_bids.append(i)
+                        break
+            logger.opt(colors=True).debug(f"matched_books_bids: {matched_books_bids}")
+            self.matched_books_bids = matched_books_bids
 
     def toggle_favorite(self, bid: int):
         with Database() as db:

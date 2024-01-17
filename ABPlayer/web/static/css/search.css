@@ -39,7 +39,7 @@
   transform-origin: top;
 }
 #drivers-container.shown {transform: scaleY(1)}
-.driver-option {display: flex}
+.driver-option {}
 .tools {position: relative}
 
 #no-search-result {margin: auto}
