@@ -45,6 +45,9 @@ class Database:
     def _execute(self, query: str, *args) -> None:
         self._cursor.execute(query, args)
 
+    def commit(self) -> None:
+        self.conn.commit()
+
     def create_library(self) -> None:
         fields = [
             f"{field.field_name} {field.sql_type}"
@@ -61,6 +64,7 @@ class Database:
         limit: int,
         offset: int,
         sort: str | None,
+        reverse: bool | None,
         author: str | None,
         series: str | None,
         favorite: bool | None,
@@ -87,10 +91,14 @@ class Database:
 
         if sort is not None:
             q += f" ORDER BY {sort}"
+        if reverse:
+            q += " DESC"
 
         q += " LIMIT ?"
         q += " OFFSET ?"
         args.extend([limit, offset])
+
+        print(q)
 
         return [_convert_book(data) for data in self._fetchall(q, *args)]
 
@@ -140,6 +148,9 @@ class Database:
             *fields.values(),
             bid,
         )
+
+    def remove_book(self, bid: int) -> None:
+        self._execute("DELETE FROM books WHERE id=?", bid)
 
 
 def _convert_book(data: tuple[ty.Any]) -> Book:

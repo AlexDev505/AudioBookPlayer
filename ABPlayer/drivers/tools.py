@@ -52,3 +52,15 @@ def safe_name(text: str) -> str:
     while text.count('"') >= 2:
         text = re.sub(r'"(.*?)"', r"«\g<1>»", text)
     return re.sub(r'[\\/:*?"<>|+]', "", text)
+
+
+def create_instance_id(obj: ty.Any) -> int:
+    last_instance_id = getattr(obj.__class__, "_last_instance_id", 0)
+    new_instance_id = last_instance_id + 1
+    setattr(obj, "_instance_id", new_instance_id)
+    setattr(obj.__class__, "_last_instance_id", new_instance_id)
+    return new_instance_id
+
+
+def instance_id(obj: ty.Any) -> int | None:
+    return getattr(obj, "_instance_id", None)

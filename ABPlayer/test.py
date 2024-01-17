@@ -1,16 +1,21 @@
+import sys
 import os
-import json
-from dataclasses import asdict
 
-import orjson
+os.environ["books_folder"] = r"E:\books"
+
+from drivers import KnigaVUhe, BaseDownloadProcessHandler
 
 
-os.environ["APP_DIR"] = os.path.join(os.environ["LOCALAPPDATA"], "AudioBookPlayer")
-os.environ["DATABASE_PATH"] = os.path.join(os.environ["APP_DIR"], "library.sqlite")
+class StdioDownloadProcessHandler(BaseDownloadProcessHandler):
+    def show_progress(self) -> None:
+        sys.stdout.write(
+            f"\r{self.done_size}/{self.total_size}\t"
+            f"{round(self.done_size / (self.total_size / 100), 2)} %"
+        )
+        sys.stdout.flush()
 
-from database import Database  # noqa
 
-with Database() as db:
-    library = db.get_libray(1, 0, None, "", "", False, None)
-    book = library[0]
-    print(json.dumps(book.to_dump()))
+driver = KnigaVUhe()
+driver.download_book(
+    driver.get_book("https://knigavuhe.org/book/my-3/"), StdioDownloadProcessHandler()
+)

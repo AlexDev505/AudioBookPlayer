@@ -33,6 +33,15 @@
 #filter-menu.collapsed #filter-menu-toggle-btn {
   background-image: url(../images/angle_left.svg);
 }
+#filters-container {
+  padding: 10px;
+  max-width: 160px;
+  font-size: small;
+}
+#search-in-library-input-line {}
+#search-in-library-input-line input {
+  max-width: calc(100% - 35px);
+}
 
 #library {
   display: flex;
@@ -70,14 +79,13 @@
   padding-right: 8px;
   overflow-y: auto;
 }
-.books-section.empty {
-  margin-top: 40%;
-  text-align: center;
-  width: 100%;
-}
-.books-section.empty::after {
+.books-section::before {
   content: "Ничего не найдено";
+  top: 50%;
+  left: 50%;
+  position: absolute;
 }
+.books-section:has(.book-card)::before {display: none}
 .books-section.loading::after {
   content: "";
   display: block;
@@ -110,6 +118,7 @@
   justify-content: space-between;
   flex-direction: column;
   max-height: 180px;
+  width: 100%;
   margin-left: 10px;
   overflow: hidden;
 }
@@ -141,12 +150,20 @@
 .book-actions {display: flex;align-items: center}
 .book-actions > * {padding: 4px; border-radius: 4px;}
 .book-actions > *:not(:first-child):not(:last-child) {margin-left: 12px; margin-right: 12px;}
-.book-actions > *:hover {transform: scale(1.1)}
-.book-actions > *:active {margin-bottom: -4px}
-.book-actions .icon-btn::after {width: 1.5em; height: 1.5em}
+.book-actions > *:hover:not(.disabled) {transform: scale(1.1)}
+.book-actions > *:active:not(.disabled) {margin-bottom: -4px}
+.book-actions .icon-btn::after {
+  width: 1.5em;
+  height: 1.5em;
+  transition: background-image .15s ease-in-out;
+  transform-origin: center;
+}
 .toggle-favorite-btn::after {background-image: url(../images/star.svg)}
+.toggle-favorite-btn.active::after {background-image: url(../images/star_fill.svg)}
 .download-btn::after {background-image: url(../images/download.svg)}
+.remove-btn::after {background-image: url(../images/cross.svg)}
 .delete-btn::after {background-image: url(../images/trash.svg)}
+.book-actions > .loading::after {background-image: url(../images/loading.gif)}
 .book-description {
   overflow: hidden;
   text-overflow: ellipsis;

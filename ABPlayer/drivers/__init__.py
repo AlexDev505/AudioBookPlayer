@@ -1,6 +1,6 @@
 import os
 
-from .akniga import AKnigaDriver
+from .akniga import AKniga
 from .base import Driver, DownloadProcessStatus, BaseDownloadProcessHandler
 from .knigavuhe import KnigaVUhe
 

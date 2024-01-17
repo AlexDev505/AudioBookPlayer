@@ -64,6 +64,7 @@ class Page {
         if (this.onShow) this.onShow(this.el)
     }
     hide() {
+        this.constructor.current = null
         this.el.style = "display: none"
         this.shown = false
         if (this.onHide) this.onHide(this.el)
@@ -89,6 +90,11 @@ function addUrlParams(params) {
     window.history.pushState({path: refresh}, '', refresh)
 }
 
+function PWVReady() {
+    parseUrlParams()
+    pywebview.api.get_downloads().then(showDownloads)
+    pywebview.api.get_available_drivers().then(loadAvailableDrivers)
+}
 function parseUrlParams() {
     page_name = urlParams.get("page")
     if (page_name) {
@@ -100,8 +106,20 @@ function parseUrlParams() {
     }
     page("search-page").show()
 }
-window.addEventListener("pywebviewready", parseUrlParams)
+window.addEventListener("pywebviewready", PWVReady)
 
 function delay(time) {
     return new Promise(resolve => setTimeout(resolve, time));
+}
+
+function openLibraryPage(favorite=null) {
+    library_page = page('library-page')
+    if (favorite != null) addUrlParams({"favorite": Number(favorite)})
+    if (!library_page.shown) {
+        library_page.show()
+    } else {
+        library_page.onHide()
+        if (favorite != null) addUrlParams({"favorite": Number(favorite)})
+        library_page.onShow(library_page.el)
+    }
 }

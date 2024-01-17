@@ -10,6 +10,7 @@ from enum import Enum
 from inspect import isclass
 
 import orjson
+from loguru import logger
 
 from models.book import DATETIME_FORMAT
 
@@ -26,6 +27,7 @@ def adapt_json(obj: ty.Any) -> bytes:
     return orjson.dumps(obj)
 
 
+@logger.catch
 def convert_json(obj: bytes) -> ty.Any:
     return orjson.loads(obj)
 
