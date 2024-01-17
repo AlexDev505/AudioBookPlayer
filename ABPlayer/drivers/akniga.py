@@ -56,7 +56,7 @@ class PyWebViewJsApi(BaseJsApi):
             self._active = False
 
 
-class AKnigaDriver(Driver):
+class AKniga(Driver):
     site_url = "https://akniga.org"
     downloader_factory = M3U8Downloader
 

@@ -6,11 +6,14 @@
 <div id="search-input-line-container">
   <div id="search-label-container">
     <span>Поиск книги</span>
-    <button class="icon-btn open-browser-btn" onclick="window.open('https://knigavuhe.org/', '_blank')"></button>
   </div>
   <div id="search-input-line" class="input-line">
     <input placeholder="начните писать или вставьте ссылку" oninput="searchBooks()">
-    <button class="icon-btn search-btn"></button>
+    <div class="tools">
+      <button class="icon-btn driver-btn" onclick="toggleDriverOptions()"></button>
+      <button class="icon-btn search-btn"></button>
+      <div id="drivers-container"></div>
+    </div>
   </div>
 </div>
 

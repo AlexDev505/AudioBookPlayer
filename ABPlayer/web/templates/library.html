@@ -3,10 +3,16 @@
 
 <div id="library-page-content">
 
-<div id="filter-menu">
+<div id="filter-menu" style="display:none;">
   <div id="filter-menu-toggle-btn" onclick="toggleFilterMenu()"></div>
   <div id="filters-container">
-    <div>filter menu</div>
+    <div id="search-in-library-input-line" class="input-line">
+      <input placeholder="найти в библиотеке" oninput="searchBooks()">
+      <button class="icon-btn search-btn"></button>
+    </div>
+    <div>
+
+    </div>
   </div>
 </div>
 
@@ -20,9 +26,9 @@
       <div id="listened-books-section-btn" class="section-button" onclick="section('listened-books-section').show()">прослушанные</div>
     </div>
     <div id="library-sections-container" onscrollend="onLibraryScrollEnd(this)">
-      <div id="all-books-section" class="books-section empty"></div>
-      <div id="new-books-section" class="books-section empty"></div>
-      <div id="in-progress-books-section" class="books-section empty"></div>
+      <div id="all-books-section" class="books-section"></div>
+      <div id="new-books-section" class="books-section"></div>
+      <div id="in-progress-books-section" class="books-section"></div>
       <div id="listened-books-section" class="books-section empty"></div>
     </div>
   </div>

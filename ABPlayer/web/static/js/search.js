@@ -13,6 +13,32 @@ page("search-page").onShow = function(el) {
     }
 }
 
+let required_drivers = []
+function loadAvailableDrivers(resp) {
+    container = document.getElementById("drivers-container")
+    for (driver of resp.data) {
+        container.innerHTML = container.innerHTML + `
+          <div class="driver-option checkbox checked" data-driver="${driver}" onclick="toggleDriver('${driver}')">${driver}</div>
+        `
+        required_drivers.push(driver)
+    }
+}
+function toggleDriver(driver) {
+    option = document.querySelector(`.driver-option[data-driver='${driver}']`)
+    if (required_drivers.length == 1 & required_drivers.includes(driver)) return
+    if (required_drivers.includes(driver)) {
+        required_drivers = required_drivers.filter(v => v !== driver)
+    } else required_drivers.push(driver)
+    if (option.classList.contains("checked")) option.classList.remove("checked")
+    else option.classList.add("checked")
+    if (document.querySelector("#search-input-line input").value.trim()) searchBooks()
+}
+function toggleDriverOptions() {
+    container = document.getElementById("drivers-container")
+    if (container.classList.contains("shown")) container.classList.remove("shown")
+    else container.classList.add("shown")
+}
+
 search_offset = 0
 lastSearch = 0
 async function searchBooks() {
@@ -28,14 +54,16 @@ async function searchBooks() {
     lastSearch = Date.now()
     addUrlParams({"search": query})
 
-    pywebview.api.search_books(query, limit=20).then(onSearchCompleted)
+    pywebview.api.search_books(
+        query, limit=20, offset=0, required_drivers=required_drivers
+    ).then(onSearchCompleted)
 }
 
 function hideSearchAnimation() {
-    document.querySelector("#search-input-line button").classList.remove("loading")
+    document.querySelector("#search-input-line .search-btn").classList.remove("loading")
 }
 function showSearchAnimation() {
-    document.querySelector("#search-input-line button").classList.add("loading")
+    document.querySelector("#search-input-line .search-btn").classList.add("loading")
 }
 
 searching = false
@@ -57,7 +85,7 @@ function onSearchResultContainerScroll() {
 function onSearchCompleted(resp, clear=true) {
     if (!page("search-page").shown) return
     searching = false
-    if (resp.status != "ok") return
+    if (resp.status != "ok") {console.log(resp); return}
     resp = resp.data
     html = ""
     urls = []

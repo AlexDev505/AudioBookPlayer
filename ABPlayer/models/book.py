@@ -3,6 +3,7 @@ from dataclasses import dataclass, field, asdict
 from datetime import datetime
 from enum import Enum
 
+from loguru import logger
 from orjson import orjson
 
 
@@ -82,7 +83,7 @@ class Book:
     author: str = ""
     name: str = ""
     series_name: str = ""
-    number_in_series: int | float | str = ""
+    number_in_series: str = ""
     description: str = ""  # Описание
     reader: str = ""  # Чтец
     duration: str = ""  # Длительность
@@ -95,7 +96,6 @@ class Book:
     favorite: bool = False
     files: BookFiles = field(default_factory=BookFiles)
     adding_date: datetime = field(default=datetime(2007, 5, 23))
-    abp_file_path: str = ""
 
     @property
     def book_path(self) -> str:
@@ -107,7 +107,7 @@ class Book:
                 "./",
                 self.author,
                 self.series_name,
-                f"{self.number_in_series.rjust(2, '0')}. {self.name}",
+                f"{str(self.number_in_series).rjust(2, '0')}. {self.name}",
             )
         return os.path.join("./", self.author, self.name)
 
@@ -117,6 +117,13 @@ class Book:
         :return: Абсолютный путь к директории, в которой храниться книга.
         """
         return os.path.abspath(os.path.join(os.environ["books_folder"], self.book_path))
+
+    @property
+    def preview_path(self) -> str:
+        """
+        :return: Абсолютный путь к файлу обложки книги.
+        """
+        return os.path.join(self.dir_path, "cover.jpg")
 
     @property
     def listening_progress(self):
@@ -149,6 +156,9 @@ class Book:
         return data
 
     def save_to_storage(self) -> None:
+        logger.opt(colors=True).debug(
+            f"{self:styled} saved to <r>.abp</r>: <y>{self.abp_file_path}</y>"
+        )
         with open(self.abp_file_path, "wb") as file:
             file.write(orjson.dumps(self.to_dump()))
 
@@ -172,8 +182,22 @@ class Book:
             adding_date=self.adding_date.strftime(DATETIME_FORMAT),
         )
 
+    @property
+    def abp_file_path(self) -> str:
+        return os.path.join(self.dir_path, ".abp")
+
     def __repr__(self):
-        return f"Books(id={self.id}, name={self.name}, url={self.url})"
+        return f"Book(id={self.id}, name={self.name}, url={self.url})"
+
+    def __format__(self, format_spec):
+        if format_spec == "styled":
+            return (
+                f"<g>Book</g><w>("
+                f"<le>id</le>=<y>{self.id}</y>, "
+                f"<le>name</le>=<y>{self.name}</y>, "
+                f"<le>url</le>=<y>{self.url}</y>)</w>"
+            )
+        return repr(self)
 
 
 __all__ = [

@@ -22,6 +22,9 @@ class JSApi:
     def _window(self) -> webview.Window:
         return webview.windows[0]
 
+    def evaluate_js(self, command: str) -> ty.Any:
+        return self._window.evaluate_js(command)
+
     @staticmethod
     def make_answer(data: ty.Any = ()) -> dict:
         return dict(status="ok", data=data)

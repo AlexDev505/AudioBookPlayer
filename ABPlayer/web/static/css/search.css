@@ -1,7 +1,5 @@
-#search-page {
-  width: 100%;
-  height: 100%;
-}
+#search-page {width: 100%; height: 100%}
+
 #search-page-content {
   display:flex;
   width: 100%;
@@ -23,8 +21,26 @@
 }
 
 #search-input-line {width: 100%; font-size: medium}
+.driver-btn::after {background-image: url(../images/hdd.svg)}
 .search-btn::after {background-image: url(../images/search.svg)}
 .search-btn.loading::after {background-image: url(../images/loading.gif)}
+
+#drivers-container {
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  top: 100%;
+  margin-top: 5px;
+  background-color: var(--ui-element-bg);
+  padding: 5px;
+  border-radius: 4px;
+  transition: transform .05s linear;
+  transform: scaleY(0);
+  transform-origin: top;
+}
+#drivers-container.shown {transform: scaleY(1)}
+.driver-option {display: flex}
+.tools {position: relative}
 
 #no-search-result {margin: auto}
 #search-results-container {
@@ -131,9 +147,10 @@
   opacity: 0;
   transition: all .2s ease-in-out, color .2s cubic-bezier(1, 0, 0, 1);
 }
-.search-result-item:hover .add-book-btn,
+.search-result-item-card:hover ~ .add-book-btn,
 .add-book-btn.loading {opacity: 1}
 .add-book-btn:not(.added):not(.loading):hover {
+  opacity: 1;
   border-bottom-left-radius: 15px;
   max-width: 100%;
   color: inherit;

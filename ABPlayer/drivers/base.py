@@ -1,16 +1,17 @@
 from __future__ import annotations
 
+import threading
 import typing as ty
 from abc import ABC, abstractmethod
 from enum import Enum
 
 import requests
+from loguru import logger
 
-from .tools import NotImplementedVariable
+from .tools import NotImplementedVariable, create_instance_id, instance_id
 
 
 if ty.TYPE_CHECKING:
-    from pathlib import Path
     from models.book import Book
 
 
@@ -22,7 +23,10 @@ class DownloadProcessStatus(Enum):
     WAITING = "waiting"
     PREPARING = "preparing"
     DOWNLOADING = "downloading"
+    FINISHING = "finishing"
     FINISHED = "finished"
+    TERMINATING = "terminating"
+    TERMINATED = "terminated"
 
 
 class BaseDownloadProcessHandler(ABC):
@@ -41,11 +45,17 @@ class BaseDownloadProcessHandler(ABC):
         self.status = DownloadProcessStatus.WAITING
         self.total_size: int = ...
         self.done_size: int = ...
+        create_instance_id(self)
+        logger.opt(colors=True).trace(f"{self:styled} created")
 
     def init(self, total_size: int, status: DownloadProcessStatus) -> None:
         self.status = status
         self.total_size = total_size
         self.done_size = 0
+        logger.opt(colors=True).trace(
+            f"{self:styled} inited: "
+            f"<y>{status.value}</y> total_size=<y>{total_size}</y>"
+        )
 
     def progress(self, size: int) -> None:
         self.done_size += size
@@ -54,13 +64,22 @@ class BaseDownloadProcessHandler(ABC):
     def finish(self) -> None:
         self.status = DownloadProcessStatus.FINISHED
         self.done_size = self.total_size
-        self.show_progress()
+        logger.opt(colors=True).trace(f"{self:styled} finished")
+        # self.show_progress()
 
     @abstractmethod
     def show_progress(self) -> None:
         """
         Отображает прогресс.
         """
+
+    def __repr__(self):
+        return f"DPH-{instance_id(self)}"
+
+    def __format__(self, format_spec):
+        if format_spec == "styled":
+            return f"<y>{self!r}</y>"
+        return repr(self)
 
 
 class BaseDownloader(ABC):
@@ -82,6 +101,10 @@ class BaseDownloader(ABC):
         self._file_stream: requests.Response | None = None
         self._terminated: bool = False
 
+        create_instance_id(self)
+        threading.current_thread().name = repr(self)
+        logger.opt(colors=True).debug(f"initialized. book: {book:styled}")
+
     @abstractmethod
     def _prepare(self) -> None:
         """
@@ -90,30 +113,66 @@ class BaseDownloader(ABC):
         """
 
     @abstractmethod
-    def _download_book(self) -> list[Path]:
+    def _download_book(self) -> None:
         """
         Скачивает файлы.
         Должно быть переопределено в наследуемом классе.
         """
 
-    def download_book(self) -> list[Path]:
+    def save_preview(self) -> None:
+        if self.book.preview:
+            logger.opt(colors=True).debug(f"loading preview <y>{self.book.preview}</y>")
+            try:
+                response = requests.get(self.book.preview)
+                if response.status_code == 200:
+                    logger.trace("saving preview")
+                    with open(self.book.preview_path, "wb") as file:
+                        file.write(response.content)
+                else:
+                    logger.error(f"preview loading status: {response.status_code}")
+            except IOError as err:
+                logger.error(f"loading preview failed. {type(err).__name__}: {err}")
+
+    def download_book(self) -> bool:
         """
         Скачивает файлы книги.
         :returns: Список с путями к скачанным файлам.
         """
+        logger.debug("preparing downloading")
         self._prepare()
-        return self._download_book()
+        logger.debug("downloading stared")
+        self._download_book()
+        if not self._terminated:
+            if self.process_handler:
+                self.process_handler.status = DownloadProcessStatus.FINISHING
+            self.save_preview()
+            self.book.save_to_storage()
+            if self.process_handler:
+                self.process_handler.finish()
+                logger.debug("finished")
+        else:
+            if self.process_handler:
+                self.process_handler.status = DownloadProcessStatus.TERMINATED
+                logger.debug("terminated")
+        return not self._terminated
 
     def terminate(self) -> None:
         """
         Прерывает загрузку.
         """
+        logger.opt(colors=True).debug(f"<y>{self}</y> terminating")
+        self.process_handler.status = DownloadProcessStatus.TERMINATING
         self._terminated = True
         if self._file:
             if not self._file.closed:
+                logger.trace("closing file")
                 self._file.close()
         if self._file_stream:
+            logger.trace("closing file stream")
             self._file_stream.close()
+
+    def __repr__(self):
+        return f"BookDownloader-{instance_id(self)}"
 
 
 class Driver(ABC):
@@ -173,7 +232,7 @@ class Driver(ABC):
 
     def download_book(
         self, book: Book, process_handler: BaseDownloadProcessHandler | None = None
-    ) -> list[Path]:
+    ) -> bool:
         """
         Метод, скачивающий аудио файлы книги.
         :param book: Экземпляр книги.

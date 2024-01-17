@@ -3,6 +3,7 @@ from __future__ import annotations
 import binascii
 import os
 import re
+import time
 import typing as ty
 from contextlib import suppress
 from pathlib import Path
@@ -14,6 +15,8 @@ import requests
 from Crypto.Cipher import AES
 from loguru import logger
 
+from models.book import BookFiles
+from tools import get_file_hash, convert_from_bytes
 from ..base import BaseDownloader, DownloadProcessStatus
 from ..tools import prepare_file_metadata, get_audio_file_duration
 
@@ -36,6 +39,7 @@ class M3U8Downloader(BaseDownloader):
 
         self._m3u8_data = None  # Объект m3u8
         self._host_uri: str | None = None
+        self._encryption_key: str | None = None  # Ключ шифрования фрагментов
 
     def _prepare(self) -> None:
         self._m3u8_data = m3u8.load(self.book.items[0].file_url)
@@ -44,76 +48,106 @@ class M3U8Downloader(BaseDownloader):
         if self.process_handler:
             # Общий размер книги(в байтах)
             total_size = self._calc_total_size()
-            logger.opt(colors=True).debug(f"Total size: <y>{total_size} bytes</y>")
             self.process_handler.init(
                 total_size, status=DownloadProcessStatus.DOWNLOADING
             )
 
-    def _download_book(self) -> list[Path]:
-        files: list[Path] = []  # Результат. Пути к скачанным файлам
-        key = None  # Ключ шифрования фрагментов
+    def _download_book(self) -> None:
+        files = BookFiles()
 
         item_index = 0
         item = self.book.items[item_index]
         file_path = self._get_file_path(item_index)
-        files.append(file_path)
         self._file = open(file_path, "wb")
 
         for segment_index, segment in enumerate(self._m3u8_data.segments):
             if self._terminated:
                 break
 
-            ts_url = os.path.join(self._host_uri, segment.uri)  # Ссылка на сегмент
             logger.opt(colors=True).debug(
-                f"Downloading segment <y>{segment.title}</y>({ts_url})"
+                f"downloading segment <y>{segment_index}</y> "
+                f"of item <y>{item_index}</y>"
             )
-
-            # Определяем функцию дешифрования фрагмента
-            decrypt_func = None
-            if segment.key.method == "AES-128":
-                if not key:
-                    key_uri = segment.key.uri
-                    key = urlopen(key_uri).read()
-
-                ind = segment_index + self._m3u8_data.media_sequence
-                iv = binascii.a2b_hex("%032x" % ind)
-                cipher = AES.new(key, AES.MODE_CBC, iv=iv)
-                decrypt_func = cipher.decrypt
-
-            # Создаем объект потоковой загрузки фрагмента
-            self._file_stream = requests.get(ts_url, timeout=10, stream=True)
-            logger.opt(colors=True).debug(
-                f"File size: <y>{self._file_stream.headers.get('content-length')}</y>"
-            )
-            with suppress(requests.exceptions.StreamConsumedError):
-                for data in self._file_stream.iter_content(chunk_size=5120):
-                    if self._terminated:
-                        break
-                    if self.process_handler:
-                        self.process_handler.progress(len(data))
-                    # Добавляем фрагмент в аудио файл
-                    self._file.write(data if not decrypt_func else decrypt_func(data))
-                    # Сбрасываем данные в файл. Освобождаем память
-                    self._file.flush()
-            self._file_stream = None
+            while True:
+                try:
+                    if not self._terminated:
+                        self._download_segment(segment_index, segment)
+                    break
+                except requests.exceptions.ConnectionError as err:
+                    logger.opt(colors=True).debug(
+                        f"downloading failed {type(err).__name__}: {err}"
+                    )
+                    time.sleep(5)
+                    logger.opt(colors=True).trace(
+                        f"retrying download segment <y>{segment_index}</y>"
+                    )
+            if self._terminated:
+                break
 
             # Если длительность получившегося файла равна длительности главы
             # (погрешность 2 сек)
             if item.duration - get_audio_file_duration(file_path) < 2:
+                logger.debug("item completed")
                 self._file.close()
                 self._file = None
+                logger.trace("preparing file metadata")
                 prepare_file_metadata(
                     file_path, self.book.author, item.title, item_index
                 )
+                logger.trace("hashing file")
+                files[file_path.name] = get_file_hash(file_path)
                 # Переход к следующей главе
                 if item_index + 1 < len(self.book.items):
                     item_index += 1
                     item = self.book.items[item_index]
                     file_path = self._get_file_path(item_index)
-                    files.append(file_path)
                     self._file = open(file_path, "wb")
+        else:
+            self.book.files = files
 
-        return files
+    def _download_segment(self, segment_index: int, segment):
+        ts_url = os.path.join(self._host_uri, segment.uri)  # Ссылка на сегмент
+        logger.opt(colors=True).trace(f"segment <y>{segment.title}</y>({ts_url})")
+
+        decrypt_func = self._get_decryption_func(segment_index, segment)
+
+        # Создаем объект потоковой загрузки фрагмента
+        self._file_stream = requests.get(ts_url, timeout=10, stream=True)
+        logger.opt(colors=True).trace(
+            "file size: <y>{}</y>".format(
+                content_length
+                if (
+                    content_length := self._file_stream.headers.get("content-length")
+                ).isdigit()
+                else convert_from_bytes(int(content_length))
+            )
+        )
+        with suppress(requests.exceptions.StreamConsumedError):
+            for data in self._file_stream.iter_content(chunk_size=5120):
+                if self._terminated:
+                    break
+                if self.process_handler:
+                    self.process_handler.progress(len(data))
+                # Добавляем фрагмент в аудио файл
+                self._file.write(data if not decrypt_func else decrypt_func(data))
+                # Сбрасываем данные в файл. Освобождаем память
+                self._file.flush()
+        self._file_stream = None
+
+    def _get_decryption_func(self, segment_index: int, segment):
+        # Определяем функцию дешифрования фрагмента
+        decrypt_func = None
+        if segment.key.method == "AES-128":
+            if not self._encryption_key:
+                key_uri = segment.key.uri
+                self._encryption_key = urlopen(key_uri).read()
+
+            ind = segment_index + self._m3u8_data.media_sequence
+            iv = binascii.a2b_hex("%032x" % ind)
+            cipher = AES.new(self._encryption_key, AES.MODE_CBC, iv=iv)
+            decrypt_func = cipher.decrypt
+
+        return decrypt_func
 
     def _parse_host_uri(self) -> None:
         host_uri = urlparse(self.book.items[0].file_url)
@@ -151,7 +185,8 @@ class M3U8Downloader(BaseDownloader):
                 f"{str(item_index + 1).rjust(2, '0')}. {item_title}.mp3",
             )
         )
-        if not file_path.exists():
+        if not file_path.parent.exists():
             file_path.parent.mkdir(parents=True, exist_ok=True)
+            logger.opt(colors=True).debug(f"book dir <y>{file_path.parent}</y> crated")
 
         return file_path
