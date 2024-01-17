@@ -3,16 +3,14 @@
 
 <div id="library-page-content">
 
-<div id="filter-menu" style="display:none;">
+<div id="filter-menu">
   <div id="filter-menu-toggle-btn" onclick="toggleFilterMenu()"></div>
   <div id="filters-container">
     <div id="search-in-library-input-line" class="input-line">
-      <input placeholder="найти в библиотеке" oninput="searchBooks()">
+      <input placeholder="найти в библиотеке" oninput="searchBooksInLibrary()">
       <button class="icon-btn search-btn"></button>
     </div>
-    <div>
-
-    </div>
+    <div id="reverse-checkbox" class="checkbox" onclick="toggleReverse()">в обратном порядке</div>
   </div>
 </div>
 

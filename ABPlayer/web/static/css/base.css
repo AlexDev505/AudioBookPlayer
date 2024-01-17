@@ -75,7 +75,7 @@ html, body {margin: 0; height: 100%; background-color: var(--root-bg)}
 }
 .icon-btn.loading::after {background-image: url(../images/loading.svg)}
 
-.checkbox {position: relative}
+.checkbox {position: relative; display: flex}
 .checkbox::before {
   content: "";
   display: block;
