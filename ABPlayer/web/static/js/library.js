@@ -298,6 +298,7 @@ function deleteBook(el, bid, name) {
         if (resp.status != "ok") {console.log(resp); return}
         deleteBtn = document.querySelector(`.book-card[data-bid='${bid}'] .delete-btn`)
         deleteBtn.classList.remove("delete-btn")
+        deleteBtn.classList.remove("loading")
         deleteBtn.classList.add("download-btn")
         deleteBtn.onclick = function() {startDownloading(this, bid, name)}
     })

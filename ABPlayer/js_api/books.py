@@ -189,19 +189,24 @@ class BooksApi(JSApi):
 
         if len(self._download_processes) >= 5:
             self._download_queue.append(bid)
-            logger.opt(colors=True).debug(f"{book} added to download queue")
+            logger.opt(colors=True).debug(f"{book:styled} added to download queue")
             return self.make_answer(dict(bid=bid))
 
         driver = Driver.get_suitable_driver(book.url)()
         self._download_processes[bid] = driver
         if driver.download_book(book, DownloadingProcessHandler(self, bid)):
-            logger.opt(colors=True).debug(f"saving {book} into db")
+            logger.opt(colors=True).debug(f"saving {book:styled} into db")
             with Database(autocommit=True) as db:
                 db.save(driver.downloader.book)
         del self._download_processes[bid]
 
+        self._window.evaluate_js(f"endLoading({bid})")
+        logger.opt(colors=True).info(f"downloading finished: {book:styled}")
+
         if self._download_queue:
             self.download_book(self._download_queue.pop(0))
+
+        return self.make_answer()
 
     def terminate_downloading(self, bid: int):
         if bid in self._download_queue:
@@ -217,19 +222,24 @@ class BooksApi(JSApi):
         if not book.files:
             return self.error(BookNotDownloaded(bid=bid))
 
-        for file in book.files.keys():
+        logger.opt(colors=True).debug(f"deleting book: {book:styled}")
+        for file in [*book.files.keys(), "cover.jpg", ".abp"]:
             file_path = os.path.join(book.dir_path, file)
             try:
+                logger.opt(colors=True).trace(f"deleting <y>{file_path}</y>")
                 os.remove(file_path)
             except PermissionError:
-                logger.error(f"File locked. {file_path}")
+                logger.error(f"file locked. {file_path}")
             except IOError as err:
                 logger.exception(err)
+
+        os.removedirs(book.dir_path)
 
         book.files.clear()
         with Database(autocommit=True) as db:
             db.save(book)
 
+        logger.opt(colors=True).debug(f"book deleted: {book:styled}")
         return self.make_answer()
 
     def remove_book(self, bid: int):

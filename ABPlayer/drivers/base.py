@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+import os
+import shutil
 import threading
 import typing as ty
 from abc import ABC, abstractmethod
 from enum import Enum
+from pathlib import Path
 
 import requests
 from loguru import logger
@@ -170,6 +173,12 @@ class BaseDownloader(ABC):
         if self._file_stream:
             logger.trace("closing file stream")
             self._file_stream.close()
+
+        logger.opt(colors=True).debug(
+            f"<y>{self}</y> clearing tree <y>{self.book.dir_path}</y>"
+        )
+        shutil.rmtree(self.book.dir_path, ignore_errors=True)
+        os.removedirs(Path(self.book.dir_path).parent)
 
     def __repr__(self):
         return f"BookDownloader-{instance_id(self)}"

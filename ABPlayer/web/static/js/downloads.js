@@ -22,7 +22,8 @@ function startDownloading(button, bid, title) {
             removeDownloadingCard(response.extra.bid)
             return
         } else {
-            setDownloadingStatus(response.data.bid, "waiting")
+            if (response.data.bid)
+                setDownloadingStatus(response.data.bid, "waiting")
         }
     })
     createDownloadingCard(bid, title)
@@ -83,5 +84,9 @@ function terminateDownloading(bid) {
 
 function removeDownloadingCard(bid) {
     document.querySelector(`.download-card[data-bid='${bid}']`).remove()
+}
+
+function endLoading(bid) {
+    if (document.querySelector(`.book-card[data-bid='${bid}']`)) applyFilters()
 }
 
