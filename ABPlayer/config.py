@@ -13,7 +13,6 @@ FIELDS = {
 
 def init() -> None:
     logger.trace("Configuration initialization")
-    print(os.environ["CONFIG_PATH"])
 
     if not os.path.exists(os.environ["CONFIG_PATH"]):
         _create_config()
