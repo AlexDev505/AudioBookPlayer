@@ -45,7 +45,6 @@
   flex-wrap: wrap;
 }
 .progress-info > div {flex: 1}
-.progress-info .status {flex: auto}
 .progress-bar {
   position: absolute;
   height: 4px;

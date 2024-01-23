@@ -34,8 +34,8 @@ function createDownloadingCard(bid, title) {
     <div class="download-card" data-bid="${bid}">
       <div>
         <div class="book-title">${title}</div>
+        <div class="status">инициализация...</div>
         <div class="progress-info">
-          <div class="status">инициализация...</div>
           <div class="percents"></div>
           <div class="data-size"></div>
         </div>
