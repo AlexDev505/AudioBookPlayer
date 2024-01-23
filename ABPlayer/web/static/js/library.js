@@ -32,6 +32,22 @@ function toggleReverseCheckbox(value) {
     else option.classList.add("checked")
 }
 
+function filterByAuthor(value) {
+    if (urlParams.get("series")) urlParams.delete("series")
+    if (value == urlParams.get("author")) urlParams.delete("author")
+    else addUrlParams({"author": value})
+    applyFilters()
+}
+function filterBySeries(value) {
+    if (urlParams.get("author")) urlParams.delete("author")
+    if (value == urlParams.get("series")) urlParams.delete("series")
+    else addUrlParams({"series": value})
+    applyFilters()
+}
+function selectFilterBy(value) {
+    document.querySelector(`.filter-by-section-item[data-value="${value}"]`).classList.add("checked")
+}
+
 lastSearch = 0
 async function searchBooksInLibrary() {
     var query = String(document.querySelector("#search-in-library-input-line input").value.trim())
@@ -49,8 +65,46 @@ async function searchBooksInLibrary() {
     lastSearch = Date.now()
     addUrlParams({"search_query": query})
     applyFilters()
-
 }
+
+
+is_authors_section_full = false
+is_series_section_full = false
+function fillFilterBySections() {
+    pywebview.api.get_all_authors().then((response) => {
+        filter_by_section = document.getElementById("authors-section")
+        filter_by_section_btn = document.getElementById("authors-section-btn")
+        if (!response.data.length) {
+            is_authors_section_full = false
+            filter_by_section_btn.classList.add("disabled")
+            return
+        }
+        filter_by_section_btn.classList.remove("disabled")
+        html = ""
+        for (obj of response.data) {
+            html = html + `<div class="filter-by-section-item" data-value="${obj}" onclick="filterByAuthor(this.dataset.value)">${obj}</div>`
+        }
+        filter_by_section.innerHTML = html
+        if (urlParams.get("author")) selectFilterBy(urlParams.get("author"))
+    })
+    pywebview.api.get_all_series().then((response) => {
+        filter_by_section = document.getElementById("series-section")
+        filter_by_section_btn = document.getElementById("series-section-btn")
+        if (!response.data.length) {
+            is_series_section_full = false
+            filter_by_section_btn.classList.add("disabled")
+            return
+        }
+        filter_by_section_btn.classList.remove("disabled")
+        html = ""
+        for (obj of response.data) {
+            html = html + `<div class="filter-by-section-item" data-value="${obj}" onclick="filterBySeries(this.dataset.value)">${obj}</div>`
+        }
+        filter_by_section.innerHTML = html
+        if (urlParams.get("series")) selectFilterBy(urlParams.get("series"))
+    })
+}
+
 
 class Section extends Page {
     constructor(el) {
@@ -90,6 +144,7 @@ function onOpenLibrary(el) {
     addUrlParams({"page": el.id})
     if (Section.current) Section.current.hide()
     section("all-books-section").show()
+    fillFilterBySections()
     if (urlParams.get("favorite"))
         document.getElementById("library-title").innerHTML = "Библиотека: Избранное"
     else

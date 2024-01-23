@@ -81,6 +81,16 @@ class BooksApi(JSApi):
             logger.opt(colors=True).debug(f"matched_books_bids: {matched_books_bids}")
             self.matched_books_bids = matched_books_bids
 
+    def get_all_authors(self):
+        with Database() as db:
+            authors = db.get_all_authors()
+        return self.make_answer(authors)
+
+    def get_all_series(self):
+        with Database() as db:
+            authors = db.get_all_series()
+        return self.make_answer(authors)
+
     def toggle_favorite(self, bid: int):
         with Database() as db:
             if not (book := db.get_book_by_bid(bid)):

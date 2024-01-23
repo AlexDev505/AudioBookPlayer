@@ -37,12 +37,44 @@
   padding: 10px;
   max-width: 160px;
   font-size: small;
+  max-height: calc(100% - 20px);
 }
 #search-in-library-input-line {}
 #search-in-library-input-line input {
   max-width: calc(100% - 35px);
 }
-#reverse-checkbox {margin-top: 6px;}
+#reverse-checkbox {margin-top: 6px; margin-bottom: 16px;}
+
+#filter-by-sections {display: inline; max-height: 90%}
+.filter-by-section-btn {
+  margin-bottom: 4px;
+  font-size: medium;
+  font-weight: bold;
+}
+.filter-by-section-btn.disabled {}
+.filter-by-section {
+  overflow:auto;
+  margin-bottom: 16px;
+  text-wrap: pretty;
+  max-height: 40%;
+}
+.filter-by-section-item {margin-bottom: 2px}
+.filter-by-section-item.checked {
+  display: flex;
+  align-items: center;
+  padding-left: 4px;
+  font-weight: bold;
+}
+.filter-by-section-item.checked::before {
+  content: "";
+  background-image: url(../images/cross.svg);
+  background-repeat: no-repeat;
+  margin-right: 4px;
+  min-width: 1em;
+  max-width: 1em;
+  display: block;
+  height: 1em;
+}
 
 #library {
   display: flex;
@@ -77,15 +109,17 @@
 }
 #library-sections-container {
   max-height: 90%;
+  height: 90%;
   padding-right: 8px;
   overflow-y: auto;
 }
 .books-section::before {
   content: "Ничего не найдено";
   top: 50%;
-  left: 50%;
-  position: absolute;
+  left: 40%;
+  position: relative;
 }
+.books-section {height: 100%}
 .books-section:has(.book-card)::before {display: none}
 .books-section.loading::after {
   content: "";
