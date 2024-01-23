@@ -13,14 +13,16 @@ page("search-page").onShow = function(el) {
     }
 }
 
-let required_drivers = []
 function loadAvailableDrivers(resp) {
     container = document.getElementById("drivers-container")
+    _required_drivers = required_drivers.slice(0, required_drivers.length)
+    console.log(required_drivers, _required_drivers)
+    required_drivers = []
     for (driver of resp.data) {
+        if (_required_drivers.includes(driver)) required_drivers.push(driver)
         container.innerHTML = container.innerHTML + `
-          <div class="driver-option checkbox checked" data-driver="${driver}" onclick="toggleDriver('${driver}')">${driver}</div>
+          <div class="driver-option checkbox ${(_required_drivers.includes(driver)) ? 'checked' : ''}" data-driver="${driver}" onclick="toggleDriver('${driver}')">${driver}</div>
         `
-        required_drivers.push(driver)
     }
 }
 function toggleDriver(driver) {

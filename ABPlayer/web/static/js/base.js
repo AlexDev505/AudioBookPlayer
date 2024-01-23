@@ -34,7 +34,6 @@ function getHttpRequestObject()
 }
 
 sideMenu = document.getElementById("side-menu")
-var menu_opened = true
 function toggleMenu() {
     if (menu_opened)
         sideMenu.classList.add("collapsed")
@@ -94,6 +93,8 @@ function PWVReady() {
     parseUrlParams()
     pywebview.api.get_downloads().then(showDownloads)
     pywebview.api.get_available_drivers().then(loadAvailableDrivers)
+    if (!menu_opened) {menu_opened = true; toggleMenu()}
+    if (!filter_menu_opened) {filter_menu_opened = true; toggleFilterMenu()}
 }
 function parseUrlParams() {
     page_name = urlParams.get("page")
@@ -104,7 +105,7 @@ function parseUrlParams() {
             return
         }
     }
-    page("search-page").show()
+    page("library-page").show()
 }
 window.addEventListener("pywebviewready", PWVReady)
 

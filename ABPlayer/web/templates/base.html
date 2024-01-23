@@ -3,6 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="{{url_for('static', filename='css/base.css')}}">
+  <script>
+    var menu_opened = {{ is_main_menu_opened|tojson }}
+    var filter_menu_opened = {{ is_filter_menu_opened|tojson }}
+    var required_drivers = {{ [] if not required_drivers else required_drivers|tojson }}
+  </script>
   <script defer src="{{url_for('static', filename='js/base.js')}}"></script>
 </head>
 <body>

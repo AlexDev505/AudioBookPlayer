@@ -1,5 +1,4 @@
 filterMenu = document.getElementById("filter-menu")
-var filter_menu_opened = true
 function toggleFilterMenu() {
     if (filter_menu_opened)
         filterMenu.classList.add("collapsed")

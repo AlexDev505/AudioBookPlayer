@@ -31,6 +31,7 @@ def main() -> None:
     from web.app import app
 
     import config
+    import temp_file
     from database import Database
 
     config.init()
@@ -49,11 +50,12 @@ def main() -> None:
     logger.info("Launching...")
 
     js_api = JSApi()
+    temp_data = temp_file.load()
     window = webview.create_window(
         "ABPLayer",
         app,
-        width=1000,
-        height=650,
+        width=temp_data.get("width", 1000),
+        height=temp_data.get("height", 650),
         frameless=True,
         easy_drag=False,
         min_size=(920, 520),
