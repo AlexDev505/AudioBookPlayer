@@ -1,5 +1,4 @@
 import os
-import sys
 
 
 # CONFIG SETUP
@@ -57,7 +56,7 @@ def main() -> None:
         height=650,
         frameless=True,
         easy_drag=False,
-        min_size=(820, 520),
+        min_size=(920, 520),
         background_color="#000",
         js_api=js_api,
     )

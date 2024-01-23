@@ -125,6 +125,12 @@ class Database:
                     result[book[0]].extend(field.lower().split())
         return result
 
+    def get_all_authors(self) -> list[str]:
+        return [obj[0] for obj in set(self._fetchall("SELECT author FROM books"))]
+
+    def get_all_series(self) -> list[str]:
+        return [obj[0] for obj in set(self._fetchall("SELECT series_name FROM books"))]
+
     def check_is_books_exists(self, urls: list[str]) -> list[str]:
         return [
             url[0]
