@@ -124,3 +124,26 @@ function openLibraryPage(favorite=null) {
         library_page.onShow(library_page.el)
     }
 }
+
+notifications_count = 0
+function createNotification(content, timeout=0, closable=true) {
+    notifications_count = notifications_count + 1
+    if (notifications_count == 6) {
+        notifications_count = notifications_count - 1
+        document.querySelector(".notification").remove()
+    }
+    notifications = document.getElementById("notifications")
+    var notification = document.createElement("div")
+    notifications.appendChild(notification)
+    notification.classList.add("notification")
+    notification.innerHTML = `<div class="notification-content">${content}</div><div class="icon-btn cross-btn"></div>`
+    notification.querySelector(".cross-btn").onclick = function() {this.parentElement.remove();notifications_count=notifications_count-1}
+    if (timeout) setTimeout(function(notification){if(!notification.isConnected) return;notification.remove();notifications_count=notifications_count-1}, timeout*1000, notification)
+    if (!closable) notification.querySelector(".cross-btn").style.display = "none"
+    return notification
+}
+function showError(text) {
+    createNotification(
+        `<div style="font-weight: bold">Ошибка</div><div>${text}</div>`, 30, true
+    )
+}

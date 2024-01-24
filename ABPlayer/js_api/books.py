@@ -425,7 +425,7 @@ class DownloadingProcessHandler(BaseDownloadProcessHandler):
 
 class ConnectionFailedError(JSApiError):
     code = 1
-    message = "Ошибка соединения"
+    message = "Проблемы с соединением"
 
 
 class NoSuitableDriver(JSApiError):

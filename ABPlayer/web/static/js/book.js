@@ -11,7 +11,7 @@ page("book-page").onHide = function() {
 
 function loadBookData(bid) {
     pywebview.api.book_by_bid(bid).then((resp) => {
-        if (resp.status != "ok") {console.log(resp); return}
+        if (resp.status != "ok") {showError(resp.message); return}
         document.querySelector("#book-page-content .book-title").innerHTML = resp.data.name
         document.querySelector("#book-page-content .book-listening-progress").innerHTML = `${resp.data.listening_progress} прослушано`
         document.querySelector("#book-page-content .book-adding-date").innerHTML = `Добавлена ${resp.data.adding_date}`

@@ -18,7 +18,7 @@ function startDownloading(button, bid, title) {
     }
     pywebview.api.download_book(bid).then((response) => {
         if (response.status != "ok") {
-            console.log(response)
+            showError(response.message)
             removeDownloadingCard(response.extra.bid)
             return
         } else {

@@ -86,7 +86,7 @@ function onSearchResultContainerScroll() {
 function onSearchCompleted(resp, clear=true) {
     if (!page("search-page").shown) return
     searching = false
-    if (resp.status != "ok") {console.log(resp); return}
+    if (resp.status != "ok") {showError(resp.message); return}
     resp = resp.data
     html = ""
     urls = []
@@ -143,7 +143,7 @@ function addBook(el) {
         (response) => {
             el.classList.remove("loading")
             if (response.status != "ok") {
-                console.log(response)
+                showError(response.message)
             } else
                 el.classList.add("added")
         }
