@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 
 from loguru import logger
@@ -22,6 +23,12 @@ def formatter(record) -> str:
     )
 
 
+def uncolored_formatter(record) -> str:
+    if "" in record["message"]:
+        record["message"] = re.sub(r"\[((\d+);?)+m", "", record["message"])
+    return formatter(record)
+
+
 LOGGING_LEVEL = os.environ.get("LOGGING_LEVEL", "DEBUG")
 if os.environ.get("CONSOLE"):
     console_logger_handler = logger.add(
@@ -30,7 +37,10 @@ if os.environ.get("CONSOLE"):
 
 if DEBUG_PATH := os.environ.get("DEBUG_PATH"):
     file_logger_handler = logger.add(
-        DEBUG_PATH, colorize=False, format=formatter, level=LOGGING_LEVEL
+        DEBUG_PATH,
+        colorize=False,
+        format=uncolored_formatter,
+        level=LOGGING_LEVEL,
     )
 
 logger.level("TRACE", color="<lk>")  # TRACE - синий

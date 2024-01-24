@@ -1,5 +1,7 @@
 import os
 
+from tools import pretty_view
+
 
 # CONFIG SETUP
 # Путь к директории приложения
@@ -22,7 +24,7 @@ os.environ["CONSOLE"] = "1"
 os.environ["DEBUG"] = "1"
 
 
-from logger import logger  # noqa
+from logger import logger, LOGGING_LEVEL  # noqa
 
 
 def main() -> None:
@@ -39,15 +41,15 @@ def main() -> None:
         db.create_library()
 
     def _on_loaded():
-        logger.info(f"Loading {window.get_current_url()}")
+        logger.debug(f"loaded {window.get_current_url()}")
 
     def _on_closed():
-        logger.info("Application closed\n\n")
+        logger.info("application closed\n\n")
 
     def _on_shown():
-        logger.info("Application started")
+        logger.info("application started")
 
-    logger.info("Launching...")
+    logger.info("launching...")
 
     js_api = JSApi()
     temp_data = temp_file.load()
@@ -68,6 +70,16 @@ def main() -> None:
     window.events.closed += _on_closed
     window.events.shown += _on_shown
 
+    logger.opt(colors=True).debug(
+        "starting params: "
+        + pretty_view(
+            dict(
+                app_dir=os.environ["APP_DIR"],
+                debug=bool(os.getenv("DEBUG")),
+                logging_level=LOGGING_LEVEL,
+            ),
+        ),
+    )
     webview.start(js_api.init, debug=bool(os.environ["DEBUG"]))
 
 

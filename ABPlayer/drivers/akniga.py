@@ -13,13 +13,37 @@ from .downloaders import M3U8Downloader
 from .tools import safe_name
 
 
+"""
+На сайте AKniga информация о книге загружается динамически через JavaScript.
+Поэтому для получения полных данных о книге нам необходима среда исполнения JS.
+"""
+
+
 class BaseJsApi(ABC):
     @abstractmethod
     def get_book_data(self, url: str) -> dict:
-        ...
+        """
+        Метод, возвращающий динамически загружаемые данные о книге.
+        {
+            "author": <str>,
+            "titleonly": <str>,  # название книги в чистом виде
+            "items": [{
+                "file": <int>,  # номер файла
+                "title": <str>,  # название главы
+                "time_from_start": <str>,  # точка начала
+                "time_finish": <str>,  # точка окончания
+            }, ...],
+            "m3u8": <str>,  # ссылка на файл m3u8
+        }
+        """
 
 
 class PyWebViewJsApi(BaseJsApi):
+    """
+    Среда исполнения JS, использующая Pywebview.
+    Создаёт скрытое окно, загружает там страницу книги и берет с нее данные.
+    """
+
     def __init__(self):
         self._window: webview.Window | None = None
         self._result = {}
@@ -27,9 +51,10 @@ class PyWebViewJsApi(BaseJsApi):
 
     def get_book_data(self, url: str) -> dict:
         self._window = webview.create_window("", url=url, hidden=True)
+        # Выполнение `self._get_book_data` после загрузки страницы
         self._window.events.loaded += self._get_book_data
         self._active = True
-        if len(webview.windows) == 1:
+        if len(webview.windows) == 1:  # На данный момент нет запущенных окон pywebview
             webview.start()
         else:
             while self._active:

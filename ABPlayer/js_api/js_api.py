@@ -1,15 +1,22 @@
 from __future__ import annotations
 
 import typing as ty
+from functools import partial
 from inspect import ismethod
 
 import webview
+from loguru import logger
+
+from tools import pretty_view
 
 
 class JSApi:
     sections: list[ty.Type[JSApi]] = []
 
     def init(self):
+        """
+        Регистрирует методы для дальнейшего вызова из среды JS.
+        """
         window = self._window
         for section in self.sections:
             section = section()
@@ -27,7 +34,11 @@ class JSApi:
 
     @staticmethod
     def make_answer(data: ty.Any = ()) -> dict:
-        return dict(status="ok", data=data)
+        answer = dict(status="ok", data=data)
+        logger.opt(lazy=True, depth=1).trace(
+            "answer: {data}", data=partial(pretty_view, answer, multiline=True)
+        )
+        return answer
 
     @staticmethod
     def error(exception: JSApiError) -> dict:
@@ -44,6 +55,7 @@ class JSApiError(Exception):
         super().__init__(
             f"[{self.code}] {self.message} {self.extra if self.extra else ''}"
         )
+        logger.error(f"{self.__class__.__name__}: {self}")
 
     def as_dict(self) -> dict:
         return dict(code=self.code, message=self.message, extra=self.extra)

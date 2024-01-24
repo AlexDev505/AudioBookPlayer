@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import sqlite3
 import typing as ty
+
 from loguru import logger
 
 from models.book import Book
@@ -101,8 +102,6 @@ class Database:
         q += " LIMIT ?"
         q += " OFFSET ?"
         args.extend([limit, offset])
-
-        print(q)
 
         return [_convert_book(data) for data in self._fetchall(q, *args)]
 

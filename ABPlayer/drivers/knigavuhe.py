@@ -20,7 +20,7 @@ class KnigaVUhe(Driver):
         soup = BeautifulSoup(page.content, "html.parser")
         page = page.text
 
-        match = re.search(r"cur.book = (.+);", page)
+        match = re.search(r"cur\.book = (.+);", page)
         book = orjson.loads(match.group(1))
 
         match = re.search(r"var player = new BookPlayer\(\d+, (\[.+?]).+\);", page)

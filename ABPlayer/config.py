@@ -1,8 +1,11 @@
 import os
 import typing as ty
+from functools import partial
 
 import orjson
 from loguru import logger
+
+from tools import pretty_view
 
 
 FIELDS = {
@@ -12,7 +15,7 @@ FIELDS = {
 
 
 def init() -> None:
-    logger.trace("Configuration initialization")
+    logger.trace("configuration initialization")
 
     if not os.path.exists(os.environ["CONFIG_PATH"]):
         _create_config()
@@ -20,6 +23,7 @@ def init() -> None:
     else:
         config = _load_config()
         config = _validate_config(config)
+        logger.opt(lazy=True).trace("config: {data}", data=partial(pretty_view, config))
         _add_to_env(config)
 
 
@@ -56,6 +60,6 @@ def _validate_config(config: dict) -> dict:
 
 
 def _add_to_env(config: dict) -> None:
-    logger.trace("Adding configuration to the virtual environment")
+    logger.trace("adding configuration to the virtual environment")
     for field in FIELDS:
         os.environ[field] = config.get(field)

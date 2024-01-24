@@ -15,8 +15,11 @@
 
 import os
 import re
+from functools import partial
 
 from loguru import logger
+
+from tools import pretty_view
 
 
 def load() -> dict[str, str | int | float | bool]:
@@ -24,11 +27,11 @@ def load() -> dict[str, str | int | float | bool]:
     Считывает данные из файла.
     :return: Словарь с данными.
     """
-    logger.opt(colors=True).trace(f"Loading data from <y>{os.environ['TEMP_PATH']}</y>")
+    logger.opt(colors=True).trace(f"loading data from <y>{os.environ['TEMP_PATH']}</y>")
     # Создаём файл
     if not os.path.isfile(os.environ["TEMP_PATH"]):
         logger.opt(colors=True).debug(
-            f"File <y>{os.environ['TEMP_PATH']}</y> bot found"
+            f"temp file <y>{os.environ['TEMP_PATH']}</y> not found"
         )
         with open(os.environ["TEMP_PATH"], "w", encoding="utf-8"):
             pass
@@ -45,7 +48,10 @@ def load() -> dict[str, str | int | float | bool]:
                 match.group("value"), match.group("type")
             )
         else:
-            logger.debug(f"Failed to retrieve information from string <y>{item}</y>")
+            logger.debug(f"failed to retrieve information from string <y>{item}</y>")
+
+    logger.opt(lazy=True).trace("temp data: {data}", data=partial(pretty_view, result))
+
     return result
 
 
@@ -54,7 +60,10 @@ def dump(data: dict[str, str | int | float | bool]) -> None:
     Сохраняет данные в файл.
     :param data: Словарь с данными.
     """
-    logger.opt(colors=True).trace(f"Saving a file <y>{os.environ['TEMP_PATH']}</y>")
+    logger.opt(lazy=True).trace(
+        "new temp data: {data}", data=partial(pretty_view, data)
+    )
+    logger.opt(colors=True).trace(f"saving a file <y>{os.environ['TEMP_PATH']}</y>")
     result = ""
     for key, value in data.items():
         result += f"{key}: {type(value).__name__} = {_convert_value(value)}\n"

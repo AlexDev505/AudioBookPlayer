@@ -1,8 +1,14 @@
 import os
+import sys
 
 from .akniga import AKniga
 from .base import Driver, DownloadProcessStatus, BaseDownloadProcessHandler
 from .knigavuhe import KnigaVUhe
 
 
-os.environ["FFPROBE_PATH"] = os.path.abspath(r"drivers\bin\ffprobe.exe")
+if getattr(sys, "frozen", False):
+    ROOT_DIR = getattr(sys, "_MEIPASS")
+else:
+    ROOT_DIR = os.path.dirname(__file__)
+
+os.environ["FFPROBE_PATH"] = os.path.join(ROOT_DIR, r"bin\ffprobe.exe")
