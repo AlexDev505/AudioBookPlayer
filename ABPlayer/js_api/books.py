@@ -4,6 +4,7 @@ import difflib
 import os
 import typing as ty
 from datetime import datetime
+from functools import partial
 
 import requests.exceptions
 from loguru import logger
@@ -11,7 +12,7 @@ from loguru import logger
 from database import Database
 from drivers import Driver, BaseDownloadProcessHandler, DownloadProcessStatus
 from models.book import DATETIME_FORMAT
-from tools import convert_from_bytes, make_book_preview
+from tools import convert_from_bytes, make_book_preview, pretty_view
 from .js_api import JSApi, JSApiError
 
 
@@ -28,12 +29,20 @@ class BooksApi(JSApi):
         self.matched_books_bids: list[int] | None = None
 
     def get_available_drivers(self):
-        return self.make_answer([driver.driver_name for driver in Driver.drivers])
+        logger.opt(colors=True).debug("request: <r>available drivers</r>")
+        available_drivers = [driver.driver_name for driver in Driver.drivers]
+        logger.opt(colors=True).debug(
+            f"available drivers count: <y>{len(available_drivers)}</y>"
+        )
+        return self.make_answer(available_drivers)
 
     def book_by_bid(self, bid: int):
+        logger.opt(colors=True).debug(f"request: <r>book by bid</r> | <y>{bid}</y>")
         with Database() as db:
             if book := db.get_book_by_bid(bid):
+                logger.opt(colors=True).debug(f"book found: {book:styled}")
                 return self.make_answer(self._answer_book(book))
+        logger.opt(colors=True).error(f"book not found. bid=<y>{bid}</y>")
         return self.error(BookNotFound(bid=bid))
 
     def get_library(
@@ -48,6 +57,7 @@ class BooksApi(JSApi):
         status: str | None = None,
         search_query: str | None = None,
     ):
+        logger.opt(colors=True).debug("request: <r>library</r>")
         sort = sort if sort else "adding_date"
         reverse = not reverse if reverse is not None else True
         if search_query is not None and search_query != self.search_query:
@@ -57,20 +67,46 @@ class BooksApi(JSApi):
             self.matched_books_bids = None
         bids = self.matched_books_bids
 
-        print(limit, offset, sort, reverse, author, series, favorite, status, bids)
+        logger.opt(lazy=True).trace(
+            "library filters: {data}",
+            data=partial(
+                pretty_view,
+                dict(
+                    limit=limit,
+                    offset=offset,
+                    sort=sort,
+                    reverse=reverse,
+                    author=author,
+                    series=series,
+                    favorite=favorite,
+                    status=status,
+                    bids=bids,
+                ),
+            ),
+        )
+
         with Database() as db:
             books = db.get_libray(
                 limit, offset, sort, reverse, author, series, favorite, status, bids
             )
+
+        logger.opt(colors=True).debug(
+            f"<y>{len(books)}</y> books found. "
+            f"bids: {pretty_view([book.id for book in books])}"
+        )
+
         return self.make_answer([self._answer_book(book) for book in books])
 
     def search_in_library(self, query: str):
+        logger.opt(colors=True).debug(
+            f"request: <r>search in library</r> | <y>{query}</y>"
+        )
         self.search_query = query
         with Database() as db:
             search_array = db.get_books_keywords()
-            logger.opt(colors=True).trace(f"search_array: {search_array}")
+            logger.opt(colors=True).trace(f"search array: {search_array}")
             search_words = query.lower().split()
-            logger.opt(colors=True).trace(f"search_words: {search_words}")
+            logger.opt(colors=True).trace(f"search words: {search_words}")
             matched_books_bids = []  # Идентификаторы найденных книг
             # Поиск
             for i, array in search_array.items():
@@ -78,35 +114,51 @@ class BooksApi(JSApi):
                     if difflib.get_close_matches(search_word, array):
                         matched_books_bids.append(i)
                         break
-            logger.opt(colors=True).debug(f"matched_books_bids: {matched_books_bids}")
+            logger.opt(colors=True).debug(
+                f"matched books bids: {pretty_view(matched_books_bids)}"
+            )
             self.matched_books_bids = matched_books_bids
 
     def get_all_authors(self):
+        logger.opt(colors=True).debug("request: <r>all authors</r>")
         with Database() as db:
             authors = db.get_all_authors()
+        logger.opt(colors=True).debug(f"authors found: <y>{len(authors)}</y>")
         return self.make_answer(authors)
 
     def get_all_series(self):
+        logger.opt(colors=True).debug("request: <r>all series</r>")
         with Database() as db:
-            authors = db.get_all_series()
-        return self.make_answer(authors)
+            series = db.get_all_series()
+        logger.opt(colors=True).debug(f"series found: <y>{len(series)}</y>")
+        return self.make_answer(series)
 
     def toggle_favorite(self, bid: int):
+        logger.opt(colors=True).debug(f"request: <r>toggle favorite</r> | <y>{bid}</y>")
         with Database() as db:
             if not (book := db.get_book_by_bid(bid)):
                 return self.error(BookNotFound(bid=bid))
             book.favorite = not book.favorite
             db.save(book)
             db.commit()
+            logger.opt(colors=True).debug(
+                f"{book:styled} favorite: <y>{book.favorite}</y>"
+            )
             return self.make_answer(book.favorite)
 
-    def book_by_url(self, url: str):
+    @staticmethod
+    def book_by_url(url: str):
+        logger.opt(colors=True).debug(
+            f"request: <r>search book by url</r> | <y>{url}</y>"
+        )
         if not (driver := Driver.get_suitable_driver(url)):
-            return self.error(NoSuitableDriver(book_url=url))
+            return NoSuitableDriver(book_url=url)
         try:
-            return driver().get_book(url)
+            book = driver().get_book(url)
+            logger.opt(colors=True).debug(f"book found: {book:styled}")
+            return book
         except requests.exceptions.ConnectionError as err:
-            return self.error(ConnectionFailedError(err=f"{type(err).__name__}: {err}"))
+            return ConnectionFailedError(err=f"{type(err).__name__}: {err}")
 
     def search_books(
         self,
@@ -115,9 +167,11 @@ class BooksApi(JSApi):
         offset: int = 0,
         required_drivers: list[str] | None = None,
     ):
+        logger.opt(colors=True).debug(f"request: <r>search books</r> | <y>{query}</y>")
         if query.startswith("https://"):
             if isinstance(resp := self.book_by_url(query), JSApiError):
-                return resp
+                return self.error(resp)
+            print([resp])
             return self.make_answer([make_book_preview(resp)])
 
         drivers = (
@@ -132,6 +186,19 @@ class BooksApi(JSApi):
         if not len(drivers):
             return self.error(NoSuitableDriver())
 
+        logger.opt(lazy=True).trace(
+            "search params: {data}",
+            data=partial(
+                pretty_view,
+                dict(
+                    query=query,
+                    limit=limit,
+                    offset=offset,
+                    required_drivers=required_drivers,
+                ),
+            ),
+        )
+
         result: list[dict] = []
         limit_per_one_driver = limit // len(drivers)
         offset_per_one_driver = offset // len(drivers)
@@ -143,25 +210,52 @@ class BooksApi(JSApi):
                 )
             except AttributeError:
                 continue
+            except requests.exceptions.RequestException as err:
+                return self.error(
+                    ConnectionFailedError(err=f"{type(err).__name__}: {err}")
+                )
             result.extend(make_book_preview(book) for book in books)
+
+        logger.opt(colors=True).debug(
+            f"<y>{len(result)}</y> books found. "
+            f"urls: {pretty_view([book['url'] for book in result])}"
+        )
+
         return self.make_answer(result)
 
     def add_book_to_library(self, url: str):
+        logger.opt(colors=True).debug(
+            f"request: <r>add book to library</r> | <y>{url}</y>"
+        )
         if isinstance(book := self.book_by_url(url), JSApiError):
-            return book
+            return self.error(book)
         with Database(autocommit=True) as db:
             if db.check_is_books_exists([url]):
                 return self.error(BookAlreadyAdded())
             book.adding_date = datetime.now()
             db.add_book(book)
+
+        logger.opt(colors=True).debug(f"book added to library: {book:styled}")
+        logger.opt(lazy=True).trace(
+            "book: {data}",
+            data=partial(pretty_view, book.to_dump(), multiline=True),
+        )
+
         return self.make_answer()
 
     def check_is_books_exists(self, urls: list[str]):
+        logger.opt(colors=True).debug("request: <r>check is books exists</r>")
         with Database() as db:
-            return self.make_answer(db.check_is_books_exists(urls))
+            exists_book_urls = db.check_is_books_exists(urls)
+        logger.opt(colors=True).debug(
+            f"<y>{len(exists_book_urls)}/{len(urls)}</y> books exists"
+        )
+        return self.make_answer(exists_book_urls)
 
     def get_downloads(self):
+        logger.opt(colors=True).debug("request: <r>get downloads</r>")
         downloads: list[tuple[int, str, str | None, str | None]] = []
+        # [(bid, book_name, status, total_size), ...]
         with Database() as db:
             for bid in [*self._download_processes.keys(), *self._download_queue]:
                 book = db.get_book_by_bid(bid)
@@ -177,9 +271,16 @@ class BooksApi(JSApi):
                         else str(downloader.process_handler.total_size)
                     )
                 downloads.append((bid, book.name, status, total_size))
-        return downloads
+
+        logger.opt(colors=True).debug(
+            f"<y>{len(downloads)}</y> downloads found."
+            f"bids: {pretty_view([process[0] for process in downloads])}"
+        )
+
+        return self.make_answer(downloads)
 
     def download_book(self, bid: int):
+        logger.opt(colors=True).debug(f"request: <r>download book</r> | <y>{bid}</y>")
         if bid in self._download_processes:
             return self.error(BookAlreadyDownloaded(bid=bid))
 
@@ -189,19 +290,20 @@ class BooksApi(JSApi):
 
         if len(self._download_processes) >= 5:
             self._download_queue.append(bid)
-            logger.opt(colors=True).debug(f"{book:styled} added to download queue")
+            logger.opt(colors=True).debug(f"added to download queue: {book:styled}")
             return self.make_answer(dict(bid=bid))
 
+        logger.opt(colors=True).debug(f"preparing download: {book:styled}")
         driver = Driver.get_suitable_driver(book.url)()
         self._download_processes[bid] = driver
         if driver.download_book(book, DownloadingProcessHandler(self, bid)):
-            logger.opt(colors=True).debug(f"saving {book:styled} into db")
+            logger.opt(colors=True).debug(f"saving into db: {book:styled}")
             with Database(autocommit=True) as db:
                 db.save(driver.downloader.book)
-        del self._download_processes[bid]
+            self.evaluate_js(f"endLoading({bid})")
+            logger.opt(colors=True).info(f"downloading finished: {book:styled}")
 
-        self._window.evaluate_js(f"endLoading({bid})")
-        logger.opt(colors=True).info(f"downloading finished: {book:styled}")
+        del self._download_processes[bid]
 
         if self._download_queue:
             self.download_book(self._download_queue.pop(0))
@@ -209,12 +311,17 @@ class BooksApi(JSApi):
         return self.make_answer()
 
     def terminate_downloading(self, bid: int):
+        logger.opt(colors=True).debug(
+            f"request: <r>terminate downloading</r> | <y>{bid}</y>"
+        )
         if bid in self._download_queue:
             self._download_queue.remove(bid)
         elif download_process := self._download_processes.get(bid):
             download_process.downloader.terminate()
+        logger.opt(colors=True).debug(f"downloading of book <y>{bid}</y> terminated")
 
     def delete_book(self, bid: int):
+        logger.opt(colors=True).debug(f"request: <r>delete book</r> | <y>{bid}</y>")
         with Database() as db:
             if not (book := db.get_book_by_bid(bid)):
                 return self.error(BookNotFound(bid=bid))
@@ -235,16 +342,18 @@ class BooksApi(JSApi):
 
         os.removedirs(book.dir_path)
 
+        logger.opt(colors=True).debug(f"clearing files data from db: {book:styled}")
         book.files.clear()
         with Database(autocommit=True) as db:
             db.save(book)
 
-        logger.opt(colors=True).debug(f"book deleted: {book:styled}")
+        logger.opt(colors=True).info(f"book deleted: {book:styled}")
         return self.make_answer()
 
     def remove_book(self, bid: int):
         # TODO: если книга скачана, помечать книгу как исключенную
         #  (можно добавлять это в .abp и не добавлять книгу в бд при запуске)
+        logger.opt(colors=True).debug(f"request: <r>remove book</r> | <y>{bid}</y>")
         with Database() as db:
             if not (db.get_book_by_bid(bid)):
                 return self.error(BookNotFound(bid=bid))
@@ -252,6 +361,7 @@ class BooksApi(JSApi):
             db.remove_book(bid)
             db.commit()
 
+        logger.opt(colors=True).info(f"book removed: <y>{bid}</y>")
         return self.make_answer()
 
     def _answer_book(self, book: Book) -> dict:

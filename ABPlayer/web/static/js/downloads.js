@@ -3,8 +3,8 @@ page("downloads-page").onShow = function(el) {
 }
 page("downloads-page").onHide = function() {}
 
-function showDownloads(data) {
-    for (download_process of data) {
+function showDownloads(response) {
+    for (download_process of response.data) {
         createDownloadingCard(download_process[0], download_process[1])
         setDownloadingStatus(download_process[0], download_process[2])
         if (download_process[3])

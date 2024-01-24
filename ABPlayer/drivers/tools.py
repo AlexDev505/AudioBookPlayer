@@ -14,6 +14,18 @@ if ty.TYPE_CHECKING:
 
 
 class NotImplementedVariable:
+    """
+    >>> class A:
+    ...     var = NotImplementedVariable()
+    >>> class B(A): ...
+    >>> class C(A):
+    ...     var = 1
+    >>> B.var
+    NotImplementedError
+    >>> C.var
+    1
+    """
+
     def __get__(self, instance, owner):
         raise NotImplementedError()
 
@@ -40,6 +52,10 @@ def prepare_file_metadata(
 
 
 def get_audio_file_duration(file_path: Path) -> float:
+    """
+    :param file_path: Путь к аудио файлу.
+    :returns: Длительность аудио файла в секундах.
+    """
     result = subprocess.check_output(
         rf'{os.environ["FFPROBE_PATH"]} -v quiet -show_streams -of json "{file_path}"',
         shell=True,
@@ -49,12 +65,27 @@ def get_audio_file_duration(file_path: Path) -> float:
 
 
 def safe_name(text: str) -> str:
+    """
+    Убирает или заменяет символы не допустимые для имени файла Windows.
+    """
     while text.count('"') >= 2:
         text = re.sub(r'"(.*?)"', r"«\g<1>»", text)
     return re.sub(r'[\\/:*?"<>|+]', "", text)
 
 
 def create_instance_id(obj: ty.Any) -> int:
+    """
+    Создает идентификатор экземпляра.
+    >>> class A:
+    ...     def __init__(self):
+    ...         create_instance_id(self)
+    >>> a1 = A()
+    >>> a2 = A()
+    >>> instance_id(a1)
+    1
+    >>> instance_id(a2)
+    2
+    """
     last_instance_id = getattr(obj.__class__, "_last_instance_id", 0)
     new_instance_id = last_instance_id + 1
     setattr(obj, "_instance_id", new_instance_id)
@@ -63,4 +94,7 @@ def create_instance_id(obj: ty.Any) -> int:
 
 
 def instance_id(obj: ty.Any) -> int | None:
+    """
+    :returns: Идентификатор экземпляра.
+    """
     return getattr(obj, "_instance_id", None)

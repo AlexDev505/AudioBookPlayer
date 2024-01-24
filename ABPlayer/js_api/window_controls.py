@@ -6,9 +6,9 @@ from ctypes import windll, Structure, c_long, byref
 
 from loguru import logger
 
+import temp_file
 from .js_api import JSApi
 from .tools import ttl_cache
-import temp_file
 
 
 if ty.TYPE_CHECKING:
@@ -20,15 +20,18 @@ class WindowControlsApi(JSApi):
         self._full_screen = False
 
     def close_app(self) -> None:
+        logger.debug("closing app")
         self._save_session_at_exit()
         self._window.destroy()
 
     def minimize_app(self) -> None:
+        logger.trace("minimizing window")
         self._window.minimize()
 
     def toggle_full_screen_app(self) -> None:
         self._window.toggle_fullscreen()
         self._full_screen = not self._full_screen
+        logger.trace(f"full screen toggled: {self._full_screen}")
 
     def drag_window(self) -> None:
         if self._full_screen:
@@ -40,6 +43,7 @@ class WindowControlsApi(JSApi):
         resize_handler(self._window, size_grip)
 
     def _save_session_at_exit(self) -> None:
+        logger.debug("saving session data")
         scale_k = query_scale_k()
         width = int(self._window.width / scale_k)
         height = int(self._window.height / scale_k)
@@ -53,6 +57,7 @@ class WindowControlsApi(JSApi):
             is_filter_menu_opened=is_filter_menu_opened,
             required_drivers=",".join(required_drivers),
         )
+        logger.trace("session data saved")
 
 
 class POINT(Structure):
@@ -68,7 +73,7 @@ def query_mouse_position() -> tuple[int, int]:
 @ttl_cache(5)
 def query_scale_k() -> float:
     """
-    Масштаб экрана(на ноутбуках обычно стоит 125%
+    Масштаб экрана(на ноутбуках обычно стоит 125%)
     """
     return windll.shcore.GetScaleFactorForDevice(0) / 100
 
@@ -94,12 +99,12 @@ def resize_handler(window: webview.Window, size_grip):
 
     scale_k = query_scale_k()
 
-    logger.debug(f"Resize started: {size_grip}")
+    logger.trace(f"resize started: {size_grip}")
 
     while True:
         # Пользователь отпустил кнопку мыши
         if windll.user32.GetKeyState(0x01) != state_left:
-            logger.debug("Resize finished")
+            logger.trace("resize finished")
             break
 
         current_x, current_y = query_mouse_position()
@@ -150,12 +155,12 @@ def drag_window(window: webview.Window) -> None:
     start_win_x = window.x
     start_win_y = window.y
 
-    logger.debug(f"Drag started")
+    logger.trace("drag started")
 
     while True:
         # Пользователь отпустил кнопку мыши
         if windll.user32.GetKeyState(0x01) != state_left:
-            logger.debug("Drag finished")
+            logger.trace("drag finished")
             break
 
         current_x, current_y = query_mouse_position()
@@ -166,6 +171,3 @@ def drag_window(window: webview.Window) -> None:
         move(window, start_win_x + delta_x, start_win_y + delta_y)
 
         time.sleep(0.005)
-
-
-WindowControlsApi()

@@ -40,7 +40,7 @@ class BaseDownloadProcessHandler(ABC):
     >>> process_handler = BaseDownloadProcessHandler()
     >>> process_handler.init(N, status=DownloadProcessStatus.DOWNLOADING)
     >>> for _ in range(N):
-    >>>     process_handler.progress(1)
+    ...     process_handler.progress(1)
     >>> process_handler.finish()
     """
 
@@ -68,7 +68,6 @@ class BaseDownloadProcessHandler(ABC):
         self.status = DownloadProcessStatus.FINISHED
         self.done_size = self.total_size
         logger.opt(colors=True).trace(f"{self:styled} finished")
-        # self.show_progress()
 
     @abstractmethod
     def show_progress(self) -> None:
@@ -100,7 +99,9 @@ class BaseDownloader(ABC):
         # Определяется, только если передан `process_handler`
         self.total_size: int | None = None
 
+        # Файл открытый для записи
         self._file: ty.TextIO | None = None
+        # Поток скачивания файла
         self._file_stream: requests.Response | None = None
         self._terminated: bool = False
 
@@ -112,29 +113,36 @@ class BaseDownloader(ABC):
     def _prepare(self) -> None:
         """
         Подготавливает загрузчик к скачиванию.
-        Должно быть переопределено в наследуемом классе.
+        Метод должен быть реализован в наследуемом классе.
         """
 
     @abstractmethod
     def _download_book(self) -> None:
         """
         Скачивает файлы.
-        Должно быть переопределено в наследуемом классе.
+        Метод должен быть реализован в наследуемом классе.
         """
 
     def save_preview(self) -> None:
-        if self.book.preview:
-            logger.opt(colors=True).debug(f"loading preview <y>{self.book.preview}</y>")
-            try:
-                response = requests.get(self.book.preview)
-                if response.status_code == 200:
-                    logger.trace("saving preview")
-                    with open(self.book.preview_path, "wb") as file:
-                        file.write(response.content)
-                else:
-                    logger.error(f"preview loading status: {response.status_code}")
-            except IOError as err:
-                logger.error(f"loading preview failed. {type(err).__name__}: {err}")
+        """
+        Скачивает и сохраняет обложку книги.
+        """
+        if not self.book.preview:
+            return
+
+        logger.opt(colors=True).debug(f"loading preview <y>{self.book.preview}</y>")
+        try:
+            response = requests.get(self.book.preview)
+            if response.status_code == 200:
+                logger.opt(colors=True).trace(
+                    f"saving preview to <y>{self.book.preview_path}</y>"
+                )
+                with open(self.book.preview_path, "wb") as file:
+                    file.write(response.content)
+            else:
+                logger.error(f"preview loading status: {response.status_code}")
+        except IOError as err:
+            logger.error(f"loading preview failed. {type(err).__name__}: {err}")
 
     def download_book(self) -> bool:
         """
@@ -143,8 +151,9 @@ class BaseDownloader(ABC):
         """
         logger.debug("preparing downloading")
         self._prepare()
-        logger.debug("downloading stared")
+        logger.debug("downloading started")
         self._download_book()
+
         if not self._terminated:
             if self.process_handler:
                 self.process_handler.status = DownloadProcessStatus.FINISHING
@@ -152,12 +161,13 @@ class BaseDownloader(ABC):
             self.book.save_to_storage()
             if self.process_handler:
                 self.process_handler.finish()
-                logger.debug("finished")
+            logger.debug("finished")
         else:
             if self.process_handler:
                 self.process_handler.status = DownloadProcessStatus.TERMINATED
-                logger.debug("terminated")
-        return not self._terminated
+            logger.debug("terminated")
+
+        return not self._terminated  # True - при успешном скачивании
 
     def terminate(self) -> None:
         """
@@ -178,7 +188,10 @@ class BaseDownloader(ABC):
             f"<y>{self}</y> clearing tree <y>{self.book.dir_path}</y>"
         )
         shutil.rmtree(self.book.dir_path, ignore_errors=True)
-        os.removedirs(Path(self.book.dir_path).parent)
+        try:
+            os.removedirs(Path(self.book.dir_path).parent)
+        except OSError:
+            pass
 
     def __repr__(self):
         return f"BookDownloader-{instance_id(self)}"
