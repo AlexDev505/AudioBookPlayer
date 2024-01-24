@@ -189,6 +189,34 @@ html, body {margin: 0; height: 100%; background-color: var(--root-bg)}
   overflow: hidden;
 }
 
+#notifications {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 2;
+  padding: 8px;
+}
+.notification {
+  position: relative;
+  background-color: var(--ui-element-bg);
+  border-radius: 4px;
+  padding: 4px;
+  width: 300px;
+  margin-top: 8px;
+  margin-top: 8px;
+}
+.notification-content {margin-right: calc(0.8em + 8px)}
+.notification .cross-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+.notification .cross-btn::after {
+  width: 0.8em;
+  height: 0.8em;
+  background-repeat: no-repeat;
+  background-position: center;
+}
 
 .size-grip {
   position: absolute;

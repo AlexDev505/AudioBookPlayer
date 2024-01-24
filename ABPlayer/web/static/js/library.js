@@ -204,7 +204,7 @@ function onLibraryScrollEnd(el) {
 }
 
 function showBooks(response, status) {
-    if (response.status != "ok") {console.log(response); return}
+    if (response.status != "ok") {showError(response.message); return}
 
     if (status == null) {
         container = document.getElementById("all-books-section")
@@ -274,7 +274,7 @@ function toggleFavorite(el, bid) {
             el.classList.remove("disabled")
             if (response.status != "ok") {
                 _toggleFavoriteActive(el)
-                console.log(response)
+                showError(response.message)
                 return
             }
             if (current_state != response.data)
@@ -295,7 +295,7 @@ function deleteBook(el, bid, name) {
     if (el.classList.contains("loading")) return
     el.classList.add("loading")
     pywebview.api.delete_book(bid).then((resp) => {
-        if (resp.status != "ok") {console.log(resp); return}
+        if (resp.status != "ok") {showError(resp.message); return}
         deleteBtn = document.querySelector(`.book-card[data-bid='${bid}'] .delete-btn`)
         deleteBtn.classList.remove("delete-btn")
         deleteBtn.classList.remove("loading")
