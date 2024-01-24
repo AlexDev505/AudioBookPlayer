@@ -27,6 +27,7 @@ class BooksApi(JSApi):
     def __init__(self):
         self.search_query: str | None = None
         self.matched_books_bids: list[int] | None = None
+        self.removed_books_files: dict[int, tuple[str, list[str]]] = {}
 
     def get_available_drivers(self):
         logger.opt(colors=True).debug("request: <r>available drivers</r>")
@@ -147,7 +148,7 @@ class BooksApi(JSApi):
             return self.make_answer(book.favorite)
 
     @staticmethod
-    def book_by_url(url: str):
+    def _book_by_url(url: str):
         logger.opt(colors=True).debug(
             f"request: <r>search book by url</r> | <y>{url}</y>"
         )
@@ -169,7 +170,7 @@ class BooksApi(JSApi):
     ):
         logger.opt(colors=True).debug(f"request: <r>search books</r> | <y>{query}</y>")
         if query.startswith("https://"):
-            if isinstance(resp := self.book_by_url(query), JSApiError):
+            if isinstance(resp := self._book_by_url(query), JSApiError):
                 return self.error(resp)
             print([resp])
             return self.make_answer([make_book_preview(resp)])
@@ -227,7 +228,7 @@ class BooksApi(JSApi):
         logger.opt(colors=True).debug(
             f"request: <r>add book to library</r> | <y>{url}</y>"
         )
-        if isinstance(book := self.book_by_url(url), JSApiError):
+        if isinstance(book := self._book_by_url(url), JSApiError):
             return self.error(book)
         with Database(autocommit=True) as db:
             if db.check_is_books_exists([url]):
@@ -320,18 +321,10 @@ class BooksApi(JSApi):
             download_process.downloader.terminate()
         logger.opt(colors=True).debug(f"downloading of book <y>{bid}</y> terminated")
 
-    def delete_book(self, bid: int):
-        logger.opt(colors=True).debug(f"request: <r>delete book</r> | <y>{bid}</y>")
-        with Database() as db:
-            if not (book := db.get_book_by_bid(bid)):
-                return self.error(BookNotFound(bid=bid))
-
-        if not book.files:
-            return self.error(BookNotDownloaded(bid=bid))
-
-        logger.opt(colors=True).debug(f"deleting book: {book:styled}")
-        for file in [*book.files.keys(), "cover.jpg", ".abp"]:
-            file_path = os.path.join(book.dir_path, file)
+    @staticmethod
+    def _delete_book_files(dir_path: str, files: list[str]) -> None:
+        for file in [*files, "cover.jpg", ".abp"]:
+            file_path = os.path.join(dir_path, file)
             try:
                 logger.opt(colors=True).trace(f"deleting <y>{file_path}</y>")
                 os.remove(file_path)
@@ -340,7 +333,25 @@ class BooksApi(JSApi):
             except IOError as err:
                 logger.exception(err)
 
-        os.removedirs(book.dir_path)
+        os.removedirs(dir_path)
+
+    def delete_book(self, bid: int):
+        logger.opt(colors=True).debug(f"request: <r>delete book</r> | <y>{bid}</y>")
+        with Database() as db:
+            if not (book := db.get_book_by_bid(bid)):
+                if bid in self.removed_books_files:
+                    logger.debug("deleting residual book files")
+                    self._delete_book_files(*self.removed_books_files[bid])
+                    del self.removed_books_files[bid]
+                    logger.opt(colors=True).info(f"book deleted: <y>{bid}</y>")
+                    return self.make_answer()
+                return self.error(BookNotFound(bid=bid))
+
+        if not book.files:
+            return self.error(BookNotDownloaded(bid=bid))
+
+        logger.opt(colors=True).debug(f"deleting book: {book:styled}")
+        self._delete_book_files(book.dir_path, list(book.files.keys()))
 
         logger.opt(colors=True).debug(f"clearing files data from db: {book:styled}")
         book.files.clear()
@@ -355,13 +366,15 @@ class BooksApi(JSApi):
         #  (можно добавлять это в .abp и не добавлять книгу в бд при запуске)
         logger.opt(colors=True).debug(f"request: <r>remove book</r> | <y>{bid}</y>")
         with Database() as db:
-            if not (db.get_book_by_bid(bid)):
+            if not (book := db.get_book_by_bid(bid)):
                 return self.error(BookNotFound(bid=bid))
 
+            if book.files:
+                self.removed_books_files[bid] = (book.dir_path, list(book.files.keys()))
             db.remove_book(bid)
             db.commit()
 
-        logger.opt(colors=True).info(f"book removed: <y>{bid}</y>")
+        logger.opt(colors=True).info(f"book removed: <y>{book:styled}</y>")
         return self.make_answer()
 
     def _answer_book(self, book: Book) -> dict:
