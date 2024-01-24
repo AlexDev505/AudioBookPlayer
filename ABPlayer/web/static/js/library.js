@@ -287,6 +287,15 @@ function removeBook(el, bid) {
     if (el.classList.contains("loading")) return
     el.classList.add("loading")
     pywebview.api.remove_book(bid).then((resp) => {
+        title = document.querySelector(`.book-card[data-bid='${bid}'] .book-title`)
+        delete_btn = document.querySelector(`.book-card[data-bid='${bid}'] .delete-btn`)
+        if (title && delete_btn) {
+            createNotification(
+                `<div>Книга <b>«${title.innerHTML}»</b> удалена из библиотеки, но скачанные файлы остались.</div>
+                <div style="margin-top: 2px; text-decoration: underline; cursor:pointer" onclick="{deleteBook(this, ${bid}, '${title.innerHTML}');this.parentElement.parentElement.remove()}">удалить оставшиеся файлы</div>`,
+                0, true
+            )
+        } else if (title) createNotification(`Книга <b>«${title.innerHTML}»</b> удалена из библиотеки`, 5, true)
         document.querySelector(`.book-card[data-bid='${bid}']`).remove()
     })
 }
@@ -297,10 +306,13 @@ function deleteBook(el, bid, name) {
     pywebview.api.delete_book(bid).then((resp) => {
         if (resp.status != "ok") {showError(resp.message); return}
         deleteBtn = document.querySelector(`.book-card[data-bid='${bid}'] .delete-btn`)
-        deleteBtn.classList.remove("delete-btn")
-        deleteBtn.classList.remove("loading")
-        deleteBtn.classList.add("download-btn")
-        deleteBtn.onclick = function() {startDownloading(this, bid, name)}
+        if (deleteBtn) {
+          deleteBtn.classList.remove("delete-btn")
+          deleteBtn.classList.remove("loading")
+          deleteBtn.classList.add("download-btn")
+          deleteBtn.onclick = function() {startDownloading(this, bid, name)}
+        }
+        createNotification(`Файлы книги <b>«${name}»</b> удалены`, 60, true)
     })
 }
 
