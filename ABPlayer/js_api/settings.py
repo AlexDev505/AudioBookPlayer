@@ -6,6 +6,7 @@ from pathlib import Path
 
 from loguru import logger
 
+import config
 from .js_api import JSApi
 
 
@@ -22,3 +23,7 @@ class SettingsApi(JSApi):
         except FileNotFoundError:
             Path(os.environ["books_folder"]).mkdir(parents=True, exist_ok=True)
             os.startfile(os.environ["books_folder"])
+
+    def set_dark_mode(self, value: bool):
+        config.update_config(dark_theme=str(int(value)))
+        return self.make_answer()

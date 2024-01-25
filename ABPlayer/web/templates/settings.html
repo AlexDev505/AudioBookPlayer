@@ -1,0 +1,40 @@
+<link rel="stylesheet" href="{{url_for('static', filename='css/settings.css')}}">
+<script defer src="{{url_for('static', filename='js/settings.js')}}"></script>
+
+<div id="settings-page-content">
+
+<div id="settings-container">
+  <div class="settings-section">
+    <div class="settings-section-title">Интерфейс</div>
+    <div class="settings-section-container">
+      <div class="settings-section-item" id="color-scheme-setting">
+        <div class="checkbox" onclick="toggleDarkTheme()" id="dark-theme-checkbox">Тёмная тема</div>
+      </div>
+    </div>
+  </div>
+  <div class="settings-section">
+    <div class="settings-section-title">Хранилище</div>
+    <div class="settings-section-container">
+      <div class="settings-section-item" id="library-dir-setting">
+        <div class="settings-section-item-title">Папка для книг</div>
+        <div class="button" onclick="openLibraryDir()">Открыть</div>
+        <div class="button">Изменить</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="about-app">
+  <hr>
+  <div id="app-main-info">
+    <div id="app-icon"></div>
+    <div>
+      <div id="app-title">Audio Book Player</div>
+      <div id="app-version">Версия: {{ app_version }}</div>
+    </div>
+  </div>
+  <div id="developer-link">Разработчик: <a href="https://github.com/AlexDev505" target="_blank">AlexDev505</a></div>
+  <a id="project-link" href="https://github.com/AlexDev505/AudioBookPlayer" target="_blank">Страница проекта</a>
+</div>
+
+</div>

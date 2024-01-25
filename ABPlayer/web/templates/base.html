@@ -2,11 +2,17 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
+  {% if dark_theme %}
+  <link class="theme" rel="stylesheet" href="{{url_for('static', filename='css/dark_theme.css')}}">
+  {% else %}
+  <link class="theme" rel="stylesheet" href="{{url_for('static', filename='css/light_theme.css')}}">
+  {% endif %}
   <link rel="stylesheet" href="{{url_for('static', filename='css/base.css')}}">
   <script>
     var menu_opened = {{ is_main_menu_opened|tojson }}
     var filter_menu_opened = {{ is_filter_menu_opened|tojson }}
     var required_drivers = {{ [] if not required_drivers else required_drivers|tojson }}
+    var dark_theme = {{ (true if dark_theme else false)|tojson }}
   </script>
   <script defer src="{{url_for('static', filename='js/base.js')}}"></script>
 </head>
@@ -21,7 +27,7 @@
   </div>
 
   <div id="central-frame">
-    <div id="side-menu">
+    <div id="side-menu" class="{{ 'collapsed' if not is_main_menu_opened else '' }}">
       <div>
         <div id="menu-btn" class="menu-btn" onclick="toggleMenu()"><span>скрыть меню</span></div>
         <hr>
@@ -32,7 +38,7 @@
       </div>
       <div>
         <div id="library-dir-btn" class="menu-btn" onclick="openLibraryDir()"><span>папка с книгами</span></div>
-        <div id="settings-btn" class="menu-btn"><span>настройки</span></div>
+        <div id="settings-btn" class="menu-btn" onclick="page('settings-page').show()"><span>настройки</span></div>
       </div>
     </div>
     <div id="content-frame">
@@ -47,6 +53,9 @@
       </div>
       <div class="page" id="book-page">
         {% include "book.html" %}
+      </div>
+      <div class="page" id="settings-page">
+        {% include "settings.html" %}
       </div>
     </div>
   </div>
