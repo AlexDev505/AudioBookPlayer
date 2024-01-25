@@ -22,6 +22,7 @@ os.environ["VERSION"] = "0.0.0"
 # TODO: remove
 os.environ["CONSOLE"] = "1"
 os.environ["DEBUG"] = "1"
+os.environ["LOGGING_LEVEL"] = "TRACE"
 
 
 from logger import logger, LOGGING_LEVEL  # noqa

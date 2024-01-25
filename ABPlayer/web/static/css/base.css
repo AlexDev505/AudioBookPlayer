@@ -1,13 +1,3 @@
-:root {
-  --root-bg: rgb(32,34,37);
-  --central-frame-bg: rgb(54,57,63);
-  --side-menu-bg: rgb(43,45,49);
-  --ui-element-bg: rgb(64,68,75);
-  --cards-bg: rgb(47,49,54);
-  --root-fg: rgb(215,214,217);
-  --dim-fg: rgb(148,155,164);
-}
-
 * {
   color: var(--root-fg);
   font-family: Arial;
@@ -99,13 +89,23 @@ html, body {margin: 0; height: 100%; background-color: var(--root-bg)}
   background-image: url(../images/check.svg);
 }
 
+.button {
+  background-color: var(--ui-element-bg);
+  padding: 8px;
+  border: 1px solid var(--side-menu-bg);
+  border-radius: 4px;
+  transition: all 0.15s ease-in-out;
+}
+.button:hover {transform: scale(1.05);}
+.button:active {transform: translateY(1px)}
+
 #top-bar {
   height: 20px;
   background-color: var(--root-bg);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-left: 15px;
+  padding-left: 4px;
 }
 #logo {
   color: var(--dim-fg);
@@ -118,7 +118,7 @@ html, body {margin: 0; height: 100%; background-color: var(--root-bg)}
 .cross-btn::after {background: url(../images/cross.svg)}
 .window-btn::after {background: url(../images/window.svg)}
 .line-btn::after {background: url(../images/line.svg)}
-#top-bar button:hover {background-color: rgb(53,55,60)}
+#top-bar button:hover {background-color: var(--root-hover-bg)}
 #top-bar button.cross-btn:hover {background-color: rgb(255,49,100)}
 
 #central-frame {
@@ -161,14 +161,14 @@ html, body {margin: 0; height: 100%; background-color: var(--root-bg)}
   min-width: 1.2em;
 }
 .menu-btn:hover {
-  background-color: rgb(53,55,60);
+  background-color: var(--root-hover-bg);
 }
 
 #side-menu hr {
-  border-radius: 25%;
-  height: 1px;
+  border-radius: 10%;
+  height: 3px;
+  border: none;
   background: var(--dim-fg);
-  border-color: var(--dim-fg);
   margin: 10px 16px 10px 16px;
 }
 

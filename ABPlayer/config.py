@@ -1,6 +1,7 @@
 import os
 import typing as ty
 from functools import partial
+from pathlib import Path
 
 import orjson
 from loguru import logger
@@ -10,7 +11,7 @@ from tools import pretty_view
 
 FIELDS = {
     "books_folder": os.path.join(os.environ["USERPROFILE"], "documents", "Аудио книги"),
-    "theme": "тёмная",
+    "dark_theme": "1",
 }
 
 
@@ -46,6 +47,7 @@ def update_config(*, update_env=True, **fields: [str, ty.Any]) -> None:
         "Configuration update. "
         + ", ".join((f"<le>{k}</le>=<y>{v}</y>" for k, v in fields.items()))
     )
+    fields = {field: fields.get(field, os.getenv(field)) for field in FIELDS}
     with open(os.environ["CONFIG_PATH"], "wb") as file:
         file.write(orjson.dumps(fields))
     if update_env:
@@ -53,9 +55,23 @@ def update_config(*, update_env=True, **fields: [str, ty.Any]) -> None:
 
 
 def _validate_config(config: dict) -> dict:
-    if len(config) != len(FIELDS):
-        config = {field: config.get(field) for field in FIELDS}
+    if any(key not in FIELDS for key in config):
+        config = {field: config.get(field, FIELDS[field]) for field in FIELDS}
         update_config(update_env=False, **config)
+    else:
+        need_update_config = False
+
+        if config["dark_theme"] not in {"1", "2"}:
+            config["dark_theme"] = FIELDS["dark_theme"]
+            need_update_config = True
+        if not os.path.isdir(config["books_folder"]):
+            config["books_folder"] = FIELDS["books_folder"]
+            Path(FIELDS["books_folder"]).mkdir(parents=True, exist_ok=True)
+            need_update_config = True
+
+        if need_update_config:
+            update_config(update_env=False, **config)
+
     return config
 
 
