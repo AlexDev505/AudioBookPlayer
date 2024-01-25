@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import typing as ty
 from functools import partial
-from inspect import ismethod
+from inspect import isfunction, ismethod
 
 import webview
 from loguru import logger
@@ -22,7 +22,8 @@ class JSApi:
             section = section()
             for name in dir(section):
                 if not name.startswith("_"):
-                    if ismethod(func := section.__getattribute__(name)):
+                    func = section.__getattribute__(name)
+                    if (ismethod(func) or isfunction(func)) and name not in dir(JSApi):
                         window.expose(func)
 
     @property

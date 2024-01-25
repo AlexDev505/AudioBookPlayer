@@ -147,3 +147,7 @@ function showError(text) {
         `<div style="font-weight: bold">Ошибка</div><div>${text}</div>`, 30, true
     )
 }
+
+function openLibraryDir() {
+    pywebview.api.open_library_dir()
+}
