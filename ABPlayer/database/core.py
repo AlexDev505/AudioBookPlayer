@@ -66,15 +66,15 @@ class Database:
 
     def get_libray(
         self,
-        limit: int,
-        offset: int,
-        sort: str | None,
-        reverse: bool | None,
-        author: str | None,
-        series: str | None,
-        favorite: bool | None,
-        status: str | None,
-        bids: list[int] | None,
+        limit: int | None = None,
+        offset: int = 0,
+        sort: str | None = None,
+        reverse: bool | None = None,
+        author: str | None = None,
+        series: str | None = None,
+        favorite: bool | None = None,
+        status: str | None = None,
+        bids: list[int] | None = None,
     ) -> list[Book]:
         q = "SELECT * FROM books"
         args = []
@@ -102,10 +102,12 @@ class Database:
             q += f" ORDER BY {sort}"
         if reverse:
             q += " DESC"
-
-        q += " LIMIT ?"
-        q += " OFFSET ?"
-        args.extend([limit, offset])
+        if limit:
+            q += " LIMIT ?"
+            args.append(limit)
+        if offset:
+            q += " OFFSET ?"
+            args.append(offset)
 
         return [_convert_book(data) for data in self._fetchall(q, *args)]
 
@@ -187,11 +189,24 @@ class Database:
     def clear(self) -> None:
         self._execute("DELETE FROM books")
 
-    def clear_files(self) -> None:
-        self._execute("UPDATE books SET files='{}'")
+    def clear_files(self, *bids: int) -> None:
+        if bids:
+            self._execute(
+                "UPDATE books SET files='{}' "
+                f"WHERE id IN ({','.join('?' * len(bids))})",
+                *bids,
+            )
+        else:
+            self._execute("UPDATE books SET files='{}'")
 
     def is_library_empty(self) -> bool:
         return bool(len(self._fetchone("SELECT id FROM books")))
+
+    @classmethod
+    def init(cls) -> None:
+        logger.trace("database initialization")
+        with cls() as db:
+            db.create_library()
 
 
 def _convert_book(data: tuple[ty.Any]) -> Book:

@@ -36,5 +36,10 @@ def index():
     )
 
 
+@app.route("/starting_window")
+def start_app():
+    return render_template("starting_window.html")
+
+
 if __name__ == "__main__":
     app.run(debug=True)

@@ -29,7 +29,9 @@ def uncolored_formatter(record) -> str:
     return formatter(record)
 
 
-LOGGING_LEVEL = os.environ.get("LOGGING_LEVEL", "DEBUG")
+if not (LOGGING_LEVEL := os.environ.get("LOGGING_LEVEL")):
+    LOGGING_LEVEL = os.environ["LOGGING_LEVEL"] = "DEBUG"
+
 if os.environ.get("CONSOLE"):
     console_logger_handler = logger.add(
         sys.stdout, colorize=True, format=formatter, level=LOGGING_LEVEL

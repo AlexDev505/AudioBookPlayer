@@ -153,9 +153,9 @@ class Book:
         return f"{int(round(cur / (total / 100)))}%"
 
     @classmethod
-    def scan_dir(cls, dir_path: str) -> list[Book]:
+    def scan_dir(cls, dir_path: str) -> ty.Generator[Book, ty.Any, None]:
         logger.opt(colors=True).debug(f"scanning <y>{dir_path}</y> for <r>.abp</r>")
-        books: list[Book] = []
+        books_found = 0
         for root, _, file_names in os.walk(dir_path):
             if ".abp" in file_names:
                 abp_path = os.path.join(root, ".abp")
@@ -165,11 +165,10 @@ class Book:
                     except IOError:
                         pass
                     continue
-                books.append(book)
+                books_found += 1
+                yield book
 
-        logger.opt(colors=True).debug(f"books found: <y>{len(books)}</y>")
-
-        return books
+        logger.opt(colors=True).debug(f"books found: <y>{books_found}</y>")
 
     @classmethod
     def load_from_storage(cls, file_path: str) -> Book | None:
@@ -221,7 +220,11 @@ class Book:
 
         logger.opt(lazy=True).trace(
             "book loaded: {data}",
-            data=partial(pretty_view, book.to_dump(), multiline=True),
+            data=partial(
+                pretty_view,
+                book.to_dump(),
+                multiline=not os.getenv("NO_MULTILINE", False),
+            ),
         )
 
         return book
