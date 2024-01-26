@@ -59,7 +59,7 @@ class SettingsApi(JSApi):
             f"books folder changed: <e>{old_dir}</e> <g>-></g> <y>{new_dir}</y>"
         )
 
-        books = Book.scan_dir(new_dir)
+        books = list(Book.scan_dir(new_dir))
         with Database() as db:
             db.clear_files()
             logger.debug("files data cleared from database")
@@ -92,10 +92,9 @@ class SettingsApi(JSApi):
         if self.old_books_folder is None:
             return self.error(RequestCanceled())
 
-        books = Book.scan_dir(self.old_books_folder)
         moved_books_count = 0
         with Database() as db:
-            for book in books:
+            for book in Book.scan_dir(self.old_books_folder):
                 if os.path.exists(book.dir_path):
                     logger.opt(colors=True).debug(f"{book:styled} already exists")
                     continue
@@ -144,10 +143,9 @@ class SettingsApi(JSApi):
         if self.old_books_folder is None:
             return self.error(RequestCanceled())
 
-        books = Book.scan_dir(self.old_books_folder)
         removed_books_count = 0
         with Database() as db:
-            for book in books:
+            for book in Book.scan_dir(self.old_books_folder):
                 if os.path.exists(book.dir_path):
                     logger.opt(colors=True).debug(
                         f"{book:styled} exists in new library"

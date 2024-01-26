@@ -239,7 +239,11 @@ class BooksApi(JSApi):
         logger.opt(colors=True).debug(f"book added to library: {book:styled}")
         logger.opt(lazy=True).trace(
             "book: {data}",
-            data=partial(pretty_view, book.to_dump(), multiline=True),
+            data=partial(
+                pretty_view,
+                book.to_dump(),
+                multiline=not os.getenv("NO_MULTILINE", False),
+            ),
         )
 
         return self.make_answer()

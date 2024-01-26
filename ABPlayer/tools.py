@@ -99,6 +99,7 @@ def pretty_view(
     elif isinstance(obj, (int, float)):
         result = f"{obj}"
     elif isinstance(obj, str):
+        obj = obj.replace("\n", "\\n").replace("\r", "\\r").replace('"', '\\"')
         result = f'"{obj}"'
 
     if __finish:

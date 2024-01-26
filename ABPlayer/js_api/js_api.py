@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import typing as ty
 from functools import partial
 from inspect import isfunction, ismethod
@@ -13,11 +14,10 @@ from tools import pretty_view
 class JSApi:
     sections: list[ty.Type[JSApi]] = []
 
-    def init(self):
+    def init(self, window: webview.Window):
         """
         Регистрирует методы для дальнейшего вызова из среды JS.
         """
-        window = self._window
         for section in self.sections:
             section = section()
             for name in dir(section):
@@ -27,7 +27,7 @@ class JSApi:
                         window.expose(func)
 
     @property
-    def _window(self) -> webview.window.Window:
+    def _window(self) -> webview.Window:
         return webview.windows[0]
 
     def evaluate_js(self, command: str) -> ty.Any:
@@ -37,7 +37,10 @@ class JSApi:
     def make_answer(data: ty.Any = ()) -> dict:
         answer = dict(status="ok", data=data)
         logger.opt(lazy=True, depth=1).trace(
-            "answer: {data}", data=partial(pretty_view, answer, multiline=True)
+            "answer: {data}",
+            data=partial(
+                pretty_view, answer, multiline=not os.getenv("NO_MULTILINE", False)
+            ),
         )
         return answer
 
