@@ -1,10 +1,17 @@
+from __future__ import annotations
+
 import os
+import typing as ty
 from dataclasses import dataclass, field, asdict
 from datetime import datetime
 from enum import Enum
+from functools import partial
+from pathlib import Path
 
 from loguru import logger
 from orjson import orjson
+
+from tools import pretty_view
 
 
 DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
@@ -146,14 +153,78 @@ class Book:
         return f"{int(round(cur / (total / 100)))}%"
 
     @classmethod
-    def load_from_storage(cls, file_path: str) -> dict:
-        with open(file_path, "rb") as file:
-            data = dict(**orjson.loads(file.read()), file_path=file_path)
-        data["items"] = BookItems(data["items"])
-        data["stop_flag"] = StopFlag(**data["stop_flag"])
-        data["files"] = BookFiles(data["files"])
-        data["adding_date"] = datetime.strptime(data["adding_date"], DATETIME_FORMAT)
-        return data
+    def scan_dir(cls, dir_path: str) -> list[Book]:
+        logger.opt(colors=True).debug(f"scanning <y>{dir_path}</y> for <r>.abp</r>")
+        books: list[Book] = []
+        for root, _, file_names in os.walk(dir_path):
+            if ".abp" in file_names:
+                abp_path = os.path.join(root, ".abp")
+                if not (book := Book.load_from_storage(abp_path)):
+                    try:
+                        os.remove(abp_path)
+                    except IOError:
+                        pass
+                    continue
+                books.append(book)
+
+        logger.opt(colors=True).debug(f"books found: <y>{len(books)}</y>")
+
+        return books
+
+    @classmethod
+    def load_from_storage(cls, file_path: str) -> Book | None:
+        logger.opt(colors=True).trace(
+            f"loading data from <r>.abp</r> <y>{file_path}</y>"
+        )
+        try:
+            with open(file_path, "rb") as file:
+                data = dict(**orjson.loads(file.read()))
+            data["items"] = BookItems(data["items"])
+            data["status"] = Status(data["status"])
+            data["stop_flag"] = StopFlag(**data["stop_flag"])
+            data["files"] = BookFiles(data["files"])
+            data["adding_date"] = datetime.strptime(
+                data["adding_date"], DATETIME_FORMAT
+            )
+        except (ValueError, TypeError) as err:
+            logger.opt(colors=True).debug(
+                f"error while loading book from <r>.abp</r> <y>{file_path}</y> : "
+                f"<lr>{type(err).__name__}: {err}</lr>"
+            )
+            return
+
+        signature = ty.get_type_hints(cls)
+        del signature["id"]
+        try:
+            if len(signature) != len(data):
+                raise ValueError("wrong fields count")
+            for fiend_name, field_type in signature.items():
+                if (value := data.get(fiend_name)) is None:
+                    raise ValueError(f"field `{fiend_name}` not found")
+                elif (value_type := type(value)) is not field_type:
+                    raise ValueError(
+                        f"field value of `{fiend_name}` has `{value_type}` type, "
+                        f"but expected `{field_type}`"
+                    )
+        except ValueError as err:
+            logger.opt(colors=True).debug(
+                f"incorrect data in <r>.abp</r> <y>{file_path}</y>: {err}"
+            )
+            return
+
+        book = Book(**data)
+        if not str(Path(file_path).parent).endswith(book_path := book.book_path[2:]):
+            logger.opt(colors=True).debug(
+                f"incorrect <r>.abp</r> file path <y>{file_path}</y> "
+                f"it's not ends on <y>{book_path}</y>"
+            )
+
+        logger.opt(lazy=True).trace(
+            "book loaded: {data}",
+            data=partial(pretty_view, book.to_dump(), multiline=True),
+        )
+
+        return book
 
     def save_to_storage(self) -> None:
         logger.opt(colors=True).debug(

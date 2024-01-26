@@ -32,15 +32,19 @@ class Database:
         self._connect()
         return self
 
+    def _fetchone(self, query: str, *args) -> tuple:
+        self._execute(query, *args)
+        return self._cursor.fetchone()
+
+    def _fetchall(self, query: str, *args) -> list[tuple]:
+        self._execute(query, *args)
+        return self._cursor.fetchall()
+
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
         if self.autocommit:
             self.conn.commit()
         self._cursor.close()
         self.conn.close()
-
-    def _fetchall(self, query: str, *args) -> list[tuple]:
-        self._execute(query, *args)
-        return self._cursor.fetchall()
 
     @logger.catch
     def _execute(self, query: str, *args) -> None:
@@ -115,6 +119,10 @@ class Database:
         ):
             return [_convert_book(book) for book in books]
 
+    def get_book_by_url(self, url: str) -> Book | None:
+        if books := self._fetchall("SELECT * FROM books WHERE url=?", url):
+            return _convert_book(books[0])
+
     def get_books_keywords(self) -> dict[int, list[ty.Any]]:
         result = {}
         for book in self._fetchall("SELECT id, name, author, series_name FROM books"):
@@ -175,6 +183,15 @@ class Database:
 
     def remove_book(self, bid: int) -> None:
         self._execute("DELETE FROM books WHERE id=?", bid)
+
+    def clear(self) -> None:
+        self._execute("DELETE FROM books")
+
+    def clear_files(self) -> None:
+        self._execute("UPDATE books SET files='{}'")
+
+    def is_library_empty(self) -> bool:
+        return bool(len(self._fetchone("SELECT id FROM books")))
 
 
 def _convert_book(data: tuple[ty.Any]) -> Book:
