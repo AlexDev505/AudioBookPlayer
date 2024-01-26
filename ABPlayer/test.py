@@ -1,21 +1,14 @@
-import sys
 import os
 
+os.environ["APP_DIR"] = os.path.join(os.environ["LOCALAPPDATA"], "AudioBookPlayer")
+os.environ["DATABASE_PATH"] = os.path.join(os.environ["APP_DIR"], "library.sqlite")
 os.environ["books_folder"] = r"E:\books"
 
-from drivers import KnigaVUhe, BaseDownloadProcessHandler
+from database import Database
 
 
-class StdioDownloadProcessHandler(BaseDownloadProcessHandler):
-    def show_progress(self) -> None:
-        sys.stdout.write(
-            f"\r{self.done_size}/{self.total_size}\t"
-            f"{round(self.done_size / (self.total_size / 100), 2)} %"
-        )
-        sys.stdout.flush()
-
-
-driver = KnigaVUhe()
-driver.download_book(
-    driver.get_book("https://knigavuhe.org/book/my-3/"), StdioDownloadProcessHandler()
-)
+with Database() as db:
+    for book in db.get_libray(100, 0, None, None, None, None, None, None, None):
+        # if os.path.exists(book.dir_path):
+        if book.files:
+            book.save_to_storage()

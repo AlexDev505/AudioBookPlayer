@@ -27,7 +27,7 @@ class JSApi:
                         window.expose(func)
 
     @property
-    def _window(self) -> webview.Window:
+    def _window(self) -> webview.window.Window:
         return webview.windows[0]
 
     def evaluate_js(self, command: str) -> ty.Any:
