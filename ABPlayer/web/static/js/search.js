@@ -78,7 +78,8 @@ function onSearchResultContainerScroll() {
         pywebview.api.search_books(
             document.querySelector("#search-input-line input").value.trim(),
             limit=10,
-            offset=search_offset
+            offset=search_offset,
+            required_drivers=required_drivers
         ).then((resp) => {onSearchCompleted(resp, false)})
     }
 }
