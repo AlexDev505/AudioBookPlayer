@@ -63,3 +63,8 @@ class JSApiError(Exception):
 
     def as_dict(self) -> dict:
         return dict(code=self.code, message=self.message, extra=self.extra)
+
+
+class ConnectionFailedError(JSApiError):
+    code = 1
+    message = "Проблемы с соединением"

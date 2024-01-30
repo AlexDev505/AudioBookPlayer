@@ -13,7 +13,7 @@ from database import Database
 from drivers import Driver, BaseDownloadProcessHandler, DownloadProcessStatus
 from models.book import DATETIME_FORMAT
 from tools import convert_from_bytes, make_book_preview, pretty_view
-from .js_api import JSApi, JSApiError
+from .js_api import JSApi, JSApiError, ConnectionFailedError
 
 
 if ty.TYPE_CHECKING:
@@ -438,11 +438,6 @@ class DownloadingProcessHandler(BaseDownloadProcessHandler):
     def status(self, v: DownloadProcessStatus):
         self._status = v
         self.js_api.evaluate_js(f"setDownloadingStatus({self.bid}, '{v.value}')")
-
-
-class ConnectionFailedError(JSApiError):
-    code = 1
-    message = "Проблемы с соединением"
 
 
 class NoSuitableDriver(JSApiError):

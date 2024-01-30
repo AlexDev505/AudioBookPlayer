@@ -32,16 +32,37 @@ function changeLibraryDir() {
 function migrateOldLibrary() {
     n = createNotification("<div><b>Перенос файлов...</b></div><div>это может занять некоторое время</div>", 0, false)
     pywebview.api.migrate_old_library().then((resp) => {
-       n.querySelector(".cross-btn").click()
-       if (resp.status != "ok") return
-       createNotification(`<div><b>Перенос завершен</b><div><div>Книг перенесено: ${resp.data.moved_books_count}</div>`, 10, true)
+        n.querySelector(".cross-btn").click()
+        if (resp.status != "ok") return
+        createNotification(`<div><b>Перенос завершен</b><div><div>Книг перенесено: ${resp.data.moved_books_count}</div>`, 10, true)
     })
 }
 function removeOldLibrary() {
     n = createNotification("<div><b>Удаление старых книг...</b></div><div>это может занять некоторое время</div>", 0, false)
     pywebview.api.remove_old_library().then((resp) => {
         n.querySelector(".cross-btn").click()
-       if (resp.status != "ok") return
-       createNotification(`<div><b>Удаление завершено</b><div><div>Книг удалено: ${resp.data.removed_books_count}</div>`, 10, true)
+        if (resp.status != "ok") return
+        createNotification(`<div><b>Удаление завершено</b><div><div>Книг удалено: ${resp.data.removed_books_count}</div>`, 10, true)
+    })
+}
+
+function checkForUpdates(resp) {
+    if (resp.status != "ok") {
+        setTimeout(checkForUpdates, 60)
+        return
+    }
+    if (!resp.data) return
+    createNotification(
+        `<div><b>Доступно обновление ${resp.data.version}</b></div>
+        <a style="margin-top: 2px" href="${resp.data.url}" target="_blank">список изменений</a>
+        <div style="margin-top: 2px; text-decoration: underline; cursor:pointer" onclick="{updateApp();this.parentElement.parentElement.remove()}">установить</div>`
+    )
+}
+
+function updateApp() {
+    n = createNotification("<div><b>Загрузка обновления</b></div><div>это может занять некоторое время</div>", 0, false)
+    pywebview.api.update_app().then((resp) => {
+        n.querySelector(".cross-btn").click()
+        if (resp.status != "ok") showError(resp.message)
     })
 }

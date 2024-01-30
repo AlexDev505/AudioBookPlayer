@@ -91,6 +91,7 @@ function addUrlParams(params) {
 
 function PWVReady() {
     parseUrlParams()
+    pywebview.api.check_for_updates().then(checkForUpdates)
     pywebview.api.get_downloads().then(showDownloads)
     pywebview.api.get_available_drivers().then(loadAvailableDrivers)
     toggleDarkThemeCheckBox(dark_theme)
