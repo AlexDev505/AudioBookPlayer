@@ -6,6 +6,7 @@ from contextlib import suppress
 
 import webview
 from bs4 import BeautifulSoup
+from loguru import logger
 
 from models.book import Book, BookItem, BookItems
 from .base import Driver
@@ -62,7 +63,7 @@ class PyWebViewJsApi(BaseJsApi):
         return self._result
 
     def _get_book_data(self) -> None:
-        try:
+        for i in range(5):
             self._result = self._window.evaluate_js(
                 """
                 function get_data() {
@@ -76,9 +77,18 @@ class PyWebViewJsApi(BaseJsApi):
                 get_data()
                 """
             )
-            self._window.destroy()
-        finally:
-            self._active = False
+            if self._result:
+                break
+            time.sleep(5)
+        else:
+            logger.error(
+                f"getting book data failed. url={self._window.get_current_url}"
+            )
+            self._window.load_url(self._window.get_current_url())
+            return
+
+        self._window.destroy()
+        self._active = False
 
 
 class AKniga(Driver):
