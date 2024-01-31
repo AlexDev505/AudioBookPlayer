@@ -29,11 +29,17 @@ def init() -> None:
 
 
 def _create_config() -> None:
+    """
+    Создает файл конфигурации со значениями по умолчанию.
+    """
     with open(os.environ["CONFIG_PATH"], "wb") as file:
         file.write(orjson.dumps(FIELDS))
 
 
 def _load_config() -> dict:
+    """
+    Загружает данные из файла конфигурации.
+    """
     try:
         with open(os.environ["CONFIG_PATH"], "rb") as file:
             return orjson.loads(file.read())
@@ -43,6 +49,11 @@ def _load_config() -> dict:
 
 
 def update_config(*, update_env=True, **fields: [str, ty.Any]) -> None:
+    """
+    Обновляет поля в файле конфигурации.
+    :param update_env: True - произойдет обновление переменных окружения.
+    :param fields: Поля для обновления.
+    """
     logger.opt(colors=True).debug(
         "Configuration update. "
         + ", ".join((f"<le>{k}</le>=<y>{v}</y>" for k, v in fields.items()))
@@ -55,6 +66,11 @@ def update_config(*, update_env=True, **fields: [str, ty.Any]) -> None:
 
 
 def _validate_config(config: dict) -> dict:
+    """
+    Проверяет валидность данных конфигурации.
+    Исправляет в случае ошибок.
+    :returns: Данные конфигурации.
+    """
     if any(key not in FIELDS for key in config):
         config = {field: config.get(field, FIELDS[field]) for field in FIELDS}
         update_config(update_env=False, **config)
@@ -76,6 +92,9 @@ def _validate_config(config: dict) -> dict:
 
 
 def _add_to_env(config: dict) -> None:
+    """
+    Добавляет данные конфигурации в переменные окружения.
+    """
     logger.trace("adding configuration to the virtual environment")
     for field in FIELDS:
         os.environ[field] = config.get(field)

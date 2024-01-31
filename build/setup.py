@@ -88,6 +88,7 @@ PyInstaller.__main__.run(
         # "--onefile",
         f"--add-data={os.path.join(dev_path, 'web', 'static')};static",
         f"--add-data={os.path.join(dev_path, 'web', 'templates')};templates",
+        f"--add-data={os.path.join(dev_path, 'drivers', 'bin')};bin",
     ]
 )
 shutil.rmtree("temp")

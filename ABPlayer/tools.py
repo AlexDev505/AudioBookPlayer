@@ -17,7 +17,7 @@ if ty.TYPE_CHECKING:
 def convert_from_bytes(bytes_value: int) -> str:
     """
     :param bytes_value: Число байт.
-    :return: Строка вида <Число> <Единица измерения>
+    :returns: Строка вида <Число> <Единица измерения>
     """
     if bytes_value == 0:
         return "0B"
@@ -32,7 +32,7 @@ def get_file_hash(file_path: ty.Union[str, Path], hash_func=hashlib.sha256) -> s
     """
     :param file_path: Путь к файлу.
     :param hash_func: Функция хеширования.
-    :return: Хеш файла.
+    :returns: Хеш файла.
     """
     hash_func = hash_func()  # Инициализируем хеш функцию
     with open(file_path, "rb") as file:
@@ -50,6 +50,10 @@ def get_file_hash(file_path: ty.Union[str, Path], hash_func=hashlib.sha256) -> s
 def pretty_view(
     obj: ty.Any, *, multiline: bool = False, indent: int = 4, __finish=True
 ) -> str:
+    """
+    Формирует удобно читаемое представление списка/словаря.
+    :returns: Строка.
+    """
     result = ""
 
     if isinstance(obj, (dict, list, tuple)):
@@ -112,6 +116,10 @@ def pretty_view(
 
 
 def make_book_preview(book: Book) -> dict:
+    """
+    :param book: Экземпляр книги.
+    :returns: Словарь с основными полями книги.
+    """
     return dict(
         author=book.author,
         name=book.name,

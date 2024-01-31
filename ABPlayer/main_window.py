@@ -7,6 +7,11 @@ from web.app import app
 
 
 def main_window() -> webview.Window:
+    """
+    Создает главное окно приложения.
+    :returns: Экземпляр окна.
+    """
+
     def _on_loaded():
         logger.debug(f"loaded {window.get_current_url()}")
 

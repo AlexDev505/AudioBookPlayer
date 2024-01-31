@@ -13,6 +13,11 @@ from web.app import app
 
 
 def create_starting_window() -> webview.Window:
+    """
+    Создает окно запуска приложения.
+    :returns: Экземпляр окна.
+    """
+
     def _on_shown():
         logger.debug("starting window launched")
         window.load_url("/starting_window")
@@ -40,6 +45,11 @@ def create_starting_window() -> webview.Window:
 
 
 def start_app(window: webview.Window) -> None:
+    """
+    Подготавливает приложение к запуску.
+    Инициализирует конфигурацию, бд.
+    Анализирует библиотеку.
+    """
     logger.debug("starting app...")
     start_time = time.time()
 
@@ -66,6 +76,11 @@ def start_app(window: webview.Window) -> None:
 
 
 def init_library(window: webview.Window) -> None:
+    """
+    Анализирует библиотеку.
+    Добавляет книги из хранилища.
+    Исправляет некорректные записи в бд.
+    """
     logger.debug("loading library...")
     window.evaluate_js("setStatus('загрузка библиотеки...')")
 
@@ -73,6 +88,7 @@ def init_library(window: webview.Window) -> None:
     correct_books_urls: list[str] = []
     incorrect_books_ids: list[int] = []
     with Database() as db:
+        # Проверка существующих в бд книг
         logger.trace("validating exists books")
         offset = 0
         books = db.get_libray(20, offset)
@@ -94,6 +110,7 @@ def init_library(window: webview.Window) -> None:
             db.clear_files(*incorrect_books_ids)
             updates = True
 
+        # Сканирование хранилища
         logger.trace("scanning books folder")
         for book in Book.scan_dir(os.environ["books_folder"]):
             if book.url in correct_books_urls:
