@@ -1,114 +1,51 @@
-from __future__ import annotations
-
-import atexit
 import os
-import sys
-import typing as ty
-from inspect import isclass
+
+from tools import pretty_view
+
 
 # CONFIG SETUP
 # Путь к директории приложения
 os.environ["APP_DIR"] = os.path.join(os.environ["LOCALAPPDATA"], "AudioBookPlayer")
 if not os.path.exists(os.environ["APP_DIR"]):
     os.mkdir(os.environ["APP_DIR"])
-# os.environ["APP_DIR"] = "../"
-# Путь к базе данных
-os.environ["DB_PATH"] = os.path.join(os.environ["APP_DIR"], "database.sqlite")
-# Путь к файлу с временными данными
-os.environ["TEMP_PATH"] = os.path.join(os.environ["APP_DIR"], "temp.txt")
-# Путь к файлу с временными данными
-os.environ["TEMP_PATH"] = os.path.join(os.environ["APP_DIR"], "temp.txt")
+# Путь к файлу конфигурации
+os.environ["CONFIG_PATH"] = os.path.join(os.environ["APP_DIR"], "config.json")
+# Путь к файлу базы данных библиотеки
+os.environ["DATABASE_PATH"] = os.path.join(os.environ["APP_DIR"], "library.sqlite")
 # Путь к файлу отладки
 os.environ["DEBUG_PATH"] = os.path.join(os.environ["APP_DIR"], "debug.log")
-# Стандартный путь к директории с книгами
-os.environ["DEFAULT_BOOKS_FOLDER"] = os.path.join(os.environ["APP_DIR"], "Книги")
+# Путь к файлу с временными данными
+os.environ["TEMP_PATH"] = os.path.join(os.environ["APP_DIR"], "temp.txt")
 # Версия приложения
-os.environ["VERSION"] = "1.0.0-beta.6"
-# Инициализация конфигурации
-# (хранил бы в json`е, но нужно несколько таблиц в бд, поэтому вот так вот...)
-from database import Config  # noqa
+os.environ["VERSION"] = "2.0.0"
 
-Config.init()
-
-from loguru import logger  # noqa
-from PyQt5.QtWidgets import QApplication  # noqa
-
-from logger import logging_level  # noqa
-from drivers.exceptions import DriverError  # noqa
-from main_window import MainWindow  # noqa
-from start_app import StartAppWindow  # noqa
+# DEV
+os.environ["CONSOLE"] = "1"
+os.environ["DEBUG"] = "1"
+os.environ["LOGGING_LEVEL"] = "TRACE"
 
 
-@logger.catch
-def exception_hook(exception_type, value, __):
-    if exception_type is KeyboardInterrupt:
-        sys.exit()
-    raise Exception from value
+from logger import logger  # noqa
 
 
-sys.excepthook = exception_hook
+def main() -> None:
+    import webview
+    from starting_window import create_starting_window
 
+    logger.opt(colors=True).debug(
+        "starting params: "
+        + pretty_view(
+            dict(
+                app_dir=os.environ["APP_DIR"],
+                debug=bool(os.environ.get("DEBUG")),
+                logging_level=os.environ["LOGGING_LEVEL"],
+            ),
+        ),
+    )
 
-@logger.catch
-def startApp() -> StartAppWindow:
-    """
-    Инициализирует окно загрузки.
-    """
-    window = StartAppWindow()
-    window.finished.connect(lambda err: finishLoading(window, err))
-    return window
+    create_starting_window()
+    webview.start(debug=bool(os.environ.get("DEBUG")))
 
-
-@logger.catch
-def finishLoading(
-    window: StartAppWindow, err: ty.Union[ty.Any, ty.Type[DriverError]]
-) -> None:
-    """
-    Обрабатывает завершение загрузки.
-    Открывает главное окно.
-    :param window: Окно загрузки.
-    :param err: Ошибка.
-    """
-    logger.info("Loading is complete")
-    window.close()  # Закрываем окно загрузки
-    main_window = startMainWindow()
-    main_window.show()
-
-    # Если при загрузке возникли ошибки
-    if isclass(err) and issubclass(err, DriverError):
-        err = err(main_window)
-        main_window.openInfoPage(**err.to_dict())
-        # Выключаем функционал окна
-        main_window.menuBtn.click()
-        main_window.menuFrame.setDisabled(True)
-        main_window.controlPanel.hide()
-
-
-@logger.catch
-def startMainWindow() -> MainWindow:
-    """
-    Инициализирует главное окно.
-    """
-    window = MainWindow()
-    window.installEventFilter(window)
-    return window
-
-
-@logger.catch
-def main():
-    logger.debug("Create application")
-    app = QApplication([])
-    window = startApp()
-    window.show()
-    logger.info("Start application")
-    app.exec()
-
-
-def exit_():
-    logger.info("Application closed\n\n")
-
-
-atexit.register(exit_)
 
 if __name__ == "__main__":
     main()

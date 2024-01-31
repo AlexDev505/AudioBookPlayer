@@ -1,0 +1,38 @@
+<link rel="stylesheet" href="{{url_for('static', filename='css/book.css')}}">
+<script defer src="{{url_for('static', filename='js/book.js')}}"></script>
+
+<div id="book-page-content">
+
+<div id="book-loading"></div>
+
+<div id="book-header">
+  <div>
+    <div class="book-title">BOOK TITLE</div>
+    <div class="book-state">
+      <div class="book-listening-progress">X% listened</div>
+      <div class="book-adding-date">Добавлена date</div>
+    </div>
+  </div>
+  <div class="book-actions" style="display: none">
+    <div class="icon-btn toggle-favorite-btn"></div>
+    <div class="icon-btn delete-btn"></div>
+    <div class="icon-btn download-btn"></div>
+    <div class="icon-btn remove-btn"></div>
+  </div>
+</div>
+<div id="book-player">
+  <div class="book-preview"></div>
+  <div id="player">плеер пока недоступен</div>
+</div>
+<div id="book-info">
+  <div class="book-additional-info">
+    <div class="book-author">author</div>
+    <div class="book-reader">reader</div>
+    <div class="book-duration">duration</div>
+    <div class="book-series">series name (X)</div>
+    <div class="book-driver">driver</div>
+  </div>
+</div>
+<div class="book-description">description</div>
+
+</div>

@@ -2,7 +2,6 @@ venv/
 .idea/
 __pycache__/
 /build/installers/
+/build/updaters/
 /build/ABPlayer/
-AudioBookPlayer.lnk
-ABPlayer/drivers/chromedriver.exe
-build/updater/drivers/chromedriver.exe
+AudioBookPlayerAppData.lnk

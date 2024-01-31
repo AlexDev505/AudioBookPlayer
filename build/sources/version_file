@@ -12,14 +12,14 @@ VSVersionInfo(
       [
       StringTable(
         u'040904B0',
-        [StringStruct(u'CompanyName', u'AlexDev'),
-        StringStruct(u'FileDescription', u'Приложение для скачивания и прослушивания аудиокниг'),
-        StringStruct(u'FileVersion', u'1.0.0-beta.6'),
-        StringStruct(u'InternalName', u'DOM'),
-        StringStruct(u'LegalCopyright', u'\xa9 AlexDev'),
-        StringStruct(u'OriginalFilename', u'ABPlayer.Exe'),
+        [StringStruct(u'CompanyName', u'AlexDev505'),
+        StringStruct(u'FileDescription', u''),
+        StringStruct(u'FileVersion', u'2.0.0'),
+        StringStruct(u'InternalName', u'ABPlayer'),
+        StringStruct(u'LegalCopyright', u'AlexDev505'),
+        StringStruct(u'OriginalFilename', u'ABPlayer.exe'),
         StringStruct(u'ProductName', u'ABPlayer'),
-        StringStruct(u'ProductVersion', u'1.0.0-beta.6')])
+        StringStruct(u'ProductVersion', u'2.0.0')])
       ]),
   VarFileInfo([VarStruct(u'Translation', [1049, 1049])])
   ]

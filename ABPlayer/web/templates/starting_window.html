@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * {
+      color: rgb(215,214,217);
+      font-family: Arial;
+      user-select: none;
+    }
+    html, body {
+      height: -webkit-fill-available;
+      margin: 0;
+      background-color: rgb(32,34,37);
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 16px;
+      align-items: center;
+    }
+    #loading-gif {
+      background-image: url(static/images/loading_app.gif);
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: contain;
+      width: 115px;
+      height: 115px;
+    }
+    #status {text-align: center;}
+    #made-by {
+      font-family: "Comic Sans MS", Arial;
+      font-weight: bold;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <div id="loading-gif"></div>
+  <div id="status">запуск...</div>
+  <div id="made-by">by AlexDev505</div>
+  <script>
+    var status = document.getElementById("status")
+    function setStatus(text) {
+        status.innerHTML = text
+    }
+  </script>
+</body>
+</html>
