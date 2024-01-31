@@ -20,7 +20,7 @@ function changeLibraryDir() {
         if (resp.status != "ok") return
         content = "<div><b>Папка с книгами изменена</b></div>" + ((resp.data.new_books_count) ? `<div>Книг добавлено: ${resp.data.new_books_count}</div>` : "")
         timeout = 5
-        if (!resp.is_old_library_empty) {
+        if (!resp.data.is_old_library_empty) {
             timeout = 0
             content = content + `<div>но скачанные ранее файлы остались на месте</div>
             <div style="margin-top: 2px; text-decoration: underline; cursor:pointer" onclick="{migrateOldLibrary();this.parentElement.parentElement.remove()}">Перенести всё в новое место</div>
