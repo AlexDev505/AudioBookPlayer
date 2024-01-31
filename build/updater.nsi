@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "ABPlayer"
-!define PRODUCT_VERSION "2.0.0-rc.2"
+!define PRODUCT_VERSION "2.0.0"
 !define PRODUCT_PUBLISHER "AlexDev505"
 !define PRODUCT_WEB_SITE "https://github.com/AlexDev505/ABPlayer"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\ABPlayer.exe"
@@ -128,9 +128,6 @@ Section "ABPlayer" SEC01
     File "ABPlayer\_internal\templates\search.html"
     File "ABPlayer\_internal\templates\settings.html"
     File "ABPlayer\_internal\templates\starting_window.html"
-
-    SetOutPath "$INSTDIR\_internal\bin"
-    File "ABPlayer\_internal\bin\ffprobe.exe"
 
     Goto Done
   FileLocked:
