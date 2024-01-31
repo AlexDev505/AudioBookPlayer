@@ -5,7 +5,7 @@ a = Analysis(
     ['E:\\PycharmProjects\\AudioBookPlayer\\build\\..\\ABPlayer\\run.py'],
     pathex=[],
     binaries=[],
-    datas=[('E:\\PycharmProjects\\AudioBookPlayer\\build\\..\\ABPlayer\\web\\static', 'static'), ('E:\\PycharmProjects\\AudioBookPlayer\\build\\..\\ABPlayer\\web\\templates', 'templates')],
+    datas=[('E:\\PycharmProjects\\AudioBookPlayer\\build\\..\\ABPlayer\\web\\static', 'static'), ('E:\\PycharmProjects\\AudioBookPlayer\\build\\..\\ABPlayer\\web\\templates', 'templates'), ('E:\\PycharmProjects\\AudioBookPlayer\\build\\..\\ABPlayer\\drivers\\bin', 'bin')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
