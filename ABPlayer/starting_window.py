@@ -43,6 +43,12 @@ def start_app(window: webview.Window) -> None:
     logger.debug("starting app...")
     start_time = time.time()
 
+    updater_path = os.path.join(
+        os.environ["APP_DIR"], f"ABPlayerUpdate.{os.environ['VERSION']}.exe"
+    )
+    if os.path.isfile(updater_path):
+        os.remove(updater_path)
+
     config.init()
     Database.init()
     init_library(window)

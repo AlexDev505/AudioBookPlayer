@@ -32,7 +32,7 @@ class Database:
         self._connect()
         return self
 
-    def _fetchone(self, query: str, *args) -> tuple:
+    def _fetchone(self, query: str, *args) -> tuple | None:
         self._execute(query, *args)
         return self._cursor.fetchone()
 
@@ -200,7 +200,7 @@ class Database:
             self._execute("UPDATE books SET files='{}'")
 
     def is_library_empty(self) -> bool:
-        return bool(len(self._fetchone("SELECT id FROM books")))
+        return not bool(self._fetchone("SELECT id FROM books"))
 
     @classmethod
     def init(cls) -> None:
