@@ -129,6 +129,9 @@ Section "ABPlayer" SEC01
     File "ABPlayer\_internal\templates\settings.html"
     File "ABPlayer\_internal\templates\starting_window.html"
 
+    SetOutPath "$INSTDIR\_internal\bin"
+    File "ABPlayer\_internal\bin\ffprobe.exe"
+
     Goto Done
   FileLocked:
     Goto FileIsLocked
