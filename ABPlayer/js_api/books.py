@@ -327,7 +327,7 @@ class BooksApi(JSApi):
 
     @staticmethod
     def _delete_book_files(dir_path: str, files: list[str]) -> None:
-        for file in [*files, "cover.jpg", ".abp"]:
+        for file in [*files, "cover.jpg"]:
             file_path = os.path.join(dir_path, file)
             try:
                 logger.opt(colors=True).trace(f"deleting <y>{file_path}</y>")
@@ -356,6 +356,7 @@ class BooksApi(JSApi):
 
         logger.opt(colors=True).debug(f"deleting book: {book:styled}")
         self._delete_book_files(book.dir_path, list(book.files.keys()))
+        os.remove(book.abp_file_path)
 
         logger.opt(colors=True).debug(f"clearing files data from db: {book:styled}")
         book.files.clear()
@@ -366,8 +367,6 @@ class BooksApi(JSApi):
         return self.make_answer()
 
     def remove_book(self, bid: int):
-        # TODO: если книга скачана, помечать книгу как исключенную
-        #  (можно добавлять это в .abp и не добавлять книгу в бд при запуске)
         logger.opt(colors=True).debug(f"request: <r>remove book</r> | <y>{bid}</y>")
         with Database() as db:
             if not (book := db.get_book_by_bid(bid)):
@@ -375,6 +374,7 @@ class BooksApi(JSApi):
 
             if book.files:
                 self.removed_books_files[bid] = (book.dir_path, list(book.files.keys()))
+                os.remove(book.abp_file_path)
             db.remove_book(bid)
             db.commit()
 

@@ -25,7 +25,7 @@ from tools import pretty_view
 def load() -> dict[str, str | int | float | bool]:
     """
     Считывает данные из файла.
-    :return: Словарь с данными.
+    :returns: Словарь с данными.
     """
     logger.opt(colors=True).trace(f"loading data from <y>{os.environ['TEMP_PATH']}</y>")
     # Создаём файл
@@ -98,7 +98,7 @@ def _adapt_value(value: str, value_type: str) -> str | int | float | bool:
     Преобразует значение полученное из файла в тип данных Python.
     :param value: Значение из файла.
     :param value_type: Тип данных.
-    :return:
+    :returns: Преобразованное значение.
     """
     try:
         if value_type == "int":
@@ -120,7 +120,7 @@ def _convert_value(value: str | int | float | bool) -> str:
     """
     Подготавливает данные для сохранения в файл.
     :param value: Исходное значение.
-    :return: Преобразованное значение.
+    :returns: Преобразованное значение.
     """
     if isinstance(value, bool):
         return str(int(value))

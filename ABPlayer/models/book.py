@@ -31,13 +31,16 @@ class BookItem:
 
     @property
     def duration(self) -> int:
+        """
+        Длительность главы (в секундах).
+        """
         return self.end_time - self.start_time
 
 
 class BookItems(list):
     """
     Список глав.
-    В Базе данных храниться как список словарей.
+    Представлен списком словарей.
     """
 
     def __init__(self, items: list[BookItem | dict[str, str | int]] = ()):
@@ -107,7 +110,7 @@ class Book:
     @property
     def book_path(self) -> str:
         """
-        :return: Относительный путь к книге в библиотеке.
+        :returns: Относительный путь к книге в библиотеке.
         """
         if self.series_name:
             return os.path.join(
@@ -121,21 +124,21 @@ class Book:
     @property
     def dir_path(self) -> str:
         """
-        :return: Абсолютный путь к директории, в которой храниться книга.
+        :returns: Абсолютный путь к директории, в которой храниться книга.
         """
         return os.path.abspath(os.path.join(os.environ["books_folder"], self.book_path))
 
     @property
     def preview_path(self) -> str:
         """
-        :return: Абсолютный путь к файлу обложки книги.
+        :returns: Абсолютный путь к файлу обложки книги.
         """
         return os.path.join(self.dir_path, "cover.jpg")
 
     @property
-    def listening_progress(self):
+    def listening_progress(self) -> str:
         """
-        :return: Прогресс прослушивания. (В процентах)
+        :returns: Прогресс прослушивания. (В процентах)
         """
         total = sum([item.duration for item in self.items])
         if not total:
@@ -154,12 +157,17 @@ class Book:
 
     @classmethod
     def scan_dir(cls, dir_path: str) -> ty.Generator[Book, ty.Any, None]:
+        """
+        Сканирует директорию на наличие `.abp` файлов.
+        :returns: Генератор экземпляров книг, загруженных из найденных файлов.
+        """
         logger.opt(colors=True).debug(f"scanning <y>{dir_path}</y> for <r>.abp</r>")
         books_found = 0
         for root, _, file_names in os.walk(dir_path):
             if ".abp" in file_names:
                 abp_path = os.path.join(root, ".abp")
                 if not (book := Book.load_from_storage(abp_path)):
+                    # Удаляем файл, если не получается загрузить книгу
                     try:
                         os.remove(abp_path)
                     except IOError:
@@ -172,6 +180,10 @@ class Book:
 
     @classmethod
     def load_from_storage(cls, file_path: str) -> Book | None:
+        """
+        Создаёт экземпляр книги из `.abp` файла.
+        :returns: Экземпляр книги или None.
+        """
         logger.opt(colors=True).trace(
             f"loading data from <r>.abp</r> <y>{file_path}</y>"
         )
@@ -230,6 +242,9 @@ class Book:
         return book
 
     def save_to_storage(self) -> None:
+        """
+        Сохраняет книгу в `.abp` файл.
+        """
         logger.opt(colors=True).debug(
             f"{self:styled} saved to <r>.abp</r>: <y>{self.abp_file_path}</y>"
         )
