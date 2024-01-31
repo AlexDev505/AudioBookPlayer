@@ -1,110 +1,23 @@
-"""
-
-Функции и классы, которые используются в приложении.
-
-"""
-
 from __future__ import annotations
 
 import hashlib
 import math
-import os
-import threading
 import typing as ty
-from abc import abstractmethod
 
-from PyQt5.QtCore import QObject, QThread
-from plyer import notification
+import pygments.formatters
+import pygments.lexers
+from loguru import logger
+
 
 if ty.TYPE_CHECKING:
     from pathlib import Path
-    from database import Books, Book
+    from models.book import Book
 
 
-class Cache(object):
-    """
-    Кэш.
-    Временно хранит до 4-х объектов.
-    """
-
-    def __init__(self):
-        self.storage = {}
-
-    def get(self, key: str) -> ty.Any:
-        """
-        :param key: Ключ к объекту.
-        :return: Объект.
-        """
-        return self.storage.get(key)
-
-    def set(self, key: str, obj: ty.Any) -> None:
-        """
-        Добавляет объект в кэш.
-        :param key: Ключ.
-        :param obj: Объект.
-        """
-        if len(self.storage) >= 4:
-            del self.storage[list(self.storage.keys())[0]]
-        self.storage[key] = obj
-
-
-class BaseWorker(QObject):
-    """
-    Базовый класс для функций, работающих в отдельном потоке.
-    """
-
-    def __new__(cls, *args, **kwargs):
-        self = super(BaseWorker, cls).__new__(cls)
-        self.__init__(*args, **kwargs)
-        self.thread = QThread(self)  # Создаем новый поток
-        self.moveToThread(self.thread)
-        self.thread.started.connect(self._worker)
-        return self
-
-    def _worker(self):
-        # Изменяем
-        threading.currentThread().setName(self.__class__.__name__)
-        self.worker()
-
-    @abstractmethod
-    def worker(self) -> None:
-        """
-        Необходимо реализовать в наследуемом классе.
-        Функция, которая будет выполняться в другом потоке.
-        """
-
-    @abstractmethod
-    def connectSignals(self) -> None:
-        """
-        Необходимо реализовать в наследуемом классе.
-        Подключение обработчиков к сигналам.
-        """
-
-    def start(self) -> None:
-        """
-        Запуск потока.
-        """
-        self.connectSignals()
-        self.thread.start()
-
-
-def convert_into_seconds(seconds: int) -> str:
-    """
-    :param seconds: Число секунд.
-    :return: Строка вида `<часы>:<минуты>:<секунды>`.
-    """
-    h = seconds // 3600
-    m = seconds % 3600 // 60
-    s = seconds % 60
-    return ((str(h).rjust(2, "0") + ":") if h else "") + ":".join(
-        map(lambda x: str(x).rjust(2, "0"), (m, s))
-    )
-
-
-def convert_into_bytes(bytes_value: int) -> str:
+def convert_from_bytes(bytes_value: int) -> str:
     """
     :param bytes_value: Число байт.
-    :return: Строка вида <Число> <Единица измерения>
+    :returns: Строка вида <Число> <Единица измерения>
     """
     if bytes_value == 0:
         return "0B"
@@ -119,7 +32,7 @@ def get_file_hash(file_path: ty.Union[str, Path], hash_func=hashlib.sha256) -> s
     """
     :param file_path: Путь к файлу.
     :param hash_func: Функция хеширования.
-    :return: Хеш файла.
+    :returns: Хеш файла.
     """
     hash_func = hash_func()  # Инициализируем хеш функцию
     with open(file_path, "rb") as file:
@@ -127,110 +40,93 @@ def get_file_hash(file_path: ty.Union[str, Path], hash_func=hashlib.sha256) -> s
         # для избежания загрузки больших файлов в оперативную память
         for block in iter(lambda: file.read(65536), b""):
             hash_func.update(block)
-    return hash_func.hexdigest()
+    file_hash = hash_func.hexdigest()
+    logger.opt(colors=True).trace(
+        f"{hash_func.name} of {str(file_path)}: <y>{file_hash}</y>"
+    )
+    return file_hash
 
 
-def pretty_view(data: ty.Union[dict, list], _indent=0) -> str:
+def pretty_view(
+    obj: ty.Any, *, multiline: bool = False, indent: int = 4, __finish=True
+) -> str:
     """
-    Преобразовывает `data` в более удобный для восприятия вид.
+    Формирует удобно читаемое представление списка/словаря.
+    :returns: Строка.
     """
-
-    def adapt_value(obj: ty.Any) -> ty.Any:
-        if isinstance(obj, (int, float, bool, dict)) or obj is None:
-            return obj
-        elif obj.__repr__().startswith("{"):
-            return obj.__dict__
-        elif obj.__repr__().startswith("["):
-            return list(obj)
-        else:
-            return str(obj)
-
-    def tag(t: str, content: ty.Any) -> str:
-        return f"<{t}>{content}</{t}>"
-
-    def dict_(content: dict) -> ty.List[str]:
-        values = []
-        for k, v in content.items():
-            k = tag("le", f'"{k}"' if isinstance(k, str) else k)
-            v = adapt_value(v)
-            if isinstance(v, str):
-                v = tag("y", '"%s"' % v.replace("\n", "\\n"))
-            elif isinstance(v, (dict, list)):
-                v = pretty_view(v, _indent=_indent + 1)
-            else:
-                v = tag("lc", v)
-            values.append(f"{k}: {v}")
-        return values
-
-    def list_(content: list) -> ty.List[str]:
-        items = []
-        for item in content:
-            item = adapt_value(item)
-            if isinstance(item, str):
-                items.append(tag("y", f'"{item}"'))
-            elif isinstance(item, (dict, list)):
-                items.append(pretty_view(item, _indent=_indent + 1))
-            else:
-                items.append(tag("lc", item))
-        return items
-
     result = ""
 
-    if isinstance(data, dict):
-        if len(data) > 2 or not all(
-            isinstance(x, (str, int, float, bool)) or x is None for x in data.values()
-        ):
-            result = (
-                "{\n"
-                + "    " * (_indent + 1)
-                + f",\n{'    ' * (_indent + 1)}".join(dict_(data))
-                + "\n"
-                + "    " * _indent
-                + "}"
+    if isinstance(obj, (dict, list, tuple)):
+        if isinstance(obj, dict):
+            new_line = (
+                "\n"
+                if multiline
+                and (
+                    len(obj) > 4
+                    or any(
+                        isinstance(x, (dict, list, tuple)) and len(x) > 4
+                        for x in obj.values()
+                    )
+                )
+                else ""
+            )
+            brackets = ("{", "}")
+            lines_iter = (
+                f'"{key}": {pretty_view(value, multiline=multiline, __finish=False)}'
+                for key, value in obj.items()
             )
         else:
-            result = "{" + ", ".join(dict_(data)) + "}"
-    elif isinstance(data, list):
-        if len(data) > 15 or not all(
-            isinstance(x, (str, int, float, bool)) for x in data
-        ):
-            result = (
-                "[\n"
-                + "    " * (_indent + 1)
-                + f",\n{'    ' * (_indent + 1)}".join(list_(data))
-                + "\n"
-                + "    " * _indent
-                + "]"
+            new_line = (
+                "\n"
+                if multiline
+                and (
+                    len(obj) > 7 or any(isinstance(x, (dict, list, tuple)) for x in obj)
+                )
+                else ""
             )
-        else:
-            result = "[" + ", ".join(list_(data)) + "]"
+            brackets = ("[", "]")
+            lines_iter = (
+                pretty_view(item, multiline=multiline, __finish=False) for item in obj
+            )
 
-    return tag("w", result)
+        result += f"{brackets[0]}{new_line}"
+        lines = f", {new_line}".join(lines_iter)
+        if "\n" in lines:
+            lines = " " * indent + lines
+            lines = lines.replace("\n", "\n" + " " * indent)
+        result += lines
+        result += f"{new_line}{brackets[1]}"
+    elif obj is None:
+        result = f"null"
+    elif isinstance(obj, bool):
+        result = f"{obj}".lower()
+    elif isinstance(obj, (int, float)):
+        result = f"{obj}"
+    elif isinstance(obj, str):
+        obj = obj.replace("\n", "\\n").replace("\r", "\\r").replace('"', '\\"')
+        result = f'"{obj}"'
+
+    if __finish:
+        result = pygments.highlight(
+            result,
+            pygments.lexers.JsonLexer(),  # noqa
+            pygments.formatters.TerminalFormatter(),  # noqa
+        ).strip()
+    return result
 
 
-def debug_book_data(book: Books | Book) -> str:
-    data = {k: v for k, v in book.__dict__.items() if not k.startswith("_")}
-    if "items" in data:
-        data["items"] = f"<list ({len(data['items'])} objects)>"
-    if "files" in data:
-        data["files"] = f"<list ({len(data['files'])} objects)>"
-    if len(data.get("description") or "") > 100:
-        data["description"] = data["description"][:100] + "..."
-
-    return "Book data: " + pretty_view(data)
-
-
-def trace_book_data(book: Books | Book) -> str:
-    return "Book data: " + pretty_view(
-        {k: v for k, v in book.__dict__.items() if not k.startswith("_")}
-    )
-
-
-def send_system_notification(title: str, message: str = "") -> None:
-    notification.notify(
-        title=title,
-        message=message,
-        app_name="AB Player",
-        ticker="AB Player",
-        app_icon=os.path.join(os.environ["APP_DIR"], "icon.ico"),
+def make_book_preview(book: Book) -> dict:
+    """
+    :param book: Экземпляр книги.
+    :returns: Словарь с основными полями книги.
+    """
+    return dict(
+        author=book.author,
+        name=book.name,
+        series_name=book.series_name,
+        reader=book.reader,
+        duration=book.duration,
+        url=book.url,
+        preview=book.preview,
+        driver=book.driver,
     )

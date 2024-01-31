@@ -1,0 +1,44 @@
+#settings-page {width: 100%; height: 100%}
+#settings-page-content {
+  width: calc(100% - 8px);
+  height: calc(100% - 8px);
+  margin-top: 8px;
+  margin-left: 8px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.settings-section {margin-bottom: 16px;}
+.settings-section-title {font-size: large; font-weight: bold}
+.settings-section-container {margin-top: 4px;}
+.settings-section-item:not(:last-child) {margin-bottom: 4px;}
+.settings-section-item-title {font-weight: bold}
+
+#library-dir-setting {display: flex; align-items: center;}
+#library-dir-setting > div:not(:last-child) {margin-right: 8px}
+
+#about-app {padding: 0 8px 12px 0}
+#about-app hr {
+  border-radius: 20%;
+  height: 2px;
+  background: var(--root-bg);
+  border: none;
+  margin: 12px 0 12px 0;
+}
+#app-main-info {
+  display: flex;
+  margin-bottom: 8px;
+}
+#app-icon {
+  background-image: url(../images/icon.png);
+  background-size: contain;
+  width: 70px;
+  height: 70px;
+  margin-right: 8px;
+}
+#app-title {
+  font-size: xx-large;
+  font-weight: 800;
+}
+#about-app a {color: #04a6e5}

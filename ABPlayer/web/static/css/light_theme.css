@@ -1,0 +1,10 @@
+:root {
+  --root-bg: rgb(227,229,232);
+  --root-hover-bg: rgb(218,221,226);
+  --central-frame-bg: rgb(255,255,255);
+  --side-menu-bg: rgb(242,243,245);
+  --ui-element-bg: rgb(235,237,239);
+  --cards-bg: rgb(242, 243, 245);
+  --root-fg: rgb(106,116,128);
+  --dim-fg: rgb(116,127,141);
+}

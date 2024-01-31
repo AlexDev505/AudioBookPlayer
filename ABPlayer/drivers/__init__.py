@@ -1,8 +1,14 @@
-from . import chromedriver
-from .base import Driver, BaseDownloadProcessHandler
-from .akniga import AKnigaDriver
+import os
+import sys
+
+from .akniga import AKniga
+from .base import Driver, DownloadProcessStatus, BaseDownloadProcessHandler
 from .knigavuhe import KnigaVUhe
 
-drivers = Driver.drivers
 
-__all__ = ["drivers", "Driver", "BaseDownloadProcessHandler", "chromedriver"]
+if getattr(sys, "frozen", False):
+    ROOT_DIR = getattr(sys, "_MEIPASS")
+else:
+    ROOT_DIR = os.path.dirname(__file__)
+
+os.environ["FFPROBE_PATH"] = os.path.join(ROOT_DIR, r"bin\ffprobe.exe")

@@ -13,25 +13,25 @@
 
 """
 
-from __future__ import annotations
-
 import os
 import re
-import typing as ty
+from functools import partial
 
 from loguru import logger
 
+from tools import pretty_view
 
-def load() -> ty.Dict[str, ty.Union[str, int, float, bool]]:
+
+def load() -> dict[str, str | int | float | bool]:
     """
     Считывает данные из файла.
-    :return: Словарь с данными.
+    :returns: Словарь с данными.
     """
-    logger.opt(colors=True).trace(f"Loading data from <y>{os.environ['TEMP_PATH']}</y>")
+    logger.opt(colors=True).trace(f"loading data from <y>{os.environ['TEMP_PATH']}</y>")
     # Создаём файл
     if not os.path.isfile(os.environ["TEMP_PATH"]):
         logger.opt(colors=True).debug(
-            f"File <y>{os.environ['TEMP_PATH']}</y> bot found"
+            f"temp file <y>{os.environ['TEMP_PATH']}</y> not found"
         )
         with open(os.environ["TEMP_PATH"], "w", encoding="utf-8"):
             pass
@@ -48,16 +48,22 @@ def load() -> ty.Dict[str, ty.Union[str, int, float, bool]]:
                 match.group("value"), match.group("type")
             )
         else:
-            logger.debug(f"Failed to retrieve information from string <y>{item}</y>")
+            logger.debug(f"failed to retrieve information from string <y>{item}</y>")
+
+    logger.opt(lazy=True).trace("temp data: {data}", data=partial(pretty_view, result))
+
     return result
 
 
-def dump(data: ty.Dict[str, ty.Union[str, int, float, bool]]) -> None:
+def dump(data: dict[str, str | int | float | bool]) -> None:
     """
     Сохраняет данные в файл.
     :param data: Словарь с данными.
     """
-    logger.opt(colors=True).trace(f"Saving a file <y>{os.environ['TEMP_PATH']}</y>")
+    logger.opt(lazy=True).trace(
+        "new temp data: {data}", data=partial(pretty_view, data)
+    )
+    logger.opt(colors=True).trace(f"saving a file <y>{os.environ['TEMP_PATH']}</y>")
     result = ""
     for key, value in data.items():
         result += f"{key}: {type(value).__name__} = {_convert_value(value)}\n"
@@ -66,13 +72,12 @@ def dump(data: ty.Dict[str, ty.Union[str, int, float, bool]]) -> None:
         file.write(result.strip())
 
 
-def update(**kwargs: ty.Union[str, int, float]) -> None:
+def update(**fields: str | int | float | bool) -> None:
     """
     Обновляет/добавляет значения в файле.
-    :param kwargs:
     """
     data = load()
-    data.update(**kwargs)
+    data.update(**fields)
     dump(data)
 
 
@@ -88,12 +93,12 @@ def delete_items(*keys: str) -> None:
     dump(data)
 
 
-def _adapt_value(value: str, value_type: str) -> ty.Union[str, int, float]:
+def _adapt_value(value: str, value_type: str) -> str | int | float | bool:
     """
-    Преобразует значение полученное из файла в питоновский тип данных.
+    Преобразует значение полученное из файла в тип данных Python.
     :param value: Значение из файла.
     :param value_type: Тип данных.
-    :return:
+    :returns: Преобразованное значение.
     """
     try:
         if value_type == "int":
@@ -111,11 +116,11 @@ def _adapt_value(value: str, value_type: str) -> ty.Union[str, int, float]:
 
 
 @logger.catch
-def _convert_value(value: ty.Union[str, int, float, bool]) -> str:
+def _convert_value(value: str | int | float | bool) -> str:
     """
-    Подготавливает питоновский тип данных для сохранения в файл.
+    Подготавливает данные для сохранения в файл.
     :param value: Исходное значение.
-    :return: Преобразованное значение.
+    :returns: Преобразованное значение.
     """
     if isinstance(value, bool):
         return str(int(value))

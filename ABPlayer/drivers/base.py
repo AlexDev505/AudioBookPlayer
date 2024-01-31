@@ -1,156 +1,227 @@
 from __future__ import annotations
 
 import os
-import sys
+import shutil
+import threading
 import typing as ty
 from abc import ABC, abstractmethod
+from enum import Enum
 from pathlib import Path
 
-import eyed3
 import requests
 from loguru import logger
-from selenium import webdriver
 
-from .chromedriver import HiddenChromeWebDriver
+from .tools import NotImplementedVariable, create_instance_id, instance_id
+
 
 if ty.TYPE_CHECKING:
-    from database.tables.books import Book, BookItem
-    from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
+    from models.book import Book
 
 
-def prepare_file_metadata(
-    file_path: ty.Union[str, Path],
-    book: Book,
-    item_index: int,
-    item: BookItem = None,
-) -> None:
+class DownloadProcessStatus(Enum):
     """
-    Изменяет метаданные аудио файла.
-    :param file_path: Путь к аудио файлу.
-    :param book: Игстанс книги.
-    :param item_index: Порядковый номер файла.
-    :param item: Инстанс главы(optional)
+    Статусы прогресса скачивания.
     """
-    file = eyed3.load(file_path)
-    file.initTag()
-    file.tag.title = item.title if item else f"{book.author} - {book.name}"
-    file.tag.artist = book.author
-    file.tag.track_num = item_index + 1
-    file.tag.save()
+
+    WAITING = "waiting"
+    PREPARING = "preparing"
+    DOWNLOADING = "downloading"
+    FINISHING = "finishing"
+    FINISHED = "finished"
+    TERMINATING = "terminating"
+    TERMINATED = "terminated"
 
 
-class BaseDownloadProcessHandler:
+class BaseDownloadProcessHandler(ABC):
     """
     Обработчик процесса скачивания.
-    Визуализирует процесс скачивания книги в пользовательском интерфейсе.
+    Визуализирует процесс скачивания книги.
+    >>> N = 10
+    >>> process_handler = BaseDownloadProcessHandler()
+    >>> process_handler.init(N, status=DownloadProcessStatus.DOWNLOADING)
+    >>> for _ in range(N):
+    ...     process_handler.progress(1)
+    >>> process_handler.finish()
     """
 
     def __init__(self):
+        self.status = DownloadProcessStatus.WAITING
         self.total_size: int = ...
         self.done_size: int = ...
+        create_instance_id(self)
+        logger.opt(colors=True).trace(f"{self:styled} created")
 
-    def init(self, total_size: int) -> None:
+    def init(self, total_size: int, status: DownloadProcessStatus) -> None:
+        self.status = status
         self.total_size = total_size
         self.done_size = 0
+        logger.opt(colors=True).trace(
+            f"{self:styled} inited: "
+            f"<y>{status.value}</y> total_size=<y>{total_size}</y>"
+        )
 
     def progress(self, size: int) -> None:
         self.done_size += size
         self.show_progress()
 
+    def finish(self) -> None:
+        self.status = DownloadProcessStatus.FINISHED
+        self.done_size = self.total_size
+        logger.opt(colors=True).trace(f"{self:styled} finished")
+
+    @abstractmethod
     def show_progress(self) -> None:
         """
         Отображает прогресс.
         """
-        sys.stdout.write(
-            f"\r{self.done_size}/{self.total_size}\t"
-            f"{round(self.done_size / (self.total_size / 100), 2)} %"
+
+    def __repr__(self):
+        return f"DPH-{instance_id(self)}"
+
+    def __format__(self, format_spec):
+        if format_spec == "styled":
+            return f"<y>{self!r}</y>"
+        return repr(self)
+
+
+class BaseDownloader(ABC):
+    """
+    Загрузчик файлов.
+    """
+
+    def __init__(
+        self, book: Book, process_handler: BaseDownloadProcessHandler | None = None
+    ):
+        self.book = book
+        self.process_handler = process_handler
+
+        # Общий размер файлов(в байтах)
+        # Определяется, только если передан `process_handler`
+        self.total_size: int | None = None
+
+        # Файл открытый для записи
+        self._file: ty.TextIO | None = None
+        # Поток скачивания файла
+        self._file_stream: requests.Response | None = None
+        self._terminated: bool = False
+
+        create_instance_id(self)
+        threading.current_thread().name = repr(self)
+        logger.opt(colors=True).debug(f"initialized. book: {book:styled}")
+
+    @abstractmethod
+    def _prepare(self) -> None:
+        """
+        Подготавливает загрузчик к скачиванию.
+        Метод должен быть реализован в наследуемом классе.
+        """
+
+    @abstractmethod
+    def _download_book(self) -> None:
+        """
+        Скачивает файлы.
+        Метод должен быть реализован в наследуемом классе.
+        """
+
+    def save_preview(self) -> None:
+        """
+        Скачивает и сохраняет обложку книги.
+        """
+        if not self.book.preview:
+            return
+
+        logger.opt(colors=True).debug(f"loading preview <y>{self.book.preview}</y>")
+        try:
+            response = requests.get(self.book.preview)
+            if response.status_code == 200:
+                logger.opt(colors=True).trace(
+                    f"saving preview to <y>{self.book.preview_path}</y>"
+                )
+                with open(self.book.preview_path, "wb") as file:
+                    file.write(response.content)
+            else:
+                logger.error(f"preview loading status: {response.status_code}")
+        except IOError as err:
+            logger.error(f"loading preview failed. {type(err).__name__}: {err}")
+
+    def download_book(self) -> bool:
+        """
+        Скачивает файлы книги.
+        :returns: Список с путями к скачанным файлам.
+        """
+        logger.debug("preparing downloading")
+        self._prepare()
+        logger.debug("downloading started")
+        self._download_book()
+
+        if not self._terminated:
+            if self.process_handler:
+                self.process_handler.status = DownloadProcessStatus.FINISHING
+            self.save_preview()
+            self.book.save_to_storage()
+            if self.process_handler:
+                self.process_handler.finish()
+            logger.debug("finished")
+        else:
+            if self.process_handler:
+                self.process_handler.status = DownloadProcessStatus.TERMINATED
+            logger.debug("terminated")
+
+        return not self._terminated  # True - при успешном скачивании
+
+    def terminate(self) -> None:
+        """
+        Прерывает загрузку.
+        """
+        logger.opt(colors=True).debug(f"<y>{self}</y> terminating")
+        self.process_handler.status = DownloadProcessStatus.TERMINATING
+        self._terminated = True
+        if self._file:
+            if not self._file.closed:
+                logger.trace("closing file")
+                self._file.close()
+        if self._file_stream:
+            logger.trace("closing file stream")
+            self._file_stream.close()
+
+        logger.opt(colors=True).debug(
+            f"<y>{self}</y> clearing tree <y>{self.book.dir_path}</y>"
         )
-        sys.stdout.flush()
+        shutil.rmtree(self.book.dir_path, ignore_errors=True)
+        try:
+            os.removedirs(Path(self.book.dir_path).parent)
+        except OSError:
+            pass
+
+    def __repr__(self):
+        return f"BookDownloader-{instance_id(self)}"
 
 
 class Driver(ABC):
-    drivers: ty.List[ty.Type[Driver]] = []  # Все доступные драйверы
-    _browser: RemoteWebDriver | None = None
-    _browser_connections: list[int] = []
+    drivers: list[ty.Type[Driver]] = []  # Все доступные драйверы
 
-    def __init__(self, use_shared_browser: bool = False):
-        logger.opt(colors=True).debug(
-            f"Creating driver <e>{self.driver_name}</e> <y>{id(self)} "
-            f"</y> use_shared_browser=<y>{use_shared_browser}</y>"
-        )
-        self._browser: RemoteWebDriver | None = None
-        self.use_shared_browser = use_shared_browser
+    site_url = NotImplementedVariable()
+    downloader_factory = NotImplementedVariable()
+
+    def __init__(self):
+        self.downloader: BaseDownloader | None = None
 
     def __init_subclass__(cls, **kwargs):
         Driver.drivers.append(cls)
 
-    def __enter__(self) -> Driver:
-        self.get_browser()
-        return self
+    @classmethod
+    def get_suitable_driver(cls, url: str) -> ty.Type[Driver] | None:
+        for driver in cls.drivers:
+            if url.startswith(driver.site_url):
+                return driver
 
-    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
-        self.quit_browser()
-
-    def _get_shared_browser(self) -> RemoteWebDriver:
-        logger.opt(colors=True).debug(
-            f"Driver <e>{self.__class__.driver_name}</e> <y>{id(self)}</y> "
-            f"getting shared browser"
-        )
-        self.__class__._browser_connections.append(id(self))
-        if self.__class__.__base__._browser is None:
-            self.__class__.__base__._browser = self.__class__._get_driver()(
-                options=self.__class__._get_driver_options()
-            )
-            logger.opt(colors=True).debug(
-                f"Drover <e>{self.__class__.driver_name}</e> <y>{id(self)}</y> "
-                "created Shared browser"
-            )
-        return self.__class__.__base__._browser
-
-    def _quit_shared_browser(self) -> None:
-        if self.__class__.__base__._browser is not None:
-            self.__class__.__base__._browser.quit()
-            self.__class__.__base__._browser = None
-            logger.opt(colors=True).debug(
-                f"Driver <e>{self.driver_name}</e> <y>{id(self)}</y> "
-                "closed Shared browser"
-            )
-
-    def get_browser(self) -> RemoteWebDriver:
-        """
-        :returns: Драйвер, для работы с браузером.
-        """
-        if self.use_shared_browser:
-            return self._get_shared_browser()
-
-        if self._browser is None:
-            logger.opt(colors=True).debug(
-                f"Driver <e>{self.driver_name}</e> <y>{id(self)}</y> "
-                "created Local browser"
-            )
-            self._browser = self._get_driver()(options=self._get_driver_options())
-        return self._browser
-
-    def quit_browser(self) -> None:
-        if self.use_shared_browser:
-            self._quit_shared_browser()
-        else:
-            if self._browser is not None:
-                self._browser.quit()
-                self._browser = None
-                logger.opt(colors=True).debug(
-                    f"Driver <e>{self.driver_name}</e> <y>{id(self)}</y> "
-                    "closed Local browser"
-                )
-
-    def get_page(self, url: str) -> webdriver.Chrome:
+    @staticmethod
+    def get_page(url: str) -> requests.Response:
         """
         :param url: Ссылка на книгу.
-        :returns: Загруженную в драйвер страницу.
+        :returns: Результат GET запроса.
         """
-        driver = self.get_browser()
-        driver.get(url)
-        return driver
+        return requests.get(url)
 
     @abstractmethod
     def get_book(self, url: str) -> Book:
@@ -158,150 +229,42 @@ class Driver(ABC):
         Метод, получающий информацию о книге.
         Должен быть реализован для каждого драйвера отдельно.
         :param url: Ссылка на книгу.
-        :returns: Инстанс книги.
+        :returns: Экземпляр книги.
         """
 
     @abstractmethod
-    def get_book_series(self, url: str) -> ty.List[Book]:
+    def get_book_series(self, url: str) -> list[Book]:
         """
         Метод, получающий информацию о книгах из серии.
         Должен быть реализован для каждого драйвера отдельно.
         :param url: Ссылка на книгу.
-        :returns: Список неполных инстансов книг.
+        :returns: Список неполных экземпляров книг.
+        """
+
+    @abstractmethod
+    def search_books(self, query: str, limit: int = 10, offset: int = 0) -> list[Book]:
+        """
+        Метод, выполняющий поиск книг по запросу.
+        Должен быть реализован для каждого драйвера отдельно.
+        :param query: Поисковый запрос.
+        :param limit: Кол-во книг, которое нужно вернуть.
+        :param offset: Будет пропущено `offset` первых книг.
+        :returns: Список неполных экземпляров книг.
         """
 
     def download_book(
-        self,
-        book: Book,
-        process_handler: BaseDownloadProcessHandler = None,
-    ) -> ty.List[Path]:
+        self, book: Book, process_handler: BaseDownloadProcessHandler | None = None
+    ) -> bool:
         """
         Метод, скачивающий аудио файлы книги.
         :param book: Экземпляр книги.
         :param process_handler: Обработчик процесса скачивания.
         :return: Список путей к файлам.
         """
-        item: BookItem
-
-        urls = []  # Ссылки на файлы
-        merged = False  # Если True, то в 1-ом файле присутствует несколько глав
-        total_size = 0  # Общий размер книги(в байтах)
-
-        # Устанавливаем значение флага `merged` и определяем общий размер
-        for item in book.items:
-            if (url := item.file_url) not in urls:
-                urls.append(url)
-                if (
-                    content_length := requests.get(url, stream=True).headers.get(
-                        "content-length"
-                    )
-                ) is not None:
-                    total_size += int(content_length)
-            else:
-                merged = True
-
-        if process_handler:
-            process_handler.init(total_size)
-
-        logger.opt(colors=True).debug(f"Audio files merged: <y>{merged}</y>")
-        logger.opt(colors=True, lazy=True).debug(
-            f"Total size: <y>{total_size} bytes</y>"
-        )
-
-        files = []
-        if merged:
-            for i, url in enumerate(urls):
-                file_path = Path(
-                    os.path.join(
-                        book.dir_path,
-                        f"{str(i + 1).rjust(2, '0')}. {book.author} - {book.name}.mp3",
-                    )
-                )
-                self._download_file(file_path, url, process_handler)
-                files.append(file_path)
-                prepare_file_metadata(file_path, book, i)
-        else:
-            for i, item in enumerate(book.items):
-                file_path = Path(os.path.join(book.dir_path, item.title + ".mp3"))
-                self._download_file(file_path, item.file_url, process_handler)
-                files.append(file_path)
-                prepare_file_metadata(file_path, book, i, item)
-
-        return files
-
-    def _download_file(
-        self,
-        file_path: Path,
-        url: str,
-        process_handler: BaseDownloadProcessHandler,
-    ) -> None:
-        """
-        Метод, скачивающий аудио файл.
-        :param file_path: Путь для сохранения.
-        :param url: Ссылка на файл.
-        :param process_handler: Обработчик процесса скачивания.
-        """
-        logger.opt(colors=True).debug(f"Download the file <y>{file_path}</y>({url})")
-        if not file_path.exists():
-            file_path.parent.mkdir(parents=True, exist_ok=True)
-
-        # Храним файл в переменной, чтобы можно было закрыть его из другой части кода.
-        # Иначе, при остановке скачивания, возникает ошибка.
-        self._file = open(file_path, "wb")
-        resp = requests.get(str(url), timeout=10, stream=True)
-        logger.opt(colors=True).debug(
-            f"File size: <y>{resp.headers.get('content-length')}</y>"
-        )
-        if resp.headers.get("content-length") is None:
-            self._file.write(resp.content)
-        else:
-            for data in resp.iter_content(chunk_size=5120):
-                if process_handler:
-                    process_handler.progress(len(data))
-                self._file.write(data)
-                self._file.flush()
-        self._file.close()
-
-    # Работает на python 3.9
-    @classmethod
-    def _get_driver(cls) -> ty.Type[RemoteWebDriver]:
-        """
-        :returns: Нужный драйвер браузера.
-        """
-        return HiddenChromeWebDriver
-
-    @classmethod
-    def _get_driver_options(cls) -> webdriver.ChromeOptions:
-        """
-        :returns: Настройки драйвера браузера.
-        """
-        options = webdriver.ChromeOptions()
-        options.add_argument("headless")
-        options.add_argument("disable-gpu")
-        options.add_experimental_option("excludeSwitches", ["enable-logging"])
-        return options
-
-    @classmethod
-    @property
-    @abstractmethod
-    def site_url(cls) -> str:
-        """
-        :returns: Ссылка на сайт, с которым работает браузер.
-        """
+        self.downloader = self.downloader_factory(book, process_handler)
+        return self.downloader.download_book()
 
     @classmethod
     @property
     def driver_name(cls) -> str:
         return cls.__name__
-
-    def __del__(self):
-        logger.opt(colors=True).debug(
-            f"Deleting driver <e>{self.driver_name}</e> <y>{id(self)}</y>"
-        )
-        if self.use_shared_browser:
-            if id(self) in self.__class__._browser_connections:
-                self.__class__._browser_connections.remove(id(self))
-            if not self.__class__._browser_connections:
-                self.quit_browser()
-        else:
-            self.quit_browser()

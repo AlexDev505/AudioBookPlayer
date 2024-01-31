@@ -1,25 +1,19 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 
-block_cipher = None
-
-
 a = Analysis(
-    ['..\\..\\abplayer\\run.py'],
+    ['E:\\PycharmProjects\\AudioBookPlayer\\build\\..\\ABPlayer\\run.py'],
     pathex=[],
     binaries=[],
-    datas=[],
-    hiddenimports=['plyer.platforms.win.notification'],
+    datas=[('E:\\PycharmProjects\\AudioBookPlayer\\build\\..\\ABPlayer\\web\\static', 'static'), ('E:\\PycharmProjects\\AudioBookPlayer\\build\\..\\ABPlayer\\web\\templates', 'templates'), ('E:\\PycharmProjects\\AudioBookPlayer\\build\\..\\ABPlayer\\drivers\\bin', 'bin')],
+    hiddenimports=[],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
     excludes=[],
-    win_no_prefer_redirects=False,
-    win_private_assemblies=False,
-    cipher=block_cipher,
     noarchive=False,
 )
-pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
+pyz = PYZ(a.pure)
 
 exe = EXE(
     pyz,
@@ -43,7 +37,6 @@ exe = EXE(
 coll = COLLECT(
     exe,
     a.binaries,
-    a.zipfiles,
     a.datas,
     strip=False,
     upx=True,

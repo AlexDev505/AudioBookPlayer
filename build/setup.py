@@ -1,91 +1,116 @@
 """
 
-    Сборка приложения в exe.
-
-    Сборка проекта осуществляется в 2 этапа.
-    1. Сборка в exe. Осуществляется с помощью pyinstaller.
-    2. Сборка в exe установщик, осуществляемая при помощи nsis.
+    Сборка exe и формирование NSIS сценариев.
 
 """
+
+import json
 import os
 import re
 import shutil
-import sys
 
 import PyInstaller.__main__
+import orjson
 
-os.system(f"{sys.executable} {os.path.abspath('./updater_setup.py')}")
+from prepare_nsis import prepare_installer, prepare_updater
+from version import Version
 
-__version__ = "1.0.0-beta.6"
-target_dir = "ABPlayer"
 
-# Изменяем версию в main.py
-with open(r"..\ABPlayer\main.py", encoding="utf-8") as file:
-    text = file.read()
-text = re.sub(
-    r'os.environ\["VERSION"] = ".+"', f'os.environ["VERSION"] = "{__version__}"', text
-)
-with open(r"..\ABPlayer\main.py", "w", encoding="utf-8") as file:
-    file.write(text)
+DEV: bool = False
+__version__ = Version(2, 0, 0)
+dev_path = os.path.join(os.path.dirname(__file__), "..", "ABPlayer")
+run_file_path = os.path.join(dev_path, "run.py")
+main_file_path = os.path.join(dev_path, "main.py")
 
-# Изменяем версию в установщике
-with open("installer.nsi") as file:
-    text = file.read()
-text = re.sub(
-    r'!define PRODUCT_VERSION ".+"', f'!define PRODUCT_VERSION "{__version__}"', text
-)
-# Добавляем вызов утилиты обновления
-if os.path.exists(r"sources\ABPUpdater.exe"):
-    if r'File "sources\ABPUpdater.exe"' not in text:
-        text = re.sub(
-            r'Section "AB Player" SEC01\n {2}SetOutPath "\$INSTDIR"',
-            r'Section "AB Player" SEC01\n  SetOutPath "$INSTDIR"\n\n  '
-            r'File "sources\\ABPUpdater.exe"\n  ExecWait "$INSTDIR\\ABPUpdater.exe"\n  '
-            r'Delete "$INSTDIR\\ABPUpdater.exe"\n',
-            text,
-            flags=re.MULTILINE,
+
+# CHECK LAST BUILD
+
+if os.path.exists("last_build.json"):
+    with open("last_build.json", encoding="utf-8") as file:
+        last_build = orjson.loads(file.read())
+
+    last_build_version = Version.from_str(last_build["version"])
+    if __version__ == last_build_version:
+        if (
+            input("the latest build was the same version. rebuild again? (y/n): ")
+            != "y"
+        ):
+            exit()
+    elif __version__ < last_build_version:
+        print(
+            "the last build was a larger version. you can't build the smaller version"
         )
+        exit()
 else:
-    if r'File "sources\ABPUpdater.exe"' in text:
-        text = re.sub(
-            r'\n\n {2}File "sources\\ABPUpdater.exe"\n'
-            r' {2}ExecWait "\$INSTDIR\\ABPUpdater.exe"\n'
-            r' {2}Delete "\$INSTDIR\\ABPUpdater.exe"\n',
-            r"",
-            text,
-            flags=re.MULTILINE,
-        )
-with open("installer.nsi", "w") as file:
+    last_build = {}
+    last_build_version = Version(0, 0, 0, "alpha", 0)
+
+# CHANGE VERSIONS IN BUILD
+with open(main_file_path, encoding="utf-8") as file:
+    text = file.read()
+text = re.sub(
+    r'os.environ\["VERSION"] = ".+"',
+    f'os.environ["VERSION"] = "{__version__}"',
+    text,
+)
+dev_env_vars = re.search(r"# DEV\s((.+\s)+\s)", text, re.MULTILINE)
+if not DEV and dev_env_vars:
+    dev_env_vars = dev_env_vars.group(1).strip()
+    text = text.replace(dev_env_vars, "")
+with open(main_file_path, "w", encoding="utf-8") as file:
     file.write(text)
 
-# Изменяем версию в version_file
-with open(r"sources\version_file") as file:
+with open(r"sources/version_file") as file:
     text = file.read()
 text = re.sub(
     r"StringStruct\(u'(?P<name>(FileVersion)|(ProductVersion))', u'.+'\)",
     rf"StringStruct(u'\g<name>', u'{__version__}')",
     text,
 )
-with open(r"sources\version_file", "w") as file:
+with open(r"sources/version_file", "w") as file:
     file.write(text)
 
+# BUILD
 shutil.rmtree("ABPlayer", ignore_errors=True)
-
 PyInstaller.__main__.run(
     [
-        "../abplayer/run.py",
+        run_file_path,
         "-D",
         "-n=ABPlayer",
-        "--version-file=version_file",
+        f"--version-file=version_file",
         "--icon=icon.ico",
         "--distpath=.",
-        "--workpath=abp_temp",
+        "--workpath=temp",
         "--specpath=sources",
         "-y",
         "--clean",
-        "-w",
-        "--hiddenimport=plyer.platforms.win.notification",
+        "-w" if not DEV else "",
+        # "--onefile",
+        f"--add-data={os.path.join(dev_path, 'web', 'static')};static",
+        f"--add-data={os.path.join(dev_path, 'web', 'templates')};templates",
+        f"--add-data={os.path.join(dev_path, 'drivers', 'bin')};bin",
     ]
 )
+shutil.rmtree("temp")
 
-shutil.rmtree("abp_temp", ignore_errors=True)
+if not DEV and dev_env_vars:
+    with open(main_file_path, encoding="utf-8") as file:
+        text = file.read()
+    text = text.replace("# DEV\n", f"# DEV\n{dev_env_vars}")
+    with open(main_file_path, "w", encoding="utf-8") as file:
+        file.write(text)
+
+# SAVING INFO ABOUT CURRENT BUILD
+print("\nSaving build info")
+current_build = {"version": str(__version__), "files": {}}
+for root, _, file_names in os.walk("ABPlayer"):
+    current_build["files"][root] = file_names
+with open("last_build.json", "w", encoding="utf-8") as file:
+    file.write(json.dumps(current_build, indent=4))
+
+print("Preparing installer")
+prepare_installer(current_build)
+if last_build and __version__ > last_build_version:
+    update_uninstaller = input("update_uninstaller? (y/n): ") == "y"
+    print("Preparing updater")
+    prepare_updater(last_build, current_build, update_uninstaller)
