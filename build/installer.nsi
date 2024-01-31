@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "ABPlayer"
-!define PRODUCT_VERSION "2.0.0-alpha.1"
+!define PRODUCT_VERSION "2.0.0-rc.1"
 !define PRODUCT_PUBLISHER "AlexDev505"
 !define PRODUCT_WEB_SITE "https://github.com/AlexDev505/AudioBookPlayer"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\ABPlayer.exe"
@@ -566,11 +566,11 @@ Section Uninstall
   RMDir "$INSTDIR\_internal"
   RMDir "$INSTDIR"
 
-  Delete "$LocalAppData\ABPlayer\debug.log"
-  Delete "$LocalAppData\ABPlayer\library.sqlite"
-  Delete "$LocalAppData\ABPlayer\config.json"
-  Delete "$LocalAppData\ABPlayer\temp.txt"
-  RMDir "$LocalAppData\ABPlayer"
+  Delete "$LocalAppData\AudioBookPlayer\debug.log"
+  Delete "$LocalAppData\AudioBookPlayer\library.sqlite"
+  Delete "$LocalAppData\AudioBookPlayer\config.json"
+  Delete "$LocalAppData\AudioBookPlayer\temp.txt"
+  RMDir "$LocalAppData\AudioBookPlayer"
   
   Delete "$DESKTOP\ABPlayer.lnk"
   Delete "$SMPROGRAMS\ABPlayer.lnk"
