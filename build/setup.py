@@ -16,7 +16,8 @@ from prepare_nsis import prepare_installer, prepare_updater
 from version import Version
 
 
-__version__ = Version(2, 0, 0, "alpha", 1)
+DEV: bool = False
+__version__ = Version(2, 0, 0, "rc", 1)
 dev_path = os.path.join(os.path.dirname(__file__), "..", "ABPlayer")
 run_file_path = os.path.join(dev_path, "run.py")
 main_file_path = os.path.join(dev_path, "main.py")
@@ -52,6 +53,10 @@ text = re.sub(
     f'os.environ["VERSION"] = "{__version__}"',
     text,
 )
+dev_env_vars = re.search(r"# DEV\s((.+\s)+\s)", text, re.MULTILINE)
+if not DEV and dev_env_vars:
+    dev_env_vars = dev_env_vars.group(1).strip()
+    text = text.replace(dev_env_vars, "")
 with open(main_file_path, "w", encoding="utf-8") as file:
     file.write(text)
 
@@ -79,13 +84,20 @@ PyInstaller.__main__.run(
         "--specpath=sources",
         "-y",
         "--clean",
-        # "-w",
+        "-w" if not DEV else "",
         # "--onefile",
         f"--add-data={os.path.join(dev_path, 'web', 'static')};static",
         f"--add-data={os.path.join(dev_path, 'web', 'templates')};templates",
     ]
 )
 shutil.rmtree("temp")
+
+if not DEV and dev_env_vars:
+    with open(main_file_path, encoding="utf-8") as file:
+        text = file.read()
+    text = text.replace("# DEV", "# DEV\n" + dev_env_vars)
+    with open(main_file_path, "w", encoding="utf-8") as file:
+        file.write(text)
 
 # SAVING INFO ABOUT CURRENT BUILD
 print("\nSaving build info")
