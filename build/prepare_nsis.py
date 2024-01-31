@@ -4,11 +4,11 @@ import re
 
 ADDITIONAL_UNINSTALL = (
     "\n"
-    "\n  " + r'Delete "$LocalAppData\ABPlayer\debug.log"'
-    "\n  " + r'Delete "$LocalAppData\ABPlayer\library.sqlite"'
-    "\n  " + r'Delete "$LocalAppData\ABPlayer\config.json"'
-    "\n  " + r'Delete "$LocalAppData\ABPlayer\temp.txt"'
-    "\n  " + r'RMDir "$LocalAppData\ABPlayer"'
+    "\n  " + r'Delete "$LocalAppData\AudioBookPlayer\debug.log"'
+    "\n  " + r'Delete "$LocalAppData\AudioBookPlayer\library.sqlite"'
+    "\n  " + r'Delete "$LocalAppData\AudioBookPlayer\config.json"'
+    "\n  " + r'Delete "$LocalAppData\AudioBookPlayer\temp.txt"'
+    "\n  " + r'RMDir "$LocalAppData\AudioBookPlayer"'
 )
 
 
