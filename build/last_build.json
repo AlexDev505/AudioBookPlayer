@@ -1,5 +1,5 @@
 {
-    "version": "2.0.0-rc.1",
+    "version": "2.0.0-rc.2",
     "files": {
         "ABPlayer": [
             "ABPlayer.exe"
@@ -71,6 +71,9 @@
             "_uuid.pyd",
             "_wmi.pyd",
             "_zoneinfo.pyd"
+        ],
+        "ABPlayer\\_internal\\bin": [
+            "ffprobe.exe"
         ],
         "ABPlayer\\_internal\\certifi": [
             "cacert.pem",

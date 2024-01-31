@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "ABPlayer"
-!define PRODUCT_VERSION "2.0.0-rc.1"
+!define PRODUCT_VERSION "2.0.0-rc.2"
 !define PRODUCT_PUBLISHER "AlexDev505"
 !define PRODUCT_WEB_SITE "https://github.com/AlexDev505/AudioBookPlayer"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\ABPlayer.exe"
@@ -121,6 +121,8 @@ Section "ABPlayer" SEC01
   File "ABPlayer\_internal\_uuid.pyd"
   File "ABPlayer\_internal\_wmi.pyd"
   File "ABPlayer\_internal\_zoneinfo.pyd"
+  SetOutPath "$INSTDIR\_internal\bin"
+  File "ABPlayer\_internal\bin\ffprobe.exe"
   SetOutPath "$INSTDIR\_internal\certifi"
   File "ABPlayer\_internal\certifi\cacert.pem"
   File "ABPlayer\_internal\certifi\py.typed"
@@ -384,6 +386,7 @@ Section Uninstall
   Delete "$INSTDIR\_internal\_uuid.pyd"
   Delete "$INSTDIR\_internal\_wmi.pyd"
   Delete "$INSTDIR\_internal\_zoneinfo.pyd"
+  Delete "$INSTDIR\_internal\bin\ffprobe.exe"
   Delete "$INSTDIR\_internal\certifi\cacert.pem"
   Delete "$INSTDIR\_internal\certifi\py.typed"
   Delete "$INSTDIR\_internal\charset_normalizer\md.cp312-win_amd64.pyd"
@@ -563,6 +566,7 @@ Section Uninstall
   RMDir "$INSTDIR\_internal\clr_loader"
   RMDir "$INSTDIR\_internal\charset_normalizer"
   RMDir "$INSTDIR\_internal\certifi"
+  RMDir "$INSTDIR\_internal\bin"
   RMDir "$INSTDIR\_internal"
   RMDir "$INSTDIR"
 

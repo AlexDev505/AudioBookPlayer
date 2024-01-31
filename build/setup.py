@@ -17,7 +17,7 @@ from version import Version
 
 
 DEV: bool = False
-__version__ = Version(2, 0, 0, "rc", 1)
+__version__ = Version(2, 0, 0, "rc", 2)
 dev_path = os.path.join(os.path.dirname(__file__), "..", "ABPlayer")
 run_file_path = os.path.join(dev_path, "run.py")
 main_file_path = os.path.join(dev_path, "main.py")
@@ -96,7 +96,7 @@ shutil.rmtree("temp")
 if not DEV and dev_env_vars:
     with open(main_file_path, encoding="utf-8") as file:
         text = file.read()
-    text = text.replace("# DEV", "# DEV\n" + dev_env_vars)
+    text = text.replace("# DEV\n", f"# DEV\n{dev_env_vars}")
     with open(main_file_path, "w", encoding="utf-8") as file:
         file.write(text)
 
