@@ -34,7 +34,7 @@ def create_starting_window() -> webview.Window:
         height=240,
         frameless=True,
         easy_drag=True,
-        background_color="#000",
+        background_color="#000000",
     )
 
     # Добавляем обработчики событий
