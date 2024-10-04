@@ -184,14 +184,14 @@ html, body {margin: 0; height: 100%; background-color: var(--root-bg)}
   margin: 10px 16px 10px 16px;
 }
 
-#menu-btn::before {background-image: url(../images/hide_menu.svg)}
-#side-menu.collapsed #menu-btn::before {background-image: url(../images/menu.svg)}
-#library-btn::before {background-image: url(../images/book.svg)}
-#favorite-btn::before {background-image: url(../images/star_fill.svg)}
-#add-book-btn::before {background-image: url(../images/plus.svg)}
-#downloads-btn::before {background-image: url(../images/download.svg)}
-#library-dir-btn::before {background-image: url(../images/folder.svg)}
-#settings-btn::before {background-image: url(../images/settings.svg)}
+#menu-btn::before {content: url(../images/hide_menu.svg)}
+#side-menu.collapsed #menu-btn::before {content: url(../images/menu.svg)}
+#library-btn::before {content: url(../images/book.svg)}
+#favorite-btn::before {content: url(../images/star_fill.svg)}
+#add-book-btn::before {content: url(../images/plus.svg)}
+#downloads-btn::before {content: url(../images/download.svg)}
+#library-dir-btn::before {content: url(../images/folder.svg)}
+#settings-btn::before {content: url(../images/settings.svg)}
 
 #content-frame {
   width: 100%;
