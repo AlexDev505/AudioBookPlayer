@@ -29,16 +29,16 @@
   <div id="central-frame">
     <div id="side-menu" class="{{ 'collapsed' if not is_main_menu_opened else '' }}">
       <div>
-        <div id="menu-btn" class="menu-btn" onclick="toggleMenu()"><span>скрыть меню</span></div>
+        <div id="menu-btn" class="iconned-btn" onclick="toggleMenu()"><span>скрыть меню</span></div>
         <hr>
-        <div id="library-btn" class="menu-btn" onclick="openLibraryPage()"><span>мои книги</span></div>
-        <div id="favorite-btn" class="menu-btn" onclick="openLibraryPage(true)"><span>избранные</span></div>
-        <div id="add-book-btn" class="menu-btn" onclick="page('search-page').show()"><span>новая книга</span></div>
-        <div id="downloads-btn" class="menu-btn" onclick="page('downloads-page').show()"><span>загрузки</span></div>
+        <div id="library-btn" class="iconned-btn" onclick="openLibraryPage()"><span>мои книги</span></div>
+        <div id="favorite-btn" class="iconned-btn" onclick="openLibraryPage(true)"><span>избранные</span></div>
+        <div id="add-book-btn" class="iconned-btn" onclick="page('search-page').show()"><span>новая книга</span></div>
+        <div id="downloads-btn" class="iconned-btn" onclick="page('downloads-page').show()"><span>загрузки</span></div>
       </div>
       <div>
-        <div id="library-dir-btn" class="menu-btn" onclick="openLibraryDir()"><span>папка с книгами</span></div>
-        <div id="settings-btn" class="menu-btn" onclick="page('settings-page').show()"><span>настройки</span></div>
+        <div id="library-dir-btn" class="iconned-btn" onclick="openLibraryDir()"><span>папка с книгами</span></div>
+        <div id="settings-btn" class="iconned-btn" onclick="page('settings-page').show()"><span>настройки</span></div>
       </div>
     </div>
     <div id="content-frame">

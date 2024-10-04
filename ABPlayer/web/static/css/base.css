@@ -99,6 +99,32 @@ html, body {margin: 0; height: 100%; background-color: var(--root-bg)}
 .button:hover {transform: scale(1.05);}
 .button:active {transform: translateY(1px)}
 
+.iconned-btn {
+  display: flex;
+  padding: 10px 10px;
+  border-radius: 5px;
+  color: var(--dim-fg);
+  cursor: pointer;
+}
+.iconned-btn > span {
+  text-wrap: nowrap;
+  color: inherit;
+  transition: color .0s linear;
+}
+.iconned-btn::before, .iconned-btn::after {
+  height: 1em;
+  min-width: 1.2em;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.iconned-btn:not(.right) > span {margin-left: 10px}
+.iconned-btn:not(.right)::before {content: ""}
+.iconned-btn.right > span {margin-right: 10px}
+.iconned-btn.right::after {content: ""}
+
+.button-group {display: flex}
+
 #top-bar {
   height: 20px;
   background-color: var(--root-bg);
@@ -139,28 +165,14 @@ html, body {margin: 0; height: 100%; background-color: var(--root-bg)}
 #side-menu.collapsed {max-width: 60px;}
 #side-menu > div {margin-top: 10px; margin-bottom: 10px}
 
-.menu-btn {
-  display: flex;
-  margin: 2px 10px;
-  padding: 10px 10px;
-  border-radius: 5px;
-  color: var(--dim-fg);
-  cursor: pointer;
-}
-.menu-btn > span {
-  color: inherit;
-  margin-left: 10px;
-  transition: color .0s linear;
-}
 #side-menu.collapsed span {
   color: transparent;
   transition: color .15s cubic-bezier(0.8, 0.05, 1, -0.24);;
 }
-.menu-btn::before {
-  height: 1em;
-  min-width: 1.2em;
+#side-menu .iconned-btn {
+  margin: 2px 10px;
 }
-.menu-btn:hover {
+#side-menu .iconned-btn:hover {
   background-color: var(--root-hover-bg);
 }
 
@@ -172,14 +184,14 @@ html, body {margin: 0; height: 100%; background-color: var(--root-bg)}
   margin: 10px 16px 10px 16px;
 }
 
-#menu-btn::before {content: url(../images/hide_menu.svg)}
-#side-menu.collapsed #menu-btn::before {content: url(../images/menu.svg)}
-#library-btn::before {content: url(../images/book.svg)}
-#favorite-btn::before {content: url(../images/star_fill.svg)}
-#add-book-btn::before {content: url(../images/plus.svg)}
-#downloads-btn::before {content: url(../images/download.svg)}
-#library-dir-btn::before {content: url(../images/folder.svg)}
-#settings-btn::before {content: url(../images/settings.svg)}
+#menu-btn::before {background-image: url(../images/hide_menu.svg)}
+#side-menu.collapsed #menu-btn::before {background-image: url(../images/menu.svg)}
+#library-btn::before {background-image: url(../images/book.svg)}
+#favorite-btn::before {background-image: url(../images/star_fill.svg)}
+#add-book-btn::before {background-image: url(../images/plus.svg)}
+#downloads-btn::before {background-image: url(../images/download.svg)}
+#library-dir-btn::before {background-image: url(../images/folder.svg)}
+#settings-btn::before {background-image: url(../images/settings.svg)}
 
 #content-frame {
   width: 100%;

@@ -58,6 +58,7 @@
   text-wrap: pretty;
   max-height: 40%;
 }
+.filter-by-section::-webkit-scrollbar-thumb {border-radius: 4px}
 .filter-by-section-item {margin-bottom: 2px}
 .filter-by-section-item.checked {
   display: flex;
