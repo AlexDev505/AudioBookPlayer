@@ -1,3 +1,4 @@
+<script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
 <link rel="stylesheet" href="{{url_for('static', filename='css/book.css')}}">
 <script defer src="{{url_for('static', filename='js/book.js')}}"></script>
 
@@ -22,7 +23,31 @@
 </div>
 <div id="book-player">
   <div class="book-preview"></div>
-  <div id="player">плеер пока недоступен</div>
+  <div id="player">
+    <div id="player-controls">
+      <div class="button-group">
+        <div class="iconned-btn button angle-left-button"><span>15 c</span></div>
+        <div class="iconned-btn button play-button"></div>
+        <div class="iconned-btn right button angle-right-button"><span>15 c</span></div>
+      </div>
+      <div id="items-container">
+        <div class="book-item current">
+          <span class="title">01</span>
+          <span class="time">00:00 / 53:04</span>
+        </div>
+        <div class="book-item">
+          <span class="title">01</span>
+          <span class="time">00:00 / 53:04</span>
+        </div>
+      </div>
+    </div>
+    <div id="player-downloading">Дождитесь окончания скачивания книги</div>
+    <div id="player-downloading-required">
+      Онлайн прослушивание пока что недоступно<br>
+      Скачайте книгу, чтобы начать прослушивание
+      <div id="download-book-btn" class="button">Скачать</div>
+    </div>
+  </div>
 </div>
 <div id="book-info">
   <div class="book-additional-info">

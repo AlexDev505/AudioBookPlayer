@@ -3,6 +3,7 @@ from __future__ import annotations
 import difflib
 import os
 import typing as ty
+from dataclasses import asdict
 from datetime import datetime
 from functools import partial
 
@@ -37,12 +38,12 @@ class BooksApi(JSApi):
         )
         return self.make_answer(available_drivers)
 
-    def book_by_bid(self, bid: int):
+    def book_by_bid(self, bid: int, listening_data: bool = False):
         logger.opt(colors=True).debug(f"request: <r>book by bid</r> | <y>{bid}</y>")
         with Database() as db:
             if book := db.get_book_by_bid(bid):
                 logger.opt(colors=True).debug(f"book found: {book:styled}")
-                return self.make_answer(self._answer_book(book))
+                return self.make_answer(self._answer_book(book, listening_data))
         logger.opt(colors=True).error(f"book not found. bid=<y>{bid}</y>")
         return self.error(BookNotFound(bid=bid))
 
@@ -327,7 +328,7 @@ class BooksApi(JSApi):
 
     @staticmethod
     def _delete_book_files(dir_path: str, files: list[str]) -> None:
-        for file in [*files, "cover.jpg"]:
+        for file in [*files, "cover.jpg", ".abp"]:
             file_path = os.path.join(dir_path, file)
             try:
                 logger.opt(colors=True).trace(f"deleting <y>{file_path}</y>")
@@ -381,8 +382,8 @@ class BooksApi(JSApi):
         logger.opt(colors=True).info(f"book removed: <y>{book:styled}</y>")
         return self.make_answer()
 
-    def _answer_book(self, book: Book) -> dict:
-        return dict(
+    def _answer_book(self, book: Book, listening_data: bool = False) -> dict:
+        data = dict(
             bid=book.id,
             author=book.author,
             name=book.name,
@@ -402,6 +403,15 @@ class BooksApi(JSApi):
                 book.id in self._download_queue or book.id in self._download_processes
             ),
         )
+        if listening_data:
+            data.update(
+                dict(
+                    stop_flag=asdict(book.stop_flag),
+                    items=book.items.to_dump(),
+                    files=book.files,
+                )
+            )
+        return data
 
 
 class DownloadingProcessHandler(BaseDownloadProcessHandler):
