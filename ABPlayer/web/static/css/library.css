@@ -163,7 +163,11 @@
   display: flex;
   justify-content: space-between;
 }
-.book-title {font-size: larger; font-weight: bold}
+.book-title {
+  font-size: larger;
+  font-weight: bold;
+  line-height: 1;
+}
 .book-state {
   display: flex;
   font-size: small;
