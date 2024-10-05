@@ -1,7 +1,7 @@
 page("settings-page").onShow = function(el) {
     addUrlParams({"page": el.id})
 }
-page("book-page").onHide = function() {}
+page("settings-page").onHide = function() {}
 
 
 function toggleDarkTheme() {
