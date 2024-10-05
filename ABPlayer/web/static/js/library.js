@@ -284,6 +284,8 @@ function toggleFavorite(el, bid) {
 }
 
 function removeBook(el, bid) {
+    if (player.current_book && player.current_book.bid == bid)
+        return createNotification("Поставьте прослушивание на паузу и повторите попытку", 5)
     if (el.classList.contains("loading")) return
     el.classList.add("loading")
     pywebview.api.remove_book(bid).then((resp) => {
@@ -301,6 +303,8 @@ function removeBook(el, bid) {
 }
 
 function deleteBook(el, bid, name) {
+    if (player.current_book && player.current_book.bid == bid)
+        return createNotification("Поставьте прослушивание на паузу и повторите попытку", 5)
     if (el.classList.contains("loading")) return
     el.classList.add("loading")
     pywebview.api.delete_book(bid).then((resp) => {
