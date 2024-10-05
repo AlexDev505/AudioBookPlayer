@@ -1,7 +1,7 @@
 import os
 import sys
 
-from flask import Flask, render_template
+from flask import Flask, render_template, send_from_directory
 
 import temp_file
 
@@ -39,6 +39,11 @@ def index():
 @app.route("/starting_window")
 def start_app():
     return render_template("starting_window.html")
+
+
+@app.route("/library/<path:file_path>")
+def library_cdn(file_path: str):
+    return send_from_directory(os.environ["books_folder"], file_path)
 
 
 if __name__ == "__main__":

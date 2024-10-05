@@ -404,11 +404,14 @@ class BooksApi(JSApi):
             ),
         )
         if listening_data:
+            book_path = book.book_path
             data.update(
                 dict(
                     stop_flag=asdict(book.stop_flag),
                     items=book.items.to_dump(),
-                    files=book.files,
+                    files=[
+                        os.path.join(book_path, file_name) for file_name in book.files
+                    ],
                 )
             )
         return data

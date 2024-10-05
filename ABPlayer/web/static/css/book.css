@@ -82,8 +82,9 @@
   display: flex;
   justify-content: space-between;
   border-bottom: 2px solid var(--ui-element-bg);
+  cursor: pointer;
 }
-.book-item > span {z-index: 2; padding: 7px;}
+.book-item > span {z-index: 2; padding: 7px; pointer-events: none;}
 .book-item > .title {
   max-width: 80%;
   overflow: hidden;
