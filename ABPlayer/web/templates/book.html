@@ -24,22 +24,14 @@
 <div id="book-player">
   <div class="book-preview"></div>
   <div id="player">
+    <audio id="audio-player"></audio>
     <div id="player-controls">
       <div class="button-group">
-        <div class="iconned-btn button angle-left-button"><span>15 c</span></div>
-        <div class="iconned-btn button play-button"></div>
-        <div class="iconned-btn right button angle-right-button"><span>15 c</span></div>
+        <div class="iconned-btn button angle-left-button" onclick="rewind()"><span>15 c</span></div>
+        <div id="toggle-playback-btn" class="iconned-btn button play-button" onclick="togglePlayback(this)"></div>
+        <div class="iconned-btn right button angle-right-button" onclick="forward()"><span>15 c</span></div>
       </div>
-      <div id="items-container">
-        <div class="book-item current">
-          <span class="title">01</span>
-          <span class="time">00:00 / 53:04</span>
-        </div>
-        <div class="book-item">
-          <span class="title">01</span>
-          <span class="time">00:00 / 53:04</span>
-        </div>
-      </div>
+      <div id="items-container"></div>
     </div>
     <div id="player-downloading">Дождитесь окончания скачивания книги</div>
     <div id="player-downloading-required">
