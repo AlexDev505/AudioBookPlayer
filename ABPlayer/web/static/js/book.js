@@ -9,7 +9,7 @@ page("book-page").onHide = function() {
 }
 
 const player = new Plyr("#audio-player", {storage: true, controls: []})
-
+last_stop_flag_time = 0
 
 
 function loadBookData(bid) {
@@ -51,6 +51,10 @@ function loadBookData(bid) {
             }
             document.getElementById("items-container").innerHTML = html
             selectItem(resp.data.stop_flag.item)
+            if (resp.data.stop_flag.time) {
+                player.play()
+                player.once("playing", (event) => {player.currentTime = resp.data.stop_flag.time; player.pause()})
+            }
         } else {
             document.getElementById("player").classList.add("not-available")
             if (resp.data.downloading) document.getElementById("player-downloading").style = "display: block"
@@ -80,6 +84,10 @@ player.on("timeupdate", (event) => {
     if (el.dataset.seeking) return
     el.style.setProperty('--current-item-percents', `${player.currentTime/ (player.duration / 100)}%`)
     document.querySelector(".book-item.current .cur-time").innerText = timeView(Math.floor(player.currentTime))
+    if (Math.abs(player.currentTime - last_stop_flag_time) > 15) {
+        pywebview.api.set_stop_flag(player.current_book.bid, player.current_item_index, Math.floor(player.currentTime))
+        last_stop_flag_time = player.currentTime
+    }
 })
 player.on("ended", (event) => {
     next_item = player.current_item_index + 1
