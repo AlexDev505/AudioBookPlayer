@@ -1,3 +1,7 @@
+const player = new Plyr("#audio-player", {storage: true, controls: []})
+opened_book = null
+last_stop_flag_time = 0
+
 page("book-page").onShow = function(el) {
     addUrlParams({"page": el.id})
     let bid = urlParams.get("bid")
@@ -6,12 +10,13 @@ page("book-page").onShow = function(el) {
 page("book-page").onHide = function() {
     document.getElementById("book-loading").style = "display: block;"
     urlParams.delete("bid")
+    opened_book = null
+    if (!player.playing && player.current_book) {
+        player.current_book = null
+        player.current_item_index = null
+        last_stop_flag_time = 0
+    }
 }
-
-const player = new Plyr("#audio-player", {storage: true, controls: []})
-opened_book = null
-last_stop_flag_time = 0
-
 
 function loadBookData(bid) {
     pywebview.api.book_by_bid(bid, true).then((resp) => {
@@ -98,7 +103,7 @@ player.on("play", (event) => {
     document.getElementById("toggle-playback-btn").classList.add("pause-button")
 })
 player.on("timeupdate", (event) => {
-    if (player.current_book.bid == opened_book.bid) {
+    if (opened_book && player.current_book.bid == opened_book.bid) {
         let el = document.querySelector(".book-item.current")
         if (el.dataset.seeking) return
         el.style.setProperty('--current-item-percents', `${player.currentTime/ (player.duration / 100)}%`)
