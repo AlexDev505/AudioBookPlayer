@@ -148,6 +148,16 @@ class BooksApi(JSApi):
             )
             return self.make_answer(book.favorite)
 
+    def set_stop_flag(self, bid: int, item: int, time: int):
+        logger.opt(colors=True).trace(f"request: <r>set stop flag</r> | <y>{bid}</y>")
+        with Database() as db:
+            if not (book := db.get_book_by_bid(bid)):
+                return self.error(BookNotFound(bid=bid))
+            book.stop_flag.item = item
+            book.stop_flag.time = time
+            db.save(book)
+            db.commit()
+
     @staticmethod
     def _book_by_url(url: str):
         logger.opt(colors=True).debug(
