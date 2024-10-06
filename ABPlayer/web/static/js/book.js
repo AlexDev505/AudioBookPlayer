@@ -1,4 +1,5 @@
 const player = new Plyr("#audio-player", {storage: true, controls: []})
+const smallPlayer = document.getElementById("small-player")
 opened_book = null
 last_stop_flag_time = 0
 
@@ -93,22 +94,36 @@ function loadBookData(bid) {
 }
 
 player.on("pause", (event) => {
-    if (player.current_book.bid != opened_book.bid) return
-    document.getElementById("toggle-playback-btn").classList.add("play-button")
-    document.getElementById("toggle-playback-btn").classList.remove("pause-button")
+    let smallPlaybackControl = smallPlayer.querySelector(".small-playback-control")
+    smallPlaybackControl.classList.add("play")
+    smallPlaybackControl.classList.remove("pause")
+    if (opened_book && player.current_book.bid != opened_book.bid) return
+    let bigPlaybackControl = document.getElementById("toggle-playback-btn")
+    bigPlaybackControl.classList.add("play-button")
+    bigPlaybackControl.classList.remove("pause-button")
 })
 player.on("play", (event) => {
-    if (player.current_book.bid != opened_book.bid) return
-    document.getElementById("toggle-playback-btn").classList.remove("play-button")
-    document.getElementById("toggle-playback-btn").classList.add("pause-button")
+    let smallPlaybackControl = smallPlayer.querySelector(".small-playback-control")
+    smallPlaybackControl.classList.remove("play")
+    smallPlaybackControl.classList.add("pause")
+    if (opened_book && player.current_book.bid != opened_book.bid) return
+    let bigPlaybackControl = document.getElementById("toggle-playback-btn")
+    bigPlaybackControl.classList.remove("play-button")
+    bigPlaybackControl.classList.add("pause-button")
 })
 player.on("timeupdate", (event) => {
+    let listening_progress = Math.floor(
+        (player.previous_items_duration + player.currentTime)
+        / (player.total_duration / 100)
+    )
     if (opened_book && player.current_book.bid == opened_book.bid) {
         let el = document.querySelector(".book-item.current")
         if (el.dataset.seeking) return
         el.style.setProperty('--current-item-percents', `${player.currentTime/ (player.duration / 100)}%`)
         document.querySelector(".book-item.current .cur-time").innerText = timeView(Math.floor(player.currentTime))
+        document.querySelector(".book-listening-progress").innerText = `${listening_progress}% прослушано`
     }
+    smallPlayer.querySelector(".listening-progres").innerText = `${listening_progress}% прослушано`
     if (Math.abs(player.currentTime - last_stop_flag_time) > 15) {
         pywebview.api.set_stop_flag(player.current_book.bid, player.current_item_index, Math.floor(player.currentTime))
         last_stop_flag_time = player.currentTime
@@ -122,14 +137,25 @@ player.on("ended", (event) => {
 })
 
 function initBook(book) {
+    smallPlayer.classList.add("visible")
+    smallPlayer.querySelector(".small-playback-control").style = `background-image: url(${book.preview});`
+    smallPlayer.querySelector(".book-title").innerText = `${book.name}`
+    smallPlayer.querySelector(".listening-progres").innerText = `${book.listening_progress}% прослушано`
+    smallPlayer.querySelector(".book-info").onclick = function() {
+        if (opened_book && opened_book.bid == player.current_book.bid) return
+        openBookPage(player.current_book.bid)
+    }
     player.current_book = book
+    let total_duration = 0
+    for (let item of book.items) total_duration += (item.end_time - item.start_time)
+    player.total_duration = total_duration
     _selectItem(book.stop_flag.item)
     if (book.stop_flag.time) {
         player.play()
         player.once("playing", (event) => {player.currentTime = book.stop_flag.time; player.pause()})
     }
 }
-function togglePlayback(btn) {
+function togglePlayback() {
     if (player.current_book.bid != opened_book.bid) {
         initBook(opened_book)
         player.once("pause", (event) => {player.play()})
@@ -167,11 +193,17 @@ function selectItem(item_index) {
     _selectItem(item_index)
 }
 function _selectItem(item_index) {
+    let previous_items_duration = 0
+    for (let i of Array(item_index).keys()) {
+        item = player.current_book.items[i]
+        previous_items_duration += (item.end_time - item.start_time)
+    }
+    player.previous_items_duration = previous_items_duration
     let playing = player.playing
     player.source = {type: "audio", title: "", sources: [{src: `/library/${player.current_book.files[item_index]}`, type: "audio/mp3"}]};
     player.current_item_index = item_index
     if (playing) player.play()
-    if (player.current_book.bid == opened_book.bid) {
+    if (opened_book && player.current_book.bid == opened_book.bid) {
         let cur_item = document.querySelector(".book-item.current")
         let new_item = document.querySelector(`.book-item[data-index="${item_index}"]`)
         if (cur_item) cur_item.classList.remove("current")
