@@ -69,6 +69,8 @@ class WindowControlsApi(JSApi):
                 else {}
             ),
         )
+        if last_listened_book_bid is None:
+            temp_file.delete_items("last_listened_book_bid")
         logger.trace("session data saved")
 
 
