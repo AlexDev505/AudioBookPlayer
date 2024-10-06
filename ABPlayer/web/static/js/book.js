@@ -1,4 +1,3 @@
-const player = new Plyr("#audio-player", {storage: true, controls: []})
 const smallPlayer = document.getElementById("small-player")
 opened_book = null
 last_stop_flag_time = 0
@@ -12,11 +11,6 @@ page("book-page").onHide = function() {
     document.getElementById("book-loading").style = "display: block;"
     urlParams.delete("bid")
     opened_book = null
-    if (!player.playing && player.current_book) {
-        player.current_book = null
-        player.current_item_index = null
-        last_stop_flag_time = 0
-    }
 }
 
 function loadBookData(bid) {
@@ -246,4 +240,12 @@ function bookItemOnmouseup(event, el) {
 
 function timeView(time) {
     return `${String(Math.floor(time/60)).padStart(2, '0')}:${String(time%60).padStart(2, '0')}`
+}
+
+function loadLastListenedBook() {
+    if (last_listened_book_bid) {
+        pywebview.api.book_by_bid(last_listened_book_bid, true).then((resp) => {
+            if (resp.data.downloaded) initBook(resp.data)
+        })
+    }
 }
