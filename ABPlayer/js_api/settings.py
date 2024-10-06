@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import re
 import shutil
 import sys
 import time
@@ -14,6 +15,7 @@ from loguru import logger
 from orjson import orjson
 
 import config
+import temp_file
 from database import Database
 from models.book import Book
 from .js_api import JSApi, JSApiError, ConnectionFailedError
@@ -181,8 +183,10 @@ class SettingsApi(JSApi):
             logger.debug("The same version is installed now")
             return self.make_answer(False)
 
+        stable = re.fullmatch(r"\d+\.\d+\.\d+", last_version) is not None
+
         return self.make_answer(
-            dict(version=last_version, url=last_release["html_url"])
+            dict(version=last_version, stable=stable, url=last_release["html_url"])
         )
 
     @staticmethod
@@ -234,6 +238,11 @@ class SettingsApi(JSApi):
         logger.info("closing app")
         self._window.destroy()
         Popen([sys.executable, f"--run-update={updater_path}"])
+
+    def unsubscribe_not_stable(self):
+        temp_file.update(only_stable=True)
+        logger.debug("unsubscribed from not stable releases")
+        return self.make_answer()
 
     def _download_updater(
         self, updater_url: str, updater_path: str, _retries: int = 0
