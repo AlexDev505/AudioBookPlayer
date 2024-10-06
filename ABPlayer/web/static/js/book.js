@@ -158,8 +158,11 @@ function initBook(book) {
     }
 }
 function togglePlayback() {
-    if (opened_book && player.current_book.bid != opened_book.bid)
-        return initBook(opened_book)
+    if (opened_book && player.current_book.bid != opened_book.bid) {
+        initBook(opened_book)
+        player.once("pause", (event) => {togglePlayback()})
+        return
+    }
     player.togglePlay()
 }
 function rewind() {
