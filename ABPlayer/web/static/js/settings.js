@@ -53,11 +53,19 @@ function checkForUpdates(resp) {
         return
     }
     if (!resp.data) return
-    createNotification(
-        `<div><b>Доступно обновление ${resp.data.version}</b></div>
-        <a style="margin-top: 2px" href="${resp.data.url}" target="_blank">список изменений</a>
-        <div style="margin-top: 2px; text-decoration: underline; cursor:pointer" onclick="{updateApp();this.parentElement.parentElement.remove()}">установить</div>`
-    )
+    if (resp.sable || !stable_version)
+        createNotification(
+            `<div><b>Доступно обновление ${resp.data.version}</b></div>
+            <a style="margin-top: 2px" href="${resp.data.url}" target="_blank">список изменений</a>
+            <div style="margin-top: 2px; text-decoration: underline; cursor:pointer" onclick="{updateApp();this.parentElement.parentElement.remove()}">установить</div>`
+        )
+    else if (!only_stable)
+        createNotification(
+            `<div><b>Доступна новая версия для тестирования ${resp.data.version}</b></div>
+            <a style="margin-top: 2px" href="${resp.data.url}" target="_blank">список изменений</a>
+            <div style="margin-top: 2px; text-decoration: underline; cursor:pointer" onclick="{updateApp();this.parentElement.parentElement.remove()}">установить</div>`
+            <div style="margin-top: 2px; text-decoration: underline; cursor:pointer" onclick="{unsubscribeNotStable();this.parentElement.parentElement.remove()}">не предлагать участие в тестировании</div>`
+        )
 }
 
 function updateApp() {
@@ -66,4 +74,7 @@ function updateApp() {
         n.querySelector(".cross-btn").click()
         if (resp.status != "ok") showError(resp.message)
     })
+}
+function unsubscribeNotStable() {
+
 }

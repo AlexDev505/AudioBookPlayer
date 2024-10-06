@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 
 from flask import Flask, render_template, send_from_directory
@@ -31,6 +32,10 @@ def index():
         volume=temp_data.get("volume", 50),
         speed=temp_data.get("speed", 1),
         last_listened_book_bid=temp_data.get("last_listened_book_bid", None),
+        only_stable=temp_data.get("only_stable", False),
+        stable_version=(
+            re.fullmatch(r"\d+\.\d+\.\d+", os.environ["VERSION"]) is not None
+        ),
         required_drivers=(
             required_drivers.split(",")
             if (required_drivers := temp_data.get("required_drivers", ""))

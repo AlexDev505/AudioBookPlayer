@@ -16,6 +16,8 @@
     var last_volume = {{ volume|tojson }}
     var last_speed = {{ speed|tojson }}
     var last_listened_book_bid = {{ last_listened_book_bid|tojson }}
+    var only_stable = {{ only_stable|tojson }}
+    var stable_version = {{ stable_version|tojson }}
   </script>
   <script defer src="{{url_for('static', filename='js/base.js')}}"></script>
 </head>
