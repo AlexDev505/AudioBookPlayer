@@ -15,8 +15,8 @@ page("book-page").onHide = function() {
 
 function loadBookData(bid) {
     pywebview.api.book_by_bid(bid, true).then((resp) => {
-        opened_book = resp.data
         if (resp.status != "ok") {showError(resp.message); return}
+        opened_book = resp.data
         document.querySelector("#book-page-content .book-title").innerHTML = resp.data.name
         document.querySelector("#book-page-content .book-listening-progress").innerHTML = `${resp.data.listening_progress} прослушано`
         document.querySelector("#book-page-content .book-adding-date").innerHTML = `Добавлена ${resp.data.adding_date}`
@@ -97,6 +97,10 @@ player.on("pause", (event) => {
     bigPlaybackControl.classList.remove("pause-button")
 })
 player.on("play", (event) => {
+    if (player.current_book.status != "started") {
+        pywebview.api.mark_as_started(player.current_book.bid)
+        player.current_book.status = "started"
+    }
     let smallPlaybackControl = smallPlayer.querySelector(".small-playback-control")
     smallPlaybackControl.classList.remove("play")
     smallPlaybackControl.classList.add("pause")
@@ -125,7 +129,11 @@ player.on("timeupdate", (event) => {
 })
 player.on("ended", (event) => {
     let next_item = player.current_item_index + 1
-    if (!player.current_book.files[next_item]) return
+    if (!player.current_book.files[next_item]) {
+        pywebview.api.set_stop_flag(player.current_book.bid, player.current_item_index, Math.floor(player.duration))
+        player.current_book.status = "finished"
+        return pywebview.api.mark_as_finished(player.current_book.bid)
+    }
     _selectItem(next_item)
     player.play()
 })
@@ -150,11 +158,8 @@ function initBook(book) {
     }
 }
 function togglePlayback() {
-    if (player.current_book.bid != opened_book.bid) {
-        initBook(opened_book)
-        player.once("pause", (event) => {player.play()})
-        return
-    }
+    if (opened_book && player.current_book.bid != opened_book.bid)
+        return initBook(opened_book)
     player.togglePlay()
 }
 function rewind() {
@@ -245,7 +250,14 @@ function timeView(time) {
 function loadLastListenedBook() {
     if (last_listened_book_bid) {
         pywebview.api.book_by_bid(last_listened_book_bid, true).then((resp) => {
+            if (resp.status != "ok") {showError(resp.message); return}
             if (resp.data.downloaded) initBook(resp.data)
         })
     }
+}
+function clearPlayingBook() {
+    if (!player.current_book) return
+    smallPlayer.classList.remove("visible")
+    player.stop()
+    player.current_book = null
 }

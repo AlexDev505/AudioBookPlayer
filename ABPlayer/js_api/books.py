@@ -12,7 +12,7 @@ from loguru import logger
 
 from database import Database
 from drivers import Driver, BaseDownloadProcessHandler, DownloadProcessStatus
-from models.book import DATETIME_FORMAT
+from models.book import DATETIME_FORMAT, Status
 from tools import convert_from_bytes, make_book_preview, pretty_view
 from .js_api import JSApi, JSApiError, ConnectionFailedError
 
@@ -29,14 +29,6 @@ class BooksApi(JSApi):
         self.search_query: str | None = None
         self.matched_books_bids: list[int] | None = None
         self.removed_books_files: dict[int, tuple[str, list[str]]] = {}
-
-    def get_available_drivers(self):
-        logger.opt(colors=True).debug("request: <r>available drivers</r>")
-        available_drivers = [driver.driver_name for driver in Driver.drivers]
-        logger.opt(colors=True).debug(
-            f"available drivers count: <y>{len(available_drivers)}</y>"
-        )
-        return self.make_answer(available_drivers)
 
     def book_by_bid(self, bid: int, listening_data: bool = False):
         logger.opt(colors=True).debug(f"request: <r>book by bid</r> | <y>{bid}</y>")
@@ -120,43 +112,6 @@ class BooksApi(JSApi):
                 f"matched books bids: {pretty_view(matched_books_bids)}"
             )
             self.matched_books_bids = matched_books_bids
-
-    def get_all_authors(self):
-        logger.opt(colors=True).debug("request: <r>all authors</r>")
-        with Database() as db:
-            authors = db.get_all_authors()
-        logger.opt(colors=True).debug(f"authors found: <y>{len(authors)}</y>")
-        return self.make_answer(authors)
-
-    def get_all_series(self):
-        logger.opt(colors=True).debug("request: <r>all series</r>")
-        with Database() as db:
-            series = db.get_all_series()
-        logger.opt(colors=True).debug(f"series found: <y>{len(series)}</y>")
-        return self.make_answer(series)
-
-    def toggle_favorite(self, bid: int):
-        logger.opt(colors=True).debug(f"request: <r>toggle favorite</r> | <y>{bid}</y>")
-        with Database() as db:
-            if not (book := db.get_book_by_bid(bid)):
-                return self.error(BookNotFound(bid=bid))
-            book.favorite = not book.favorite
-            db.save(book)
-            db.commit()
-            logger.opt(colors=True).debug(
-                f"{book:styled} favorite: <y>{book.favorite}</y>"
-            )
-            return self.make_answer(book.favorite)
-
-    def set_stop_flag(self, bid: int, item: int, time: int):
-        logger.opt(colors=True).trace(f"request: <r>set stop flag</r> | <y>{bid}</y>")
-        with Database() as db:
-            if not (book := db.get_book_by_bid(bid)):
-                return self.error(BookNotFound(bid=bid))
-            book.stop_flag.item = item
-            book.stop_flag.time = time
-            db.save(book)
-            db.commit()
 
     @staticmethod
     def _book_by_url(url: str):
@@ -259,6 +214,59 @@ class BooksApi(JSApi):
 
         return self.make_answer()
 
+    def toggle_favorite(self, bid: int):
+        logger.opt(colors=True).debug(f"request: <r>toggle favorite</r> | <y>{bid}</y>")
+        with Database(autocommit=True) as db:
+            if not (book := db.get_book_by_bid(bid)):
+                return self.error(BookNotFound(bid=bid))
+            book.favorite = not book.favorite
+            db.save(book)
+            logger.opt(colors=True).debug(
+                f"{book:styled} favorite: <y>{book.favorite}</y>"
+            )
+            return self.make_answer(book.favorite)
+
+    def mark_as_started(self, bid: int):
+        return self._set_book_status(bid, Status.STARTED)
+
+    def mark_as_finished(self, bid: int):
+        return self._set_book_status(bid, Status.FINISHED)
+
+    def _set_book_status(self, bid: int, status: Status):
+        logger.opt(colors=True).debug(f"request: <r>set book status</r> | <y>{bid}</y>")
+        with Database(autocommit=True) as db:
+            if not (book := db.get_book_by_bid(bid)):
+                return self.error(BookNotFound(bid=bid))
+            book.status = status
+            db.save(book)
+            logger.opt(colors=True).debug(
+                f"{book:styled} status: <y>{book.status.value}</y>"
+            )
+            return self.make_answer()
+
+    def set_stop_flag(self, bid: int, item: int, time: int):
+        logger.opt(colors=True).trace(f"request: <r>set stop flag</r> | <y>{bid}</y>")
+        with Database(autocommit=True) as db:
+            if not (book := db.get_book_by_bid(bid)):
+                return self.error(BookNotFound(bid=bid))
+            book.stop_flag.item = item
+            book.stop_flag.time = time
+            db.save(book)
+
+    def get_all_authors(self):
+        logger.opt(colors=True).debug("request: <r>all authors</r>")
+        with Database() as db:
+            authors = db.get_all_authors()
+        logger.opt(colors=True).debug(f"authors found: <y>{len(authors)}</y>")
+        return self.make_answer(authors)
+
+    def get_all_series(self):
+        logger.opt(colors=True).debug("request: <r>all series</r>")
+        with Database() as db:
+            series = db.get_all_series()
+        logger.opt(colors=True).debug(f"series found: <y>{len(series)}</y>")
+        return self.make_answer(series)
+
     def check_is_books_exists(self, urls: list[str]):
         logger.opt(colors=True).debug("request: <r>check is books exists</r>")
         with Database() as db:
@@ -267,6 +275,14 @@ class BooksApi(JSApi):
             f"<y>{len(exists_book_urls)}/{len(urls)}</y> books exists"
         )
         return self.make_answer(exists_book_urls)
+
+    def get_available_drivers(self):
+        logger.opt(colors=True).debug("request: <r>available drivers</r>")
+        available_drivers = [driver.driver_name for driver in Driver.drivers]
+        logger.opt(colors=True).debug(
+            f"available drivers count: <y>{len(available_drivers)}</y>"
+        )
+        return self.make_answer(available_drivers)
 
     def get_downloads(self):
         logger.opt(colors=True).debug("request: <r>get downloads</r>")
@@ -367,7 +383,6 @@ class BooksApi(JSApi):
 
         logger.opt(colors=True).debug(f"deleting book: {book:styled}")
         self._delete_book_files(book.dir_path, list(book.files.keys()))
-        os.remove(book.abp_file_path)
 
         logger.opt(colors=True).debug(f"clearing files data from db: {book:styled}")
         book.files.clear()

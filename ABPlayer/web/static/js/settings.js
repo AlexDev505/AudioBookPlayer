@@ -16,7 +16,7 @@ function toggleDarkThemeCheckBox(value) {
 }
 
 function changeLibraryDir() {
-    if (player.current_book) return createNotification("<div>Поставьте прослушивание на паузу и повторите попытку</div>", 5)
+    clearPlayingBook()
     pywebview.api.change_library_dir().then((resp) => {
         if (resp.status != "ok") return
         content = "<div><b>Папка с книгами изменена</b></div>" + ((resp.data.new_books_count) ? `<div>Книг добавлено: ${resp.data.new_books_count}</div>` : "")
