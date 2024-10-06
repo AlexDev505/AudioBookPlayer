@@ -28,6 +28,9 @@ def index():
         dark_theme=bool(int(os.environ["dark_theme"])),
         is_main_menu_opened=temp_data.get("is_main_menu_opened", True),
         is_filter_menu_opened=temp_data.get("is_filter_menu_opened", True),
+        volume=temp_data.get("volume", 50),
+        speed=temp_data.get("speed", 1),
+        last_listened_book_bid=temp_data.get("last_listened_book_bid", None),
         required_drivers=(
             required_drivers.split(",")
             if (required_drivers := temp_data.get("required_drivers", ""))

@@ -13,6 +13,9 @@
     var filter_menu_opened = {{ is_filter_menu_opened|tojson }}
     var required_drivers = {{ [] if not required_drivers else required_drivers|tojson }}
     var dark_theme = {{ (true if dark_theme else false)|tojson }}
+    var last_volume = {{ volume|tojson }}
+    var last_speed = {{ speed|tojson }}
+    var last_listened_book_bid = {{ last_listened_book_bid|tojson }}
   </script>
   <script defer src="{{url_for('static', filename='js/base.js')}}"></script>
 </head>
@@ -52,9 +55,9 @@
         </div>
         <div>
           <div id="volume-btn" class="icon-btn volume-btn"></div>
-          <input id="volume-input" type="range" min="0" max="100" value="50" data-postfix="%" oninput="setVolume(this.value)">
+          <input id="volume-input" type="range" min="0" max="100" value="{{ volume|tojson }}" data-postfix="%" oninput="setVolume(this.value)">
           <div id="speed-btn" class="icon-btn speed-btn"></div>
-          <input id="speed-input" type="range" min="0" max="2" value="1" step="0.1" data-prefix="x" oninput="setSpeed(this.value)">
+          <input id="speed-input" type="range" min="0" max="2" value="{{ speed|tojson }}" step="0.1" data-prefix="x" oninput="setSpeed(this.value)">
         </div>
       </div>
       <div class="page" id="library-page">

@@ -1,3 +1,4 @@
+const player = new Plyr("#audio-player", {storage: true, controls: []})
 var urlParams = new URLSearchParams(window.location.search);
 
 for (size_grip of document.getElementsByClassName("size-grip")) {
@@ -95,6 +96,7 @@ function PWVReady() {
     pywebview.api.get_downloads().then(showDownloads)
     pywebview.api.get_available_drivers().then(loadAvailableDrivers)
     toggleDarkThemeCheckBox(dark_theme)
+    loadLastListenedBook()
 }
 function parseUrlParams() {
     page_name = urlParams.get("page")

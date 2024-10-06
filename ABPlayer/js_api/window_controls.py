@@ -50,12 +50,24 @@ class WindowControlsApi(JSApi):
         is_main_menu_opened = self._window.evaluate_js("menu_opened")
         is_filter_menu_opened = self._window.evaluate_js("filter_menu_opened")
         required_drivers = self._window.evaluate_js("required_drivers")
+        volume = self._window.evaluate_js("player.volume") * 100
+        speed = self._window.evaluate_js("player.speed")
+        last_listened_book_bid = self._window.evaluate_js(
+            "(player.current_book)?player.current_book.bid:null"
+        )
         temp_file.update(
             width=width,
             height=height,
             is_main_menu_opened=is_main_menu_opened,
             is_filter_menu_opened=is_filter_menu_opened,
             required_drivers=",".join(required_drivers),
+            volume=volume,
+            speed=speed,
+            **(
+                dict(last_listened_book_bid=last_listened_book_bid)
+                if last_listened_book_bid is not None
+                else {}
+            ),
         )
         logger.trace("session data saved")
 
