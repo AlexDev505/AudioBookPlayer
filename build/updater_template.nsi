@@ -4,7 +4,7 @@
 !define PRODUCT_NAME "ABPlayer"
 !define PRODUCT_VERSION "{version}"
 !define PRODUCT_PUBLISHER "AlexDev505"
-!define PRODUCT_WEB_SITE "https://github.com/AlexDev505/ABPlayer"
+!define PRODUCT_WEB_SITE "https://github.com/AlexDev505/AudioBookPlayer"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\ABPlayer.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
@@ -41,9 +41,7 @@ OutFile "updaters\ABPlayerUpdate.${PRODUCT_VERSION}.exe"
 InstallDir "$PROGRAMFILES\ABPlayer"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
-{%uninstaller section%}
 ShowUnInstDetails show
-{%uninstaller section end%}
 
 !define IfFileLocked "!insertmacro _IfFileLocked"
 
@@ -59,7 +57,8 @@ Section "ABPlayer" SEC01
   SetOutPath "$INSTDIR"
   FileIsLocked:
     ${IfFileLocked} FileLocked
-    File "ABPlayer\ABPlayer.exe"{install}
+    File "ABPlayer\ABPlayer.exe"
+    RMDir /r "$INSTDIR\_internal"{install}
     Goto Done
   FileLocked:
     Goto FileIsLocked
@@ -68,15 +67,12 @@ SectionEnd
 
 Section -Post
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
-{%uninstaller section%}
   WriteUninstaller "$INSTDIR\uninst.exe"
-  WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\ABPlayer.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\ABPlayer.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
-{%uninstaller section end%}
 SectionEnd
 
 Function .OnInstSuccess
@@ -84,7 +80,6 @@ Function .OnInstSuccess
   Exec "ABPlayer.exe"
 FunctionEnd
 
-{%uninstaller section%}
 Function un.onUninstSuccess
   HideWindow
   MessageBox MB_ICONINFORMATION|MB_OK "Удаление программы $(^Name) было успешно завершено."
@@ -106,4 +101,3 @@ Section Uninstall
   DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
   SetAutoClose true
 SectionEnd
-{%uninstaller section end%}
