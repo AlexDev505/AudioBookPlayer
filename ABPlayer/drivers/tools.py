@@ -70,7 +70,7 @@ def safe_name(text: str) -> str:
     """
     while text.count('"') >= 2:
         text = re.sub(r'"(.*?)"', r"«\g<1>»", text)
-    return re.sub(r'[\\/:*?"<>|+]', "", text)
+    return re.sub(r'[\\/:*?"<>|+]', "", text).rstrip(". ")
 
 
 def create_instance_id(obj: ty.Any) -> int:

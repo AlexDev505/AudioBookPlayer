@@ -90,5 +90,6 @@ function endLoading(bid) {
     title = document.querySelector(`.download-card[data-bid='${bid}'] .book-title`)
     if (title) createNotification(`Книга <b>«${title.innerHTML}»</b> скачана`, 60, true)
     if (document.querySelector(`.book-card[data-bid='${bid}']`)) applyFilters()
+    if (opened_book && opened_book.bid == bid) loadBookData(bid)
 }
 

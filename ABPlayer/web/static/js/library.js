@@ -13,6 +13,7 @@ function clearLibraryFilters() {
     urlParams.delete("series")
     urlParams.delete("favorite")
     urlParams.delete("search_query")
+    document.querySelector("#search-in-library-input-line input").value = ""
 }
 
 function applyFilters() {
@@ -173,7 +174,7 @@ function addBooks(el) {
     var status = null
     if (el.id == "new-books-section") {status = "new"}
     else if (el.id == "in-progress-books-section") {status = "started"}
-    else if (el.id == "listened-books-section") {status = "listened"}
+    else if (el.id == "listened-books-section") {status = "finished"}
     let books_in_section = books_in_sections[el.id]
     if (!books_in_sections.hasOwnProperty(el.id)) {
         books_in_section = 0
@@ -212,7 +213,7 @@ function showBooks(response, status) {
         container = document.getElementById("new-books-section")
     } else if (status == "started") {
         container = document.getElementById("in-progress-books-section")
-    } else if (status == "listened") {
+    } else if (status == "finished") {
         container = document.getElementById("listened-books-section")
     }
     if (container.id != Section.current.el.id) return
@@ -284,6 +285,8 @@ function toggleFavorite(el, bid) {
 }
 
 function removeBook(el, bid) {
+    if (player.current_book && player.current_book.bid == bid)
+        clearPlayingBook()
     if (el.classList.contains("loading")) return
     el.classList.add("loading")
     pywebview.api.remove_book(bid).then((resp) => {
@@ -301,6 +304,8 @@ function removeBook(el, bid) {
 }
 
 function deleteBook(el, bid, name) {
+    if (player.current_book && player.current_book.bid == bid)
+        clearPlayingBook()
     if (el.classList.contains("loading")) return
     el.classList.add("loading")
     pywebview.api.delete_book(bid).then((resp) => {

@@ -1,6 +1,14 @@
 #book-page {width: 100%; height: 100%}
 #book-loading {
   background-image: url(../images/loading.gif);
+  height: -webkit-fill-available;
+  width: -webkit-fill-available;
+  position: absolute;
+  background-color: var(--central-frame-bg);
+  z-index: 5;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 4em;
 }
 
 #book-page-content {
@@ -29,16 +37,77 @@
 #book-player {
   display: flex;
   width: calc(100% - 32px);
+  max-height: 220px;
   margin-top: 16px
 }
 #player {
-  border: 2px dashed var(--ui-element-bg);
-  border-radius: 4px;
   flex: 1;
   margin-left: 16px;
+  max-width: calc(100% - 159px - 16px);
   display: flex;
   justify-content: center;
-  align-items: center
+  align-items: center;
+  text-align: center
+}
+#player.not-available {
+  border: 2px dashed var(--ui-element-bg);
+  border-radius: 4px;
+}
+#player-controls {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+#items-container {
+  flex: 1;
+  margin-top: 10px;
+  border: 2px solid var(--ui-element-bg);
+  border-radius: 4px;
+  overflow: auto;
+}
+#items-container::-webkit-scrollbar {background: var(--ui-element-bg)}
+#items-container::-webkit-scrollbar-thumb {border-radius: 4px}
+
+.angle-left-button::before, .angle-right-button::after {background-size: auto}
+.play-button, .pause-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 0 10px 0 10px;
+}
+#player-controls .button:hover {transform: none}
+#player-controls .button::before, #player-controls .button::after {transition: transform 0.15s ease-in-out}
+#player-controls .button:hover::before, #player-controls .button:hover::after {transform: scale(1.4)}
+.angle-left-button::before {background-image: url(../images/angle_left.svg)}
+.angle-right-button::after {background-image: url(../images/angle_right.svg)}
+.play-button::before {background-image: url(../images/play.svg)}
+.pause-button::before {background-image: url(../images/pause.svg)}
+
+.book-item {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--ui-element-bg);
+  cursor: pointer;
+}
+.book-item > span {z-index: 2; padding: 7px; pointer-events: none;}
+.book-item > .title {
+  max-width: 80%;
+  overflow: hidden;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+}
+.book-item > .time {}
+.book-item.current {background-color: var(--ui-element-bg)}
+.book-item.current::before {
+  content: "";
+  z-index: 1;
+  position: absolute;
+  height: 100%;
+  width: var(--current-item-percents);
+  background-color: var(--dim-fg);
 }
 
 #book-info {
@@ -56,3 +125,4 @@
   -webkit-line-clamp: unset;
   -webkit-box-orient: unset;
 }
+#book-page-content .book-description::-webkit-scrollbar-thumb {border-radius: 4px}
