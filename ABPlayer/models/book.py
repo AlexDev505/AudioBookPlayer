@@ -229,6 +229,7 @@ class Book:
                 f"incorrect <r>.abp</r> file path <y>{file_path}</y> "
                 f"it's not ends on <y>{book_path}</y>"
             )
+            return
 
         logger.opt(lazy=True).trace(
             "book loaded: {data}",
