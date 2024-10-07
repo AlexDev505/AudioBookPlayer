@@ -13,6 +13,7 @@ function clearLibraryFilters() {
     urlParams.delete("series")
     urlParams.delete("favorite")
     urlParams.delete("search_query")
+    document.querySelector("#search-in-library-input-line input").value = ""
 }
 
 function applyFilters() {

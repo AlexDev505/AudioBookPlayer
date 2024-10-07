@@ -59,7 +59,7 @@
           <div id="volume-btn" class="icon-btn volume-btn"></div>
           <input id="volume-input" type="range" min="0" max="100" value="{{ volume|tojson }}" data-postfix="%" oninput="setVolume(this.value)">
           <div id="speed-btn" class="icon-btn speed-btn"></div>
-          <input id="speed-input" type="range" min="0" max="2" value="{{ speed|tojson }}" step="0.1" data-prefix="x" oninput="setSpeed(this.value)">
+          <input id="speed-input" type="range" min="0.1" max="2" value="{{ speed|tojson }}" step="0.1" data-prefix="x" oninput="setSpeed(this.value)">
         </div>
       </div>
       <div class="page" id="library-page">

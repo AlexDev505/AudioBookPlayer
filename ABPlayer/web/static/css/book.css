@@ -125,3 +125,4 @@
   -webkit-line-clamp: unset;
   -webkit-box-orient: unset;
 }
+#book-page-content .book-description::-webkit-scrollbar-thumb {border-radius: 4px}
