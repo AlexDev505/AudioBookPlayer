@@ -30,7 +30,7 @@ def prepare_nsis(build: dict) -> None:
     uninstall = uninstall_files + "\n\n" + "\n".join(uninstall_dirs)
     uninstall += ADDITIONAL_UNINSTALL
 
-    _prepare_file("install", build["version"], install, uninstall)
+    _prepare_file("installer", build["version"], install, uninstall)
     _prepare_file("updater", build["version"], install, uninstall)
 
 
