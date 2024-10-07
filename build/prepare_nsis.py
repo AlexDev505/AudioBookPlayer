@@ -9,6 +9,7 @@ ADDITIONAL_UNINSTALL = (
     "\n  " + r'Delete "$LocalAppData\AudioBookPlayer\config.json"'
     "\n  " + r'Delete "$LocalAppData\AudioBookPlayer\temp.txt"'
     "\n  " + r'RMDir "$LocalAppData\AudioBookPlayer"'
+    "\n"
 )
 
 
@@ -27,8 +28,9 @@ def prepare_nsis(build: dict) -> None:
             uninstall_files += f'\n  Delete "{os.path.join(out_path, file_name)}"'
 
     uninstall_dirs.reverse()
-    uninstall = uninstall_files + "\n\n" + "\n".join(uninstall_dirs)
-    uninstall += ADDITIONAL_UNINSTALL
+    uninstall = (
+        ADDITIONAL_UNINSTALL + uninstall_files + "\n\n" + "\n".join(uninstall_dirs)
+    )
 
     _prepare_file("installer", build["version"], install, uninstall)
     _prepare_file("updater", build["version"], install, uninstall)
@@ -42,5 +44,5 @@ def _prepare_file(target: str, version: str, install: str, uninstall: str) -> No
     text = text.replace("{install}", install)
     text = text.replace("{uninstall}", uninstall)
 
-    with open(f"{target}", "w") as file:
+    with open(f"{target}.nsi", "w") as file:
         file.write(text)
