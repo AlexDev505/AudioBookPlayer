@@ -54,7 +54,6 @@ class SettingsApi(JSApi):
             logger.debug("dir not selected")
             return self.error(RequestCanceled())
 
-        new_dir = new_dir[0]
         self.old_books_folder = old_dir = os.environ["books_folder"]
 
         if new_dir == old_dir:
@@ -76,12 +75,14 @@ class SettingsApi(JSApi):
             new_books_count = 0
             for book in books:
                 if book.url in exists_books_urls:
+                    db_book = db.get_book_by_url(book.url)
+                    db_book.files = book.files
+                    db.save(db_book)
                     continue
                 new_books_count += 1
                 db.add_book(book)
 
-            if new_books_count:
-                db.commit()
+            db.commit()
 
             logger.opt(colors=True).debug(
                 f"<y>{new_books_count}</y> new books added to library"
