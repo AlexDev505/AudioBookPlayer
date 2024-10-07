@@ -23,10 +23,8 @@ AutoCloseWindow true
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
 
-{%uninstaller section%}
 ; Uninstaller pages
 !insertmacro MUI_UNPAGE_INSTFILES
-{%uninstaller section end%}
 
 ; Language files
 !insertmacro MUI_LANGUAGE "Russian"
