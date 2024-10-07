@@ -12,7 +12,7 @@ import shutil
 import PyInstaller.__main__
 import orjson
 
-from prepare_nsis import prepare_installer, prepare_updater
+from prepare_nsis import prepare_nsis
 from version import Version
 
 
@@ -108,9 +108,5 @@ for root, _, file_names in os.walk("ABPlayer"):
 with open("last_build.json", "w", encoding="utf-8") as file:
     file.write(json.dumps(current_build, indent=4))
 
-print("Preparing installer")
-prepare_installer(current_build)
-if last_build and __version__ > last_build_version:
-    update_uninstaller = input("update_uninstaller? (y/n): ") == "y"
-    print("Preparing updater")
-    prepare_updater(last_build, current_build, update_uninstaller)
+print("Preparing nsis")
+prepare_nsis(current_build)
