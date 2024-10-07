@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import re
 import shutil
 import sys
 import time
@@ -14,6 +15,7 @@ from loguru import logger
 from orjson import orjson
 
 import config
+import temp_file
 from database import Database
 from models.book import Book
 from .js_api import JSApi, JSApiError, ConnectionFailedError
@@ -52,7 +54,6 @@ class SettingsApi(JSApi):
             logger.debug("dir not selected")
             return self.error(RequestCanceled())
 
-        new_dir = new_dir[0]
         self.old_books_folder = old_dir = os.environ["books_folder"]
 
         if new_dir == old_dir:
@@ -74,12 +75,14 @@ class SettingsApi(JSApi):
             new_books_count = 0
             for book in books:
                 if book.url in exists_books_urls:
+                    db_book = db.get_book_by_url(book.url)
+                    db_book.files = book.files
+                    db.save(db_book)
                     continue
                 new_books_count += 1
                 db.add_book(book)
 
-            if new_books_count:
-                db.commit()
+            db.commit()
 
             logger.opt(colors=True).debug(
                 f"<y>{new_books_count}</y> new books added to library"
@@ -181,8 +184,10 @@ class SettingsApi(JSApi):
             logger.debug("The same version is installed now")
             return self.make_answer(False)
 
+        stable = re.fullmatch(r"\d+\.\d+\.\d+", last_version) is not None
+
         return self.make_answer(
-            dict(version=last_version, url=last_release["html_url"])
+            dict(version=last_version, stable=stable, url=last_release["html_url"])
         )
 
     @staticmethod
@@ -234,6 +239,11 @@ class SettingsApi(JSApi):
         logger.info("closing app")
         self._window.destroy()
         Popen([sys.executable, f"--run-update={updater_path}"])
+
+    def unsubscribe_not_stable(self):
+        temp_file.update(only_stable=True)
+        logger.debug("unsubscribed from not stable releases")
+        return self.make_answer()
 
     def _download_updater(
         self, updater_url: str, updater_path: str, _retries: int = 0

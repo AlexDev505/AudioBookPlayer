@@ -13,6 +13,11 @@
     var filter_menu_opened = {{ is_filter_menu_opened|tojson }}
     var required_drivers = {{ [] if not required_drivers else required_drivers|tojson }}
     var dark_theme = {{ (true if dark_theme else false)|tojson }}
+    var last_volume = {{ volume|tojson }}
+    var last_speed = {{ speed|tojson }}
+    var last_listened_book_bid = {{ last_listened_book_bid|tojson }}
+    var only_stable = {{ only_stable|tojson }}
+    var stable_version = {{ stable_version|tojson }}
   </script>
   <script defer src="{{url_for('static', filename='js/base.js')}}"></script>
 </head>
@@ -29,19 +34,34 @@
   <div id="central-frame">
     <div id="side-menu" class="{{ 'collapsed' if not is_main_menu_opened else '' }}">
       <div>
-        <div id="menu-btn" class="menu-btn" onclick="toggleMenu()"><span>скрыть меню</span></div>
+        <div id="menu-btn" class="iconned-btn" onclick="toggleMenu()"><span>скрыть меню</span></div>
         <hr>
-        <div id="library-btn" class="menu-btn" onclick="openLibraryPage()"><span>мои книги</span></div>
-        <div id="favorite-btn" class="menu-btn" onclick="openLibraryPage(true)"><span>избранные</span></div>
-        <div id="add-book-btn" class="menu-btn" onclick="page('search-page').show()"><span>новая книга</span></div>
-        <div id="downloads-btn" class="menu-btn" onclick="page('downloads-page').show()"><span>загрузки</span></div>
+        <div id="library-btn" class="iconned-btn" onclick="openLibraryPage()"><span>мои книги</span></div>
+        <div id="favorite-btn" class="iconned-btn" onclick="openLibraryPage(true)"><span>избранные</span></div>
+        <div id="add-book-btn" class="iconned-btn" onclick="page('search-page').show()"><span>новая книга</span></div>
+        <div id="downloads-btn" class="iconned-btn" onclick="page('downloads-page').show()"><span>загрузки</span></div>
       </div>
       <div>
-        <div id="library-dir-btn" class="menu-btn" onclick="openLibraryDir()"><span>папка с книгами</span></div>
-        <div id="settings-btn" class="menu-btn" onclick="page('settings-page').show()"><span>настройки</span></div>
+        <div id="library-dir-btn" class="iconned-btn" onclick="openLibraryDir()"><span>папка с книгами</span></div>
+        <div id="settings-btn" class="iconned-btn" onclick="page('settings-page').show()"><span>настройки</span></div>
       </div>
     </div>
     <div id="content-frame">
+      <div id="small-player">
+        <div>
+          <div class="icon-btn small-playback-control play" onclick="player.togglePlay()"></div>
+          <div class="book-info">
+            <div class="book-title">Тринитротолуол. Метка хаоса как образ мышления</div>
+            <div class="listening-progres">88% прослушано</div>
+          </div>
+        </div>
+        <div>
+          <div id="volume-btn" class="icon-btn volume-btn"></div>
+          <input id="volume-input" type="range" min="0" max="100" value="{{ volume|tojson }}" data-postfix="%" oninput="setVolume(this.value)">
+          <div id="speed-btn" class="icon-btn speed-btn"></div>
+          <input id="speed-input" type="range" min="0.1" max="2" value="{{ speed|tojson }}" step="0.1" data-prefix="x" oninput="setSpeed(this.value)">
+        </div>
+      </div>
       <div class="page" id="library-page">
         {% include "library.html" %}
       </div>

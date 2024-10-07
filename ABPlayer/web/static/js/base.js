@@ -1,3 +1,4 @@
+const player = new Plyr("#audio-player", {storage: true, controls: []})
 var urlParams = new URLSearchParams(window.location.search);
 
 for (size_grip of document.getElementsByClassName("size-grip")) {
@@ -95,6 +96,7 @@ function PWVReady() {
     pywebview.api.get_downloads().then(showDownloads)
     pywebview.api.get_available_drivers().then(loadAvailableDrivers)
     toggleDarkThemeCheckBox(dark_theme)
+    loadLastListenedBook()
 }
 function parseUrlParams() {
     page_name = urlParams.get("page")
@@ -150,4 +152,38 @@ function showError(text) {
 
 function openLibraryDir() {
     pywebview.api.open_library_dir()
+}
+
+function scaleOninputDecorator(func) {
+    return function() {
+        this.setAttribute('data-value',
+        `${(this.dataset.prefix)?this.dataset.prefix:""}${this.value}${(this.dataset.postfix)?this.dataset.postfix:""}`);
+        func.apply(this)
+    }
+}
+function toggleVolumeSpeed(section) {
+    if (section == "volume-input") document.getElementById("speed-input").classList.remove("showed")
+    if (section == "speed-input") document.getElementById("volume-input").classList.remove("showed")
+    let el = document.getElementById(section)
+    if (el.classList.contains("showed")) el.classList.remove("showed")
+    else el.classList.add("showed")
+}
+const volumeBtn = document.getElementById("volume-btn")
+volumeBtn.onclick = function() {toggleVolumeSpeed("volume-input")}
+document.getElementById("speed-btn").onclick = function() {toggleVolumeSpeed("speed-input")}
+function setVolume(value) {
+    player.volume = value / 100
+    volumeBtn.classList.remove("muted")
+    volumeBtn.classList.remove("low")
+    volumeBtn.classList.remove("medium")
+    if (value == 0) volumeBtn.classList.add("muted")
+    else if (value <= 33) volumeBtn.classList.add("low")
+    else if (value <= 66) volumeBtn.classList.add("medium")
+}
+function setSpeed(value) {
+    player.speed = Number(value)
+}
+for (let scale of document.querySelectorAll('input[type="range"]')) {
+    scale.oninput = scaleOninputDecorator(scale.oninput)
+    scale.oninput()
 }

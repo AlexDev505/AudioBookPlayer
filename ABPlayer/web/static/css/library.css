@@ -56,8 +56,9 @@
   overflow:auto;
   margin-bottom: 16px;
   text-wrap: pretty;
-  max-height: 40%;
+  max-height: 38%;
 }
+.filter-by-section::-webkit-scrollbar-thumb {border-radius: 4px}
 .filter-by-section-item {margin-bottom: 2px}
 .filter-by-section-item.checked {
   display: flex;
@@ -92,7 +93,7 @@
 
 #library-sections {
   width: 100%;
-  height: 100%;
+  height: calc(100% - 1.1em - 7px);
   margin-top: 4px;
   border-top: solid 3px var(--cards-bg);
 }
@@ -162,7 +163,11 @@
   display: flex;
   justify-content: space-between;
 }
-.book-title {font-size: larger; font-weight: bold}
+.book-title {
+  font-size: larger;
+  font-weight: bold;
+  line-height: 1;
+}
 .book-state {
   display: flex;
   font-size: small;

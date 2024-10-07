@@ -35,7 +35,7 @@ class Version:
                 int(match.group(2)),
                 int(match.group(3)),
                 match.group(5),
-                int(match.group(6)),
+                int(match.group(6)) if match.group(6) is not None else None,
             )
         raise ValueError(f"Can`t parse version from string: {string_version}")
 
