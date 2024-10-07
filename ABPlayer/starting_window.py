@@ -95,7 +95,7 @@ def init_library(window: webview.Window) -> None:
         while books:
             for book in books:
                 if book.files:
-                    if not os.path.exists(book.dir_path):
+                    if not os.path.exists(book.abp_file_path):
                         incorrect_books_ids.append(book.id)
                     else:
                         correct_books_urls.append(book.url)

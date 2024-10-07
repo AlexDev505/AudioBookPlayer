@@ -56,7 +56,7 @@
   overflow:auto;
   margin-bottom: 16px;
   text-wrap: pretty;
-  max-height: 40%;
+  max-height: 38%;
 }
 .filter-by-section::-webkit-scrollbar-thumb {border-radius: 4px}
 .filter-by-section-item {margin-bottom: 2px}

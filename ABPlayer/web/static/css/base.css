@@ -4,7 +4,12 @@
   user-select: none;
 }
 
-html, body {margin: 0; height: 100%; background-color: var(--root-bg)}
+html, body {
+  margin: 0;
+  height: 100%;
+  background-color: var(--root-bg);
+  overflow: hidden;
+}
 
 ::-webkit-scrollbar {
   width: 5px;
@@ -241,6 +246,7 @@ input[type="range"]::after {
 #small-player.visible {display: flex}
 #small-player.visible ~ .page {max-height: 85%}
 #small-player.visible ~ .page .filter-by-section {max-height: 35%}
+#small-player.visible ~ .page #book-page-content .book-description {max-height: 22%}
 #small-player > div {
   height: 100%;
   display: flex;
