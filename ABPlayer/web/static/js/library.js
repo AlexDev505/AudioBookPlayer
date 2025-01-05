@@ -222,7 +222,7 @@ function showBooks(response, status) {
     for (book of response.data) {
         html = html + `
           <div class="book-card" data-bid="${book.bid}", onclick="openBookPage(${book.bid})">
-            <div class="book-preview" style="background-image: url(${book.preview})"></div>
+            <div class="book-preview" style="background-image: url('${book.preview}'), url('/library/${book.local_preview}');"></div>
             <div class="book-content">
               <div class="book-main-info-container">
                 <div class="book-main-info">
