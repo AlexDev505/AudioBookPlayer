@@ -20,7 +20,7 @@ function loadBookData(bid) {
         document.querySelector("#book-page-content .book-title").innerHTML = resp.data.name
         document.querySelector("#book-page-content .book-listening-progress").innerHTML = `${resp.data.listening_progress} прослушано`
         document.querySelector("#book-page-content .book-adding-date").innerHTML = `Добавлена ${resp.data.adding_date}`
-        document.querySelector("#book-page-content .book-preview").style = `background-image: url(${resp.data.preview})`
+        document.querySelector("#book-page-content .book-preview").style = `background-image: url('${resp.data.preview}'), url('/library/${resp.data.local_preview}');`
         document.querySelector("#book-page-content .book-author").innerHTML = resp.data.author
         document.querySelector("#book-page-content .book-reader").innerHTML = resp.data.reader
         document.querySelector("#book-page-content .book-duration").innerHTML = resp.data.duration
