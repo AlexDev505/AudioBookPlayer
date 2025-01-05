@@ -418,6 +418,7 @@ class BooksApi(JSApi):
             reader=book.reader,
             duration=book.duration,
             preview=book.preview,
+            local_preview=os.path.join(book.book_path, "cover.jpg").replace("\\", "/"),
             driver=book.driver,
             status=book.status.value,
             listening_progress=book.listening_progress,
