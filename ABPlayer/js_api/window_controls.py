@@ -84,6 +84,10 @@ def query_mouse_position() -> tuple[int, int]:
     return pt.x, pt.y
 
 
+def query_key_state(key_code) -> bool:
+    return bool(windll.user32.GetKeyState(key_code) >> 15)
+
+
 @ttl_cache(5)
 def query_scale_k() -> float:
     """
@@ -102,8 +106,6 @@ def move(window: webview.Window, x: int, y: int) -> None:
 
 
 def resize_handler(window: webview.Window, size_grip):
-    state_left = windll.user32.GetKeyState(0x01)
-
     # Определяем начальное положение курсора, окна и его размер
     start_x, start_y = query_mouse_position()
     start_win_x = window.x
@@ -117,7 +119,7 @@ def resize_handler(window: webview.Window, size_grip):
 
     while True:
         # Пользователь отпустил кнопку мыши
-        if windll.user32.GetKeyState(0x01) != state_left:
+        if not query_key_state(0x01):
             logger.trace("resize finished")
             break
 
@@ -162,8 +164,6 @@ def move_to_cursor(window: webview.Window) -> None:
 
 
 def drag_window(window: webview.Window) -> None:
-    state_left = windll.user32.GetKeyState(0x01)
-
     # Определяем начальное положение курсора и окна
     start_x, start_y = query_mouse_position()
     start_win_x = window.x
@@ -173,7 +173,7 @@ def drag_window(window: webview.Window) -> None:
 
     while True:
         # Пользователь отпустил кнопку мыши
-        if windll.user32.GetKeyState(0x01) != state_left:
+        if not query_key_state(0x01):
             logger.trace("drag finished")
             break
 
