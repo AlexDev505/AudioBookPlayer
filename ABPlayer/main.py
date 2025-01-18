@@ -44,7 +44,10 @@ def main() -> None:
     )
 
     create_starting_window()
-    webview.start(debug=bool(os.environ.get("DEBUG")))
+    webview.start(
+        debug=bool(os.environ.get("DEBUG")),
+        storage_path=os.path.join(os.environ["APP_DIR"], "WebViewCache"),
+    )
 
 
 if __name__ == "__main__":
