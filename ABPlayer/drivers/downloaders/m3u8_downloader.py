@@ -26,6 +26,21 @@ if ty.TYPE_CHECKING:
     from ..base import BaseDownloadProcessHandler
 
 
+"""
+
+TODO: 
+Файлы, которые выдает этот загрузчик открываются стандартным проигрывателем, 
+но не работают в самом приложении.
+
+Можно попробовать
+copy /b seq1.ts+seq2.ts+seq3.ts all.ts
+ffmpeg -i all.ts -acodec copy all.mp4
+
+ffmpeg лежит в `drivers/bin`, так же мб он может заменить ffprobe
+
+"""
+
+
 class M3U8Downloader(BaseDownloader):
     """
     Загрузчик, предназначенный для книг в которых файлы представлены
