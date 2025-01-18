@@ -2,8 +2,7 @@ import os
 
 
 ADDITIONAL_UNINSTALL = (
-    "\n  " + r'RMDir /r "$INSTDIR\ABPlayer.exe.WebView2"'
-    "\n"
+    "\n  " + r'RMDir /r "$LocalAppData\AudioBookPlayer\WebViewCache"'
     "\n  " + r'Delete "$LocalAppData\AudioBookPlayer\debug.log"'
     "\n  " + r'Delete "$LocalAppData\AudioBookPlayer\library.sqlite"'
     "\n  " + r'Delete "$LocalAppData\AudioBookPlayer\config.json"'

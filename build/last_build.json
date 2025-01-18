@@ -1,5 +1,5 @@
 {
-    "version": "2.1.2",
+    "version": "2.1.3",
     "files": {
         "ABPlayer": [
             "ABPlayer.exe"
@@ -419,6 +419,15 @@
             "WHEEL"
         ],
         "ABPlayer\\_internal\\webview": [],
+        "ABPlayer\\_internal\\webview\\js": [
+            "api.js",
+            "customize.js",
+            "finish.js"
+        ],
+        "ABPlayer\\_internal\\webview\\js\\lib": [
+            "dom_json.js",
+            "polyfill.js"
+        ],
         "ABPlayer\\_internal\\webview\\lib": [
             "Microsoft.Web.WebView2.Core.dll",
             "Microsoft.Web.WebView2.WinForms.dll",
