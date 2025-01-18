@@ -17,7 +17,7 @@ os.environ["DEBUG_PATH"] = os.path.join(os.environ["APP_DIR"], "debug.log")
 # Путь к файлу с временными данными
 os.environ["TEMP_PATH"] = os.path.join(os.environ["APP_DIR"], "temp.txt")
 # Версия приложения
-os.environ["VERSION"] = "2.1.2"
+os.environ["VERSION"] = "2.1.3"
 
 # DEV
 os.environ["CONSOLE"] = "1"
@@ -44,7 +44,10 @@ def main() -> None:
     )
 
     create_starting_window()
-    webview.start(debug=bool(os.environ.get("DEBUG")))
+    webview.start(
+        debug=bool(os.environ.get("DEBUG")),
+        storage_path=os.path.join(os.environ["APP_DIR"], "WebViewCache"),
+    )
 
 
 if __name__ == "__main__":
