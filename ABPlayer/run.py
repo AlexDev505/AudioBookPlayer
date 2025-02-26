@@ -1,9 +1,9 @@
 """
 
-Запуск приложения.
+Running the application.
 
-Параметры запуска:
-    --run-update=<str> запуск обновления из файла
+Startup parameters:
+    --run-update=<str> run update from file
 
 """
 

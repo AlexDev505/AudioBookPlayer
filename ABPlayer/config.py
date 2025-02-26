@@ -10,7 +10,7 @@ from tools import pretty_view
 
 
 FIELDS = {
-    "books_folder": os.path.join(os.environ["USERPROFILE"], "documents", "Аудио книги"),
+    "books_folder": os.path.join(os.environ["USERPROFILE"], "documents", "Audiobooks"),
     "dark_theme": "1",
 }
 
