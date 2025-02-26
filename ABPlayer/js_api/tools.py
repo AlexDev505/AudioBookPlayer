@@ -21,3 +21,4 @@ def ttl_cache(max_age: int, maxsize: int = 128, typed: bool = False):
         return _wrapper
 
     return _decorator
+

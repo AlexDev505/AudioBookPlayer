@@ -187,3 +187,4 @@ for (let scale of document.querySelectorAll('input[type="range"]')) {
     scale.oninput = scaleOninputDecorator(scale.oninput)
     scale.oninput()
 }
+

@@ -93,3 +93,4 @@ function endLoading(bid) {
     if (opened_book && opened_book.bid == bid) loadBookData(bid)
 }
 
+

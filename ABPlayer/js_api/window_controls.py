@@ -185,3 +185,4 @@ def drag_window(window: webview.Window) -> None:
         move(window, start_win_x + delta_x, start_win_y + delta_y)
 
         time.sleep(0.005)
+

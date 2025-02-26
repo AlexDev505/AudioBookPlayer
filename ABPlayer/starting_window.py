@@ -129,3 +129,4 @@ def init_library(window: webview.Window) -> None:
         if updates:
             logger.trace("saving library")
             db.commit()
+

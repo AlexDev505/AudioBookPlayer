@@ -2,10 +2,10 @@
 
 **Audio Book Player** - an application for Windows that allows you to listen to and download audiobooks for free.
 
-The application has access to all the books available on the websites [_akniga.org_](https://akniga.org/) и [_knigavuhe.org_](https://knigavuhe.org/).
+The application has access to all the books available on the websites [_akniga.org_](https://akniga.org/) and [_knigavuhe.org_](https://knigavuhe.org/).
 These websites have huge libraries of audiobooks of various genres and authors,
-but typically audiobook websites do not allow users to download their audiobooks.
-**Audio Book Player**, however, provides this opportunity for free without SMS and registration.
+but typically audiobook websites do not allow users to download their audiobooks..
+**Audio Book Player** however, provides this opportunity for free without SMS and registration.
 
 ## Interface Overview
 
@@ -17,7 +17,7 @@ Here are all your books.
 ![Search](imgs/search.png "Search")
 
 **Listening**
-![Listening](imgs/book.png "Listening")
+![Search](imgs/book.png "Listening")
 The application allows you to listen to downloaded books.
 Convenient chapter navigation, playback speed adjustment,
 and progress saving.
@@ -41,7 +41,8 @@ git clone https://github.com/AlexDev505/AudioBookPlayer.git
 
 or download the archive using [this link](https://github.com/AlexDev505/AudioBookPlayer/archive/refs/heads/master.zip).
 
-Next, you need to create a virtual environment and install all project dependencies. Use this while in the project directory.
+Next, you need to create a virtual environment 
+and install all project dependencies. Use this while in the project directory.
 ```commandline
 python -m venv venv
 venv\Scripts\activate.bat
@@ -54,27 +55,3 @@ venv\Scripts\activate.bat
 cd ABPlayer
 python main.py
 ```
-=======
-# AudioBook Player [![](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/AlexDev-py/AudioBookPlayer/blob/master/LICENSE)
-
-
-Clone
------------------
-
-    git clone https://github.com/AlexDev-py/AudioBookPlayer.git
-    
-
-Create virtualenv and download requirements
-----------------
-
-    python -m venv venv
-    venv\Scripts\activate.bat
-    pip install -r requirements.txt
-
-
-Running
-------
-
-    venv\Scripts\activate.bat
-    python main.py
-    bc06960 (add readme.md)

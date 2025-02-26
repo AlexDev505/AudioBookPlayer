@@ -157,3 +157,4 @@ class MP3Downloader(BaseDownloader):
             self._file = None
 
         return True
+

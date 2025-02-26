@@ -190,3 +190,4 @@ class M3U8Downloader(BaseDownloader):
             logger.opt(colors=True).debug(f"book dir <y>{file_path.parent}</y> crated")
 
         return file_path
+

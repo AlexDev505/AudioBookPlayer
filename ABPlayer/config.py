@@ -98,3 +98,4 @@ def _add_to_env(config: dict) -> None:
     logger.trace("adding configuration to the virtual environment")
     for field in FIELDS:
         os.environ[field] = config.get(field)
+

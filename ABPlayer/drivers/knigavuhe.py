@@ -55,8 +55,8 @@ class KnigaVUhe(Driver):
         for element in elements:
             info = element.select("span.book_info_label")
             if info:
-                if info[0].text == "Время звучания:":
-                    duration = element.text.replace("Время звучания:", "").strip()
+                if info[0].text == "Duration:":
+                    duration = element.text.replace("Duration:", "").strip()
 
         preview = soup.select_one("div.book_cover > img").attrs["src"]
 
@@ -199,13 +199,13 @@ class KnigaVUhe(Driver):
                     try:
                         author = el.select_one("span.bookkitem_author > a").text.strip()
                     except AttributeError:
-                        author = "нет данных"
+                        author = "no data"
                     try:
                         reader = el.select_one(
                             "div.bookkitem_meta_block:has(span.-reader) a"
                         ).text.strip()
                     except AttributeError:
-                        reader = "нет данных"
+                        reader = "no data"
                     duration = el.select_one("span.bookkitem_meta_time").text.strip()
                     try:
                         series_name = el.select_one(

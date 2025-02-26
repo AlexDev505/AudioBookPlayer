@@ -264,3 +264,4 @@ function clearPlayingBook() {
     player.stop()
     player.current_book = null
 }
+

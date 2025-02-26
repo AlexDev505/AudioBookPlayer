@@ -48,3 +48,4 @@ if DEBUG_PATH := os.environ.get("DEBUG_PATH"):
 logger.level("TRACE", color="<lk>")  # TRACE - blue
 logger.level("DEBUG", color="<w>")  # DEBUG - white
 logger.level("INFO", color="<c><bold>")  # INFO - cyan
+

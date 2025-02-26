@@ -327,3 +327,4 @@ function openBookPage(bid) {
     addUrlParams({"bid": bid})
     page('book-page').show()
 }
+

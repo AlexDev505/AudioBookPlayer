@@ -12,136 +12,136 @@
 #'./ABPlayer/logger.py' - Line 48 (Occurrences: 5): logger.level("TRACE", color="<lk>")  # TRACE - синий
 #'./ABPlayer/logger.py' - Line 49 (Occurrences: 5): logger.level("DEBUG", color="<w>")  # DEBUG - белый
 #'./ABPlayer/logger.py' - Line 50 (Occurrences: 9): logger.level("INFO", color="<c><bold>")  # INFO - бирюзовый
-'./ABPlayer/main_window.py' - Line 11 (Occurrences: 28):     Создает главное окно приложения.
-'./ABPlayer/main_window.py' - Line 12 (Occurrences: 13):     :returns: Экземпляр окна.
-'./ABPlayer/main_window.py' - Line 41 (Occurrences: 27):     # Добавляем обработчики событий
-'./ABPlayer/main.py' - Line 7 (Occurrences: 25): # Путь к директории приложения
-'./ABPlayer/main.py' - Line 11 (Occurrences: 22): # Путь к файлу конфигурации
-'./ABPlayer/main.py' - Line 13 (Occurrences: 30): # Путь к файлу базы данных библиотеки
-'./ABPlayer/main.py' - Line 15 (Occurrences: 17): # Путь к файлу отладки
-'./ABPlayer/main.py' - Line 17 (Occurrences: 28): # Путь к файлу с временными данными
-'./ABPlayer/main.py' - Line 19 (Occurrences: 16): # Версия приложения
-'./ABPlayer/run.py' - Line 3 (Occurrences: 16): Запуск приложения.
-'./ABPlayer/run.py' - Line 5 (Occurrences: 16): Параметры запуска:
-'./ABPlayer/run.py' - Line 6 (Occurrences: 23):     --run-update=<str> запуск обновления из файла
-'./ABPlayer/starting_window.py' - Line 17 (Occurrences: 28):     Создает окно запуска приложения.
-'./ABPlayer/starting_window.py' - Line 18 (Occurrences: 13):     :returns: Экземпляр окна.
-'./ABPlayer/starting_window.py' - Line 40 (Occurrences: 27):     # Добавляем обработчики событий
-'./ABPlayer/starting_window.py' - Line 49 (Occurrences: 32):     Подготавливает приложение к запуску.
-'./ABPlayer/starting_window.py' - Line 50 (Occurrences: 28):     Инициализирует конфигурацию, бд.
-'./ABPlayer/starting_window.py' - Line 51 (Occurrences: 21):     Анализирует библиотеку.
-'./ABPlayer/starting_window.py' - Line 66 (Occurrences: 6):     window.evaluate_js("setStatus('запуск...')")
-'./ABPlayer/starting_window.py' - Line 80 (Occurrences: 21):     Анализирует библиотеку.
-'./ABPlayer/starting_window.py' - Line 81 (Occurrences: 25):     Добавляет книги из хранилища.
-'./ABPlayer/starting_window.py' - Line 82 (Occurrences: 31):     Исправляет некорректные записи в бд.
-'./ABPlayer/starting_window.py' - Line 85 (Occurrences: 18):     window.evaluate_js("setStatus('загрузка библиотеки...')")
-'./ABPlayer/starting_window.py' - Line 91 (Occurrences: 27):         # Проверка существующих в бд книг
-'./ABPlayer/starting_window.py' - Line 113 (Occurrences: 21):         # Сканирование хранилища
-'./ABPlayer/temp_file.py' - Line 3 (Occurrences: 53): Реализует взаимодействие с файлом, хранящим временные данные.
-'./ABPlayer/temp_file.py' - Line 5 (Occurrences: 30): В файле данные хранятся в таком виде:
-'./ABPlayer/temp_file.py' - Line 6 (Occurrences: 21): <ключ>: <тип данных> = <значение>
-'./ABPlayer/temp_file.py' - Line 7 (Occurrences: 21): <ключ>: <тип данных> = <значение>
-'./ABPlayer/temp_file.py' - Line 8 (Occurrences: 21): <ключ>: <тип данных> = <значение>
-'./ABPlayer/temp_file.py' - Line 11 (Occurrences: 34): Каждая запись начинается с новой строки.
-'./ABPlayer/temp_file.py' - Line 12 (Occurrences: 37): Для хранения доступны такие типы данных как: str, int, float, bool.
-'./ABPlayer/temp_file.py' - Line 27 (Occurrences: 22):     Считывает данные из файла.
-'./ABPlayer/temp_file.py' - Line 28 (Occurrences: 15):     :returns: Словарь с данными.
-'./ABPlayer/temp_file.py' - Line 31 (Occurrences: 11):     # Создаём файл
-'./ABPlayer/temp_file.py' - Line 45 (Occurrences: 15):         )  # Проверка шаблона
-'./ABPlayer/temp_file.py' - Line 60 (Occurrences: 20):     Сохраняет данные в файл.
-'./ABPlayer/temp_file.py' - Line 61 (Occurrences: 15):     :param data: Словарь с данными.
-'./ABPlayer/temp_file.py' - Line 77 (Occurrences: 32):     Обновляет/добавляет значения в файле.
-'./ABPlayer/temp_file.py' - Line 86 (Occurrences: 19):     Удаляет записи в файле.
-'./ABPlayer/temp_file.py' - Line 87 (Occurrences: 12):     :param keys: Ключи записей.
-'./ABPlayer/temp_file.py' - Line 98 (Occurrences: 46):     Преобразует значение полученное из файла в тип данных Python.
-'./ABPlayer/temp_file.py' - Line 99 (Occurrences: 15):     :param value: Значение из файла.
-'./ABPlayer/temp_file.py' - Line 100 (Occurrences: 9):     :param value_type: Тип данных.
-'./ABPlayer/temp_file.py' - Line 101 (Occurrences: 23):     :returns: Преобразованное значение.
-'./ABPlayer/temp_file.py' - Line 121 (Occurrences: 38):     Подготавливает данные для сохранения в файл.
-'./ABPlayer/temp_file.py' - Line 122 (Occurrences: 16):     :param value: Исходное значение.
-'./ABPlayer/temp_file.py' - Line 123 (Occurrences: 23):     :returns: Преобразованное значение.
-'./ABPlayer/temp_file.py' - Line 130 (Occurrences: 21):         f"Недопустимый тип данных {type(value).__name__}, "
-'./ABPlayer/temp_file.py' - Line 131 (Occurrences: 18):         "можно хранить только str, int, float, bool"
-'./ABPlayer/tools.py' - Line 19 (Occurrences: 9):     :param bytes_value: Число байт.
-'./ABPlayer/tools.py' - Line 20 (Occurrences: 31):     :returns: Строка вида <Число> <Единица измерения>
-'./ABPlayer/tools.py' - Line 24 (Occurrences: 11):     size_name = ("б", "КБ", "МБ", "ГБ", "ТБ", "ПБ", "EB", "ZB", "YB")
-'./ABPlayer/tools.py' - Line 33 (Occurrences: 10):     :param file_path: Путь к файлу.
-'./ABPlayer/tools.py' - Line 34 (Occurrences: 18):     :param hash_func: Функция хеширования.
-'./ABPlayer/tools.py' - Line 35 (Occurrences: 8):     :returns: Хеш файла.
-'./ABPlayer/tools.py' - Line 37 (Occurrences: 24):     hash_func = hash_func()  # Инициализируем хеш функцию
-'./ABPlayer/tools.py' - Line 39 (Occurrences: 21):         # Читаем файл по блокам в 64кб,
-'./ABPlayer/tools.py' - Line 40 (Occurrences: 51):         # для избежания загрузки больших файлов в оперативную память
-'./ABPlayer/tools.py' - Line 54 (Occurrences: 49):     Формирует удобно читаемое представление списка/словаря.
-'./ABPlayer/tools.py' - Line 55 (Occurrences: 6):     :returns: Строка.
-'./ABPlayer/tools.py' - Line 120 (Occurrences: 14):     :param book: Экземпляр книги.
-'./ABPlayer/tools.py' - Line 121 (Occurrences: 28):     :returns: Словарь с основными полями книги.
-'./ABPlayer/drivers/akniga.py' - Line 18 (Occurrences: 50): На сайте AKniga информация о книге загружается динамически через JavaScript.
-'./ABPlayer/drivers/akniga.py' - Line 19 (Occurrences: 65): Поэтому для получения полных данных о книге нам необходима среда исполнения JS.
-'./ABPlayer/drivers/akniga.py' - Line 27 (Occurrences: 51):         Метод, возвращающий динамически загружаемые данные о книге.
-'./ABPlayer/drivers/akniga.py' - Line 30 (Occurrences: 24):             "titleonly": <str>,  # название книги в чистом виде
-'./ABPlayer/drivers/akniga.py' - Line 32 (Occurrences: 10):                 "file": <int>,  # номер файла
-'./ABPlayer/drivers/akniga.py' - Line 33 (Occurrences: 13):                 "title": <str>,  # название главы
-'./ABPlayer/drivers/akniga.py' - Line 34 (Occurrences: 11):                 "time_from_start": <str>,  # точка начала
-'./ABPlayer/drivers/akniga.py' - Line 35 (Occurrences: 14):                 "time_finish": <str>,  # точка окончания
-'./ABPlayer/drivers/akniga.py' - Line 37 (Occurrences: 12):             "m3u8": <str>,  # ссылка на файл m3u8
-'./ABPlayer/drivers/akniga.py' - Line 44 (Occurrences: 27):     Среда исполнения JS, использующая Pywebview.
-'./ABPlayer/drivers/akniga.py' - Line 45 (Occurrences: 59):     Создаёт скрытое окно, загружает там страницу книги и берет с нее данные.
-'./ABPlayer/drivers/akniga.py' - Line 55 (Occurrences: 31):         # Выполнение `self._get_book_data` после загрузки страницы
-'./ABPlayer/drivers/akniga.py' - Line 58 (Occurrences: 31):         if len(webview.windows) == 1:  # На данный момент нет запущенных окон pywebview
-'./ABPlayer/drivers/akniga.py' - Line 272 (Occurrences: 9):                         reader = "нет данных"
-'./ABPlayer/drivers/base.py' - Line 23 (Occurrences: 26):     Статусы прогресса скачивания.
-'./ABPlayer/drivers/base.py' - Line 37 (Occurrences: 28):     Обработчик процесса скачивания.
-'./ABPlayer/drivers/base.py' - Line 38 (Occurrences: 35):     Визуализирует процесс скачивания книги.
-'./ABPlayer/drivers/base.py' - Line 75 (Occurrences: 18):         Отображает прогресс.
-'./ABPlayer/drivers/base.py' - Line 89 (Occurrences: 15):     Загрузчик файлов.
-'./ABPlayer/drivers/base.py' - Line 98 (Occurrences: 24):         # Общий размер файлов(в байтах)
-'./ABPlayer/drivers/base.py' - Line 99 (Occurrences: 29):         # Определяется, только если передан `process_handler`
-'./ABPlayer/drivers/base.py' - Line 102 (Occurrences: 21):         # Файл открытый для записи
-'./ABPlayer/drivers/base.py' - Line 104 (Occurrences: 20):         # Поток скачивания файла
-'./ABPlayer/drivers/base.py' - Line 115 (Occurrences: 34):         Подготавливает загрузчик к скачиванию.
-'./ABPlayer/drivers/base.py' - Line 116 (Occurrences: 43):         Метод должен быть реализован в наследуемом классе.
-'./ABPlayer/drivers/base.py' - Line 122 (Occurrences: 14):         Скачивает файлы.
-'./ABPlayer/drivers/base.py' - Line 123 (Occurrences: 43):         Метод должен быть реализован в наследуемом классе.
-'./ABPlayer/drivers/base.py' - Line 128 (Occurrences: 31):         Скачивает и сохраняет обложку книги.
-'./ABPlayer/drivers/base.py' - Line 149 (Occurrences: 19):         Скачивает файлы книги.
-'./ABPlayer/drivers/base.py' - Line 150 (Occurrences: 29):         :returns: Список с путями к скачанным файлам.
-'./ABPlayer/drivers/base.py' - Line 170 (Occurrences: 21):         return not self._terminated  # True - при успешном скачивании
-'./ABPlayer/drivers/base.py' - Line 174 (Occurrences: 17):         Прерывает загрузку.
-'./ABPlayer/drivers/base.py' - Line 201 (Occurrences: 20):     drivers: list[ty.Type[Driver]] = []  # Все доступные драйверы
-'./ABPlayer/drivers/base.py' - Line 221 (Occurrences: 13):         :param url: Ссылка на книгу.
-'./ABPlayer/drivers/base.py' - Line 222 (Occurrences: 16):         :returns: Результат GET запроса.
-'./ABPlayer/drivers/base.py' - Line 229 (Occurrences: 31):         Метод, получающий информацию о книге.
-'./ABPlayer/drivers/base.py' - Line 230 (Occurrences: 46):         Должен быть реализован для каждого драйвера отдельно.
-'./ABPlayer/drivers/base.py' - Line 231 (Occurrences: 13):         :param url: Ссылка на книгу.
-'./ABPlayer/drivers/base.py' - Line 232 (Occurrences: 14):         :returns: Экземпляр книги.
-'./ABPlayer/drivers/base.py' - Line 238 (Occurrences: 39):         Метод, получающий информацию о книгах из серии.
-'./ABPlayer/drivers/base.py' - Line 239 (Occurrences: 46):         Должен быть реализован для каждого драйвера отдельно.
-'./ABPlayer/drivers/base.py' - Line 240 (Occurrences: 13):         :param url: Ссылка на книгу.
-'./ABPlayer/drivers/base.py' - Line 241 (Occurrences: 29):         :returns: Список неполных экземпляров книг.
-'./ABPlayer/drivers/base.py' - Line 247 (Occurrences: 34):         Метод, выполняющий поиск книг по запросу.
-'./ABPlayer/drivers/base.py' - Line 248 (Occurrences: 46):         Должен быть реализован для каждого драйвера отдельно.
-'./ABPlayer/drivers/base.py' - Line 249 (Occurrences: 15):         :param query: Поисковый запрос.
-'./ABPlayer/drivers/base.py' - Line 250 (Occurrences: 28):         :param limit: Кол-во книг, которое нужно вернуть.
-'./ABPlayer/drivers/base.py' - Line 251 (Occurrences: 24):         :param offset: Будет пропущено `offset` первых книг.
-'./ABPlayer/drivers/base.py' - Line 252 (Occurrences: 29):         :returns: Список неполных экземпляров книг.
-'./ABPlayer/drivers/base.py' - Line 259 (Occurrences: 31):         Метод, скачивающий аудио файлы книги.
-'./ABPlayer/drivers/base.py' - Line 260 (Occurrences: 14):         :param book: Экземпляр книги.
-'./ABPlayer/drivers/base.py' - Line 261 (Occurrences: 28):         :param process_handler: Обработчик процесса скачивания.
-'./ABPlayer/drivers/base.py' - Line 262 (Occurrences: 18):         :return: Список путей к файлам.
+#'./ABPlayer/main_window.py' - Line 11 (Occurrences: 28):     Создает главное окно приложения.
+#'./ABPlayer/main_window.py' - Line 12 (Occurrences: 13):     :returns: Экземпляр окна.
+#'./ABPlayer/main_window.py' - Line 41 (Occurrences: 27):     # Добавляем обработчики событий
+#'./ABPlayer/main.py' - Line 7 (Occurrences: 25): # Путь к директории приложения
+#'./ABPlayer/main.py' - Line 11 (Occurrences: 22): # Путь к файлу конфигурации
+#'./ABPlayer/main.py' - Line 13 (Occurrences: 30): # Путь к файлу базы данных библиотеки
+#'./ABPlayer/main.py' - Line 15 (Occurrences: 17): # Путь к файлу отладки
+#'./ABPlayer/main.py' - Line 17 (Occurrences: 28): # Путь к файлу с временными данными
+#'./ABPlayer/main.py' - Line 19 (Occurrences: 16): # Версия приложения
+#'./ABPlayer/run.py' - Line 3 (Occurrences: 16): Запуск приложения.
+#'./ABPlayer/run.py' - Line 5 (Occurrences: 16): Параметры запуска:
+#'./ABPlayer/run.py' - Line 6 (Occurrences: 23):     --run-update=<str> запуск обновления из файла
+#'./ABPlayer/starting_window.py' - Line 17 (Occurrences: 28):     Создает окно запуска приложения.
+#'./ABPlayer/starting_window.py' - Line 18 (Occurrences: 13):     :returns: Экземпляр окна.
+#'./ABPlayer/starting_window.py' - Line 40 (Occurrences: 27):     # Добавляем обработчики событий
+#'./ABPlayer/starting_window.py' - Line 49 (Occurrences: 32):     Подготавливает приложение к запуску.
+#'./ABPlayer/starting_window.py' - Line 50 (Occurrences: 28):     Инициализирует конфигурацию, бд.
+#'./ABPlayer/starting_window.py' - Line 51 (Occurrences: 21):     Анализирует библиотеку.
+#'./ABPlayer/starting_window.py' - Line 66 (Occurrences: 6):     window.evaluate_js("setStatus('запуск...')")
+#'./ABPlayer/starting_window.py' - Line 80 (Occurrences: 21):     Анализирует библиотеку.
+#'./ABPlayer/starting_window.py' - Line 81 (Occurrences: 25):     Добавляет книги из хранилища.
+#'./ABPlayer/starting_window.py' - Line 82 (Occurrences: 31):     Исправляет некорректные записи в бд.
+#'./ABPlayer/starting_window.py' - Line 85 (Occurrences: 18):     window.evaluate_js("setStatus('загрузка библиотеки...')")
+#'./ABPlayer/starting_window.py' - Line 91 (Occurrences: 27):         # Проверка существующих в бд книг
+#'./ABPlayer/starting_window.py' - Line 113 (Occurrences: 21):         # Сканирование хранилища
+#'./ABPlayer/temp_file.py' - Line 3 (Occurrences: 53): Реализует взаимодействие с файлом, хранящим временные данные.
+#'./ABPlayer/temp_file.py' - Line 5 (Occurrences: 30): В файле данные хранятся в таком виде:
+#'./ABPlayer/temp_file.py' - Line 6 (Occurrences: 21): <ключ>: <тип данных> = <значение>
+#'./ABPlayer/temp_file.py' - Line 7 (Occurrences: 21): <ключ>: <тип данных> = <значение>
+#'./ABPlayer/temp_file.py' - Line 8 (Occurrences: 21): <ключ>: <тип данных> = <значение>
+#'./ABPlayer/temp_file.py' - Line 11 (Occurrences: 34): Каждая запись начинается с новой строки.
+#'./ABPlayer/temp_file.py' - Line 12 (Occurrences: 37): Для хранения доступны такие типы данных как: str, int, float, bool.
+#'./ABPlayer/temp_file.py' - Line 27 (Occurrences: 22):     Считывает данные из файла.
+#'./ABPlayer/temp_file.py' - Line 28 (Occurrences: 15):     :returns: Словарь с данными.
+#'./ABPlayer/temp_file.py' - Line 31 (Occurrences: 11):     # Создаём файл
+#'./ABPlayer/temp_file.py' - Line 45 (Occurrences: 15):         )  # Проверка шаблона
+#'./ABPlayer/temp_file.py' - Line 60 (Occurrences: 20):     Сохраняет данные в файл.
+#'./ABPlayer/temp_file.py' - Line 61 (Occurrences: 15):     :param data: Словарь с данными.
+#'./ABPlayer/temp_file.py' - Line 77 (Occurrences: 32):     Обновляет/добавляет значения в файле.
+#'./ABPlayer/temp_file.py' - Line 86 (Occurrences: 19):     Удаляет записи в файле.
+#'./ABPlayer/temp_file.py' - Line 87 (Occurrences: 12):     :param keys: Ключи записей.
+#'./ABPlayer/temp_file.py' - Line 98 (Occurrences: 46):     Преобразует значение полученное из файла в тип данных Python.
+#'./ABPlayer/temp_file.py' - Line 99 (Occurrences: 15):     :param value: Значение из файла.
+#'./ABPlayer/temp_file.py' - Line 100 (Occurrences: 9):     :param value_type: Тип данных.
+#'./ABPlayer/temp_file.py' - Line 101 (Occurrences: 23):     :returns: Преобразованное значение.
+#'./ABPlayer/temp_file.py' - Line 121 (Occurrences: 38):     Подготавливает данные для сохранения в файл.
+#'./ABPlayer/temp_file.py' - Line 122 (Occurrences: 16):     :param value: Исходное значение.
+#'./ABPlayer/temp_file.py' - Line 123 (Occurrences: 23):     :returns: Преобразованное значение.
+#'./ABPlayer/temp_file.py' - Line 130 (Occurrences: 21):         f"Недопустимый тип данных {type(value).__name__}, "
+#'./ABPlayer/temp_file.py' - Line 131 (Occurrences: 18):         "можно хранить только str, int, float, bool"
+#'./ABPlayer/tools.py' - Line 19 (Occurrences: 9):     :param bytes_value: Число байт.
+#'./ABPlayer/tools.py' - Line 20 (Occurrences: 31):     :returns: Строка вида <Число> <Единица измерения>
+#'./ABPlayer/tools.py' - Line 24 (Occurrences: 11):     size_name = ("б", "КБ", "МБ", "ГБ", "ТБ", "ПБ", "EB", "ZB", "YB")
+#'./ABPlayer/tools.py' - Line 33 (Occurrences: 10):     :param file_path: Путь к файлу.
+#'./ABPlayer/tools.py' - Line 34 (Occurrences: 18):     :param hash_func: Функция хеширования.
+#'./ABPlayer/tools.py' - Line 35 (Occurrences: 8):     :returns: Хеш файла.
+#'./ABPlayer/tools.py' - Line 37 (Occurrences: 24):     hash_func = hash_func()  # Инициализируем хеш функцию
+#'./ABPlayer/tools.py' - Line 39 (Occurrences: 21):         # Читаем файл по блокам в 64кб,
+#'./ABPlayer/tools.py' - Line 40 (Occurrences: 51):         # для избежания загрузки больших файлов в оперативную память
+#'./ABPlayer/tools.py' - Line 54 (Occurrences: 49):     Формирует удобно читаемое представление списка/словаря.
+#'./ABPlayer/tools.py' - Line 55 (Occurrences: 6):     :returns: Строка.
+#'./ABPlayer/tools.py' - Line 120 (Occurrences: 14):     :param book: Экземпляр книги.
+#'./ABPlayer/tools.py' - Line 121 (Occurrences: 28):     :returns: Словарь с основными полями книги.
+#'./ABPlayer/drivers/akniga.py' - Line 18 (Occurrences: 50): На сайте AKniga информация о книге загружается динамически через JavaScript.
+#'./ABPlayer/drivers/akniga.py' - Line 19 (Occurrences: 65): Поэтому для получения полных данных о книге нам необходима среда исполнения JS.
+#'./ABPlayer/drivers/akniga.py' - Line 27 (Occurrences: 51):         Метод, возвращающий динамически загружаемые данные о книге.
+#'./ABPlayer/drivers/akniga.py' - Line 30 (Occurrences: 24):             "titleonly": <str>,  # название книги в чистом виде
+#'./ABPlayer/drivers/akniga.py' - Line 32 (Occurrences: 10):                 "file": <int>,  # номер файла
+#'./ABPlayer/drivers/akniga.py' - Line 33 (Occurrences: 13):                 "title": <str>,  # название главы
+#'./ABPlayer/drivers/akniga.py' - Line 34 (Occurrences: 11):                 "time_from_start": <str>,  # точка начала
+#'./ABPlayer/drivers/akniga.py' - Line 35 (Occurrences: 14):                 "time_finish": <str>,  # точка окончания
+#'./ABPlayer/drivers/akniga.py' - Line 37 (Occurrences: 12):             "m3u8": <str>,  # ссылка на файл m3u8
+#'./ABPlayer/drivers/akniga.py' - Line 44 (Occurrences: 27):     Среда исполнения JS, использующая Pywebview.
+#'./ABPlayer/drivers/akniga.py' - Line 45 (Occurrences: 59):     Создаёт скрытое окно, загружает там страницу книги и берет с нее данные.
+#'./ABPlayer/drivers/akniga.py' - Line 55 (Occurrences: 31):         # Выполнение `self._get_book_data` после загрузки страницы
+#'./ABPlayer/drivers/akniga.py' - Line 58 (Occurrences: 31):         if len(webview.windows) == 1:  # На данный момент нет запущенных окон pywebview
+#'./ABPlayer/drivers/akniga.py' - Line 272 (Occurrences: 9):                         reader = "нет данных"
+#'./ABPlayer/drivers/base.py' - Line 23 (Occurrences: 26):     Статусы прогресса скачивания.
+#'./ABPlayer/drivers/base.py' - Line 37 (Occurrences: 28):     Обработчик процесса скачивания.
+#'./ABPlayer/drivers/base.py' - Line 38 (Occurrences: 35):     Визуализирует процесс скачивания книги.
+#'./ABPlayer/drivers/base.py' - Line 75 (Occurrences: 18):         Отображает прогресс.
+#'./ABPlayer/drivers/base.py' - Line 89 (Occurrences: 15):     Загрузчик файлов.
+#'./ABPlayer/drivers/base.py' - Line 98 (Occurrences: 24):         # Общий размер файлов(в байтах)
+#'./ABPlayer/drivers/base.py' - Line 99 (Occurrences: 29):         # Определяется, только если передан `process_handler`
+#'./ABPlayer/drivers/base.py' - Line 102 (Occurrences: 21):         # Файл открытый для записи
+#'./ABPlayer/drivers/base.py' - Line 104 (Occurrences: 20):         # Поток скачивания файла
+#'./ABPlayer/drivers/base.py' - Line 115 (Occurrences: 34):         Подготавливает загрузчик к скачиванию.
+#'./ABPlayer/drivers/base.py' - Line 116 (Occurrences: 43):         Метод должен быть реализован в наследуемом классе.
+#'./ABPlayer/drivers/base.py' - Line 122 (Occurrences: 14):         Скачивает файлы.
+#'./ABPlayer/drivers/base.py' - Line 123 (Occurrences: 43):         Метод должен быть реализован в наследуемом классе.
+#'./ABPlayer/drivers/base.py' - Line 128 (Occurrences: 31):         Скачивает и сохраняет обложку книги.
+#'./ABPlayer/drivers/base.py' - Line 149 (Occurrences: 19):         Скачивает файлы книги.
+#'./ABPlayer/drivers/base.py' - Line 150 (Occurrences: 29):         :returns: Список с путями к скачанным файлам.
+#'./ABPlayer/drivers/base.py' - Line 170 (Occurrences: 21):         return not self._terminated  # True - при успешном скачивании
+#'./ABPlayer/drivers/base.py' - Line 174 (Occurrences: 17):         Прерывает загрузку.
+#'./ABPlayer/drivers/base.py' - Line 201 (Occurrences: 20):     drivers: list[ty.Type[Driver]] = []  # Все доступные драйверы
+#'./ABPlayer/drivers/base.py' - Line 221 (Occurrences: 13):         :param url: Ссылка на книгу.
+#'./ABPlayer/drivers/base.py' - Line 222 (Occurrences: 16):         :returns: Результат GET запроса.
+#'./ABPlayer/drivers/base.py' - Line 229 (Occurrences: 31):         Метод, получающий информацию о книге.
+#'./ABPlayer/drivers/base.py' - Line 230 (Occurrences: 46):         Должен быть реализован для каждого драйвера отдельно.
+#'./ABPlayer/drivers/base.py' - Line 231 (Occurrences: 13):         :param url: Ссылка на книгу.
+#'./ABPlayer/drivers/base.py' - Line 232 (Occurrences: 14):         :returns: Экземпляр книги.
+#'./ABPlayer/drivers/base.py' - Line 238 (Occurrences: 39):         Метод, получающий информацию о книгах из серии.
+#'./ABPlayer/drivers/base.py' - Line 239 (Occurrences: 46):         Должен быть реализован для каждого драйвера отдельно.
+#'./ABPlayer/drivers/base.py' - Line 240 (Occurrences: 13):         :param url: Ссылка на книгу.
+#'./ABPlayer/drivers/base.py' - Line 241 (Occurrences: 29):         :returns: Список неполных экземпляров книг.
+#'./ABPlayer/drivers/base.py' - Line 247 (Occurrences: 34):         Метод, выполняющий поиск книг по запросу.
+#'./ABPlayer/drivers/base.py' - Line 248 (Occurrences: 46):         Должен быть реализован для каждого драйвера отдельно.
+#'./ABPlayer/drivers/base.py' - Line 249 (Occurrences: 15):         :param query: Поисковый запрос.
+#'./ABPlayer/drivers/base.py' - Line 250 (Occurrences: 28):         :param limit: Кол-во книг, которое нужно вернуть.
+#'./ABPlayer/drivers/base.py' - Line 251 (Occurrences: 24):         :param offset: Будет пропущено `offset` первых книг.
+#'./ABPlayer/drivers/base.py' - Line 252 (Occurrences: 29):         :returns: Список неполных экземпляров книг.
+#'./ABPlayer/drivers/base.py' - Line 259 (Occurrences: 31):         Метод, скачивающий аудио файлы книги.
+#'./ABPlayer/drivers/base.py' - Line 260 (Occurrences: 14):         :param book: Экземпляр книги.
+#'./ABPlayer/drivers/base.py' - Line 261 (Occurrences: 28):         :param process_handler: Обработчик процесса скачивания.
+#'./ABPlayer/drivers/base.py' - Line 262 (Occurrences: 18):         :return: Список путей к файлам.
 './ABPlayer/drivers/knigavuhe.py' - Line 51 (Occurrences: 12):                 if children[0].text in ["читает", "читают"]:
-'./ABPlayer/drivers/knigavuhe.py' - Line 58 (Occurrences: 13):                 if info[0].text == "Время звучания:":
-'./ABPlayer/drivers/knigavuhe.py' - Line 59 (Occurrences: 13):                     duration = element.text.replace("Время звучания:", "").strip()
-'./ABPlayer/drivers/knigavuhe.py' - Line 202 (Occurrences: 9):                         author = "нет данных"
-'./ABPlayer/drivers/knigavuhe.py' - Line 208 (Occurrences: 9):                         reader = "нет данных"
-'./ABPlayer/drivers/tools.py' - Line 40 (Occurrences: 28):     Изменяет метаданные аудио файла.
-'./ABPlayer/drivers/tools.py' - Line 41 (Occurrences: 15):     :param file_path: Путь к аудио файлу.
-'./ABPlayer/drivers/tools.py' - Line 42 (Occurrences: 10):     :param author: Автор книги.
-'./ABPlayer/drivers/tools.py' - Line 43 (Occurrences: 13):     :param title: Название главы.
-'./ABPlayer/drivers/tools.py' - Line 44 (Occurrences: 20):     :param item_index: Порядковый номер файла.
-'./ABPlayer/drivers/tools.py' - Line 56 (Occurrences: 15):     :param file_path: Путь к аудио файлу.
-'./ABPlayer/drivers/tools.py' - Line 57 (Occurrences: 31):     :returns: Длительность аудио файла в секундах.
-'./ABPlayer/drivers/tools.py' - Line 69 (Occurrences: 50):     Убирает или заменяет символы не допустимые для имени файла Windows.
-'./ABPlayer/drivers/tools.py' - Line 78 (Occurrences: 30):     Создает идентификатор экземпляра.
+#'./ABPlayer/drivers/knigavuhe.py' - Line 58 (Occurrences: 13):                 if info[0].text == "Время звучания:":
+#'./ABPlayer/drivers/knigavuhe.py' - Line 59 (Occurrences: 13):                     duration = element.text.replace("Время звучания:", "").strip()
+#'./ABPlayer/drivers/knigavuhe.py' - Line 202 (Occurrences: 9):                         author = "нет данных"
+#'./ABPlayer/drivers/knigavuhe.py' - Line 208 (Occurrences: 9):                         reader = "нет данных"
+#'./ABPlayer/drivers/tools.py' - Line 40 (Occurrences: 28):     Изменяет метаданные аудио файла.
+#'./ABPlayer/drivers/tools.py' - Line 41 (Occurrences: 15):     :param file_path: Путь к аудио файлу.
+#'./ABPlayer/drivers/tools.py' - Line 42 (Occurrences: 10):     :param author: Автор книги.
+#'./ABPlayer/drivers/tools.py' - Line 43 (Occurrences: 13):     :param title: Название главы.
+#'./ABPlayer/drivers/tools.py' - Line 44 (Occurrences: 20):     :param item_index: Порядковый номер файла.
+#'./ABPlayer/drivers/tools.py' - Line 56 (Occurrences: 15):     :param file_path: Путь к аудио файлу.
+#'./ABPlayer/drivers/tools.py' - Line 57 (Occurrences: 31):     :returns: Длительность аудио файла в секундах.
+#'./ABPlayer/drivers/tools.py' - Line 69 (Occurrences: 50):     Убирает или заменяет символы не допустимые для имени файла Windows.
+#'./ABPlayer/drivers/tools.py' - Line 78 (Occurrences: 30):     Создает идентификатор экземпляра.
 './ABPlayer/drivers/tools.py' - Line 98 (Occurrences: 23):     :returns: Идентификатор экземпляра.
 './ABPlayer/drivers/downloaders/m3u8_downloader.py' - Line 31 (Occurrences: 56):     Загрузчик, предназначенный для книг в которых файлы представлены
 './ABPlayer/drivers/downloaders/m3u8_downloader.py' - Line 32 (Occurrences: 6):     m3u8 файлом.

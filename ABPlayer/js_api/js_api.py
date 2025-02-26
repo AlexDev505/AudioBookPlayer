@@ -68,3 +68,4 @@ class JSApiError(Exception):
 class ConnectionFailedError(JSApiError):
     code = 1
     message = "Проблемы с соединением"
+

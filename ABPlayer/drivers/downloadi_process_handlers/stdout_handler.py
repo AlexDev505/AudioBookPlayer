@@ -15,3 +15,4 @@ class StdoutDownloadProcessHandler(BaseDownloadProcessHandler):
             f"{round(self.done_size / (self.total_size / 100), 2)} %"
         )
         sys.stdout.flush()
+

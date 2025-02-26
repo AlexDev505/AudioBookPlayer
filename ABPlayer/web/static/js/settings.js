@@ -79,3 +79,4 @@ function updateApp() {
 function unsubscribeNotStable() {
     pywebview.api.unsubscribe_not_stable()
 }
+
