@@ -118,15 +118,15 @@ def _adapt_value(value: str, value_type: str) -> str | int | float | bool:
 @logger.catch
 def _convert_value(value: str | int | float | bool) -> str:
     """
-    Подготавливает данные для сохранения в файл.
-    :param value: Исходное значение.
-    :returns: Преобразованное значение.
+    Prepares data for saving to a file.
+    :param value: Original value.
+    :returns: Converted value.
     """
     if isinstance(value, bool):
         return str(int(value))
     elif isinstance(value, (str, int, float)):
         return str(value).replace("\n", "\\n")
     raise ValueError(
-        f"Недопустимый тип данных {type(value).__name__}, "
-        "можно хранить только str, int, float, bool"
+        f"Invalid data type {type(value).__name__}, "
+        "only str, int, float, bool are expected."
     )
