@@ -146,9 +146,9 @@ function onOpenLibrary(el) {
     section("all-books-section").show()
     fillFilterBySections()
     if (urlParams.get("favorite"))
-        document.getElementById("library-title").innerHTML = "Библиотека: Избранное"
+        document.getElementById("library-title").innerHTML = "Library: Favourites"
     else
-        document.getElementById("library-title").innerHTML = "Библиотека"
+        document.getElementById("library-title").innerHTML = "Library"
     if (urlParams.get("reverse")) toggleReverseCheckbox(1)
     else toggleReverseCheckbox(0)
 }
@@ -228,8 +228,8 @@ function showBooks(response, status) {
                 <div class="book-main-info">
                   <div class="book-title">${book.name}</div>
                   <div class="book-state">
-                    <div class="book-listening-progress">${book.listening_progress} прослушано</div>
-                    <div class="book-adding-date">Добавлена ${book.adding_date}</div>
+                    <div class="book-listening-progress">${book.listening_progress} listened</div>
+                    <div class="book-adding-date">date added ${book.adding_date}</div>
                   </div>
                 </div>
                 <div class="book-actions">
@@ -294,11 +294,11 @@ function removeBook(el, bid) {
         delete_btn = document.querySelector(`.book-card[data-bid='${bid}'] .delete-btn`)
         if (title && delete_btn) {
             createNotification(
-                `<div>Книга <b>«${title.innerHTML}»</b> удалена из библиотеки, но скачанные файлы остались.</div>
-                <div style="margin-top: 2px; text-decoration: underline; cursor:pointer" onclick="{deleteBook(this, ${bid}, '${title.innerHTML}');this.parentElement.parentElement.remove()}">удалить оставшиеся файлы</div>`,
+                `<div>Book <b>«${title.innerHTML}»</b> Has been removed from library, but the downloaded files remain.</div>
+                <div style="margin-top: 2px; text-decoration: underline; cursor:pointer" onclick="{deleteBook(this, ${bid}, '${title.innerHTML}');this.parentElement.parentElement.remove()}">delte remaining files</div>`,
                 0, true
             )
-        } else if (title) createNotification(`Книга <b>«${title.innerHTML}»</b> удалена из библиотеки`, 5, true)
+        } else if (title) createNotification(`Book <b>«${title.innerHTML}»</b> has been removed from the library.`, 5, true)
         document.querySelector(`.book-card[data-bid='${bid}']`).remove()
     })
 }
@@ -317,7 +317,7 @@ function deleteBook(el, bid, name) {
           deleteBtn.classList.add("download-btn")
           deleteBtn.onclick = function() {startDownloading(this, bid, name)}
         }
-        createNotification(`Файлы книги <b>«${name}»</b> удалены`, 60, true)
+        createNotification(`Files of the book <b>«${name}»</b> have been deleted`, 60, true)
     })
 }
 

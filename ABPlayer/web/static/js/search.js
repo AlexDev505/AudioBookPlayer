@@ -107,10 +107,10 @@ function onSearchCompleted(resp, clear=true) {
               </div>
             </div>
           </div>
-          <div class="icon-btn add-book-btn" onclick="addBook(this)"><span>в библиотеку</span></div>
+          <div class="icon-btn add-book-btn" onclick="addBook(this)"><span>to the library</span></div>
         </div>`
     }
-    if (!resp.length && clear) html = '<div id="no-search-result">Ничего не найдено</div>'
+    if (!resp.length && clear) html = '<div id="no-search-result">Nothing found</div>'
     container = document.getElementById("search-results-container")
     if (!container.classList.contains("shown")) container.classList.add("shown")
     if (clear) {

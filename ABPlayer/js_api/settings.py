@@ -272,10 +272,10 @@ class SettingsApi(JSApi):
 
 class RequestCanceled(JSApiError):
     code = 7
-    message = "Операция отменена"
+    message = "Operation canceled"
 
 
 class UpdateFileNotFound(JSApiError):
     code = 8
-    message = "Файл обновления не найден"
+    message = "Update file not found"
 

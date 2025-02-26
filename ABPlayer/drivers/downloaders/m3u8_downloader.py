@@ -28,8 +28,8 @@ if ty.TYPE_CHECKING:
 
 class M3U8Downloader(BaseDownloader):
     """
-    Загрузчик, предназначенный для книг в которых файлы представлены
-    m3u8 файлом.
+    Loader designed for books where files are presented with an m3u8 file.
+
     """
 
     def __init__(
@@ -37,16 +37,16 @@ class M3U8Downloader(BaseDownloader):
     ):
         super().__init__(book, process_handler)
 
-        self._m3u8_data = None  # Объект m3u8
+        self._m3u8_data = None  # m3u8 object
         self._host_uri: str | None = None
-        self._encryption_key: str | None = None  # Ключ шифрования фрагментов
+        self._encryption_key: str | None = None  # Fragment encryption key
 
     def _prepare(self) -> None:
         self._m3u8_data = m3u8.load(self.book.items[0].file_url)
         self._parse_host_uri()
 
         if self.process_handler:
-            # Общий размер книги(в байтах)
+            # Total size of the book (in bytes)
             total_size = self._calc_total_size()
             self.process_handler.init(
                 total_size, status=DownloadProcessStatus.DOWNLOADING
@@ -84,8 +84,8 @@ class M3U8Downloader(BaseDownloader):
             if self._terminated:
                 break
 
-            # Если длительность получившегося файла равна длительности главы
-            # (погрешность 2 сек)
+            # If the duration of the resulting file is equal to the duration of the chapter
+            # (tolerance of 2 seconds)
             if item.duration - get_audio_file_duration(file_path) < 2:
                 logger.debug("item completed")
                 self._file.close()
@@ -96,7 +96,7 @@ class M3U8Downloader(BaseDownloader):
                 )
                 logger.trace("hashing file")
                 files[file_path.name] = get_file_hash(file_path)
-                # Переход к следующей главе
+                # Move to the next chapter
                 if item_index + 1 < len(self.book.items):
                     item_index += 1
                     item = self.book.items[item_index]
@@ -106,12 +106,12 @@ class M3U8Downloader(BaseDownloader):
             self.book.files = files
 
     def _download_segment(self, segment_index: int, segment):
-        ts_url = os.path.join(self._host_uri, segment.uri)  # Ссылка на сегмент
+        ts_url = os.path.join(self._host_uri, segment.uri)  # Segment URL
         logger.opt(colors=True).trace(f"segment <y>{segment.title}</y>({ts_url})")
 
         decrypt_func = self._get_decryption_func(segment_index, segment)
 
-        # Создаем объект потоковой загрузки фрагмента
+        # Create a fragment streaming loader object
         self._file_stream = requests.get(ts_url, timeout=10, stream=True)
         logger.opt(colors=True).trace(
             "file size: <y>{}</y>".format(
@@ -128,14 +128,14 @@ class M3U8Downloader(BaseDownloader):
                     break
                 if self.process_handler:
                     self.process_handler.progress(len(data))
-                # Добавляем фрагмент в аудио файл
+                # Add fragment to audio file
                 self._file.write(data if not decrypt_func else decrypt_func(data))
-                # Сбрасываем данные в файл. Освобождаем память
+                # Flush data to file. Free up memory
                 self._file.flush()
         self._file_stream = None
 
     def _get_decryption_func(self, segment_index: int, segment):
-        # Определяем функцию дешифрования фрагмента
+        # Define fragment decryption function
         decrypt_func = None
         if segment.key.method == "AES-128":
             if not self._encryption_key:
@@ -177,7 +177,7 @@ class M3U8Downloader(BaseDownloader):
 
     def _get_file_path(self, item_index: int) -> Path:
         item = self.book.items[item_index]
-        # Убираем номер файла из названия
+        # Remove file number from the name
         item_title = re.sub(r"^(\d+) (.+)", r"\g<2>", item.title)
         file_path = Path(
             os.path.join(

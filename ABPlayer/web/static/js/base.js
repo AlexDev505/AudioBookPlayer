@@ -146,7 +146,7 @@ function createNotification(content, timeout=0, closable=true) {
 }
 function showError(text) {
     createNotification(
-        `<div style="font-weight: bold">Ошибка</div><div>${text}</div>`, 30, true
+        `<div style="font-weight: bold">Error</div><div>${text}</div>`, 30, true
     )
 }
 

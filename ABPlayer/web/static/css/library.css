@@ -115,7 +115,7 @@
   overflow-y: auto;
 }
 .books-section::before {
-  content: "Ничего не найдено";
+  content: "Nothing found";
   top: 50%;
   left: 40%;
   position: relative;

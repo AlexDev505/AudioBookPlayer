@@ -5,7 +5,3 @@ __pycache__/
 /build/updaters/
 /build/ABPlayer/
 AudioBookPlayerAppData.lnk
-findcyrillic.ps1
-cyrillic_hits.txt
-filtered_hits.txt
-config.py
