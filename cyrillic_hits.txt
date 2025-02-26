@@ -1,0 +1,1000 @@
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\readme.md' - Line 5 (Occurrences: 1): The application has access to all the books available on the websites [_akniga.org_](https://akniga.org/) и [_knigavuhe.org_](https://knigavuhe.org/).
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\__init__.py' - Line 11 (Occurrences: 42):    >>> results = from_bytes('Bсеки човек има право на образование. Oбразованието!'.encode('utf_8'))
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\__init__.py' - Line 14 (Occurrences: 42):    'Bсеки човек има право на образование. Oбразованието!'
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 788 (Occurrences: 1):         "о",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 789 (Occurrences: 1):         "а",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 790 (Occurrences: 1):         "е",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 791 (Occurrences: 1):         "и",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 792 (Occurrences: 1):         "н",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 793 (Occurrences: 1):         "с",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 794 (Occurrences: 1):         "т",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 795 (Occurrences: 1):         "р",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 796 (Occurrences: 1):         "в",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 797 (Occurrences: 1):         "л",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 798 (Occurrences: 1):         "к",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 799 (Occurrences: 1):         "м",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 800 (Occurrences: 1):         "д",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 801 (Occurrences: 1):         "п",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 802 (Occurrences: 1):         "у",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 803 (Occurrences: 1):         "г",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 804 (Occurrences: 1):         "я",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 805 (Occurrences: 1):         "ы",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 806 (Occurrences: 1):         "з",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 807 (Occurrences: 1):         "б",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 808 (Occurrences: 1):         "й",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 809 (Occurrences: 1):         "ь",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 810 (Occurrences: 1):         "ч",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 811 (Occurrences: 1):         "х",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 812 (Occurrences: 1):         "ж",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 813 (Occurrences: 1):         "ц",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1272 (Occurrences: 1):         "о",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1273 (Occurrences: 1):         "а",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1274 (Occurrences: 1):         "н",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1275 (Occurrences: 1):         "і",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1276 (Occurrences: 1):         "и",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1277 (Occurrences: 1):         "р",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1278 (Occurrences: 1):         "в",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1279 (Occurrences: 1):         "т",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1280 (Occurrences: 1):         "е",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1281 (Occurrences: 1):         "с",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1282 (Occurrences: 1):         "к",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1283 (Occurrences: 1):         "л",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1284 (Occurrences: 1):         "у",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1285 (Occurrences: 1):         "д",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1286 (Occurrences: 1):         "м",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1287 (Occurrences: 1):         "п",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1288 (Occurrences: 1):         "з",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1289 (Occurrences: 1):         "я",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1290 (Occurrences: 1):         "ь",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1291 (Occurrences: 1):         "б",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1292 (Occurrences: 1):         "г",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1293 (Occurrences: 1):         "й",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1294 (Occurrences: 1):         "ч",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1295 (Occurrences: 1):         "х",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1296 (Occurrences: 1):         "ц",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1297 (Occurrences: 1):         "ї",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1636 (Occurrences: 1):         "а",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1637 (Occurrences: 1):         "и",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1638 (Occurrences: 1):         "о",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1639 (Occurrences: 1):         "е",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1640 (Occurrences: 1):         "н",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1641 (Occurrences: 1):         "р",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1642 (Occurrences: 1):         "с",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1643 (Occurrences: 1):         "у",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1644 (Occurrences: 1):         "т",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1645 (Occurrences: 1):         "к",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1646 (Occurrences: 1):         "ј",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1647 (Occurrences: 1):         "в",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1648 (Occurrences: 1):         "д",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1649 (Occurrences: 1):         "м",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1650 (Occurrences: 1):         "п",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1651 (Occurrences: 1):         "л",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1652 (Occurrences: 1):         "г",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1653 (Occurrences: 1):         "з",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1654 (Occurrences: 1):         "б",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1660 (Occurrences: 1):         "ц",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1661 (Occurrences: 1):         "ш",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1775 (Occurrences: 1):         "а",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1776 (Occurrences: 1):         "и",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1777 (Occurrences: 1):         "о",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1778 (Occurrences: 1):         "е",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1779 (Occurrences: 1):         "н",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1780 (Occurrences: 1):         "т",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1781 (Occurrences: 1):         "р",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1782 (Occurrences: 1):         "с",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1783 (Occurrences: 1):         "в",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1784 (Occurrences: 1):         "л",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1785 (Occurrences: 1):         "к",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1786 (Occurrences: 1):         "д",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1787 (Occurrences: 1):         "п",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1788 (Occurrences: 1):         "м",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1789 (Occurrences: 1):         "з",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1790 (Occurrences: 1):         "г",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1791 (Occurrences: 1):         "я",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1792 (Occurrences: 1):         "ъ",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1793 (Occurrences: 1):         "у",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1794 (Occurrences: 1):         "б",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1795 (Occurrences: 1):         "ч",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1796 (Occurrences: 1):         "ц",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1797 (Occurrences: 1):         "й",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1798 (Occurrences: 1):         "ж",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1799 (Occurrences: 1):         "щ",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1800 (Occurrences: 1):         "х",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1969 (Occurrences: 1):         "а",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1970 (Occurrences: 1):         "ы",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1971 (Occurrences: 1):         "е",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1972 (Occurrences: 1):         "н",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1973 (Occurrences: 1):         "т",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1974 (Occurrences: 1):         "р",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1975 (Occurrences: 1):         "л",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1976 (Occurrences: 1):         "і",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1977 (Occurrences: 1):         "д",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1978 (Occurrences: 1):         "с",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1979 (Occurrences: 1):         "м",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1980 (Occurrences: 1):         "қ",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1981 (Occurrences: 1):         "к",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1982 (Occurrences: 1):         "о",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1983 (Occurrences: 1):         "б",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1984 (Occurrences: 1):         "и",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1985 (Occurrences: 1):         "у",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1986 (Occurrences: 1):         "ғ",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1987 (Occurrences: 1):         "ж",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1988 (Occurrences: 1):         "ң",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1989 (Occurrences: 1):         "з",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1990 (Occurrences: 1):         "ш",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1991 (Occurrences: 1):         "й",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1992 (Occurrences: 1):         "п",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1993 (Occurrences: 1):         "г",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\charset_normalizer\constant.py' - Line 1994 (Occurrences: 1):         "ө",
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\Crypto\SelfTest\Protocol\test_KDF.py' - Line 613 (Occurrences: 28):             ("АБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмН", 4, b"03e26gQFHhQwRNf81/ww9.", b"$2a$04$03e26gQFHhQwRNf81/ww9.p1UbrNwxpzWjLuT.zpTLH4t/w5WhAhC"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\Crypto\SelfTest\Protocol\test_KDF.py' - Line 614 (Occurrences: 35):             ("нОоПпРрСсТтУуФфХхЦцЧчШшЩщЪъЫыЬьЭэЮю", 4, b"PHNoJwpXCfe32nUtLv2Upu", b"$2a$04$PHNoJwpXCfe32nUtLv2UpuhJXOzd4k7IdFwnEpYwfJVCZ/f/.8Pje"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 741 (Occurrences: 1):         (0x400, "M", "ѐ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 742 (Occurrences: 1):         (0x401, "M", "ё"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 743 (Occurrences: 1):         (0x402, "M", "ђ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 749 (Occurrences: 1):         (0x403, "M", "ѓ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 750 (Occurrences: 1):         (0x404, "M", "є"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 751 (Occurrences: 1):         (0x405, "M", "ѕ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 752 (Occurrences: 1):         (0x406, "M", "і"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 753 (Occurrences: 1):         (0x407, "M", "ї"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 754 (Occurrences: 1):         (0x408, "M", "ј"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 755 (Occurrences: 1):         (0x409, "M", "љ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 756 (Occurrences: 1):         (0x40A, "M", "њ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 757 (Occurrences: 1):         (0x40B, "M", "ћ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 758 (Occurrences: 1):         (0x40C, "M", "ќ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 759 (Occurrences: 1):         (0x40D, "M", "ѝ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 760 (Occurrences: 1):         (0x40E, "M", "ў"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 761 (Occurrences: 1):         (0x40F, "M", "џ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 762 (Occurrences: 1):         (0x410, "M", "а"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 763 (Occurrences: 1):         (0x411, "M", "б"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 764 (Occurrences: 1):         (0x412, "M", "в"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 765 (Occurrences: 1):         (0x413, "M", "г"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 766 (Occurrences: 1):         (0x414, "M", "д"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 767 (Occurrences: 1):         (0x415, "M", "е"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 768 (Occurrences: 1):         (0x416, "M", "ж"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 769 (Occurrences: 1):         (0x417, "M", "з"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 770 (Occurrences: 1):         (0x418, "M", "и"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 771 (Occurrences: 1):         (0x419, "M", "й"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 772 (Occurrences: 1):         (0x41A, "M", "к"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 773 (Occurrences: 1):         (0x41B, "M", "л"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 774 (Occurrences: 1):         (0x41C, "M", "м"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 775 (Occurrences: 1):         (0x41D, "M", "н"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 776 (Occurrences: 1):         (0x41E, "M", "о"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 777 (Occurrences: 1):         (0x41F, "M", "п"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 778 (Occurrences: 1):         (0x420, "M", "р"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 779 (Occurrences: 1):         (0x421, "M", "с"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 780 (Occurrences: 1):         (0x422, "M", "т"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 781 (Occurrences: 1):         (0x423, "M", "у"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 782 (Occurrences: 1):         (0x424, "M", "ф"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 783 (Occurrences: 1):         (0x425, "M", "х"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 784 (Occurrences: 1):         (0x426, "M", "ц"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 785 (Occurrences: 1):         (0x427, "M", "ч"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 786 (Occurrences: 1):         (0x428, "M", "ш"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 787 (Occurrences: 1):         (0x429, "M", "щ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 788 (Occurrences: 1):         (0x42A, "M", "ъ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 789 (Occurrences: 1):         (0x42B, "M", "ы"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 790 (Occurrences: 1):         (0x42C, "M", "ь"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 791 (Occurrences: 1):         (0x42D, "M", "э"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 792 (Occurrences: 1):         (0x42E, "M", "ю"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 793 (Occurrences: 1):         (0x42F, "M", "я"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 795 (Occurrences: 1):         (0x460, "M", "ѡ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 797 (Occurrences: 1):         (0x462, "M", "ѣ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 799 (Occurrences: 1):         (0x464, "M", "ѥ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 801 (Occurrences: 1):         (0x466, "M", "ѧ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 803 (Occurrences: 1):         (0x468, "M", "ѩ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 805 (Occurrences: 1):         (0x46A, "M", "ѫ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 807 (Occurrences: 1):         (0x46C, "M", "ѭ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 809 (Occurrences: 1):         (0x46E, "M", "ѯ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 811 (Occurrences: 1):         (0x470, "M", "ѱ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 813 (Occurrences: 1):         (0x472, "M", "ѳ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 815 (Occurrences: 1):         (0x474, "M", "ѵ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 817 (Occurrences: 1):         (0x476, "M", "ѷ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 819 (Occurrences: 1):         (0x478, "M", "ѹ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 821 (Occurrences: 1):         (0x47A, "M", "ѻ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 823 (Occurrences: 1):         (0x47C, "M", "ѽ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 825 (Occurrences: 1):         (0x47E, "M", "ѿ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 827 (Occurrences: 1):         (0x480, "M", "ҁ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 829 (Occurrences: 1):         (0x48A, "M", "ҋ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 831 (Occurrences: 1):         (0x48C, "M", "ҍ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 833 (Occurrences: 1):         (0x48E, "M", "ҏ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 835 (Occurrences: 1):         (0x490, "M", "ґ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 837 (Occurrences: 1):         (0x492, "M", "ғ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 839 (Occurrences: 1):         (0x494, "M", "ҕ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 841 (Occurrences: 1):         (0x496, "M", "җ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 843 (Occurrences: 1):         (0x498, "M", "ҙ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 845 (Occurrences: 1):         (0x49A, "M", "қ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 847 (Occurrences: 1):         (0x49C, "M", "ҝ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 854 (Occurrences: 1):         (0x49E, "M", "ҟ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 856 (Occurrences: 1):         (0x4A0, "M", "ҡ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 858 (Occurrences: 1):         (0x4A2, "M", "ң"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 860 (Occurrences: 1):         (0x4A4, "M", "ҥ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 862 (Occurrences: 1):         (0x4A6, "M", "ҧ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 864 (Occurrences: 1):         (0x4A8, "M", "ҩ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 866 (Occurrences: 1):         (0x4AA, "M", "ҫ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 868 (Occurrences: 1):         (0x4AC, "M", "ҭ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 870 (Occurrences: 1):         (0x4AE, "M", "ү"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 872 (Occurrences: 1):         (0x4B0, "M", "ұ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 874 (Occurrences: 1):         (0x4B2, "M", "ҳ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 876 (Occurrences: 1):         (0x4B4, "M", "ҵ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 878 (Occurrences: 1):         (0x4B6, "M", "ҷ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 880 (Occurrences: 1):         (0x4B8, "M", "ҹ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 882 (Occurrences: 1):         (0x4BA, "M", "һ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 884 (Occurrences: 1):         (0x4BC, "M", "ҽ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 886 (Occurrences: 1):         (0x4BE, "M", "ҿ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 889 (Occurrences: 1):         (0x4C1, "M", "ӂ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 891 (Occurrences: 1):         (0x4C3, "M", "ӄ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 893 (Occurrences: 1):         (0x4C5, "M", "ӆ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 895 (Occurrences: 1):         (0x4C7, "M", "ӈ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 897 (Occurrences: 1):         (0x4C9, "M", "ӊ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 899 (Occurrences: 1):         (0x4CB, "M", "ӌ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 901 (Occurrences: 1):         (0x4CD, "M", "ӎ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 903 (Occurrences: 1):         (0x4D0, "M", "ӑ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 905 (Occurrences: 1):         (0x4D2, "M", "ӓ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 907 (Occurrences: 1):         (0x4D4, "M", "ӕ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 909 (Occurrences: 1):         (0x4D6, "M", "ӗ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 911 (Occurrences: 1):         (0x4D8, "M", "ә"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 913 (Occurrences: 1):         (0x4DA, "M", "ӛ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 915 (Occurrences: 1):         (0x4DC, "M", "ӝ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 917 (Occurrences: 1):         (0x4DE, "M", "ӟ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 919 (Occurrences: 1):         (0x4E0, "M", "ӡ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 921 (Occurrences: 1):         (0x4E2, "M", "ӣ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 923 (Occurrences: 1):         (0x4E4, "M", "ӥ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 925 (Occurrences: 1):         (0x4E6, "M", "ӧ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 927 (Occurrences: 1):         (0x4E8, "M", "ө"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 929 (Occurrences: 1):         (0x4EA, "M", "ӫ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 931 (Occurrences: 1):         (0x4EC, "M", "ӭ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 933 (Occurrences: 1):         (0x4EE, "M", "ӯ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 935 (Occurrences: 1):         (0x4F0, "M", "ӱ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 937 (Occurrences: 1):         (0x4F2, "M", "ӳ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 939 (Occurrences: 1):         (0x4F4, "M", "ӵ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 941 (Occurrences: 1):         (0x4F6, "M", "ӷ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 943 (Occurrences: 1):         (0x4F8, "M", "ӹ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 945 (Occurrences: 1):         (0x4FA, "M", "ӻ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 947 (Occurrences: 1):         (0x4FC, "M", "ӽ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 949 (Occurrences: 1):         (0x4FE, "M", "ӿ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 1583 (Occurrences: 1):         (0x1C80, "M", "в"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 1589 (Occurrences: 1):         (0x1C81, "M", "д"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 1590 (Occurrences: 1):         (0x1C82, "M", "о"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 1591 (Occurrences: 1):         (0x1C83, "M", "с"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 1592 (Occurrences: 1):         (0x1C84, "M", "т"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 1593 (Occurrences: 1):         (0x1C86, "M", "ъ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 1594 (Occurrences: 1):         (0x1C87, "M", "ѣ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 1718 (Occurrences: 1):         (0x1D78, "M", "н"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 3804 (Occurrences: 1):         (0xA69C, "M", "ъ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 3805 (Occurrences: 1):         (0xA69D, "M", "ь"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7457 (Occurrences: 1):         (0x1E030, "M", "а"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7458 (Occurrences: 1):         (0x1E031, "M", "б"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7459 (Occurrences: 1):         (0x1E032, "M", "в"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7460 (Occurrences: 1):         (0x1E033, "M", "г"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7461 (Occurrences: 1):         (0x1E034, "M", "д"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7462 (Occurrences: 1):         (0x1E035, "M", "е"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7463 (Occurrences: 1):         (0x1E036, "M", "ж"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7469 (Occurrences: 1):         (0x1E037, "M", "з"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7470 (Occurrences: 1):         (0x1E038, "M", "и"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7471 (Occurrences: 1):         (0x1E039, "M", "к"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7472 (Occurrences: 1):         (0x1E03A, "M", "л"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7473 (Occurrences: 1):         (0x1E03B, "M", "м"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7474 (Occurrences: 1):         (0x1E03C, "M", "о"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7475 (Occurrences: 1):         (0x1E03D, "M", "п"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7476 (Occurrences: 1):         (0x1E03E, "M", "р"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7477 (Occurrences: 1):         (0x1E03F, "M", "с"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7478 (Occurrences: 1):         (0x1E040, "M", "т"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7479 (Occurrences: 1):         (0x1E041, "M", "у"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7480 (Occurrences: 1):         (0x1E042, "M", "ф"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7481 (Occurrences: 1):         (0x1E043, "M", "х"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7482 (Occurrences: 1):         (0x1E044, "M", "ц"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7483 (Occurrences: 1):         (0x1E045, "M", "ч"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7484 (Occurrences: 1):         (0x1E046, "M", "ш"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7485 (Occurrences: 1):         (0x1E047, "M", "ы"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7486 (Occurrences: 1):         (0x1E048, "M", "э"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7487 (Occurrences: 1):         (0x1E049, "M", "ю"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7489 (Occurrences: 1):         (0x1E04B, "M", "ә"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7490 (Occurrences: 1):         (0x1E04C, "M", "і"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7491 (Occurrences: 1):         (0x1E04D, "M", "ј"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7492 (Occurrences: 1):         (0x1E04E, "M", "ө"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7493 (Occurrences: 1):         (0x1E04F, "M", "ү"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7494 (Occurrences: 1):         (0x1E050, "M", "ӏ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7495 (Occurrences: 1):         (0x1E051, "M", "а"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7496 (Occurrences: 1):         (0x1E052, "M", "б"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7497 (Occurrences: 1):         (0x1E053, "M", "в"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7498 (Occurrences: 1):         (0x1E054, "M", "г"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7499 (Occurrences: 1):         (0x1E055, "M", "д"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7500 (Occurrences: 1):         (0x1E056, "M", "е"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7501 (Occurrences: 1):         (0x1E057, "M", "ж"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7502 (Occurrences: 1):         (0x1E058, "M", "з"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7503 (Occurrences: 1):         (0x1E059, "M", "и"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7504 (Occurrences: 1):         (0x1E05A, "M", "к"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7505 (Occurrences: 1):         (0x1E05B, "M", "л"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7506 (Occurrences: 1):         (0x1E05C, "M", "о"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7507 (Occurrences: 1):         (0x1E05D, "M", "п"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7508 (Occurrences: 1):         (0x1E05E, "M", "с"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7509 (Occurrences: 1):         (0x1E05F, "M", "у"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7510 (Occurrences: 1):         (0x1E060, "M", "ф"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7511 (Occurrences: 1):         (0x1E061, "M", "х"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7512 (Occurrences: 1):         (0x1E062, "M", "ц"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7513 (Occurrences: 1):         (0x1E063, "M", "ч"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7514 (Occurrences: 1):         (0x1E064, "M", "ш"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7515 (Occurrences: 1):         (0x1E065, "M", "ъ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7516 (Occurrences: 1):         (0x1E066, "M", "ы"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7517 (Occurrences: 1):         (0x1E067, "M", "ґ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7518 (Occurrences: 1):         (0x1E068, "M", "і"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7519 (Occurrences: 1):         (0x1E069, "M", "ѕ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7520 (Occurrences: 1):         (0x1E06A, "M", "џ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7521 (Occurrences: 1):         (0x1E06B, "M", "ҫ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\idna\uts46data.py' - Line 7523 (Occurrences: 1):         (0x1E06D, "M", "ұ"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\jinja2\_identifier.py' - Line 5 (Occurrences: 2):     r"[\w·̀-ͯ·҃-֑҇-ׇֽֿׁׂׅׄؐ-ًؚ-ٰٟۖ-ۜ۟-۪ۤۧۨ-ܑۭܰ-݊ަ-ް߫-߽߳ࠖ-࠙ࠛ-ࠣࠥ-ࠧࠩ-࡙࠭-࡛࣓-ࣣ࣡-ःऺ-़ा-ॏ॑-ॗॢॣঁ-ঃ়া-ৄেৈো-্ৗৢৣ৾ਁ-ਃ਼ਾ-ੂੇੈੋ-੍ੑੰੱੵઁ-ઃ઼ા-ૅે-ૉો-્ૢૣૺ-૿ଁ-ଃ଼ା-ୄେୈୋ-୍ୖୗୢୣஂா-ூெ-ைொ-்ௗఀ-ఄా-ౄె-ైొ-్ౕౖౢౣಁ-ಃ಼ಾ-ೄೆ-ೈೊ-್ೕೖೢೣഀ-ഃ഻഼ാ-ൄെ-ൈൊ-്ൗൢൣංඃ්ා-ුූෘ-ෟෲෳัิ-ฺ็-๎ັິ-ູົຼ່-ໍ༹༘༙༵༷༾༿ཱ-྄྆྇ྍ-ྗྙ-ྼ࿆ါ-ှၖ-ၙၞ-ၠၢ-ၤၧ-ၭၱ-ၴႂ-ႍႏႚ-ႝ፝-፟ᜒ-᜔ᜲ-᜴ᝒᝓᝲᝳ឴-៓៝᠋-᠍ᢅᢆᢩᤠ-ᤫᤰ-᤻ᨗ-ᨛᩕ-ᩞ᩠-᩿᩼᪰-᪽ᬀ-ᬄ᬴-᭄᭫-᭳ᮀ-ᮂᮡ-ᮭ᯦-᯳ᰤ-᰷᳐-᳔᳒-᳨᳭ᳲ-᳴᳷-᳹᷀-᷹᷻-᷿‿⁀⁔⃐-⃥⃜⃡-⃰℘℮⳯-⵿⳱ⷠ-〪ⷿ-゙゚〯꙯ꙴ-꙽ꚞꚟ꛰꛱ꠂ꠆ꠋꠣ-ꠧꢀꢁꢴ-ꣅ꣠-꣱ꣿꤦ-꤭ꥇ-꥓ꦀ-ꦃ꦳-꧀ꧥꨩ-ꨶꩃꩌꩍꩻ-ꩽꪰꪲ-ꪴꪷꪸꪾ꪿꫁ꫫ-ꫯꫵ꫶ꯣ-ꯪ꯬꯭ﬞ︀-️︠-︯︳︴﹍-﹏＿𐇽𐋠𐍶-𐍺𐨁-𐨃𐨅𐨆𐨌-𐨏𐨸-𐨿𐨺𐫦𐫥𐴤-𐽆𐴧-𐽐𑀀-𑀂𑀸-𑁆𑁿-𑂂𑂰-𑂺𑄀-𑄂𑄧-𑄴𑅅𑅆𑅳𑆀-𑆂𑆳-𑇀𑇉-𑇌𑈬-𑈷𑈾𑋟-𑋪𑌀-𑌃𑌻𑌼𑌾-𑍄𑍇𑍈𑍋-𑍍𑍗𑍢𑍣𑍦-𑍬𑍰-𑍴𑐵-𑑆𑑞𑒰-𑓃𑖯-𑖵𑖸-𑗀𑗜𑗝𑘰-𑙀𑚫-𑚷𑜝-𑜫𑠬-𑠺𑨁-𑨊𑨳-𑨹𑨻-𑨾𑩇𑩑-𑩛𑪊-𑪙𑰯-𑰶𑰸-𑰿𑲒-𑲧𑲩-𑲶𑴱-𑴶𑴺𑴼𑴽𑴿-𑵅𑵇𑶊-𑶎𑶐𑶑𑶓-𑶗𑻳-𑻶𖫰-𖫴𖬰-𖬶𖽑-𖽾𖾏-𖾒𛲝𛲞𝅥-𝅩𝅭-𝅲𝅻-𝆂𝆅-𝆋𝆪-𝆭𝉂-𝉄𝨀-𝨶𝨻-𝩬𝩵𝪄𝪛-𝪟𝪡-𝪯𞀀-𞀆𞀈-𞀘𞀛-𞀡𞀣𞀤𞀦-𞣐𞀪-𞣖𞥄-𞥊󠄀-󠇯]+"  # noqa: B950
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 734 (Occurrences: 1):     (0x400, 'M', 'ѐ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 735 (Occurrences: 1):     (0x401, 'M', 'ё'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 736 (Occurrences: 1):     (0x402, 'M', 'ђ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 741 (Occurrences: 1):     (0x403, 'M', 'ѓ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 742 (Occurrences: 1):     (0x404, 'M', 'є'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 743 (Occurrences: 1):     (0x405, 'M', 'ѕ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 744 (Occurrences: 1):     (0x406, 'M', 'і'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 745 (Occurrences: 1):     (0x407, 'M', 'ї'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 746 (Occurrences: 1):     (0x408, 'M', 'ј'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 747 (Occurrences: 1):     (0x409, 'M', 'љ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 748 (Occurrences: 1):     (0x40A, 'M', 'њ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 749 (Occurrences: 1):     (0x40B, 'M', 'ћ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 750 (Occurrences: 1):     (0x40C, 'M', 'ќ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 751 (Occurrences: 1):     (0x40D, 'M', 'ѝ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 752 (Occurrences: 1):     (0x40E, 'M', 'ў'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 753 (Occurrences: 1):     (0x40F, 'M', 'џ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 754 (Occurrences: 1):     (0x410, 'M', 'а'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 755 (Occurrences: 1):     (0x411, 'M', 'б'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 756 (Occurrences: 1):     (0x412, 'M', 'в'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 757 (Occurrences: 1):     (0x413, 'M', 'г'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 758 (Occurrences: 1):     (0x414, 'M', 'д'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 759 (Occurrences: 1):     (0x415, 'M', 'е'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 760 (Occurrences: 1):     (0x416, 'M', 'ж'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 761 (Occurrences: 1):     (0x417, 'M', 'з'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 762 (Occurrences: 1):     (0x418, 'M', 'и'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 763 (Occurrences: 1):     (0x419, 'M', 'й'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 764 (Occurrences: 1):     (0x41A, 'M', 'к'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 765 (Occurrences: 1):     (0x41B, 'M', 'л'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 766 (Occurrences: 1):     (0x41C, 'M', 'м'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 767 (Occurrences: 1):     (0x41D, 'M', 'н'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 768 (Occurrences: 1):     (0x41E, 'M', 'о'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 769 (Occurrences: 1):     (0x41F, 'M', 'п'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 770 (Occurrences: 1):     (0x420, 'M', 'р'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 771 (Occurrences: 1):     (0x421, 'M', 'с'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 772 (Occurrences: 1):     (0x422, 'M', 'т'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 773 (Occurrences: 1):     (0x423, 'M', 'у'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 774 (Occurrences: 1):     (0x424, 'M', 'ф'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 775 (Occurrences: 1):     (0x425, 'M', 'х'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 776 (Occurrences: 1):     (0x426, 'M', 'ц'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 777 (Occurrences: 1):     (0x427, 'M', 'ч'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 778 (Occurrences: 1):     (0x428, 'M', 'ш'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 779 (Occurrences: 1):     (0x429, 'M', 'щ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 780 (Occurrences: 1):     (0x42A, 'M', 'ъ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 781 (Occurrences: 1):     (0x42B, 'M', 'ы'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 782 (Occurrences: 1):     (0x42C, 'M', 'ь'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 783 (Occurrences: 1):     (0x42D, 'M', 'э'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 784 (Occurrences: 1):     (0x42E, 'M', 'ю'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 785 (Occurrences: 1):     (0x42F, 'M', 'я'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 787 (Occurrences: 1):     (0x460, 'M', 'ѡ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 789 (Occurrences: 1):     (0x462, 'M', 'ѣ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 791 (Occurrences: 1):     (0x464, 'M', 'ѥ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 793 (Occurrences: 1):     (0x466, 'M', 'ѧ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 795 (Occurrences: 1):     (0x468, 'M', 'ѩ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 797 (Occurrences: 1):     (0x46A, 'M', 'ѫ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 799 (Occurrences: 1):     (0x46C, 'M', 'ѭ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 801 (Occurrences: 1):     (0x46E, 'M', 'ѯ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 803 (Occurrences: 1):     (0x470, 'M', 'ѱ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 805 (Occurrences: 1):     (0x472, 'M', 'ѳ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 807 (Occurrences: 1):     (0x474, 'M', 'ѵ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 809 (Occurrences: 1):     (0x476, 'M', 'ѷ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 811 (Occurrences: 1):     (0x478, 'M', 'ѹ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 813 (Occurrences: 1):     (0x47A, 'M', 'ѻ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 815 (Occurrences: 1):     (0x47C, 'M', 'ѽ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 817 (Occurrences: 1):     (0x47E, 'M', 'ѿ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 819 (Occurrences: 1):     (0x480, 'M', 'ҁ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 821 (Occurrences: 1):     (0x48A, 'M', 'ҋ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 823 (Occurrences: 1):     (0x48C, 'M', 'ҍ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 825 (Occurrences: 1):     (0x48E, 'M', 'ҏ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 827 (Occurrences: 1):     (0x490, 'M', 'ґ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 829 (Occurrences: 1):     (0x492, 'M', 'ғ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 831 (Occurrences: 1):     (0x494, 'M', 'ҕ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 833 (Occurrences: 1):     (0x496, 'M', 'җ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 835 (Occurrences: 1):     (0x498, 'M', 'ҙ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 837 (Occurrences: 1):     (0x49A, 'M', 'қ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 839 (Occurrences: 1):     (0x49C, 'M', 'ҝ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 845 (Occurrences: 1):     (0x49E, 'M', 'ҟ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 847 (Occurrences: 1):     (0x4A0, 'M', 'ҡ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 849 (Occurrences: 1):     (0x4A2, 'M', 'ң'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 851 (Occurrences: 1):     (0x4A4, 'M', 'ҥ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 853 (Occurrences: 1):     (0x4A6, 'M', 'ҧ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 855 (Occurrences: 1):     (0x4A8, 'M', 'ҩ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 857 (Occurrences: 1):     (0x4AA, 'M', 'ҫ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 859 (Occurrences: 1):     (0x4AC, 'M', 'ҭ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 861 (Occurrences: 1):     (0x4AE, 'M', 'ү'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 863 (Occurrences: 1):     (0x4B0, 'M', 'ұ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 865 (Occurrences: 1):     (0x4B2, 'M', 'ҳ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 867 (Occurrences: 1):     (0x4B4, 'M', 'ҵ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 869 (Occurrences: 1):     (0x4B6, 'M', 'ҷ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 871 (Occurrences: 1):     (0x4B8, 'M', 'ҹ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 873 (Occurrences: 1):     (0x4BA, 'M', 'һ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 875 (Occurrences: 1):     (0x4BC, 'M', 'ҽ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 877 (Occurrences: 1):     (0x4BE, 'M', 'ҿ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 880 (Occurrences: 1):     (0x4C1, 'M', 'ӂ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 882 (Occurrences: 1):     (0x4C3, 'M', 'ӄ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 884 (Occurrences: 1):     (0x4C5, 'M', 'ӆ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 886 (Occurrences: 1):     (0x4C7, 'M', 'ӈ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 888 (Occurrences: 1):     (0x4C9, 'M', 'ӊ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 890 (Occurrences: 1):     (0x4CB, 'M', 'ӌ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 892 (Occurrences: 1):     (0x4CD, 'M', 'ӎ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 894 (Occurrences: 1):     (0x4D0, 'M', 'ӑ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 896 (Occurrences: 1):     (0x4D2, 'M', 'ӓ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 898 (Occurrences: 1):     (0x4D4, 'M', 'ӕ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 900 (Occurrences: 1):     (0x4D6, 'M', 'ӗ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 902 (Occurrences: 1):     (0x4D8, 'M', 'ә'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 904 (Occurrences: 1):     (0x4DA, 'M', 'ӛ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 906 (Occurrences: 1):     (0x4DC, 'M', 'ӝ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 908 (Occurrences: 1):     (0x4DE, 'M', 'ӟ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 910 (Occurrences: 1):     (0x4E0, 'M', 'ӡ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 912 (Occurrences: 1):     (0x4E2, 'M', 'ӣ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 914 (Occurrences: 1):     (0x4E4, 'M', 'ӥ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 916 (Occurrences: 1):     (0x4E6, 'M', 'ӧ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 918 (Occurrences: 1):     (0x4E8, 'M', 'ө'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 920 (Occurrences: 1):     (0x4EA, 'M', 'ӫ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 922 (Occurrences: 1):     (0x4EC, 'M', 'ӭ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 924 (Occurrences: 1):     (0x4EE, 'M', 'ӯ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 926 (Occurrences: 1):     (0x4F0, 'M', 'ӱ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 928 (Occurrences: 1):     (0x4F2, 'M', 'ӳ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 930 (Occurrences: 1):     (0x4F4, 'M', 'ӵ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 932 (Occurrences: 1):     (0x4F6, 'M', 'ӷ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 934 (Occurrences: 1):     (0x4F8, 'M', 'ӹ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 936 (Occurrences: 1):     (0x4FA, 'M', 'ӻ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 938 (Occurrences: 1):     (0x4FC, 'M', 'ӽ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 940 (Occurrences: 1):     (0x4FE, 'M', 'ӿ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 1568 (Occurrences: 1):     (0x1C80, 'M', 'в'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 1573 (Occurrences: 1):     (0x1C81, 'M', 'д'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 1574 (Occurrences: 1):     (0x1C82, 'M', 'о'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 1575 (Occurrences: 1):     (0x1C83, 'M', 'с'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 1576 (Occurrences: 1):     (0x1C84, 'M', 'т'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 1577 (Occurrences: 1):     (0x1C86, 'M', 'ъ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 1578 (Occurrences: 1):     (0x1C87, 'M', 'ѣ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 1701 (Occurrences: 1):     (0x1D78, 'M', 'н'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 3767 (Occurrences: 1):     (0xA69C, 'M', 'ъ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 3768 (Occurrences: 1):     (0xA69D, 'M', 'ь'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7386 (Occurrences: 1):     (0x1E030, 'M', 'а'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7387 (Occurrences: 1):     (0x1E031, 'M', 'б'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7388 (Occurrences: 1):     (0x1E032, 'M', 'в'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7389 (Occurrences: 1):     (0x1E033, 'M', 'г'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7390 (Occurrences: 1):     (0x1E034, 'M', 'д'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7391 (Occurrences: 1):     (0x1E035, 'M', 'е'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7392 (Occurrences: 1):     (0x1E036, 'M', 'ж'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7397 (Occurrences: 1):     (0x1E037, 'M', 'з'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7398 (Occurrences: 1):     (0x1E038, 'M', 'и'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7399 (Occurrences: 1):     (0x1E039, 'M', 'к'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7400 (Occurrences: 1):     (0x1E03A, 'M', 'л'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7401 (Occurrences: 1):     (0x1E03B, 'M', 'м'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7402 (Occurrences: 1):     (0x1E03C, 'M', 'о'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7403 (Occurrences: 1):     (0x1E03D, 'M', 'п'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7404 (Occurrences: 1):     (0x1E03E, 'M', 'р'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7405 (Occurrences: 1):     (0x1E03F, 'M', 'с'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7406 (Occurrences: 1):     (0x1E040, 'M', 'т'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7407 (Occurrences: 1):     (0x1E041, 'M', 'у'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7408 (Occurrences: 1):     (0x1E042, 'M', 'ф'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7409 (Occurrences: 1):     (0x1E043, 'M', 'х'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7410 (Occurrences: 1):     (0x1E044, 'M', 'ц'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7411 (Occurrences: 1):     (0x1E045, 'M', 'ч'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7412 (Occurrences: 1):     (0x1E046, 'M', 'ш'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7413 (Occurrences: 1):     (0x1E047, 'M', 'ы'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7414 (Occurrences: 1):     (0x1E048, 'M', 'э'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7415 (Occurrences: 1):     (0x1E049, 'M', 'ю'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7417 (Occurrences: 1):     (0x1E04B, 'M', 'ә'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7418 (Occurrences: 1):     (0x1E04C, 'M', 'і'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7419 (Occurrences: 1):     (0x1E04D, 'M', 'ј'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7420 (Occurrences: 1):     (0x1E04E, 'M', 'ө'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7421 (Occurrences: 1):     (0x1E04F, 'M', 'ү'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7422 (Occurrences: 1):     (0x1E050, 'M', 'ӏ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7423 (Occurrences: 1):     (0x1E051, 'M', 'а'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7424 (Occurrences: 1):     (0x1E052, 'M', 'б'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7425 (Occurrences: 1):     (0x1E053, 'M', 'в'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7426 (Occurrences: 1):     (0x1E054, 'M', 'г'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7427 (Occurrences: 1):     (0x1E055, 'M', 'д'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7428 (Occurrences: 1):     (0x1E056, 'M', 'е'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7429 (Occurrences: 1):     (0x1E057, 'M', 'ж'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7430 (Occurrences: 1):     (0x1E058, 'M', 'з'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7431 (Occurrences: 1):     (0x1E059, 'M', 'и'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7432 (Occurrences: 1):     (0x1E05A, 'M', 'к'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7433 (Occurrences: 1):     (0x1E05B, 'M', 'л'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7434 (Occurrences: 1):     (0x1E05C, 'M', 'о'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7435 (Occurrences: 1):     (0x1E05D, 'M', 'п'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7436 (Occurrences: 1):     (0x1E05E, 'M', 'с'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7437 (Occurrences: 1):     (0x1E05F, 'M', 'у'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7438 (Occurrences: 1):     (0x1E060, 'M', 'ф'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7439 (Occurrences: 1):     (0x1E061, 'M', 'х'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7440 (Occurrences: 1):     (0x1E062, 'M', 'ц'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7441 (Occurrences: 1):     (0x1E063, 'M', 'ч'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7442 (Occurrences: 1):     (0x1E064, 'M', 'ш'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7443 (Occurrences: 1):     (0x1E065, 'M', 'ъ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7444 (Occurrences: 1):     (0x1E066, 'M', 'ы'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7445 (Occurrences: 1):     (0x1E067, 'M', 'ґ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7446 (Occurrences: 1):     (0x1E068, 'M', 'і'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7447 (Occurrences: 1):     (0x1E069, 'M', 'ѕ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7448 (Occurrences: 1):     (0x1E06A, 'M', 'џ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7449 (Occurrences: 1):     (0x1E06B, 'M', 'ҫ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7451 (Occurrences: 1):     (0x1E06D, 'M', 'ұ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip-24.3.1.dist-info\AUTHORS.txt' - Line 716 (Occurrences: 18): Sviatoslav Sydorenko (Святослав Сидоренко)
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip-24.3.1.dist-info\AUTHORS.txt' - Line 798 (Occurrences: 13): Роман Донченко
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pip-24.3.1.dist-info\AUTHORS.txt' - Line 799 (Occurrences: 13): Семён Марьясин
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pygments\lexers\testing.py' - Line 28 (Occurrences: 54):     feature_keywords = '^(기능|機能|功能|フィーチャ|خاصية|תכונה|Функціонал|Функционалност|Функционал|Фича|Особина|Могућност|Özellik|Właściwość|Tính năng|Trajto|Savybė|Požiadavka|Požadavek|Osobina|Ominaisuus|Omadus|OH HAI|Mogućnost|Mogucnost|Jellemző|Fīča|Funzionalità|Funktionalität|Funkcionalnost|Funkcionalitāte|Funcționalitate|Functionaliteit|Functionalitate|Funcionalitat|Funcionalidade|Fonctionnalité|Fitur|Feature|Egenskap|Egenskab|Crikey|Característica|Arwedd)(:)(.*)$'
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pygments\lexers\testing.py' - Line 29 (Occurrences: 187):     feature_element_keywords = '^(\\s*)(시나리오 개요|시나리오|배경|背景|場景大綱|場景|场景大纲|场景|劇本大綱|劇本|剧本大纲|剧本|テンプレ|シナリオテンプレート|シナリオテンプレ|シナリオアウトライン|シナリオ|سيناريو مخطط|سيناريو|الخلفية|תרחיש|תבנית תרחיש|רקע|Тарих|Сценарій|Сценарио|Сценарий структураси|Сценарий|Структура сценарію|Структура сценарија|Структура сценария|Скица|Рамка на сценарий|Пример|Предыстория|Предистория|Позадина|Передумова|Основа|Концепт|Контекст|Założenia|Wharrimean is|Tình huống|The thing of it is|Tausta|Taust|Tapausaihio|Tapaus|Szenariogrundriss|Szenario|Szablon scenariusza|Stsenaarium|Struktura scenarija|Skica|Skenario konsep|Skenario|Situācija|Senaryo taslağı|Senaryo|Scénář|Scénario|Schema dello scenario|Scenārijs pēc parauga|Scenārijs|Scenár|Scenaro|Scenariusz|Scenariul de şablon|Scenariul de sablon|Scenariu|Scenario Outline|Scenario Amlinellol|Scenario|Scenarijus|Scenarijaus šablonas|Scenarij|Scenarie|Rerefons|Raamstsenaarium|Primer|Pozadí|Pozadina|Pozadie|Plan du scénario|Plan du Scénario|Osnova scénáře|Osnova|Náčrt Scénáře|Náčrt Scenáru|Mate|MISHUN SRSLY|MISHUN|Kịch bản|Konturo de la scenaro|Kontext|Konteksts|Kontekstas|Kontekst|Koncept|Khung tình huống|Khung kịch bản|Háttér|Grundlage|Geçmiş|Forgatókönyv vázlat|Forgatókönyv|Fono|Esquema do Cenário|Esquema do Cenario|Esquema del escenario|Esquema de l\'escenari|Escenario|Escenari|Dis is what went down|Dasar|Contexto|Contexte|Contesto|Condiţii|Conditii|Cenário|Cenario|Cefndir|Bối cảnh|Blokes|Bakgrunn|Bakgrund|Baggrund|Background|B4|Antecedents|Antecedentes|All y\'all|Achtergrond|Abstrakt Scenario|Abstract Scenario)(:)(.*)$'
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pygments\lexers\testing.py' - Line 30 (Occurrences: 40):     examples_keywords = '^(\\s*)(예|例子|例|サンプル|امثلة|דוגמאות|Сценарији|Примери|Приклади|Мисоллар|Значения|Örnekler|Voorbeelden|Variantai|Tapaukset|Scenarios|Scenariji|Scenarijai|Příklady|Példák|Príklady|Przykłady|Primjeri|Primeri|Piemēri|Pavyzdžiai|Paraugs|Juhtumid|Exemplos|Exemples|Exemplele|Exempel|Examples|Esempi|Enghreifftiau|Ekzemploj|Eksempler|Ejemplos|EXAMPLZ|Dữ liệu|Contoh|Cobber|Beispiele)(:)(.*)$'
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\.venv\Lib\site-packages\pygments\lexers\testing.py' - Line 31 (Occurrences: 128):     step_keywords = '^(\\s*)(하지만|조건|먼저|만일|만약|단|그리고|그러면|那麼|那么|而且|當|当|前提|假設|假设|假如|假定|但是|但し|並且|并且|同時|同时|もし|ならば|ただし|しかし|かつ|و |متى |لكن |عندما |ثم |بفرض |اذاً |כאשר |וגם |בהינתן |אזי |אז |אבל |Якщо |Унда |То |Припустимо, що |Припустимо |Онда |Но |Нехай |Лекин |Когато |Када |Кад |К тому же |И |Задато |Задати |Задате |Если |Допустим |Дадено |Ва |Бирок |Аммо |Али |Але |Агар |А |І |Și |És |Zatati |Zakładając |Zadato |Zadate |Zadano |Zadani |Zadan |Youse know when youse got |Youse know like when |Yna |Ya know how |Ya gotta |Y |Wun |Wtedy |When y\'all |When |Wenn |WEN |Và |Ve |Und |Un |Thì |Then y\'all |Then |Tapi |Tak |Tada |Tad |Så |Stel |Soit |Siis |Si |Sed |Se |Quando |Quand |Quan |Pryd |Pokud |Pokiaľ |Però |Pero |Pak |Oraz |Onda |Ond |Oletetaan |Og |Och |O zaman |Når |När |Niin |Nhưng |N |Mutta |Men |Mas |Maka |Majd |Mais |Maar |Ma |Lorsque |Lorsqu\'|Kun |Kuid |Kui |Khi |Keď |Ketika |Když |Kaj |Kai |Kada |Kad |Jeżeli |Ja |Ir |I CAN HAZ |I |Ha |Givun |Givet |Given y\'all |Given |Gitt |Gegeven |Gegeben sei |Fakat |Eğer ki |Etant donné |Et |Então |Entonces |Entao |En |Eeldades |E |Duota |Dun |Donitaĵo |Donat |Donada |Do |Diyelim ki |Dengan |Den youse gotta |De |Dato |Dar |Dann |Dan |Dado |Dacă |Daca |DEN |Când |Cuando |Cho |Cept |Cand |Cal |But y\'all |But |Buh |Biết |Bet |BUT |Atès |Atunci |Atesa |Anrhegedig a |Angenommen |And y\'all |And |An |Ama |Als |Alors |Allora |Ali |Aleshores |Ale |Akkor |Aber |AN |A také |A |\\* )'
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\config.py' - Line 13 (Occurrences: 10):     "books_folder": os.path.join(os.environ["USERPROFILE"], "documents", "Аудио книги"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\config.py' - Line 33 (Occurrences: 46):     Создает файл конфигурации со значениями по умолчанию.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\config.py' - Line 41 (Occurrences: 34):     Загружает данные из файла конфигурации.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\config.py' - Line 53 (Occurrences: 31):     Обновляет поля в файле конфигурации.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\config.py' - Line 54 (Occurrences: 39):     :param update_env: True - произойдет обновление переменных окружения.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\config.py' - Line 55 (Occurrences: 17):     :param fields: Поля для обновления.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\config.py' - Line 70 (Occurrences: 37):     Проверяет валидность данных конфигурации.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\config.py' - Line 71 (Occurrences: 23):     Исправляет в случае ошибок.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\config.py' - Line 72 (Occurrences: 18):     :returns: Данные конфигурации.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\config.py' - Line 96 (Occurrences: 47):     Добавляет данные конфигурации в переменные окружения.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\logger.py' - Line 8 (Occurrences: 34): try:  # Удаление настроек логгера по умолчанию
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\logger.py' - Line 48 (Occurrences: 5): logger.level("TRACE", color="<lk>")  # TRACE - синий
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\logger.py' - Line 49 (Occurrences: 5): logger.level("DEBUG", color="<w>")  # DEBUG - белый
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\logger.py' - Line 50 (Occurrences: 9): logger.level("INFO", color="<c><bold>")  # INFO - бирюзовый
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\main_window.py' - Line 11 (Occurrences: 28):     Создает главное окно приложения.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\main_window.py' - Line 12 (Occurrences: 13):     :returns: Экземпляр окна.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\main_window.py' - Line 41 (Occurrences: 27):     # Добавляем обработчики событий
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\main.py' - Line 7 (Occurrences: 25): # Путь к директории приложения
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\main.py' - Line 11 (Occurrences: 22): # Путь к файлу конфигурации
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\main.py' - Line 13 (Occurrences: 30): # Путь к файлу базы данных библиотеки
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\main.py' - Line 15 (Occurrences: 17): # Путь к файлу отладки
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\main.py' - Line 17 (Occurrences: 28): # Путь к файлу с временными данными
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\main.py' - Line 19 (Occurrences: 16): # Версия приложения
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\run.py' - Line 3 (Occurrences: 16): Запуск приложения.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\run.py' - Line 5 (Occurrences: 16): Параметры запуска:
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\run.py' - Line 6 (Occurrences: 23):     --run-update=<str> запуск обновления из файла
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\starting_window.py' - Line 17 (Occurrences: 28):     Создает окно запуска приложения.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\starting_window.py' - Line 18 (Occurrences: 13):     :returns: Экземпляр окна.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\starting_window.py' - Line 40 (Occurrences: 27):     # Добавляем обработчики событий
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\starting_window.py' - Line 49 (Occurrences: 32):     Подготавливает приложение к запуску.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\starting_window.py' - Line 50 (Occurrences: 28):     Инициализирует конфигурацию, бд.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\starting_window.py' - Line 51 (Occurrences: 21):     Анализирует библиотеку.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\starting_window.py' - Line 66 (Occurrences: 6):     window.evaluate_js("setStatus('запуск...')")
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\starting_window.py' - Line 80 (Occurrences: 21):     Анализирует библиотеку.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\starting_window.py' - Line 81 (Occurrences: 25):     Добавляет книги из хранилища.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\starting_window.py' - Line 82 (Occurrences: 31):     Исправляет некорректные записи в бд.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\starting_window.py' - Line 85 (Occurrences: 18):     window.evaluate_js("setStatus('загрузка библиотеки...')")
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\starting_window.py' - Line 91 (Occurrences: 27):         # Проверка существующих в бд книг
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\starting_window.py' - Line 113 (Occurrences: 21):         # Сканирование хранилища
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\temp_file.py' - Line 3 (Occurrences: 53): Реализует взаимодействие с файлом, хранящим временные данные.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\temp_file.py' - Line 5 (Occurrences: 30): В файле данные хранятся в таком виде:
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\temp_file.py' - Line 6 (Occurrences: 21): <ключ>: <тип данных> = <значение>
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\temp_file.py' - Line 7 (Occurrences: 21): <ключ>: <тип данных> = <значение>
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\temp_file.py' - Line 8 (Occurrences: 21): <ключ>: <тип данных> = <значение>
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\temp_file.py' - Line 11 (Occurrences: 34): Каждая запись начинается с новой строки.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\temp_file.py' - Line 12 (Occurrences: 37): Для хранения доступны такие типы данных как: str, int, float, bool.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\temp_file.py' - Line 27 (Occurrences: 22):     Считывает данные из файла.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\temp_file.py' - Line 28 (Occurrences: 15):     :returns: Словарь с данными.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\temp_file.py' - Line 31 (Occurrences: 11):     # Создаём файл
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\temp_file.py' - Line 45 (Occurrences: 15):         )  # Проверка шаблона
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\temp_file.py' - Line 60 (Occurrences: 20):     Сохраняет данные в файл.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\temp_file.py' - Line 61 (Occurrences: 15):     :param data: Словарь с данными.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\temp_file.py' - Line 77 (Occurrences: 32):     Обновляет/добавляет значения в файле.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\temp_file.py' - Line 86 (Occurrences: 19):     Удаляет записи в файле.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\temp_file.py' - Line 87 (Occurrences: 12):     :param keys: Ключи записей.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\temp_file.py' - Line 98 (Occurrences: 46):     Преобразует значение полученное из файла в тип данных Python.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\temp_file.py' - Line 99 (Occurrences: 15):     :param value: Значение из файла.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\temp_file.py' - Line 100 (Occurrences: 9):     :param value_type: Тип данных.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\temp_file.py' - Line 101 (Occurrences: 23):     :returns: Преобразованное значение.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\temp_file.py' - Line 121 (Occurrences: 38):     Подготавливает данные для сохранения в файл.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\temp_file.py' - Line 122 (Occurrences: 16):     :param value: Исходное значение.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\temp_file.py' - Line 123 (Occurrences: 23):     :returns: Преобразованное значение.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\temp_file.py' - Line 130 (Occurrences: 21):         f"Недопустимый тип данных {type(value).__name__}, "
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\temp_file.py' - Line 131 (Occurrences: 18):         "можно хранить только str, int, float, bool"
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\tools.py' - Line 19 (Occurrences: 9):     :param bytes_value: Число байт.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\tools.py' - Line 20 (Occurrences: 31):     :returns: Строка вида <Число> <Единица измерения>
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\tools.py' - Line 24 (Occurrences: 11):     size_name = ("б", "КБ", "МБ", "ГБ", "ТБ", "ПБ", "EB", "ZB", "YB")
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\tools.py' - Line 33 (Occurrences: 10):     :param file_path: Путь к файлу.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\tools.py' - Line 34 (Occurrences: 18):     :param hash_func: Функция хеширования.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\tools.py' - Line 35 (Occurrences: 8):     :returns: Хеш файла.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\tools.py' - Line 37 (Occurrences: 24):     hash_func = hash_func()  # Инициализируем хеш функцию
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\tools.py' - Line 39 (Occurrences: 21):         # Читаем файл по блокам в 64кб,
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\tools.py' - Line 40 (Occurrences: 51):         # для избежания загрузки больших файлов в оперативную память
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\tools.py' - Line 54 (Occurrences: 49):     Формирует удобно читаемое представление списка/словаря.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\tools.py' - Line 55 (Occurrences: 6):     :returns: Строка.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\tools.py' - Line 120 (Occurrences: 14):     :param book: Экземпляр книги.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\tools.py' - Line 121 (Occurrences: 28):     :returns: Словарь с основными полями книги.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\akniga.py' - Line 18 (Occurrences: 50): На сайте AKniga информация о книге загружается динамически через JavaScript.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\akniga.py' - Line 19 (Occurrences: 65): Поэтому для получения полных данных о книге нам необходима среда исполнения JS.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\akniga.py' - Line 27 (Occurrences: 51):         Метод, возвращающий динамически загружаемые данные о книге.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\akniga.py' - Line 30 (Occurrences: 24):             "titleonly": <str>,  # название книги в чистом виде
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\akniga.py' - Line 32 (Occurrences: 10):                 "file": <int>,  # номер файла
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\akniga.py' - Line 33 (Occurrences: 13):                 "title": <str>,  # название главы
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\akniga.py' - Line 34 (Occurrences: 11):                 "time_from_start": <str>,  # точка начала
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\akniga.py' - Line 35 (Occurrences: 14):                 "time_finish": <str>,  # точка окончания
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\akniga.py' - Line 37 (Occurrences: 12):             "m3u8": <str>,  # ссылка на файл m3u8
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\akniga.py' - Line 44 (Occurrences: 27):     Среда исполнения JS, использующая Pywebview.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\akniga.py' - Line 45 (Occurrences: 59):     Создаёт скрытое окно, загружает там страницу книги и берет с нее данные.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\akniga.py' - Line 55 (Occurrences: 31):         # Выполнение `self._get_book_data` после загрузки страницы
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\akniga.py' - Line 58 (Occurrences: 31):         if len(webview.windows) == 1:  # На данный момент нет запущенных окон pywebview
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\akniga.py' - Line 272 (Occurrences: 9):                         reader = "нет данных"
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 23 (Occurrences: 26):     Статусы прогресса скачивания.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 37 (Occurrences: 28):     Обработчик процесса скачивания.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 38 (Occurrences: 35):     Визуализирует процесс скачивания книги.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 75 (Occurrences: 18):         Отображает прогресс.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 89 (Occurrences: 15):     Загрузчик файлов.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 98 (Occurrences: 24):         # Общий размер файлов(в байтах)
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 99 (Occurrences: 29):         # Определяется, только если передан `process_handler`
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 102 (Occurrences: 21):         # Файл открытый для записи
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 104 (Occurrences: 20):         # Поток скачивания файла
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 115 (Occurrences: 34):         Подготавливает загрузчик к скачиванию.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 116 (Occurrences: 43):         Метод должен быть реализован в наследуемом классе.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 122 (Occurrences: 14):         Скачивает файлы.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 123 (Occurrences: 43):         Метод должен быть реализован в наследуемом классе.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 128 (Occurrences: 31):         Скачивает и сохраняет обложку книги.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 149 (Occurrences: 19):         Скачивает файлы книги.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 150 (Occurrences: 29):         :returns: Список с путями к скачанным файлам.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 170 (Occurrences: 21):         return not self._terminated  # True - при успешном скачивании
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 174 (Occurrences: 17):         Прерывает загрузку.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 201 (Occurrences: 20):     drivers: list[ty.Type[Driver]] = []  # Все доступные драйверы
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 221 (Occurrences: 13):         :param url: Ссылка на книгу.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 222 (Occurrences: 16):         :returns: Результат GET запроса.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 229 (Occurrences: 31):         Метод, получающий информацию о книге.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 230 (Occurrences: 46):         Должен быть реализован для каждого драйвера отдельно.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 231 (Occurrences: 13):         :param url: Ссылка на книгу.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 232 (Occurrences: 14):         :returns: Экземпляр книги.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 238 (Occurrences: 39):         Метод, получающий информацию о книгах из серии.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 239 (Occurrences: 46):         Должен быть реализован для каждого драйвера отдельно.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 240 (Occurrences: 13):         :param url: Ссылка на книгу.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 241 (Occurrences: 29):         :returns: Список неполных экземпляров книг.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 247 (Occurrences: 34):         Метод, выполняющий поиск книг по запросу.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 248 (Occurrences: 46):         Должен быть реализован для каждого драйвера отдельно.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 249 (Occurrences: 15):         :param query: Поисковый запрос.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 250 (Occurrences: 28):         :param limit: Кол-во книг, которое нужно вернуть.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 251 (Occurrences: 24):         :param offset: Будет пропущено `offset` первых книг.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 252 (Occurrences: 29):         :returns: Список неполных экземпляров книг.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 259 (Occurrences: 31):         Метод, скачивающий аудио файлы книги.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 260 (Occurrences: 14):         :param book: Экземпляр книги.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 261 (Occurrences: 28):         :param process_handler: Обработчик процесса скачивания.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\base.py' - Line 262 (Occurrences: 18):         :return: Список путей к файлам.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\knigavuhe.py' - Line 51 (Occurrences: 12):                 if children[0].text in ["читает", "читают"]:
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\knigavuhe.py' - Line 58 (Occurrences: 13):                 if info[0].text == "Время звучания:":
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\knigavuhe.py' - Line 59 (Occurrences: 13):                     duration = element.text.replace("Время звучания:", "").strip()
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\knigavuhe.py' - Line 202 (Occurrences: 9):                         author = "нет данных"
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\knigavuhe.py' - Line 208 (Occurrences: 9):                         reader = "нет данных"
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\tools.py' - Line 40 (Occurrences: 28):     Изменяет метаданные аудио файла.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\tools.py' - Line 41 (Occurrences: 15):     :param file_path: Путь к аудио файлу.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\tools.py' - Line 42 (Occurrences: 10):     :param author: Автор книги.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\tools.py' - Line 43 (Occurrences: 13):     :param title: Название главы.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\tools.py' - Line 44 (Occurrences: 20):     :param item_index: Порядковый номер файла.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\tools.py' - Line 56 (Occurrences: 15):     :param file_path: Путь к аудио файлу.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\tools.py' - Line 57 (Occurrences: 31):     :returns: Длительность аудио файла в секундах.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\tools.py' - Line 69 (Occurrences: 50):     Убирает или заменяет символы не допустимые для имени файла Windows.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\tools.py' - Line 78 (Occurrences: 30):     Создает идентификатор экземпляра.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\tools.py' - Line 98 (Occurrences: 23):     :returns: Идентификатор экземпляра.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\downloaders\m3u8_downloader.py' - Line 31 (Occurrences: 56):     Загрузчик, предназначенный для книг в которых файлы представлены
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\downloaders\m3u8_downloader.py' - Line 32 (Occurrences: 6):     m3u8 файлом.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\downloaders\m3u8_downloader.py' - Line 40 (Occurrences: 6):         self._m3u8_data = None  # Объект m3u8
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\downloaders\m3u8_downloader.py' - Line 42 (Occurrences: 24):         self._encryption_key: str | None = None  # Ключ шифрования фрагментов
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\downloaders\m3u8_downloader.py' - Line 49 (Occurrences: 23):             # Общий размер книги(в байтах)
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\downloaders\m3u8_downloader.py' - Line 87 (Occurrences: 56):             # Если длительность получившегося файла равна длительности главы
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\downloaders\m3u8_downloader.py' - Line 88 (Occurrences: 14):             # (погрешность 2 сек)
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\downloaders\m3u8_downloader.py' - Line 99 (Occurrences: 22):                 # Переход к следующей главе
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\downloaders\m3u8_downloader.py' - Line 109 (Occurrences: 15):         ts_url = os.path.join(self._host_uri, segment.uri)  # Ссылка на сегмент
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\downloaders\m3u8_downloader.py' - Line 114 (Occurrences: 39):         # Создаем объект потоковой загрузки фрагмента
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\downloaders\m3u8_downloader.py' - Line 131 (Occurrences: 27):                 # Добавляем фрагмент в аудио файл
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\downloaders\m3u8_downloader.py' - Line 133 (Occurrences: 38):                 # Сбрасываем данные в файл. Освобождаем память
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\downloaders\m3u8_downloader.py' - Line 138 (Occurrences: 38):         # Определяем функцию дешифрования фрагмента
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\downloaders\m3u8_downloader.py' - Line 180 (Occurrences: 27):         # Убираем номер файла из названия
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\downloaders\mp3_downloader.py' - Line 25 (Occurrences: 56):     Загрузчик, предназначенный для книг в которых файлы представлены
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\downloaders\mp3_downloader.py' - Line 26 (Occurrences: 33):     отдельными или объединенными MP3 файлами.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\downloaders\mp3_downloader.py' - Line 34 (Occurrences: 13):         self._files_urls = []  # Ссылки на файлы
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\downloaders\mp3_downloader.py' - Line 35 (Occurrences: 39):         # True - в одном аудио файле присутствует не одна глава
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\downloaders\mp3_downloader.py' - Line 41 (Occurrences: 32):             # Инициализируем прогресс подготовки
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\downloaders\mp3_downloader.py' - Line 56 (Occurrences: 21):                     # Определяем размер файла
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\downloaders\mp3_downloader.py' - Line 67 (Occurrences: 32):             # Инициализируем прогресс скачивания
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\downloaders\mp3_downloader.py' - Line 80 (Occurrences: 44):                 # Исключаем ссылку, чтобы не скачивать файл второй раз
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\downloadi_process_handlers\stdout_handler.py' - Line 8 (Occurrences: 28):     Обработчик процесса скачивания.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\drivers\downloadi_process_handlers\stdout_handler.py' - Line 9 (Occurrences: 43):     Визуализирует процесс скачивания книги в консоли.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\js_api\books.py' - Line 104 (Occurrences: 27):             matched_books_bids = []  # Идентификаторы найденных книг
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\js_api\books.py' - Line 105 (Occurrences: 5):             # Поиск
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\js_api\books.py' - Line 484 (Occurrences: 22):     message = "Нет подходящего драйвера"
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\js_api\books.py' - Line 489 (Occurrences: 28):     message = "Книга уже добавлена в библиотеку"
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\js_api\books.py' - Line 494 (Occurrences: 14):     message = "Книга не найдена"
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\js_api\books.py' - Line 499 (Occurrences: 29):     message = "Книга скачивается или уже скачана"
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\js_api\books.py' - Line 504 (Occurrences: 14):     message = "Книга не скачана"
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\js_api\js_api.py' - Line 19 (Occurrences: 45):         Регистрирует методы для дальнейшего вызова из среды JS.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\js_api\js_api.py' - Line 70 (Occurrences: 20):     message = "Проблемы с соединением"
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\js_api\settings.py' - Line 275 (Occurrences: 16):     message = "Операция отменена"
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\js_api\settings.py' - Line 280 (Occurrences: 22):     message = "Файл обновления не найден"
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\js_api\tools.py' - Line 7 (Occurrences: 41):     Декоратор кэширующий результат вызова функции
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\js_api\tools.py' - Line 8 (Occurrences: 38):     в течении определенного промежутка времени.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\js_api\tools.py' - Line 9 (Occurrences: 40):     max_age: Продолжительность сохранения кэша(в секундах).
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\js_api\window_controls.py' - Line 94 (Occurrences: 35):     Масштаб экрана(на ноутбуках обычно стоит 125%)
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\js_api\window_controls.py' - Line 109 (Occurrences: 49):     # Определяем начальное положение курсора, окна и его размер
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\js_api\window_controls.py' - Line 121 (Occurrences: 30):         # Пользователь отпустил кнопку мыши
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\js_api\window_controls.py' - Line 128 (Occurrences: 55):         # Определяем изменение значений в зависимости от области захвата
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\js_api\window_controls.py' - Line 130 (Occurrences: 27):         # Обычное изменение размера окна
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\js_api\window_controls.py' - Line 135 (Occurrences: 29):         # Изменение положения размера окна
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\js_api\window_controls.py' - Line 150 (Occurrences: 21):             # Изменяем положение окна
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\js_api\window_controls.py' - Line 152 (Occurrences: 18):         # Изменяем размер окна
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\js_api\window_controls.py' - Line 167 (Occurrences: 40):     # Определяем начальное положение курсора и окна
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\js_api\window_controls.py' - Line 175 (Occurrences: 30):         # Пользователь отпустил кнопку мыши
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 23 (Occurrences: 10):     Глава книги.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 26 (Occurrences: 25):     file_url: str  # Ссылка на файл, для скачивания
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 27 (Occurrences: 27):     file_index: int  # Номер файла(Нумерация с единицы)
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 28 (Occurrences: 13):     title: str  # Название главы
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 29 (Occurrences: 34):     start_time: int  # Время (в секундах), когда начинается глава
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 30 (Occurrences: 37):     end_time: int  # Время (в секундах), когда заканчивается глава
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 35 (Occurrences: 26):         Длительность главы (в секундах).
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 42 (Occurrences: 10):     Список глав.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 43 (Occurrences: 26):     Представлен списком словарей.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 60 (Occurrences: 11):     Статус книги.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 63 (Occurrences: 10):     NEW = "new"  # Новая книга
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 64 (Occurrences: 12):     STARTED = "started"  # Начал слушать
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 65 (Occurrences: 15):     FINISHED = "finished"  # Закончил слушать
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 71 (Occurrences: 50):     Отметка, на которой пользователь остановил прослушивание.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 72 (Occurrences: 30):     В базе данных храниться как словарь.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 75 (Occurrences: 11):     item: int = 0  # Глава(Индекс)
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 76 (Occurrences: 7):     time: int = 0  # Секунда
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 81 (Occurrences: 33):     Аудио файлы книги. Словарь: dict[str, str] {<имя файла>: <хеш>}
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 88 (Occurrences: 43):     Класс, описывающий, как книги, хранятся в базе данных,
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 89 (Occurrences: 38):     а так же какие данные драйвера парсят с сайтов.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 97 (Occurrences: 8):     description: str = ""  # Описание
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 98 (Occurrences: 4):     reader: str = ""  # Чтец
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 99 (Occurrences: 12):     duration: str = ""  # Длительность
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 100 (Occurrences: 13):     url: str = ""  # Ссылка на книгу
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 101 (Occurrences: 26):     preview: str = ""  # Ссылка на превью(обложку) книги
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 102 (Occurrences: 27):     driver: str = ""  # Драйвер, с которым работает сайт
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 103 (Occurrences: 10):     items: BookItems = field(default_factory=BookItems)  # Список глав
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 113 (Occurrences: 34):         :returns: Относительный путь к книге в библиотеке.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 127 (Occurrences: 47):         :returns: Абсолютный путь к директории, в которой храниться книга.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 134 (Occurrences: 32):         :returns: Абсолютный путь к файлу обложки книги.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 141 (Occurrences: 31):         :returns: Прогресс прослушивания. (В процентах)
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 161 (Occurrences: 34):         Сканирует директорию на наличие `.abp` файлов.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 162 (Occurrences: 52):         :returns: Генератор экземпляров книг, загруженных из найденных файлов.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 170 (Occurrences: 41):                     # Удаляем файл, если не получается загрузить книгу
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 184 (Occurrences: 28):         Создаёт экземпляр книги из `.abp` файла.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 185 (Occurrences: 17):         :returns: Экземпляр книги или None.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\models\book.py' - Line 247 (Occurrences: 19):         Сохраняет книгу в `.abp` файл.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\css\downloads.css' - Line 22 (Occurrences: 19):   content: "нет активных загрузок";
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\css\library.css' - Line 118 (Occurrences: 15):   content: "Ничего не найдено";
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\base.js' - Line 149 (Occurrences: 6):         `<div style="font-weight: bold">Ошибка</div><div>${text}</div>`, 30, true
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\book.js' - Line 21 (Occurrences: 10):         document.querySelector("#book-page-content .book-listening-progress").innerHTML = `${resp.data.listening_progress} прослушано`
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\book.js' - Line 22 (Occurrences: 9):         document.querySelector("#book-page-content .book-adding-date").innerHTML = `Добавлена ${resp.data.adding_date}`
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\book.js' - Line 122 (Occurrences: 10):         document.querySelector(".book-listening-progress").innerText = `${listening_progress}% прослушано`
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\book.js' - Line 124 (Occurrences: 10):     smallPlayer.querySelector(".listening-progres").innerText = `${listening_progress}% прослушано`
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\book.js' - Line 145 (Occurrences: 10):     smallPlayer.querySelector(".listening-progres").innerText = `${book.listening_progress}% прослушано`
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\downloads.js' - Line 38 (Occurrences: 13):         <div class="status">инициализация...</div>
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\downloads.js' - Line 56 (Occurrences: 8):     if (status == "waiting") status_el.innerHTML = "ожидание..."
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\downloads.js' - Line 57 (Occurrences: 10):     else if (status == "preparing") status_el.innerHTML = "подготовка..."
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\downloads.js' - Line 58 (Occurrences: 10):     else if (status == "downloading") status_el.innerHTML = "скачивание..."
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\downloads.js' - Line 59 (Occurrences: 10):     else if (status == "finishing") status_el.innerHTML = "завершение..."
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\downloads.js' - Line 60 (Occurrences: 19):     else if (status == "finished") status_el.innerHTML = "скачивание завершено"
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\downloads.js' - Line 61 (Occurrences: 9):     else if (status == "terminating") status_el.innerHTML = "остановка..."
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\downloads.js' - Line 91 (Occurrences: 12):     if (title) createNotification(`Книга <b>«${title.innerHTML}»</b> скачана`, 60, true)
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\library.js' - Line 149 (Occurrences: 19):         document.getElementById("library-title").innerHTML = "Библиотека: Избранное"
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\library.js' - Line 151 (Occurrences: 10):         document.getElementById("library-title").innerHTML = "Библиотека"
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\library.js' - Line 231 (Occurrences: 10):                     <div class="book-listening-progress">${book.listening_progress} прослушано</div>
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\library.js' - Line 232 (Occurrences: 9):                     <div class="book-adding-date">Добавлена ${book.adding_date}</div>
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\library.js' - Line 297 (Occurrences: 48):                 `<div>Книга <b>«${title.innerHTML}»</b> удалена из библиотеки, но скачанные файлы остались.</div>
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\library.js' - Line 298 (Occurrences: 22):                 <div style="margin-top: 2px; text-decoration: underline; cursor:pointer" onclick="{deleteBook(this, ${bid}, '${title.innerHTML}');this.parentElement.parentElement.remove()}">удалить оставшиеся файлы</div>`,
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\library.js' - Line 301 (Occurrences: 24):         } else if (title) createNotification(`Книга <b>«${title.innerHTML}»</b> удалена из библиотеки`, 5, true)
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\library.js' - Line 320 (Occurrences: 17):         createNotification(`Файлы книги <b>«${name}»</b> удалены`, 60, true)
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\search.js' - Line 110 (Occurrences: 11):           <div class="icon-btn add-book-btn" onclick="addBook(this)"><span>в библиотеку</span></div>
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\search.js' - Line 113 (Occurrences: 15):     if (!resp.length && clear) html = '<div id="no-search-result">Ничего не найдено</div>'
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\settings.js' - Line 22 (Occurrences: 34):         content = "<div><b>Папка с книгами изменена</b></div>" + ((resp.data.new_books_count) ? `<div>Книг добавлено: ${resp.data.new_books_count}</div>` : "")
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\settings.js' - Line 26 (Occurrences: 36):             content = content + `<div>но скачанные ранее файлы остались на месте</div>
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\settings.js' - Line 27 (Occurrences: 23):             <div style="margin-top: 2px; text-decoration: underline; cursor:pointer" onclick="{migrateOldLibrary();this.parentElement.parentElement.remove()}">Перенести всё в новое место</div>
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\settings.js' - Line 28 (Occurrences: 30):             <div style="margin-top: 2px; text-decoration: underline; cursor:pointer" onclick="{removeOldLibrary();this.parentElement.parentElement.remove()}">Удалить старые книги из библиотеки</div>`
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\settings.js' - Line 34 (Occurrences: 41):     n = createNotification("<div><b>Перенос файлов...</b></div><div>это может занять некоторое время</div>", 0, false)
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\settings.js' - Line 38 (Occurrences: 29):         createNotification(`<div><b>Перенос завершен</b><div><div>Книг перенесено: ${resp.data.moved_books_count}</div>`, 10, true)
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\settings.js' - Line 42 (Occurrences: 46):     n = createNotification("<div><b>Удаление старых книг...</b></div><div>это может занять некоторое время</div>", 0, false)
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\settings.js' - Line 46 (Occurrences: 28):         createNotification(`<div><b>Удаление завершено</b><div><div>Книг удалено: ${resp.data.removed_books_count}</div>`, 10, true)
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\settings.js' - Line 58 (Occurrences: 18):             `<div><b>Доступно обновление ${resp.data.version}</b></div>
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\settings.js' - Line 59 (Occurrences: 15):             <a style="margin-top: 2px" href="${resp.data.url}" target="_blank">список изменений</a>
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\settings.js' - Line 60 (Occurrences: 10):             <div style="margin-top: 2px; text-decoration: underline; cursor:pointer" onclick="{updateApp();this.parentElement.parentElement.remove()}">установить</div>`
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\settings.js' - Line 64 (Occurrences: 34):             `<div><b>Доступна новая версия для тестирования ${resp.data.version}</b></div>
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\settings.js' - Line 65 (Occurrences: 15):             <a style="margin-top: 2px" href="${resp.data.url}" target="_blank">список изменений</a>
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\settings.js' - Line 66 (Occurrences: 10):             <div style="margin-top: 2px; text-decoration: underline; cursor:pointer" onclick="{updateApp();this.parentElement.parentElement.remove()}">установить</div>
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\settings.js' - Line 67 (Occurrences: 32):             <div style="margin-top: 2px; text-decoration: underline; cursor:pointer" onclick="{unsubscribeNotStable();this.parentElement.parentElement.remove()}">не предлагать участие в тестировании</div>`
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\ABPlayer\web\static\js\settings.js' - Line 73 (Occurrences: 46):     n = createNotification("<div><b>Загрузка обновления</b></div><div>это может занять некоторое время</div>", 0, false)
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\build\setup.py' - Line 3 (Occurrences: 28):     Сборка exe и формирование NSIS сценариев.
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\Crypto\SelfTest\Protocol\test_KDF.py' - Line 613 (Occurrences: 28):             ("АБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмН", 4, b"03e26gQFHhQwRNf81/ww9.", b"$2a$04$03e26gQFHhQwRNf81/ww9.p1UbrNwxpzWjLuT.zpTLH4t/w5WhAhC"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\Crypto\SelfTest\Protocol\test_KDF.py' - Line 614 (Occurrences: 35):             ("нОоПпРрСсТтУуФфХхЦцЧчШшЩщЪъЫыЬьЭэЮю", 4, b"PHNoJwpXCfe32nUtLv2Upu", b"$2a$04$PHNoJwpXCfe32nUtLv2UpuhJXOzd4k7IdFwnEpYwfJVCZ/f/.8Pje"),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\jinja2\_identifier.py' - Line 5 (Occurrences: 2):     r"[\w·̀-ͯ·҃-֑҇-ׇֽֿׁׂׅׄؐ-ًؚ-ٰٟۖ-ۜ۟-۪ۤۧۨ-ܑۭܰ-݊ަ-ް߫-߽߳ࠖ-࠙ࠛ-ࠣࠥ-ࠧࠩ-࡙࠭-࡛࣓-ࣣ࣡-ःऺ-़ा-ॏ॑-ॗॢॣঁ-ঃ়া-ৄেৈো-্ৗৢৣ৾ਁ-ਃ਼ਾ-ੂੇੈੋ-੍ੑੰੱੵઁ-ઃ઼ા-ૅે-ૉો-્ૢૣૺ-૿ଁ-ଃ଼ା-ୄେୈୋ-୍ୖୗୢୣஂா-ூெ-ைொ-்ௗఀ-ఄా-ౄె-ైొ-్ౕౖౢౣಁ-ಃ಼ಾ-ೄೆ-ೈೊ-್ೕೖೢೣഀ-ഃ഻഼ാ-ൄെ-ൈൊ-്ൗൢൣංඃ්ා-ුූෘ-ෟෲෳัิ-ฺ็-๎ັິ-ູົຼ່-ໍ༹༘༙༵༷༾༿ཱ-྄྆྇ྍ-ྗྙ-ྼ࿆ါ-ှၖ-ၙၞ-ၠၢ-ၤၧ-ၭၱ-ၴႂ-ႍႏႚ-ႝ፝-፟ᜒ-᜔ᜲ-᜴ᝒᝓᝲᝳ឴-៓៝᠋-᠍ᢅᢆᢩᤠ-ᤫᤰ-᤻ᨗ-ᨛᩕ-ᩞ᩠-᩿᩼᪰-᪽ᬀ-ᬄ᬴-᭄᭫-᭳ᮀ-ᮂᮡ-ᮭ᯦-᯳ᰤ-᰷᳐-᳔᳒-᳨᳭ᳲ-᳴᳷-᳹᷀-᷹᷻-᷿‿⁀⁔⃐-⃥⃜⃡-⃰℘℮⳯-⵿⳱ⷠ-〪ⷿ-゙゚〯꙯ꙴ-꙽ꚞꚟ꛰꛱ꠂ꠆ꠋꠣ-ꠧꢀꢁꢴ-ꣅ꣠-꣱ꣿꤦ-꤭ꥇ-꥓ꦀ-ꦃ꦳-꧀ꧥꨩ-ꨶꩃꩌꩍꩻ-ꩽꪰꪲ-ꪴꪷꪸꪾ꪿꫁ꫫ-ꫯꫵ꫶ꯣ-ꯪ꯬꯭ﬞ︀-️︠-︯︳︴﹍-﹏＿𐇽𐋠𐍶-𐍺𐨁-𐨃𐨅𐨆𐨌-𐨏𐨸-𐨿𐨺𐫦𐫥𐴤-𐽆𐴧-𐽐𑀀-𑀂𑀸-𑁆𑁿-𑂂𑂰-𑂺𑄀-𑄂𑄧-𑄴𑅅𑅆𑅳𑆀-𑆂𑆳-𑇀𑇉-𑇌𑈬-𑈷𑈾𑋟-𑋪𑌀-𑌃𑌻𑌼𑌾-𑍄𑍇𑍈𑍋-𑍍𑍗𑍢𑍣𑍦-𑍬𑍰-𑍴𑐵-𑑆𑑞𑒰-𑓃𑖯-𑖵𑖸-𑗀𑗜𑗝𑘰-𑙀𑚫-𑚷𑜝-𑜫𑠬-𑠺𑨁-𑨊𑨳-𑨹𑨻-𑨾𑩇𑩑-𑩛𑪊-𑪙𑰯-𑰶𑰸-𑰿𑲒-𑲧𑲩-𑲶𑴱-𑴶𑴺𑴼𑴽𑴿-𑵅𑵇𑶊-𑶎𑶐𑶑𑶓-𑶗𑻳-𑻶𖫰-𖫴𖬰-𖬶𖽑-𖽾𖾏-𖾒𛲝𛲞𝅥-𝅩𝅭-𝅲𝅻-𝆂𝆅-𝆋𝆪-𝆭𝉂-𝉄𝨀-𝨶𝨻-𝩬𝩵𝪄𝪛-𝪟𝪡-𝪯𞀀-𞀆𞀈-𞀘𞀛-𞀡𞀣𞀤𞀦-𞣐𞀪-𞣖𞥄-𞥊󠄀-󠇯]+"  # noqa: B950
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 734 (Occurrences: 1):     (0x400, 'M', 'ѐ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 735 (Occurrences: 1):     (0x401, 'M', 'ё'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 736 (Occurrences: 1):     (0x402, 'M', 'ђ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 741 (Occurrences: 1):     (0x403, 'M', 'ѓ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 742 (Occurrences: 1):     (0x404, 'M', 'є'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 743 (Occurrences: 1):     (0x405, 'M', 'ѕ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 744 (Occurrences: 1):     (0x406, 'M', 'і'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 745 (Occurrences: 1):     (0x407, 'M', 'ї'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 746 (Occurrences: 1):     (0x408, 'M', 'ј'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 747 (Occurrences: 1):     (0x409, 'M', 'љ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 748 (Occurrences: 1):     (0x40A, 'M', 'њ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 749 (Occurrences: 1):     (0x40B, 'M', 'ћ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 750 (Occurrences: 1):     (0x40C, 'M', 'ќ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 751 (Occurrences: 1):     (0x40D, 'M', 'ѝ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 752 (Occurrences: 1):     (0x40E, 'M', 'ў'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 753 (Occurrences: 1):     (0x40F, 'M', 'џ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 754 (Occurrences: 1):     (0x410, 'M', 'а'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 755 (Occurrences: 1):     (0x411, 'M', 'б'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 756 (Occurrences: 1):     (0x412, 'M', 'в'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 757 (Occurrences: 1):     (0x413, 'M', 'г'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 758 (Occurrences: 1):     (0x414, 'M', 'д'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 759 (Occurrences: 1):     (0x415, 'M', 'е'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 760 (Occurrences: 1):     (0x416, 'M', 'ж'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 761 (Occurrences: 1):     (0x417, 'M', 'з'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 762 (Occurrences: 1):     (0x418, 'M', 'и'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 763 (Occurrences: 1):     (0x419, 'M', 'й'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 764 (Occurrences: 1):     (0x41A, 'M', 'к'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 765 (Occurrences: 1):     (0x41B, 'M', 'л'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 766 (Occurrences: 1):     (0x41C, 'M', 'м'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 767 (Occurrences: 1):     (0x41D, 'M', 'н'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 768 (Occurrences: 1):     (0x41E, 'M', 'о'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 769 (Occurrences: 1):     (0x41F, 'M', 'п'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 770 (Occurrences: 1):     (0x420, 'M', 'р'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 771 (Occurrences: 1):     (0x421, 'M', 'с'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 772 (Occurrences: 1):     (0x422, 'M', 'т'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 773 (Occurrences: 1):     (0x423, 'M', 'у'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 774 (Occurrences: 1):     (0x424, 'M', 'ф'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 775 (Occurrences: 1):     (0x425, 'M', 'х'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 776 (Occurrences: 1):     (0x426, 'M', 'ц'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 777 (Occurrences: 1):     (0x427, 'M', 'ч'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 778 (Occurrences: 1):     (0x428, 'M', 'ш'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 779 (Occurrences: 1):     (0x429, 'M', 'щ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 780 (Occurrences: 1):     (0x42A, 'M', 'ъ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 781 (Occurrences: 1):     (0x42B, 'M', 'ы'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 782 (Occurrences: 1):     (0x42C, 'M', 'ь'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 783 (Occurrences: 1):     (0x42D, 'M', 'э'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 784 (Occurrences: 1):     (0x42E, 'M', 'ю'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 785 (Occurrences: 1):     (0x42F, 'M', 'я'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 787 (Occurrences: 1):     (0x460, 'M', 'ѡ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 789 (Occurrences: 1):     (0x462, 'M', 'ѣ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 791 (Occurrences: 1):     (0x464, 'M', 'ѥ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 793 (Occurrences: 1):     (0x466, 'M', 'ѧ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 795 (Occurrences: 1):     (0x468, 'M', 'ѩ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 797 (Occurrences: 1):     (0x46A, 'M', 'ѫ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 799 (Occurrences: 1):     (0x46C, 'M', 'ѭ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 801 (Occurrences: 1):     (0x46E, 'M', 'ѯ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 803 (Occurrences: 1):     (0x470, 'M', 'ѱ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 805 (Occurrences: 1):     (0x472, 'M', 'ѳ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 807 (Occurrences: 1):     (0x474, 'M', 'ѵ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 809 (Occurrences: 1):     (0x476, 'M', 'ѷ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 811 (Occurrences: 1):     (0x478, 'M', 'ѹ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 813 (Occurrences: 1):     (0x47A, 'M', 'ѻ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 815 (Occurrences: 1):     (0x47C, 'M', 'ѽ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 817 (Occurrences: 1):     (0x47E, 'M', 'ѿ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 819 (Occurrences: 1):     (0x480, 'M', 'ҁ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 821 (Occurrences: 1):     (0x48A, 'M', 'ҋ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 823 (Occurrences: 1):     (0x48C, 'M', 'ҍ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 825 (Occurrences: 1):     (0x48E, 'M', 'ҏ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 827 (Occurrences: 1):     (0x490, 'M', 'ґ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 829 (Occurrences: 1):     (0x492, 'M', 'ғ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 831 (Occurrences: 1):     (0x494, 'M', 'ҕ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 833 (Occurrences: 1):     (0x496, 'M', 'җ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 835 (Occurrences: 1):     (0x498, 'M', 'ҙ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 837 (Occurrences: 1):     (0x49A, 'M', 'қ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 839 (Occurrences: 1):     (0x49C, 'M', 'ҝ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 845 (Occurrences: 1):     (0x49E, 'M', 'ҟ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 847 (Occurrences: 1):     (0x4A0, 'M', 'ҡ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 849 (Occurrences: 1):     (0x4A2, 'M', 'ң'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 851 (Occurrences: 1):     (0x4A4, 'M', 'ҥ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 853 (Occurrences: 1):     (0x4A6, 'M', 'ҧ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 855 (Occurrences: 1):     (0x4A8, 'M', 'ҩ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 857 (Occurrences: 1):     (0x4AA, 'M', 'ҫ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 859 (Occurrences: 1):     (0x4AC, 'M', 'ҭ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 861 (Occurrences: 1):     (0x4AE, 'M', 'ү'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 863 (Occurrences: 1):     (0x4B0, 'M', 'ұ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 865 (Occurrences: 1):     (0x4B2, 'M', 'ҳ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 867 (Occurrences: 1):     (0x4B4, 'M', 'ҵ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 869 (Occurrences: 1):     (0x4B6, 'M', 'ҷ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 871 (Occurrences: 1):     (0x4B8, 'M', 'ҹ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 873 (Occurrences: 1):     (0x4BA, 'M', 'һ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 875 (Occurrences: 1):     (0x4BC, 'M', 'ҽ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 877 (Occurrences: 1):     (0x4BE, 'M', 'ҿ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 880 (Occurrences: 1):     (0x4C1, 'M', 'ӂ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 882 (Occurrences: 1):     (0x4C3, 'M', 'ӄ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 884 (Occurrences: 1):     (0x4C5, 'M', 'ӆ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 886 (Occurrences: 1):     (0x4C7, 'M', 'ӈ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 888 (Occurrences: 1):     (0x4C9, 'M', 'ӊ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 890 (Occurrences: 1):     (0x4CB, 'M', 'ӌ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 892 (Occurrences: 1):     (0x4CD, 'M', 'ӎ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 894 (Occurrences: 1):     (0x4D0, 'M', 'ӑ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 896 (Occurrences: 1):     (0x4D2, 'M', 'ӓ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 898 (Occurrences: 1):     (0x4D4, 'M', 'ӕ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 900 (Occurrences: 1):     (0x4D6, 'M', 'ӗ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 902 (Occurrences: 1):     (0x4D8, 'M', 'ә'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 904 (Occurrences: 1):     (0x4DA, 'M', 'ӛ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 906 (Occurrences: 1):     (0x4DC, 'M', 'ӝ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 908 (Occurrences: 1):     (0x4DE, 'M', 'ӟ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 910 (Occurrences: 1):     (0x4E0, 'M', 'ӡ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 912 (Occurrences: 1):     (0x4E2, 'M', 'ӣ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 914 (Occurrences: 1):     (0x4E4, 'M', 'ӥ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 916 (Occurrences: 1):     (0x4E6, 'M', 'ӧ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 918 (Occurrences: 1):     (0x4E8, 'M', 'ө'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 920 (Occurrences: 1):     (0x4EA, 'M', 'ӫ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 922 (Occurrences: 1):     (0x4EC, 'M', 'ӭ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 924 (Occurrences: 1):     (0x4EE, 'M', 'ӯ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 926 (Occurrences: 1):     (0x4F0, 'M', 'ӱ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 928 (Occurrences: 1):     (0x4F2, 'M', 'ӳ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 930 (Occurrences: 1):     (0x4F4, 'M', 'ӵ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 932 (Occurrences: 1):     (0x4F6, 'M', 'ӷ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 934 (Occurrences: 1):     (0x4F8, 'M', 'ӹ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 936 (Occurrences: 1):     (0x4FA, 'M', 'ӻ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 938 (Occurrences: 1):     (0x4FC, 'M', 'ӽ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 940 (Occurrences: 1):     (0x4FE, 'M', 'ӿ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 1568 (Occurrences: 1):     (0x1C80, 'M', 'в'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 1573 (Occurrences: 1):     (0x1C81, 'M', 'д'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 1574 (Occurrences: 1):     (0x1C82, 'M', 'о'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 1575 (Occurrences: 1):     (0x1C83, 'M', 'с'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 1576 (Occurrences: 1):     (0x1C84, 'M', 'т'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 1577 (Occurrences: 1):     (0x1C86, 'M', 'ъ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 1578 (Occurrences: 1):     (0x1C87, 'M', 'ѣ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 1701 (Occurrences: 1):     (0x1D78, 'M', 'н'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 3767 (Occurrences: 1):     (0xA69C, 'M', 'ъ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 3768 (Occurrences: 1):     (0xA69D, 'M', 'ь'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7386 (Occurrences: 1):     (0x1E030, 'M', 'а'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7387 (Occurrences: 1):     (0x1E031, 'M', 'б'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7388 (Occurrences: 1):     (0x1E032, 'M', 'в'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7389 (Occurrences: 1):     (0x1E033, 'M', 'г'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7390 (Occurrences: 1):     (0x1E034, 'M', 'д'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7391 (Occurrences: 1):     (0x1E035, 'M', 'е'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7392 (Occurrences: 1):     (0x1E036, 'M', 'ж'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7397 (Occurrences: 1):     (0x1E037, 'M', 'з'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7398 (Occurrences: 1):     (0x1E038, 'M', 'и'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7399 (Occurrences: 1):     (0x1E039, 'M', 'к'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7400 (Occurrences: 1):     (0x1E03A, 'M', 'л'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7401 (Occurrences: 1):     (0x1E03B, 'M', 'м'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7402 (Occurrences: 1):     (0x1E03C, 'M', 'о'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7403 (Occurrences: 1):     (0x1E03D, 'M', 'п'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7404 (Occurrences: 1):     (0x1E03E, 'M', 'р'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7405 (Occurrences: 1):     (0x1E03F, 'M', 'с'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7406 (Occurrences: 1):     (0x1E040, 'M', 'т'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7407 (Occurrences: 1):     (0x1E041, 'M', 'у'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7408 (Occurrences: 1):     (0x1E042, 'M', 'ф'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7409 (Occurrences: 1):     (0x1E043, 'M', 'х'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7410 (Occurrences: 1):     (0x1E044, 'M', 'ц'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7411 (Occurrences: 1):     (0x1E045, 'M', 'ч'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7412 (Occurrences: 1):     (0x1E046, 'M', 'ш'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7413 (Occurrences: 1):     (0x1E047, 'M', 'ы'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7414 (Occurrences: 1):     (0x1E048, 'M', 'э'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7415 (Occurrences: 1):     (0x1E049, 'M', 'ю'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7417 (Occurrences: 1):     (0x1E04B, 'M', 'ә'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7418 (Occurrences: 1):     (0x1E04C, 'M', 'і'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7419 (Occurrences: 1):     (0x1E04D, 'M', 'ј'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7420 (Occurrences: 1):     (0x1E04E, 'M', 'ө'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7421 (Occurrences: 1):     (0x1E04F, 'M', 'ү'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7422 (Occurrences: 1):     (0x1E050, 'M', 'ӏ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7423 (Occurrences: 1):     (0x1E051, 'M', 'а'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7424 (Occurrences: 1):     (0x1E052, 'M', 'б'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7425 (Occurrences: 1):     (0x1E053, 'M', 'в'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7426 (Occurrences: 1):     (0x1E054, 'M', 'г'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7427 (Occurrences: 1):     (0x1E055, 'M', 'д'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7428 (Occurrences: 1):     (0x1E056, 'M', 'е'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7429 (Occurrences: 1):     (0x1E057, 'M', 'ж'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7430 (Occurrences: 1):     (0x1E058, 'M', 'з'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7431 (Occurrences: 1):     (0x1E059, 'M', 'и'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7432 (Occurrences: 1):     (0x1E05A, 'M', 'к'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7433 (Occurrences: 1):     (0x1E05B, 'M', 'л'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7434 (Occurrences: 1):     (0x1E05C, 'M', 'о'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7435 (Occurrences: 1):     (0x1E05D, 'M', 'п'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7436 (Occurrences: 1):     (0x1E05E, 'M', 'с'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7437 (Occurrences: 1):     (0x1E05F, 'M', 'у'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7438 (Occurrences: 1):     (0x1E060, 'M', 'ф'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7439 (Occurrences: 1):     (0x1E061, 'M', 'х'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7440 (Occurrences: 1):     (0x1E062, 'M', 'ц'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7441 (Occurrences: 1):     (0x1E063, 'M', 'ч'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7442 (Occurrences: 1):     (0x1E064, 'M', 'ш'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7443 (Occurrences: 1):     (0x1E065, 'M', 'ъ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7444 (Occurrences: 1):     (0x1E066, 'M', 'ы'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7445 (Occurrences: 1):     (0x1E067, 'M', 'ґ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7446 (Occurrences: 1):     (0x1E068, 'M', 'і'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7447 (Occurrences: 1):     (0x1E069, 'M', 'ѕ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7448 (Occurrences: 1):     (0x1E06A, 'M', 'џ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7449 (Occurrences: 1):     (0x1E06B, 'M', 'ҫ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip\_vendor\idna\uts46data.py' - Line 7451 (Occurrences: 1):     (0x1E06D, 'M', 'ұ'),
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip-24.3.1.dist-info\AUTHORS.txt' - Line 716 (Occurrences: 18): Sviatoslav Sydorenko (Святослав Сидоренко)
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip-24.3.1.dist-info\AUTHORS.txt' - Line 798 (Occurrences: 13): Роман Донченко
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pip-24.3.1.dist-info\AUTHORS.txt' - Line 799 (Occurrences: 13): Семён Марьясин
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pygments\lexers\testing.py' - Line 28 (Occurrences: 54):     feature_keywords = '^(기능|機能|功能|フィーチャ|خاصية|תכונה|Функціонал|Функционалност|Функционал|Фича|Особина|Могућност|Özellik|Właściwość|Tính năng|Trajto|Savybė|Požiadavka|Požadavek|Osobina|Ominaisuus|Omadus|OH HAI|Mogućnost|Mogucnost|Jellemző|Fīča|Funzionalità|Funktionalität|Funkcionalnost|Funkcionalitāte|Funcționalitate|Functionaliteit|Functionalitate|Funcionalitat|Funcionalidade|Fonctionnalité|Fitur|Feature|Egenskap|Egenskab|Crikey|Característica|Arwedd)(:)(.*)$'
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pygments\lexers\testing.py' - Line 29 (Occurrences: 187):     feature_element_keywords = '^(\\s*)(시나리오 개요|시나리오|배경|背景|場景大綱|場景|场景大纲|场景|劇本大綱|劇本|剧本大纲|剧本|テンプレ|シナリオテンプレート|シナリオテンプレ|シナリオアウトライン|シナリオ|سيناريو مخطط|سيناريو|الخلفية|תרחיש|תבנית תרחיש|רקע|Тарих|Сценарій|Сценарио|Сценарий структураси|Сценарий|Структура сценарію|Структура сценарија|Структура сценария|Скица|Рамка на сценарий|Пример|Предыстория|Предистория|Позадина|Передумова|Основа|Концепт|Контекст|Założenia|Wharrimean is|Tình huống|The thing of it is|Tausta|Taust|Tapausaihio|Tapaus|Szenariogrundriss|Szenario|Szablon scenariusza|Stsenaarium|Struktura scenarija|Skica|Skenario konsep|Skenario|Situācija|Senaryo taslağı|Senaryo|Scénář|Scénario|Schema dello scenario|Scenārijs pēc parauga|Scenārijs|Scenár|Scenaro|Scenariusz|Scenariul de şablon|Scenariul de sablon|Scenariu|Scenario Outline|Scenario Amlinellol|Scenario|Scenarijus|Scenarijaus šablonas|Scenarij|Scenarie|Rerefons|Raamstsenaarium|Primer|Pozadí|Pozadina|Pozadie|Plan du scénario|Plan du Scénario|Osnova scénáře|Osnova|Náčrt Scénáře|Náčrt Scenáru|Mate|MISHUN SRSLY|MISHUN|Kịch bản|Konturo de la scenaro|Kontext|Konteksts|Kontekstas|Kontekst|Koncept|Khung tình huống|Khung kịch bản|Háttér|Grundlage|Geçmiş|Forgatókönyv vázlat|Forgatókönyv|Fono|Esquema do Cenário|Esquema do Cenario|Esquema del escenario|Esquema de l\'escenari|Escenario|Escenari|Dis is what went down|Dasar|Contexto|Contexte|Contesto|Condiţii|Conditii|Cenário|Cenario|Cefndir|Bối cảnh|Blokes|Bakgrunn|Bakgrund|Baggrund|Background|B4|Antecedents|Antecedentes|All y\'all|Achtergrond|Abstrakt Scenario|Abstract Scenario)(:)(.*)$'
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pygments\lexers\testing.py' - Line 30 (Occurrences: 40):     examples_keywords = '^(\\s*)(예|例子|例|サンプル|امثلة|דוגמאות|Сценарији|Примери|Приклади|Мисоллар|Значения|Örnekler|Voorbeelden|Variantai|Tapaukset|Scenarios|Scenariji|Scenarijai|Příklady|Példák|Príklady|Przykłady|Primjeri|Primeri|Piemēri|Pavyzdžiai|Paraugs|Juhtumid|Exemplos|Exemples|Exemplele|Exempel|Examples|Esempi|Enghreifftiau|Ekzemploj|Eksempler|Ejemplos|EXAMPLZ|Dữ liệu|Contoh|Cobber|Beispiele)(:)(.*)$'
+Found in 'C:\Users\learn\open_source_github\AudioBookPlayer-2.1.3\venv\Lib\site-packages\pygments\lexers\testing.py' - Line 31 (Occurrences: 128):     step_keywords = '^(\\s*)(하지만|조건|먼저|만일|만약|단|그리고|그러면|那麼|那么|而且|當|当|前提|假設|假设|假如|假定|但是|但し|並且|并且|同時|同时|もし|ならば|ただし|しかし|かつ|و |متى |لكن |عندما |ثم |بفرض |اذاً |כאשר |וגם |בהינתן |אזי |אז |אבל |Якщо |Унда |То |Припустимо, що |Припустимо |Онда |Но |Нехай |Лекин |Когато |Када |Кад |К тому же |И |Задато |Задати |Задате |Если |Допустим |Дадено |Ва |Бирок |Аммо |Али |Але |Агар |А |І |Și |És |Zatati |Zakładając |Zadato |Zadate |Zadano |Zadani |Zadan |Youse know when youse got |Youse know like when |Yna |Ya know how |Ya gotta |Y |Wun |Wtedy |When y\'all |When |Wenn |WEN |Và |Ve |Und |Un |Thì |Then y\'all |Then |Tapi |Tak |Tada |Tad |Så |Stel |Soit |Siis |Si |Sed |Se |Quando |Quand |Quan |Pryd |Pokud |Pokiaľ |Però |Pero |Pak |Oraz |Onda |Ond |Oletetaan |Og |Och |O zaman |Når |När |Niin |Nhưng |N |Mutta |Men |Mas |Maka |Majd |Mais |Maar |Ma |Lorsque |Lorsqu\'|Kun |Kuid |Kui |Khi |Keď |Ketika |Když |Kaj |Kai |Kada |Kad |Jeżeli |Ja |Ir |I CAN HAZ |I |Ha |Givun |Givet |Given y\'all |Given |Gitt |Gegeven |Gegeben sei |Fakat |Eğer ki |Etant donné |Et |Então |Entonces |Entao |En |Eeldades |E |Duota |Dun |Donitaĵo |Donat |Donada |Do |Diyelim ki |Dengan |Den youse gotta |De |Dato |Dar |Dann |Dan |Dado |Dacă |Daca |DEN |Când |Cuando |Cho |Cept |Cand |Cal |But y\'all |But |Buh |Biết |Bet |BUT |Atès |Atunci |Atesa |Anrhegedig a |Angenommen |And y\'all |And |An |Ama |Als |Alors |Allora |Ali |Aleshores |Ale |Akkor |Aber |AN |A také |A |\\* )'

@@ -1,0 +1,273 @@
+#'./readme.md' - Line 5 (Occurrences: 1): The application has access to all the books available on the websites [_akniga.org_](https://akniga.org/) и [_knigavuhe.org_](https://knigavuhe.org/).
+#'./ABPlayer/config.py' - Line 33 (Occurrences: 46):     Создает файл конфигурации со значениями по умолчанию.
+#'./ABPlayer/config.py' - Line 41 (Occurrences: 34):     Загружает данные из файла конфигурации.
+#'./ABPlayer/config.py' - Line 53 (Occurrences: 31):     Обновляет поля в файле конфигурации.
+#'./ABPlayer/config.py' - Line 54 (Occurrences: 39):     :param update_env: True - произойдет обновление переменных окружения.
+#'./ABPlayer/config.py' - Line 55 (Occurrences: 17):     :param fields: Поля для обновления.
+#'./ABPlayer/config.py' - Line 70 (Occurrences: 37):     Проверяет валидность данных конфигурации.
+#'./ABPlayer/config.py' - Line 71 (Occurrences: 23):     Исправляет в случае ошибок.
+#'./ABPlayer/config.py' - Line 72 (Occurrences: 18):     :returns: Данные конфигурации.
+#'./ABPlayer/config.py' - Line 96 (Occurrences: 47):     Добавляет данные конфигурации в переменные окружения.
+'./ABPlayer/logger.py' - Line 8 (Occurrences: 34): try:  # Удаление настроек логгера по умолчанию
+'./ABPlayer/logger.py' - Line 48 (Occurrences: 5): logger.level("TRACE", color="<lk>")  # TRACE - синий
+'./ABPlayer/logger.py' - Line 49 (Occurrences: 5): logger.level("DEBUG", color="<w>")  # DEBUG - белый
+'./ABPlayer/logger.py' - Line 50 (Occurrences: 9): logger.level("INFO", color="<c><bold>")  # INFO - бирюзовый
+'./ABPlayer/main_window.py' - Line 11 (Occurrences: 28):     Создает главное окно приложения.
+'./ABPlayer/main_window.py' - Line 12 (Occurrences: 13):     :returns: Экземпляр окна.
+'./ABPlayer/main_window.py' - Line 41 (Occurrences: 27):     # Добавляем обработчики событий
+'./ABPlayer/main.py' - Line 7 (Occurrences: 25): # Путь к директории приложения
+'./ABPlayer/main.py' - Line 11 (Occurrences: 22): # Путь к файлу конфигурации
+'./ABPlayer/main.py' - Line 13 (Occurrences: 30): # Путь к файлу базы данных библиотеки
+'./ABPlayer/main.py' - Line 15 (Occurrences: 17): # Путь к файлу отладки
+'./ABPlayer/main.py' - Line 17 (Occurrences: 28): # Путь к файлу с временными данными
+'./ABPlayer/main.py' - Line 19 (Occurrences: 16): # Версия приложения
+'./ABPlayer/run.py' - Line 3 (Occurrences: 16): Запуск приложения.
+'./ABPlayer/run.py' - Line 5 (Occurrences: 16): Параметры запуска:
+'./ABPlayer/run.py' - Line 6 (Occurrences: 23):     --run-update=<str> запуск обновления из файла
+'./ABPlayer/starting_window.py' - Line 17 (Occurrences: 28):     Создает окно запуска приложения.
+'./ABPlayer/starting_window.py' - Line 18 (Occurrences: 13):     :returns: Экземпляр окна.
+'./ABPlayer/starting_window.py' - Line 40 (Occurrences: 27):     # Добавляем обработчики событий
+'./ABPlayer/starting_window.py' - Line 49 (Occurrences: 32):     Подготавливает приложение к запуску.
+'./ABPlayer/starting_window.py' - Line 50 (Occurrences: 28):     Инициализирует конфигурацию, бд.
+'./ABPlayer/starting_window.py' - Line 51 (Occurrences: 21):     Анализирует библиотеку.
+'./ABPlayer/starting_window.py' - Line 66 (Occurrences: 6):     window.evaluate_js("setStatus('запуск...')")
+'./ABPlayer/starting_window.py' - Line 80 (Occurrences: 21):     Анализирует библиотеку.
+'./ABPlayer/starting_window.py' - Line 81 (Occurrences: 25):     Добавляет книги из хранилища.
+'./ABPlayer/starting_window.py' - Line 82 (Occurrences: 31):     Исправляет некорректные записи в бд.
+'./ABPlayer/starting_window.py' - Line 85 (Occurrences: 18):     window.evaluate_js("setStatus('загрузка библиотеки...')")
+'./ABPlayer/starting_window.py' - Line 91 (Occurrences: 27):         # Проверка существующих в бд книг
+'./ABPlayer/starting_window.py' - Line 113 (Occurrences: 21):         # Сканирование хранилища
+'./ABPlayer/temp_file.py' - Line 3 (Occurrences: 53): Реализует взаимодействие с файлом, хранящим временные данные.
+'./ABPlayer/temp_file.py' - Line 5 (Occurrences: 30): В файле данные хранятся в таком виде:
+'./ABPlayer/temp_file.py' - Line 6 (Occurrences: 21): <ключ>: <тип данных> = <значение>
+'./ABPlayer/temp_file.py' - Line 7 (Occurrences: 21): <ключ>: <тип данных> = <значение>
+'./ABPlayer/temp_file.py' - Line 8 (Occurrences: 21): <ключ>: <тип данных> = <значение>
+'./ABPlayer/temp_file.py' - Line 11 (Occurrences: 34): Каждая запись начинается с новой строки.
+'./ABPlayer/temp_file.py' - Line 12 (Occurrences: 37): Для хранения доступны такие типы данных как: str, int, float, bool.
+'./ABPlayer/temp_file.py' - Line 27 (Occurrences: 22):     Считывает данные из файла.
+'./ABPlayer/temp_file.py' - Line 28 (Occurrences: 15):     :returns: Словарь с данными.
+'./ABPlayer/temp_file.py' - Line 31 (Occurrences: 11):     # Создаём файл
+'./ABPlayer/temp_file.py' - Line 45 (Occurrences: 15):         )  # Проверка шаблона
+'./ABPlayer/temp_file.py' - Line 60 (Occurrences: 20):     Сохраняет данные в файл.
+'./ABPlayer/temp_file.py' - Line 61 (Occurrences: 15):     :param data: Словарь с данными.
+'./ABPlayer/temp_file.py' - Line 77 (Occurrences: 32):     Обновляет/добавляет значения в файле.
+'./ABPlayer/temp_file.py' - Line 86 (Occurrences: 19):     Удаляет записи в файле.
+'./ABPlayer/temp_file.py' - Line 87 (Occurrences: 12):     :param keys: Ключи записей.
+'./ABPlayer/temp_file.py' - Line 98 (Occurrences: 46):     Преобразует значение полученное из файла в тип данных Python.
+'./ABPlayer/temp_file.py' - Line 99 (Occurrences: 15):     :param value: Значение из файла.
+'./ABPlayer/temp_file.py' - Line 100 (Occurrences: 9):     :param value_type: Тип данных.
+'./ABPlayer/temp_file.py' - Line 101 (Occurrences: 23):     :returns: Преобразованное значение.
+'./ABPlayer/temp_file.py' - Line 121 (Occurrences: 38):     Подготавливает данные для сохранения в файл.
+'./ABPlayer/temp_file.py' - Line 122 (Occurrences: 16):     :param value: Исходное значение.
+'./ABPlayer/temp_file.py' - Line 123 (Occurrences: 23):     :returns: Преобразованное значение.
+'./ABPlayer/temp_file.py' - Line 130 (Occurrences: 21):         f"Недопустимый тип данных {type(value).__name__}, "
+'./ABPlayer/temp_file.py' - Line 131 (Occurrences: 18):         "можно хранить только str, int, float, bool"
+'./ABPlayer/tools.py' - Line 19 (Occurrences: 9):     :param bytes_value: Число байт.
+'./ABPlayer/tools.py' - Line 20 (Occurrences: 31):     :returns: Строка вида <Число> <Единица измерения>
+'./ABPlayer/tools.py' - Line 24 (Occurrences: 11):     size_name = ("б", "КБ", "МБ", "ГБ", "ТБ", "ПБ", "EB", "ZB", "YB")
+'./ABPlayer/tools.py' - Line 33 (Occurrences: 10):     :param file_path: Путь к файлу.
+'./ABPlayer/tools.py' - Line 34 (Occurrences: 18):     :param hash_func: Функция хеширования.
+'./ABPlayer/tools.py' - Line 35 (Occurrences: 8):     :returns: Хеш файла.
+'./ABPlayer/tools.py' - Line 37 (Occurrences: 24):     hash_func = hash_func()  # Инициализируем хеш функцию
+'./ABPlayer/tools.py' - Line 39 (Occurrences: 21):         # Читаем файл по блокам в 64кб,
+'./ABPlayer/tools.py' - Line 40 (Occurrences: 51):         # для избежания загрузки больших файлов в оперативную память
+'./ABPlayer/tools.py' - Line 54 (Occurrences: 49):     Формирует удобно читаемое представление списка/словаря.
+'./ABPlayer/tools.py' - Line 55 (Occurrences: 6):     :returns: Строка.
+'./ABPlayer/tools.py' - Line 120 (Occurrences: 14):     :param book: Экземпляр книги.
+'./ABPlayer/tools.py' - Line 121 (Occurrences: 28):     :returns: Словарь с основными полями книги.
+'./ABPlayer/drivers/akniga.py' - Line 18 (Occurrences: 50): На сайте AKniga информация о книге загружается динамически через JavaScript.
+'./ABPlayer/drivers/akniga.py' - Line 19 (Occurrences: 65): Поэтому для получения полных данных о книге нам необходима среда исполнения JS.
+'./ABPlayer/drivers/akniga.py' - Line 27 (Occurrences: 51):         Метод, возвращающий динамически загружаемые данные о книге.
+'./ABPlayer/drivers/akniga.py' - Line 30 (Occurrences: 24):             "titleonly": <str>,  # название книги в чистом виде
+'./ABPlayer/drivers/akniga.py' - Line 32 (Occurrences: 10):                 "file": <int>,  # номер файла
+'./ABPlayer/drivers/akniga.py' - Line 33 (Occurrences: 13):                 "title": <str>,  # название главы
+'./ABPlayer/drivers/akniga.py' - Line 34 (Occurrences: 11):                 "time_from_start": <str>,  # точка начала
+'./ABPlayer/drivers/akniga.py' - Line 35 (Occurrences: 14):                 "time_finish": <str>,  # точка окончания
+'./ABPlayer/drivers/akniga.py' - Line 37 (Occurrences: 12):             "m3u8": <str>,  # ссылка на файл m3u8
+'./ABPlayer/drivers/akniga.py' - Line 44 (Occurrences: 27):     Среда исполнения JS, использующая Pywebview.
+'./ABPlayer/drivers/akniga.py' - Line 45 (Occurrences: 59):     Создаёт скрытое окно, загружает там страницу книги и берет с нее данные.
+'./ABPlayer/drivers/akniga.py' - Line 55 (Occurrences: 31):         # Выполнение `self._get_book_data` после загрузки страницы
+'./ABPlayer/drivers/akniga.py' - Line 58 (Occurrences: 31):         if len(webview.windows) == 1:  # На данный момент нет запущенных окон pywebview
+'./ABPlayer/drivers/akniga.py' - Line 272 (Occurrences: 9):                         reader = "нет данных"
+'./ABPlayer/drivers/base.py' - Line 23 (Occurrences: 26):     Статусы прогресса скачивания.
+'./ABPlayer/drivers/base.py' - Line 37 (Occurrences: 28):     Обработчик процесса скачивания.
+'./ABPlayer/drivers/base.py' - Line 38 (Occurrences: 35):     Визуализирует процесс скачивания книги.
+'./ABPlayer/drivers/base.py' - Line 75 (Occurrences: 18):         Отображает прогресс.
+'./ABPlayer/drivers/base.py' - Line 89 (Occurrences: 15):     Загрузчик файлов.
+'./ABPlayer/drivers/base.py' - Line 98 (Occurrences: 24):         # Общий размер файлов(в байтах)
+'./ABPlayer/drivers/base.py' - Line 99 (Occurrences: 29):         # Определяется, только если передан `process_handler`
+'./ABPlayer/drivers/base.py' - Line 102 (Occurrences: 21):         # Файл открытый для записи
+'./ABPlayer/drivers/base.py' - Line 104 (Occurrences: 20):         # Поток скачивания файла
+'./ABPlayer/drivers/base.py' - Line 115 (Occurrences: 34):         Подготавливает загрузчик к скачиванию.
+'./ABPlayer/drivers/base.py' - Line 116 (Occurrences: 43):         Метод должен быть реализован в наследуемом классе.
+'./ABPlayer/drivers/base.py' - Line 122 (Occurrences: 14):         Скачивает файлы.
+'./ABPlayer/drivers/base.py' - Line 123 (Occurrences: 43):         Метод должен быть реализован в наследуемом классе.
+'./ABPlayer/drivers/base.py' - Line 128 (Occurrences: 31):         Скачивает и сохраняет обложку книги.
+'./ABPlayer/drivers/base.py' - Line 149 (Occurrences: 19):         Скачивает файлы книги.
+'./ABPlayer/drivers/base.py' - Line 150 (Occurrences: 29):         :returns: Список с путями к скачанным файлам.
+'./ABPlayer/drivers/base.py' - Line 170 (Occurrences: 21):         return not self._terminated  # True - при успешном скачивании
+'./ABPlayer/drivers/base.py' - Line 174 (Occurrences: 17):         Прерывает загрузку.
+'./ABPlayer/drivers/base.py' - Line 201 (Occurrences: 20):     drivers: list[ty.Type[Driver]] = []  # Все доступные драйверы
+'./ABPlayer/drivers/base.py' - Line 221 (Occurrences: 13):         :param url: Ссылка на книгу.
+'./ABPlayer/drivers/base.py' - Line 222 (Occurrences: 16):         :returns: Результат GET запроса.
+'./ABPlayer/drivers/base.py' - Line 229 (Occurrences: 31):         Метод, получающий информацию о книге.
+'./ABPlayer/drivers/base.py' - Line 230 (Occurrences: 46):         Должен быть реализован для каждого драйвера отдельно.
+'./ABPlayer/drivers/base.py' - Line 231 (Occurrences: 13):         :param url: Ссылка на книгу.
+'./ABPlayer/drivers/base.py' - Line 232 (Occurrences: 14):         :returns: Экземпляр книги.
+'./ABPlayer/drivers/base.py' - Line 238 (Occurrences: 39):         Метод, получающий информацию о книгах из серии.
+'./ABPlayer/drivers/base.py' - Line 239 (Occurrences: 46):         Должен быть реализован для каждого драйвера отдельно.
+'./ABPlayer/drivers/base.py' - Line 240 (Occurrences: 13):         :param url: Ссылка на книгу.
+'./ABPlayer/drivers/base.py' - Line 241 (Occurrences: 29):         :returns: Список неполных экземпляров книг.
+'./ABPlayer/drivers/base.py' - Line 247 (Occurrences: 34):         Метод, выполняющий поиск книг по запросу.
+'./ABPlayer/drivers/base.py' - Line 248 (Occurrences: 46):         Должен быть реализован для каждого драйвера отдельно.
+'./ABPlayer/drivers/base.py' - Line 249 (Occurrences: 15):         :param query: Поисковый запрос.
+'./ABPlayer/drivers/base.py' - Line 250 (Occurrences: 28):         :param limit: Кол-во книг, которое нужно вернуть.
+'./ABPlayer/drivers/base.py' - Line 251 (Occurrences: 24):         :param offset: Будет пропущено `offset` первых книг.
+'./ABPlayer/drivers/base.py' - Line 252 (Occurrences: 29):         :returns: Список неполных экземпляров книг.
+'./ABPlayer/drivers/base.py' - Line 259 (Occurrences: 31):         Метод, скачивающий аудио файлы книги.
+'./ABPlayer/drivers/base.py' - Line 260 (Occurrences: 14):         :param book: Экземпляр книги.
+'./ABPlayer/drivers/base.py' - Line 261 (Occurrences: 28):         :param process_handler: Обработчик процесса скачивания.
+'./ABPlayer/drivers/base.py' - Line 262 (Occurrences: 18):         :return: Список путей к файлам.
+'./ABPlayer/drivers/knigavuhe.py' - Line 51 (Occurrences: 12):                 if children[0].text in ["читает", "читают"]:
+'./ABPlayer/drivers/knigavuhe.py' - Line 58 (Occurrences: 13):                 if info[0].text == "Время звучания:":
+'./ABPlayer/drivers/knigavuhe.py' - Line 59 (Occurrences: 13):                     duration = element.text.replace("Время звучания:", "").strip()
+'./ABPlayer/drivers/knigavuhe.py' - Line 202 (Occurrences: 9):                         author = "нет данных"
+'./ABPlayer/drivers/knigavuhe.py' - Line 208 (Occurrences: 9):                         reader = "нет данных"
+'./ABPlayer/drivers/tools.py' - Line 40 (Occurrences: 28):     Изменяет метаданные аудио файла.
+'./ABPlayer/drivers/tools.py' - Line 41 (Occurrences: 15):     :param file_path: Путь к аудио файлу.
+'./ABPlayer/drivers/tools.py' - Line 42 (Occurrences: 10):     :param author: Автор книги.
+'./ABPlayer/drivers/tools.py' - Line 43 (Occurrences: 13):     :param title: Название главы.
+'./ABPlayer/drivers/tools.py' - Line 44 (Occurrences: 20):     :param item_index: Порядковый номер файла.
+'./ABPlayer/drivers/tools.py' - Line 56 (Occurrences: 15):     :param file_path: Путь к аудио файлу.
+'./ABPlayer/drivers/tools.py' - Line 57 (Occurrences: 31):     :returns: Длительность аудио файла в секундах.
+'./ABPlayer/drivers/tools.py' - Line 69 (Occurrences: 50):     Убирает или заменяет символы не допустимые для имени файла Windows.
+'./ABPlayer/drivers/tools.py' - Line 78 (Occurrences: 30):     Создает идентификатор экземпляра.
+'./ABPlayer/drivers/tools.py' - Line 98 (Occurrences: 23):     :returns: Идентификатор экземпляра.
+'./ABPlayer/drivers/downloaders/m3u8_downloader.py' - Line 31 (Occurrences: 56):     Загрузчик, предназначенный для книг в которых файлы представлены
+'./ABPlayer/drivers/downloaders/m3u8_downloader.py' - Line 32 (Occurrences: 6):     m3u8 файлом.
+'./ABPlayer/drivers/downloaders/m3u8_downloader.py' - Line 40 (Occurrences: 6):         self._m3u8_data = None  # Объект m3u8
+'./ABPlayer/drivers/downloaders/m3u8_downloader.py' - Line 42 (Occurrences: 24):         self._encryption_key: str | None = None  # Ключ шифрования фрагментов
+'./ABPlayer/drivers/downloaders/m3u8_downloader.py' - Line 49 (Occurrences: 23):             # Общий размер книги(в байтах)
+'./ABPlayer/drivers/downloaders/m3u8_downloader.py' - Line 87 (Occurrences: 56):             # Если длительность получившегося файла равна длительности главы
+'./ABPlayer/drivers/downloaders/m3u8_downloader.py' - Line 88 (Occurrences: 14):             # (погрешность 2 сек)
+'./ABPlayer/drivers/downloaders/m3u8_downloader.py' - Line 99 (Occurrences: 22):                 # Переход к следующей главе
+'./ABPlayer/drivers/downloaders/m3u8_downloader.py' - Line 109 (Occurrences: 15):         ts_url = os.path.join(self._host_uri, segment.uri)  # Ссылка на сегмент
+'./ABPlayer/drivers/downloaders/m3u8_downloader.py' - Line 114 (Occurrences: 39):         # Создаем объект потоковой загрузки фрагмента
+'./ABPlayer/drivers/downloaders/m3u8_downloader.py' - Line 131 (Occurrences: 27):                 # Добавляем фрагмент в аудио файл
+'./ABPlayer/drivers/downloaders/m3u8_downloader.py' - Line 133 (Occurrences: 38):                 # Сбрасываем данные в файл. Освобождаем память
+'./ABPlayer/drivers/downloaders/m3u8_downloader.py' - Line 138 (Occurrences: 38):         # Определяем функцию дешифрования фрагмента
+'./ABPlayer/drivers/downloaders/m3u8_downloader.py' - Line 180 (Occurrences: 27):         # Убираем номер файла из названия
+'./ABPlayer/drivers/downloaders/mp3_downloader.py' - Line 25 (Occurrences: 56):     Загрузчик, предназначенный для книг в которых файлы представлены
+'./ABPlayer/drivers/downloaders/mp3_downloader.py' - Line 26 (Occurrences: 33):     отдельными или объединенными MP3 файлами.
+'./ABPlayer/drivers/downloaders/mp3_downloader.py' - Line 34 (Occurrences: 13):         self._files_urls = []  # Ссылки на файлы
+'./ABPlayer/drivers/downloaders/mp3_downloader.py' - Line 35 (Occurrences: 39):         # True - в одном аудио файле присутствует не одна глава
+'./ABPlayer/drivers/downloaders/mp3_downloader.py' - Line 41 (Occurrences: 32):             # Инициализируем прогресс подготовки
+'./ABPlayer/drivers/downloaders/mp3_downloader.py' - Line 56 (Occurrences: 21):                     # Определяем размер файла
+'./ABPlayer/drivers/downloaders/mp3_downloader.py' - Line 67 (Occurrences: 32):             # Инициализируем прогресс скачивания
+'./ABPlayer/drivers/downloaders/mp3_downloader.py' - Line 80 (Occurrences: 44):                 # Исключаем ссылку, чтобы не скачивать файл второй раз
+'./ABPlayer/drivers/downloadi_process_handlers/stdout_handler.py' - Line 8 (Occurrences: 28):     Обработчик процесса скачивания.
+'./ABPlayer/drivers/downloadi_process_handlers/stdout_handler.py' - Line 9 (Occurrences: 43):     Визуализирует процесс скачивания книги в консоли.
+'./ABPlayer/js_api/books.py' - Line 104 (Occurrences: 27):             matched_books_bids = []  # Идентификаторы найденных книг
+'./ABPlayer/js_api/books.py' - Line 105 (Occurrences: 5):             # Поиск
+'./ABPlayer/js_api/books.py' - Line 484 (Occurrences: 22):     message = "Нет подходящего драйвера"
+'./ABPlayer/js_api/books.py' - Line 489 (Occurrences: 28):     message = "Книга уже добавлена в библиотеку"
+'./ABPlayer/js_api/books.py' - Line 494 (Occurrences: 14):     message = "Книга не найдена"
+'./ABPlayer/js_api/books.py' - Line 499 (Occurrences: 29):     message = "Книга скачивается или уже скачана"
+'./ABPlayer/js_api/books.py' - Line 504 (Occurrences: 14):     message = "Книга не скачана"
+'./ABPlayer/js_api/js_api.py' - Line 19 (Occurrences: 45):         Регистрирует методы для дальнейшего вызова из среды JS.
+'./ABPlayer/js_api/js_api.py' - Line 70 (Occurrences: 20):     message = "Проблемы с соединением"
+'./ABPlayer/js_api/settings.py' - Line 275 (Occurrences: 16):     message = "Операция отменена"
+'./ABPlayer/js_api/settings.py' - Line 280 (Occurrences: 22):     message = "Файл обновления не найден"
+'./ABPlayer/js_api/tools.py' - Line 7 (Occurrences: 41):     Декоратор кэширующий результат вызова функции
+'./ABPlayer/js_api/tools.py' - Line 8 (Occurrences: 38):     в течении определенного промежутка времени.
+'./ABPlayer/js_api/tools.py' - Line 9 (Occurrences: 40):     max_age: Продолжительность сохранения кэша(в секундах).
+'./ABPlayer/js_api/window_controls.py' - Line 94 (Occurrences: 35):     Масштаб экрана(на ноутбуках обычно стоит 125%)
+'./ABPlayer/js_api/window_controls.py' - Line 109 (Occurrences: 49):     # Определяем начальное положение курсора, окна и его размер
+'./ABPlayer/js_api/window_controls.py' - Line 121 (Occurrences: 30):         # Пользователь отпустил кнопку мыши
+'./ABPlayer/js_api/window_controls.py' - Line 128 (Occurrences: 55):         # Определяем изменение значений в зависимости от области захвата
+'./ABPlayer/js_api/window_controls.py' - Line 130 (Occurrences: 27):         # Обычное изменение размера окна
+'./ABPlayer/js_api/window_controls.py' - Line 135 (Occurrences: 29):         # Изменение положения размера окна
+'./ABPlayer/js_api/window_controls.py' - Line 150 (Occurrences: 21):             # Изменяем положение окна
+'./ABPlayer/js_api/window_controls.py' - Line 152 (Occurrences: 18):         # Изменяем размер окна
+'./ABPlayer/js_api/window_controls.py' - Line 167 (Occurrences: 40):     # Определяем начальное положение курсора и окна
+'./ABPlayer/js_api/window_controls.py' - Line 175 (Occurrences: 30):         # Пользователь отпустил кнопку мыши
+'./ABPlayer/models/book.py' - Line 23 (Occurrences: 10):     Глава книги.
+'./ABPlayer/models/book.py' - Line 26 (Occurrences: 25):     file_url: str  # Ссылка на файл, для скачивания
+'./ABPlayer/models/book.py' - Line 27 (Occurrences: 27):     file_index: int  # Номер файла(Нумерация с единицы)
+'./ABPlayer/models/book.py' - Line 28 (Occurrences: 13):     title: str  # Название главы
+'./ABPlayer/models/book.py' - Line 29 (Occurrences: 34):     start_time: int  # Время (в секундах), когда начинается глава
+'./ABPlayer/models/book.py' - Line 30 (Occurrences: 37):     end_time: int  # Время (в секундах), когда заканчивается глава
+'./ABPlayer/models/book.py' - Line 35 (Occurrences: 26):         Длительность главы (в секундах).
+'./ABPlayer/models/book.py' - Line 42 (Occurrences: 10):     Список глав.
+'./ABPlayer/models/book.py' - Line 43 (Occurrences: 26):     Представлен списком словарей.
+'./ABPlayer/models/book.py' - Line 60 (Occurrences: 11):     Статус книги.
+'./ABPlayer/models/book.py' - Line 63 (Occurrences: 10):     NEW = "new"  # Новая книга
+'./ABPlayer/models/book.py' - Line 64 (Occurrences: 12):     STARTED = "started"  # Начал слушать
+'./ABPlayer/models/book.py' - Line 65 (Occurrences: 15):     FINISHED = "finished"  # Закончил слушать
+'./ABPlayer/models/book.py' - Line 71 (Occurrences: 50):     Отметка, на которой пользователь остановил прослушивание.
+'./ABPlayer/models/book.py' - Line 72 (Occurrences: 30):     В базе данных храниться как словарь.
+'./ABPlayer/models/book.py' - Line 75 (Occurrences: 11):     item: int = 0  # Глава(Индекс)
+'./ABPlayer/models/book.py' - Line 76 (Occurrences: 7):     time: int = 0  # Секунда
+'./ABPlayer/models/book.py' - Line 81 (Occurrences: 33):     Аудио файлы книги. Словарь: dict[str, str] {<имя файла>: <хеш>}
+'./ABPlayer/models/book.py' - Line 88 (Occurrences: 43):     Класс, описывающий, как книги, хранятся в базе данных,
+'./ABPlayer/models/book.py' - Line 89 (Occurrences: 38):     а так же какие данные драйвера парсят с сайтов.
+'./ABPlayer/models/book.py' - Line 97 (Occurrences: 8):     description: str = ""  # Описание
+'./ABPlayer/models/book.py' - Line 98 (Occurrences: 4):     reader: str = ""  # Чтец
+'./ABPlayer/models/book.py' - Line 99 (Occurrences: 12):     duration: str = ""  # Длительность
+'./ABPlayer/models/book.py' - Line 100 (Occurrences: 13):     url: str = ""  # Ссылка на книгу
+'./ABPlayer/models/book.py' - Line 101 (Occurrences: 26):     preview: str = ""  # Ссылка на превью(обложку) книги
+'./ABPlayer/models/book.py' - Line 102 (Occurrences: 27):     driver: str = ""  # Драйвер, с которым работает сайт
+'./ABPlayer/models/book.py' - Line 103 (Occurrences: 10):     items: BookItems = field(default_factory=BookItems)  # Список глав
+'./ABPlayer/models/book.py' - Line 113 (Occurrences: 34):         :returns: Относительный путь к книге в библиотеке.
+'./ABPlayer/models/book.py' - Line 127 (Occurrences: 47):         :returns: Абсолютный путь к директории, в которой храниться книга.
+'./ABPlayer/models/book.py' - Line 134 (Occurrences: 32):         :returns: Абсолютный путь к файлу обложки книги.
+'./ABPlayer/models/book.py' - Line 141 (Occurrences: 31):         :returns: Прогресс прослушивания. (В процентах)
+'./ABPlayer/models/book.py' - Line 161 (Occurrences: 34):         Сканирует директорию на наличие `.abp` файлов.
+'./ABPlayer/models/book.py' - Line 162 (Occurrences: 52):         :returns: Генератор экземпляров книг, загруженных из найденных файлов.
+'./ABPlayer/models/book.py' - Line 170 (Occurrences: 41):                     # Удаляем файл, если не получается загрузить книгу
+'./ABPlayer/models/book.py' - Line 184 (Occurrences: 28):         Создаёт экземпляр книги из `.abp` файла.
+'./ABPlayer/models/book.py' - Line 185 (Occurrences: 17):         :returns: Экземпляр книги или None.
+'./ABPlayer/models/book.py' - Line 247 (Occurrences: 19):         Сохраняет книгу в `.abp` файл.
+'./ABPlayer/web/static/css/downloads.css' - Line 22 (Occurrences: 19):   content: "нет активных загрузок";
+'./ABPlayer/web/static/css/library.css' - Line 118 (Occurrences: 15):   content: "Ничего не найдено";
+'./ABPlayer/web/static/js/base.js' - Line 149 (Occurrences: 6):         `<div style="font-weight: bold">Ошибка</div><div>${text}</div>`, 30, true
+'./ABPlayer/web/static/js/book.js' - Line 21 (Occurrences: 10):         document.querySelector("#book-page-content .book-listening-progress").innerHTML = `${resp.data.listening_progress} прослушано`
+'./ABPlayer/web/static/js/book.js' - Line 22 (Occurrences: 9):         document.querySelector("#book-page-content .book-adding-date").innerHTML = `Добавлена ${resp.data.adding_date}`
+'./ABPlayer/web/static/js/book.js' - Line 122 (Occurrences: 10):         document.querySelector(".book-listening-progress").innerText = `${listening_progress}% прослушано`
+'./ABPlayer/web/static/js/book.js' - Line 124 (Occurrences: 10):     smallPlayer.querySelector(".listening-progres").innerText = `${listening_progress}% прослушано`
+'./ABPlayer/web/static/js/book.js' - Line 145 (Occurrences: 10):     smallPlayer.querySelector(".listening-progres").innerText = `${book.listening_progress}% прослушано`
+'./ABPlayer/web/static/js/downloads.js' - Line 38 (Occurrences: 13):         <div class="status">инициализация...</div>
+'./ABPlayer/web/static/js/downloads.js' - Line 56 (Occurrences: 8):     if (status == "waiting") status_el.innerHTML = "ожидание..."
+'./ABPlayer/web/static/js/downloads.js' - Line 57 (Occurrences: 10):     else if (status == "preparing") status_el.innerHTML = "подготовка..."
+'./ABPlayer/web/static/js/downloads.js' - Line 58 (Occurrences: 10):     else if (status == "downloading") status_el.innerHTML = "скачивание..."
+'./ABPlayer/web/static/js/downloads.js' - Line 59 (Occurrences: 10):     else if (status == "finishing") status_el.innerHTML = "завершение..."
+'./ABPlayer/web/static/js/downloads.js' - Line 60 (Occurrences: 19):     else if (status == "finished") status_el.innerHTML = "скачивание завершено"
+'./ABPlayer/web/static/js/downloads.js' - Line 61 (Occurrences: 9):     else if (status == "terminating") status_el.innerHTML = "остановка..."
+'./ABPlayer/web/static/js/downloads.js' - Line 91 (Occurrences: 12):     if (title) createNotification(`Книга <b>«${title.innerHTML}»</b> скачана`, 60, true)
+'./ABPlayer/web/static/js/library.js' - Line 149 (Occurrences: 19):         document.getElementById("library-title").innerHTML = "Библиотека: Избранное"
+'./ABPlayer/web/static/js/library.js' - Line 151 (Occurrences: 10):         document.getElementById("library-title").innerHTML = "Библиотека"
+'./ABPlayer/web/static/js/library.js' - Line 231 (Occurrences: 10):                     <div class="book-listening-progress">${book.listening_progress} прослушано</div>
+'./ABPlayer/web/static/js/library.js' - Line 232 (Occurrences: 9):                     <div class="book-adding-date">Добавлена ${book.adding_date}</div>
+'./ABPlayer/web/static/js/library.js' - Line 297 (Occurrences: 48):                 `<div>Книга <b>«${title.innerHTML}»</b> удалена из библиотеки, но скачанные файлы остались.</div>
+'./ABPlayer/web/static/js/library.js' - Line 298 (Occurrences: 22):                 <div style="margin-top: 2px; text-decoration: underline; cursor:pointer" onclick="{deleteBook(this, ${bid}, '${title.innerHTML}');this.parentElement.parentElement.remove()}">удалить оставшиеся файлы</div>`,
+'./ABPlayer/web/static/js/library.js' - Line 301 (Occurrences: 24):         } else if (title) createNotification(`Книга <b>«${title.innerHTML}»</b> удалена из библиотеки`, 5, true)
+'./ABPlayer/web/static/js/library.js' - Line 320 (Occurrences: 17):         createNotification(`Файлы книги <b>«${name}»</b> удалены`, 60, true)
+'./ABPlayer/web/static/js/search.js' - Line 110 (Occurrences: 11):           <div class="icon-btn add-book-btn" onclick="addBook(this)"><span>в библиотеку</span></div>
+'./ABPlayer/web/static/js/search.js' - Line 113 (Occurrences: 15):     if (!resp.length && clear) html = '<div id="no-search-result">Ничего не найдено</div>'
+'./ABPlayer/web/static/js/settings.js' - Line 22 (Occurrences: 34):         content = "<div><b>Папка с книгами изменена</b></div>" + ((resp.data.new_books_count) ? `<div>Книг добавлено: ${resp.data.new_books_count}</div>` : "")
+'./ABPlayer/web/static/js/settings.js' - Line 26 (Occurrences: 36):             content = content + `<div>но скачанные ранее файлы остались на месте</div>
+'./ABPlayer/web/static/js/settings.js' - Line 27 (Occurrences: 23):             <div style="margin-top: 2px; text-decoration: underline; cursor:pointer" onclick="{migrateOldLibrary();this.parentElement.parentElement.remove()}">Перенести всё в новое место</div>
+'./ABPlayer/web/static/js/settings.js' - Line 28 (Occurrences: 30):             <div style="margin-top: 2px; text-decoration: underline; cursor:pointer" onclick="{removeOldLibrary();this.parentElement.parentElement.remove()}">Удалить старые книги из библиотеки</div>`
+'./ABPlayer/web/static/js/settings.js' - Line 34 (Occurrences: 41):     n = createNotification("<div><b>Перенос файлов...</b></div><div>это может занять некоторое время</div>", 0, false)
+'./ABPlayer/web/static/js/settings.js' - Line 38 (Occurrences: 29):         createNotification(`<div><b>Перенос завершен</b><div><div>Книг перенесено: ${resp.data.moved_books_count}</div>`, 10, true)
+'./ABPlayer/web/static/js/settings.js' - Line 42 (Occurrences: 46):     n = createNotification("<div><b>Удаление старых книг...</b></div><div>это может занять некоторое время</div>", 0, false)
+'./ABPlayer/web/static/js/settings.js' - Line 46 (Occurrences: 28):         createNotification(`<div><b>Удаление завершено</b><div><div>Книг удалено: ${resp.data.removed_books_count}</div>`, 10, true)
+'./ABPlayer/web/static/js/settings.js' - Line 58 (Occurrences: 18):             `<div><b>Доступно обновление ${resp.data.version}</b></div>
+'./ABPlayer/web/static/js/settings.js' - Line 59 (Occurrences: 15):             <a style="margin-top: 2px" href="${resp.data.url}" target="_blank">список изменений</a>
+'./ABPlayer/web/static/js/settings.js' - Line 60 (Occurrences: 10):             <div style="margin-top: 2px; text-decoration: underline; cursor:pointer" onclick="{updateApp();this.parentElement.parentElement.remove()}">установить</div>`
+'./ABPlayer/web/static/js/settings.js' - Line 64 (Occurrences: 34):             `<div><b>Доступна новая версия для тестирования ${resp.data.version}</b></div>
+'./ABPlayer/web/static/js/settings.js' - Line 65 (Occurrences: 15):             <a style="margin-top: 2px" href="${resp.data.url}" target="_blank">список изменений</a>
+'./ABPlayer/web/static/js/settings.js' - Line 66 (Occurrences: 10):             <div style="margin-top: 2px; text-decoration: underline; cursor:pointer" onclick="{updateApp();this.parentElement.parentElement.remove()}">установить</div>
+'./ABPlayer/web/static/js/settings.js' - Line 67 (Occurrences: 32):             <div style="margin-top: 2px; text-decoration: underline; cursor:pointer" onclick="{unsubscribeNotStable();this.parentElement.parentElement.remove()}">не предлагать участие в тестировании</div>`
+'./ABPlayer/web/static/js/settings.js' - Line 73 (Occurrences: 46):     n = createNotification("<div><b>Загрузка обновления</b></div><div>это может занять некоторое время</div>", 0, false)
+'./build/setup.py' - Line 3 (Occurrences: 28):     Сборка exe и формирование NSIS сценариев.
