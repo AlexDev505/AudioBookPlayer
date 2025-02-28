@@ -80,7 +80,10 @@ def _validate_config(config: dict) -> dict:
         if config["dark_theme"] not in {"1", "2"}:
             config["dark_theme"] = FIELDS["dark_theme"]
             need_update_config = True
-        if not os.path.isdir(config["books_folder"]):
+        if not (
+            isinstance(config["books_folder"], str)
+            and os.path.isdir(config["books_folder"])
+        ):
             config["books_folder"] = FIELDS["books_folder"]
             Path(FIELDS["books_folder"]).mkdir(parents=True, exist_ok=True)
             need_update_config = True
