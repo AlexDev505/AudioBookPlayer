@@ -54,6 +54,7 @@ class SettingsApi(JSApi):
             logger.debug("dir not selected")
             return self.error(RequestCanceled())
 
+        new_dir = new_dir[0]
         self.old_books_folder = old_dir = os.environ["books_folder"]
 
         if new_dir == old_dir:
@@ -272,9 +273,10 @@ class SettingsApi(JSApi):
 
 class RequestCanceled(JSApiError):
     code = 7
-    message = "Операция отменена"
+    message = "Operation canceled"
 
 
 class UpdateFileNotFound(JSApiError):
     code = 8
-    message = "Файл обновления не найден"
+    message = "Update file not found"
+

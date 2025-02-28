@@ -18,8 +18,8 @@ function loadBookData(bid) {
         if (resp.status != "ok") {showError(resp.message); return}
         opened_book = resp.data
         document.querySelector("#book-page-content .book-title").innerHTML = resp.data.name
-        document.querySelector("#book-page-content .book-listening-progress").innerHTML = `${resp.data.listening_progress} прослушано`
-        document.querySelector("#book-page-content .book-adding-date").innerHTML = `Добавлена ${resp.data.adding_date}`
+        document.querySelector("#book-page-content .book-listening-progress").innerHTML = `${resp.data.listening_progress} listened`
+        document.querySelector("#book-page-content .book-adding-date").innerHTML = `date added ${resp.data.adding_date}`
         document.querySelector("#book-page-content .book-preview").style = `background-image: url('${resp.data.preview}'), url('/library/${resp.data.local_preview}');`
         document.querySelector("#book-page-content .book-author").innerHTML = resp.data.author
         document.querySelector("#book-page-content .book-reader").innerHTML = resp.data.reader
@@ -119,9 +119,9 @@ player.on("timeupdate", (event) => {
         if (el.dataset.seeking) return
         el.style.setProperty('--current-item-percents', `${player.currentTime/ (player.duration / 100)}%`)
         document.querySelector(".book-item.current .cur-time").innerText = timeView(Math.floor(player.currentTime))
-        document.querySelector(".book-listening-progress").innerText = `${listening_progress}% прослушано`
+        document.querySelector(".book-listening-progress").innerText = `${listening_progress}% listened`
     }
-    smallPlayer.querySelector(".listening-progres").innerText = `${listening_progress}% прослушано`
+    smallPlayer.querySelector(".listening-progres").innerText = `${listening_progress}% listened`
     if (Math.abs(player.currentTime - last_stop_flag_time) > 15) {
         pywebview.api.set_stop_flag(player.current_book.bid, player.current_item_index, Math.floor(player.currentTime))
         last_stop_flag_time = player.currentTime
@@ -142,7 +142,7 @@ function initBook(book) {
     smallPlayer.classList.add("visible")
     smallPlayer.querySelector(".small-playback-control").style = `background-image: url(${book.preview});`
     smallPlayer.querySelector(".book-title").innerText = `${book.name}`
-    smallPlayer.querySelector(".listening-progres").innerText = `${book.listening_progress}% прослушано`
+    smallPlayer.querySelector(".listening-progres").innerText = `${book.listening_progress}% listened`
     smallPlayer.querySelector(".book-info").onclick = function() {
         if (opened_book && opened_book.bid == player.current_book.bid) return
         openBookPage(player.current_book.bid)
@@ -264,3 +264,4 @@ function clearPlayingBook() {
     player.stop()
     player.current_book = null
 }
+

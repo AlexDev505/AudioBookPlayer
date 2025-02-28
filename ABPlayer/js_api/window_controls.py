@@ -91,7 +91,7 @@ def query_key_state(key_code) -> bool:
 @ttl_cache(5)
 def query_scale_k() -> float:
     """
-    Масштаб экрана(на ноутбуках обычно стоит 125%)
+    Screen scale (usually set to 125% on laptops)
     """
     return windll.shcore.GetScaleFactorForDevice(0) / 100
 
@@ -106,7 +106,7 @@ def move(window: webview.Window, x: int, y: int) -> None:
 
 
 def resize_handler(window: webview.Window, size_grip):
-    # Определяем начальное положение курсора, окна и его размер
+    # Define initial cursor position, window, and its size
     start_x, start_y = query_mouse_position()
     start_win_x = window.x
     start_win_y = window.y
@@ -118,21 +118,21 @@ def resize_handler(window: webview.Window, size_grip):
     logger.trace(f"resize started: {size_grip}")
 
     while True:
-        # Пользователь отпустил кнопку мыши
+        # User released the mouse button
         if not query_key_state(0x01):
             logger.trace("resize finished")
             break
 
         current_x, current_y = query_mouse_position()
 
-        # Определяем изменение значений в зависимости от области захвата
+        # Define value changes depending on the capture area
         delta_width = delta_height = delta_x = delta_y = 0
-        # Обычное изменение размера окна
+        # Regular window resizing
         if "bottom" in size_grip:
             delta_height = current_y - start_y
         if "right" in size_grip:
             delta_width = current_x - start_x
-        # Изменение положения размера окна
+        # Change window size position
         if "top" in size_grip:
             delta_y = current_y - start_y
             delta_height = -delta_y
@@ -147,9 +147,9 @@ def resize_handler(window: webview.Window, size_grip):
                 delta_x = -delta_width
 
         if delta_x or delta_y:
-            # Изменяем положение окна
+            # Change window position
             move(window, start_win_x + delta_x, start_win_y + delta_y)
-        # Изменяем размер окна
+        # Change window size
         resize(window, start_width + delta_width, start_height + delta_height)
 
         time.sleep(0.005)
@@ -164,7 +164,7 @@ def move_to_cursor(window: webview.Window) -> None:
 
 
 def drag_window(window: webview.Window) -> None:
-    # Определяем начальное положение курсора и окна
+    # Define initial cursor and window position
     start_x, start_y = query_mouse_position()
     start_win_x = window.x
     start_win_y = window.y
@@ -172,7 +172,7 @@ def drag_window(window: webview.Window) -> None:
     logger.trace("drag started")
 
     while True:
-        # Пользователь отпустил кнопку мыши
+        # User released the mouse button
         if not query_key_state(0x01):
             logger.trace("drag finished")
             break
@@ -185,3 +185,4 @@ def drag_window(window: webview.Window) -> None:
         move(window, start_win_x + delta_x, start_win_y + delta_y)
 
         time.sleep(0.005)
+

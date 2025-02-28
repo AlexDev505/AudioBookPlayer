@@ -16,12 +16,12 @@ if ty.TYPE_CHECKING:
 
 def convert_from_bytes(bytes_value: int) -> str:
     """
-    :param bytes_value: Число байт.
-    :returns: Строка вида <Число> <Единица измерения>
+    :param bytes_value: Number of bytes.
+    :returns: String in the format <Number> <Unit of measurement>
     """
     if bytes_value == 0:
         return "0B"
-    size_name = ("б", "КБ", "МБ", "ГБ", "ТБ", "ПБ", "EB", "ZB", "YB")
+    size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
     i = int(math.floor(math.log(bytes_value, 1024)))
     p = math.pow(1024, i)
     s = round(bytes_value / p, 2)
@@ -30,14 +30,14 @@ def convert_from_bytes(bytes_value: int) -> str:
 
 def get_file_hash(file_path: ty.Union[str, Path], hash_func=hashlib.sha256) -> str:
     """
-    :param file_path: Путь к файлу.
-    :param hash_func: Функция хеширования.
-    :returns: Хеш файла.
+    :param file_path: Path to the file.
+    :param hash_func: Hash function.
+    :returns: File hash.
     """
-    hash_func = hash_func()  # Инициализируем хеш функцию
+    hash_func = hash_func()  # Initialize the hash function
     with open(file_path, "rb") as file:
-        # Читаем файл по блокам в 64кб,
-        # для избежания загрузки больших файлов в оперативную память
+        # Read the file in 64KB blocks,
+        # to avoid loading large files into memory
         for block in iter(lambda: file.read(65536), b""):
             hash_func.update(block)
     file_hash = hash_func.hexdigest()
@@ -51,8 +51,8 @@ def pretty_view(
     obj: ty.Any, *, multiline: bool = False, indent: int = 4, __finish=True
 ) -> str:
     """
-    Формирует удобно читаемое представление списка/словаря.
-    :returns: Строка.
+    Creates a readable representation of a list/dictionary.
+    :returns: String.
     """
     result = ""
 
@@ -117,8 +117,8 @@ def pretty_view(
 
 def make_book_preview(book: Book) -> dict:
     """
-    :param book: Экземпляр книги.
-    :returns: Словарь с основными полями книги.
+    :param book: Instance of the book.
+    :returns: Dictionary with the main fields of the book.
     """
     return dict(
         author=book.author,
@@ -130,3 +130,4 @@ def make_book_preview(book: Book) -> dict:
         preview=book.preview,
         driver=book.driver,
     )
+

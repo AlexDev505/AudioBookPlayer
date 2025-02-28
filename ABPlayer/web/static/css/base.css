@@ -351,3 +351,4 @@ input[type="range"]::after {
 .side-grip[data-place="bottom"] {
   bottom: 0; width: 100%; cursor: n-resize
 }
+

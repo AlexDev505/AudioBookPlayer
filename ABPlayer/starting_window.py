@@ -14,8 +14,8 @@ from web.app import app
 
 def create_starting_window() -> webview.Window:
     """
-    Создает окно запуска приложения.
-    :returns: Экземпляр окна.
+    Creates the application startup window.
+    :returns: An instance of the window.
     """
 
     def _on_shown():
@@ -37,7 +37,7 @@ def create_starting_window() -> webview.Window:
         background_color="#000000",
     )
 
-    # Добавляем обработчики событий
+    # Adding event handlers
     window.events.loaded += _on_loaded
     window.events.shown += _on_shown
 
@@ -46,9 +46,9 @@ def create_starting_window() -> webview.Window:
 
 def start_app(window: webview.Window) -> None:
     """
-    Подготавливает приложение к запуску.
-    Инициализирует конфигурацию, бд.
-    Анализирует библиотеку.
+    Prepares the application for launch.
+    Initializes the configuration and database.
+    Analyzes the library.
     """
     logger.debug("starting app...")
     start_time = time.time()
@@ -63,7 +63,7 @@ def start_app(window: webview.Window) -> None:
     Database.init()
     init_library(window)
 
-    window.evaluate_js("setStatus('запуск...')")
+    window.evaluate_js("setStatus('starting...')")
 
     if (sub := time.time() - start_time) < 2:
         logger.trace(f"sleeping {round(2 - sub, 2)}s （*＾-＾*）")
@@ -77,18 +77,18 @@ def start_app(window: webview.Window) -> None:
 
 def init_library(window: webview.Window) -> None:
     """
-    Анализирует библиотеку.
-    Добавляет книги из хранилища.
-    Исправляет некорректные записи в бд.
+    Analyzes the library.
+    Adds books from storage.
+    Fixes incorrect entries in the database.
     """
     logger.debug("loading library...")
-    window.evaluate_js("setStatus('загрузка библиотеки...')")
+    window.evaluate_js("setStatus('loading library...')")
 
     updates = False
     correct_books_urls: list[str] = []
     incorrect_books_ids: list[int] = []
     with Database() as db:
-        # Проверка существующих в бд книг
+        # Checking existing books in the database
         logger.trace("validating exists books")
         offset = 0
         books = db.get_libray(20, offset)
@@ -110,7 +110,7 @@ def init_library(window: webview.Window) -> None:
             db.clear_files(*incorrect_books_ids)
             updates = True
 
-        # Сканирование хранилища
+        # Scanning storage
         logger.trace("scanning books folder")
         for book in Book.scan_dir(os.environ["books_folder"]):
             if book.url in correct_books_urls:
@@ -129,3 +129,4 @@ def init_library(window: webview.Window) -> None:
         if updates:
             logger.trace("saving library")
             db.commit()
+

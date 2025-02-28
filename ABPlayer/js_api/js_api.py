@@ -16,7 +16,7 @@ class JSApi:
 
     def init(self, window: webview.Window):
         """
-        Регистрирует методы для дальнейшего вызова из среды JS.
+        Registers methods for further invocation from the JS environment.
         """
         for section in self.sections:
             section = section()
@@ -67,4 +67,5 @@ class JSApiError(Exception):
 
 class ConnectionFailedError(JSApiError):
     code = 1
-    message = "Проблемы с соединением"
+    message = "Connection issues"
+
