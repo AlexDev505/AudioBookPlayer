@@ -1,6 +1,6 @@
 """
 
-    Сборка exe и формирование NSIS сценариев.
+Сборка exe и формирование NSIS сценариев.
 
 """
 
@@ -17,7 +17,7 @@ from version import Version
 
 
 DEV: bool = False
-__version__ = Version(2, 1, 3)
+__version__ = Version(2, 1, 4)
 dev_path = os.path.join(os.path.dirname(__file__), "..", "ABPlayer")
 run_file_path = os.path.join(dev_path, "run.py")
 main_file_path = os.path.join(dev_path, "main.py")

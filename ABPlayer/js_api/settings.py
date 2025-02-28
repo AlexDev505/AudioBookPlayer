@@ -54,6 +54,7 @@ class SettingsApi(JSApi):
             logger.debug("dir not selected")
             return self.error(RequestCanceled())
 
+        new_dir = new_dir[0]
         self.old_books_folder = old_dir = os.environ["books_folder"]
 
         if new_dir == old_dir:
