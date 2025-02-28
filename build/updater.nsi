@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "ABPlayer"
-!define PRODUCT_VERSION "2.1.3"
+!define PRODUCT_VERSION "2.1.4"
 !define PRODUCT_PUBLISHER "AlexDev505"
 !define PRODUCT_WEB_SITE "https://github.com/AlexDev505/AudioBookPlayer"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\ABPlayer.exe"
@@ -58,7 +58,6 @@ Section "ABPlayer" SEC01
     File "ABPlayer\ABPlayer.exe"
     RMDir /r "$INSTDIR\_internal"
   SetOutPath "$INSTDIR"
-  RMDir /r "$INSTDIR\ABPlayer.exe.WebView2"
   File "ABPlayer\ABPlayer.exe"
   SetOutPath "$INSTDIR\_internal"
   File "ABPlayer\_internal\api-ms-win-core-console-l1-1-0.dll"
