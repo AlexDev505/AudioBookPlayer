@@ -126,6 +126,7 @@
 }
 .item-author::before {content: url(../images/person.svg)}
 .item-reader::before {content: url(../images/mic.svg)}
+.item-duration:empty::before {content: ""}
 .item-duration::before {content: url(../images/clock.svg)}
 .item-driver::before {content: url(../images/hdd.svg)}
 .item-series-name::before {content: url(../images/book.svg)}
