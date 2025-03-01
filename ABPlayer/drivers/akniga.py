@@ -232,7 +232,7 @@ class AKniga(Driver):
             soup = BeautifulSoup(page.text, "html.parser")
 
             elements = soup.select(
-                "div.content__main__articles--item:not(:has(svg[class*='biblio']))"
+                "div.content__main__articles--item:not(:has(.caption__article-preview))"
             )
             if not elements:
                 break
