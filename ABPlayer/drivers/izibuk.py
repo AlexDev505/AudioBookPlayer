@@ -125,12 +125,11 @@ class Izibuk(Driver):
 
             page = self.get_page(url)
             soup = BeautifulSoup(page.content, "html.parser")
-            if not (
-                elements := soup.select(
-                    "#books_list>div>div:not(:has(a[href^='/book']+span))"
-                )
-            ):
-                break
+            if not soup.select_one("#books_list > div a[href^='/book']"):
+                return books
+            elements = soup.select(
+                "#books_list>div>div:not(:has(a[href^='/book']+span))"
+            )
 
             if offset:
                 if offset > len(elements):
