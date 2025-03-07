@@ -58,7 +58,6 @@ class LibriVox(Driver):
         ) = (None, None, None, None, None, [], None, None, {})
         identifier = url.strip("/").split("/")[-1]
         meta_item = self.session.get(f"{self.site_url}/metadata/{identifier}").json()
-        logger.debug(f"Cache hit: {meta_item.from_cache}")
         if "metadata" in meta_item.keys():
             metadata = meta_item["metadata"]
             if "creator" in metadata.keys():
