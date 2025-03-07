@@ -92,14 +92,20 @@ def create_instance_id(obj: ty.Any) -> int:
     setattr(obj.__class__, "_last_instance_id", new_instance_id)
     return new_instance_id
 
+
+def html_to_text(html):
+    soup = BeautifulSoup(html, "html.parser")
+    return soup.get_text()
+
+
 def hms2sec(length: str) -> int:
     """
     Converts the length of the audio file of format hh:mm:ss or ss or mm:ss to seconds.
-    
+
     """
-    parts = length.split(':')
+    parts = length.split(":")
     parts = [int(part) for part in parts]
-    
+
     if len(parts) == 1:
         # Only seconds
         return parts[0]
@@ -113,22 +119,35 @@ def hms2sec(length: str) -> int:
         return hours * 3600 + minutes * 60 + seconds
     else:
         raise ValueError("Invalid length format")
+
+
 def html2text(html: str) -> str:
     """
     Converts HTML content to plain text while preserving URLs and paragraphing.
     """
-    soup = BeautifulSoup(html, 'html.parser')
+    soup = BeautifulSoup(html, "html.parser")
+    return soup.get_text()
+    """
     output = []
     for element in soup.descendants:
-        if element.name == 'a' and element.get('href'):
+        
+        if element.name == "a" and element.get("href"):
             output.append(f"{element.get_text()} ({element['href']})")
-        elif element.name == 'br':
-            output.append('\n')
+        elif element.name == "br":
+            output.append("\n")
         elif element.string:
             output.append(element.string)
-        elif element.name in ['span', 'b', 'i', 'u', 'strong', 'em']:  # Add other inline tags as needed
+        elif element.name in [
+            "span",
+            "b",
+            "i",
+            "u",
+            "strong",
+            "em",
+        ]:  # Add other inline tags as needed
             output.append(element.get_text())
-    return ''.join(output).strip()
+    return "".join(output).strip()
+    """
 
 
 def instance_id(obj: ty.Any) -> int | None:
@@ -136,11 +155,3 @@ def instance_id(obj: ty.Any) -> int | None:
     :returns: Идентификатор экземпляра.
     """
     return getattr(obj, "_instance_id", None)
-
-
-def dlink_maker(book_url,identifier:str,filename: str) -> str:
-    """
-    returns download endpoint for provided filename.
-    """
-    url=f"{book_url.rstrip('/')}/{identifier.strip(' ')}/{filename.strip(' ')}"
-    return url
