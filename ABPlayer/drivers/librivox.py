@@ -265,11 +265,19 @@ class LibriVox(Driver):
 
             return books
 
+
+
         page = offset + 1
         books = []
+        url_encoded=urlize(f'title:({query}) AND collection:"librivoxaudio"')
         result = self.session.get(
-            f"https://archive.org/advancedsearch.php?q={urlize('title:('+str(query)+')')}+AND+collection:%22librivoxaudio%22&fl[]=identifier&sort[]=&sort[]=&sort[]=&rows={limit}&page={page}&output=json"
-        ).json()["response"]["docs"]
+        
+            f"https://archive.org/advancedsearch.php?q={url_encoded}&fl[]=identifier&sort[]=&sort[]=&sort[]=&rows={limit}&page={page}&output=json"
+        ).json()
+        if "response" in result.keys():
+            result = result["response"]["docs"]
+        else:
+            return []
         hits = []
         if len(result) > 0:
             hits = [i["identifier"] for i in result]
