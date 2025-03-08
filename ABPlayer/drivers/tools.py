@@ -98,7 +98,7 @@ def html_to_text(html):
     return soup.get_text()
 
 
-def hms2sec(length: str) -> int:
+def hms_to_sec(length: str) -> int:
     """
     Converts the length of the audio file of format hh:mm:ss or ss or mm:ss to seconds.
 
@@ -121,33 +121,21 @@ def hms2sec(length: str) -> int:
         raise ValueError("Invalid length format")
 
 
-def html2text(html: str) -> str:
+def sec_to_hms(seconds: int) -> str:
+    """
+    Converts the length of the audio file in seconds to format hh:mm:ss.
+    """
+    hours, remainder = divmod(seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    return f"{hours:02}:{minutes:02}:{seconds:02}"
+
+
+def html_to_text(html: str) -> str:
     """
     Converts HTML content to plain text while preserving URLs and paragraphing.
     """
     soup = BeautifulSoup(html, "html.parser")
     return soup.get_text()
-    """
-    output = []
-    for element in soup.descendants:
-        
-        if element.name == "a" and element.get("href"):
-            output.append(f"{element.get_text()} ({element['href']})")
-        elif element.name == "br":
-            output.append("\n")
-        elif element.string:
-            output.append(element.string)
-        elif element.name in [
-            "span",
-            "b",
-            "i",
-            "u",
-            "strong",
-            "em",
-        ]:  # Add other inline tags as needed
-            output.append(element.get_text())
-    return "".join(output).strip()
-    """
 
 
 def instance_id(obj: ty.Any) -> int | None:
