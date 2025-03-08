@@ -15,18 +15,20 @@ from requests_cache import CachedSession
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import logging
 
-CACHE_EXPIRATION = 43200  # 12 hours. This is a personal preference. IA requests have no expiration headers. Longer expiry means larger cache. Shorter expiry means more disk operations.
-CACHE_BACKEND = "sqlite"  # SQLite is the most efficient backend for requests_cache. It is also the most efficient for requests_ratelimiter. Memory backend is not recommended for requests_ratelimiter.
-CACHE_CONTROL = (
-    False  # As already mentioned, I discovered the default expiration to be Null.
-)
-MAX_RETRIES = 3  # Maximum number of retries before giving up on a particular item in search results. If abandoned, the item will not appear in search results. The higher you go, the slower your other results load due to rate-limit.
-BACKOFF_FACTOR = 1  # The maximum I would risk before repeating a request. 3 successive retries (worst case) in 1, 2, and 4 seconds respectively.
-RATE_LIMIT = 5  # Beyond this would be too much. 5 is high on API calls. 1 is too low. 3 is a good balance. Exceeding this could get you rate-limted or blocked.
-RETRY_STATUS_CODES = [500, 502, 503, 504]  # Retrying on these specific server errors.
-MAX_WORKERS = 32 # Maximum number of threads to use for fetching metadata. This is a personal preference. The higher you go, the more requests you make to the server. The lower you go, the slower your search results load. In event workers get tied up you want to have higher number of workers to keep the search results coming.
+CACHE_EXPIRATION = 43200  # 12 hours.
+CACHE_BACKEND = "sqlite"
+CACHE_CONTROL = False  # Archive metadata is set to not expire
+# moderate, non aggressive strategy
+MAX_RETRIES = 3
+BACKOFF_FACTOR = 1
+RATE_LIMIT = 5  # Beyond this would be too much.
+RETRY_STATUS_CODES = [500, 502, 503, 504]
+MAX_WORKERS = 32  # doesn't matter. The bottleneck is the rate limit.
 CACHE_NAME = os.path.join(os.environ["APP_DIR"], "librivox_cache.sqlite")
-SELECTED_FORMAT = "128Kbps MP3" #"64Kbps MP3"  # original format of LibriVox collection, near CD quality. Other formats are available. Refer : https://archive.org/post/1053663/file-format
+SELECTED_FORMAT = "128Kbps MP3"  # "64Kbps MP3"
+# "128Kbps MP3" is the original format of LibriVox collection, ~ CD quality.
+# Refer : https://archive.org/post/1053663/file-format
+
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -35,14 +37,13 @@ logger = logging.getLogger(__name__)
 class LibriVox(Driver):
     """
     Driver for LibriVox.
-    Making use of the internetarchive metadata API to browse and fetch audiobooks
+    Making use of the internetarchive metadata API to browse/fetch audiobooks
     while respecting rate limits.
     """
 
     site_url = "https://archive.org"
     downloader_factory = MP3Downloader
 
-    
     session = CachedSession(
         cache_name=CACHE_NAME,
         cache_control=CACHE_CONTROL,
@@ -64,27 +65,31 @@ class LibriVox(Driver):
         target=session.cache.remove_expired_responses
     ).start()  # an opportunity to clear up expired cache
 
-
-
-
     def get_book(self, url: str) -> Book:
         """
         def get_book(self, url: str) -> Book:
 
-        Fetches a book from Internet Archive using the identifier.
 
-        This method uses the rate-limited class-method 'self.session' to fetch metadata for an archive.org audiobook, specifically from the Librivox collection. The URL of the audiobook is passed into this function.
+        This method uses the rate-limited class-method 'self.session' to
+        fetch metadata for an archive.org audiobook, specifically from the-
+        -Librivox collection.
+        The URL of the audiobook is passed into this function.
 
         Args:
-            url (str): The URL of the audiobook on archive.org. This URL is used to fetch metadata and chapter information for the audiobook.
+            url (str): The URL of the audiobook on archive.org.
+            This URL is used to fetch metadata and chapter information-
+                                                    -for the audiobook.
 
         Returns:
-           Book: A Book object containing metadata and chapter information for the audiobook.
+           Book: A Book object containing metadata
+           and chapter information for the audiobook.
+
         """
         threading.Thread(
             target=self.session.cache.remove_expired_responses
-        ).start()  # an opportunity to clear up expired cache. Had to tie it to some event to save the bother of setting up a cron job.
-        
+        ).start()  # an opportunity to clear up expired cache.
+        # Had to tie it to some event to save the bother of a cron job.
+
         (
             identifier,
             author,
@@ -116,7 +121,8 @@ class LibriVox(Driver):
             files = meta_item["files"]
             cover_filename = next(
                 (item["name"] for item in files if item["format"] == "JPEG"),
-                None,  # Only one cover file image is presetn per audiobook and only cover file image has format label JPEG. others have "JPEG thumb"
+                None,
+                # only one jpg file i.e. cover img has label "JPEG".
             )
             preview = (
                 f"{self.site_url}/download/{identifier}/{cover_filename}"
@@ -142,9 +148,7 @@ class LibriVox(Driver):
                 except ValueError:
                     file_index = 0
             if "name" in keys:
-                file_url = (
-                    f"{self.site_url}/download/{identifier}/{file['name']}"  # explicit
-                )
+                file_url = f"{self.site_url}/download/{identifier}/{file['name']}"
             if "title" in keys:
                 chapter_title = file["title"]
             if "title" in keys:
@@ -152,12 +156,11 @@ class LibriVox(Driver):
             if "length" in keys:
                 if (
                     file["format"] == "64Kbps MP3"
-                ):  # special condition. lengthetadata for "64Kbps MP3" files is in hh:mm:ss format
+                ):  # special condition. lengthetadata for "64Kbps MP3" files is
+                    # in hh:mm:ss format
                     end_time = hms_to_sec(file["length"])
                 elif file["format"] == "128Kbps MP3":
-                    end_time = floor(
-                        float(file["length"])
-                    )  # special condition metadata for "128Kbps MP3" files is in float format (seconds with decimal)
+                    end_time = floor(float(file["length"]))
 
                 chapters.append(
                     BookItem(
@@ -173,10 +176,10 @@ class LibriVox(Driver):
         return Book(
             author=author,
             name=title,
-            series_name=None,
-            number_in_series=None,
+            series_name=str(),
+            number_in_series=str(),
             description=description,
-            reader="No Data", #This information is available on librivox.org but not in archive.org metadata- at least not for all items.
+            reader="No Data",  # This information is available on librivox.org
             duration=duration,
             url=url,
             preview=preview,
@@ -185,14 +188,12 @@ class LibriVox(Driver):
         )
 
     def search_books(self, query: str, limit: int = 20, offset: int = 0) -> list[Book]:
-        """
-        def search_books(self, query: str, limit: int = 10, offset: int = 0) -> Book:
-
-        """
 
         def fetch_item(identifier):
             """
-            a sub-function to fetch a single book's metadata from the archive.org metadata API
+            a sub-function to fetch a single book's metadata
+                            from the archive.org metadata API
+
             """
             threading.Thread(
                 target=self.session.cache.remove_expired_responses
@@ -221,8 +222,8 @@ class LibriVox(Driver):
                     name = metadata["title"]
                 if "runtime" in keys_2:
                     duration = metadata[
-                        "runtime" 
-                    ] #runtime is expected to be formatted as it is. This is headed to the search preview templat.
+                        "runtime"
+                    ]  # duration is in hh:mm:ss format (This is for preview)
                 if "reader" in keys:
                     reader = metadata["reader"]
             else:
@@ -265,19 +266,11 @@ class LibriVox(Driver):
 
             return books
 
-
-
         page = offset + 1
         books = []
-        url_encoded=urlize(f'title:({query}) AND collection:"librivoxaudio"')
         result = self.session.get(
-        
-            f"https://archive.org/advancedsearch.php?q={url_encoded}&fl[]=identifier&sort[]=&sort[]=&sort[]=&rows={limit}&page={page}&output=json"
-        ).json()
-        if "response" in result.keys():
-            result = result["response"]["docs"]
-        else:
-            return []
+            f"https://archive.org/advancedsearch.php?q={urlize('title:('+str(query)+')')}+AND+collection:%22librivoxaudio%22&fl[]=identifier&sort[]=&sort[]=&sort[]=&rows={limit}&page={page}&output=json"
+        ).json()["response"]["docs"]
         hits = []
         if len(result) > 0:
             hits = [i["identifier"] for i in result]
@@ -289,8 +282,8 @@ class LibriVox(Driver):
     def get_book_series(self, url: str) -> ty.List[Book]:
         """
         to be implemented
-        Yet to find connecting pattern between books in a series in the collection.
-        This is a placeholder because without it the class cannot be instantiated.
+
+        Placeholder to enable class instantiation.
         """
         books = ty.List()
         return books
