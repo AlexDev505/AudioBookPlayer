@@ -1,55 +1,93 @@
-import typing as ty
 from models.book import Book, BookItems, BookItem
 from .base import Driver
 from .downloaders import MP3Downloader
 from .tools import safe_name, hms_to_sec, html_to_text
-import threading
-from math import floor
-import os
 
+from math import floor
+from cachetools import TTLCache
 from requests_ratelimiter import LimiterAdapter
 from urllib3.util.retry import Retry
 from urllib.parse import quote as urlize
 from requests_cache import CachedSession
+from sys import stdout
+from loguru import logger
+from threading import Timer, Lock
+import typing as ty
 
-from concurrent.futures import ThreadPoolExecutor, as_completed
-import logging
 
-CACHE_EXPIRATION = 43200  # 12 hours.
-CACHE_BACKEND = "sqlite"
-CACHE_CONTROL = False  # Archive metadata is set to not expire
+
 # moderate, non aggressive strategy
 MAX_RETRIES = 3
+# CACHE_BACKEND = "sqlite" or "memory"
 BACKOFF_FACTOR = 1
 RATE_LIMIT = 5  # Beyond this would be too much.
 RETRY_STATUS_CODES = [500, 502, 503, 504]
-MAX_WORKERS = 32  # doesn't matter. The bottleneck is the rate limit.
-CACHE_NAME = os.path.join(os.environ["APP_DIR"], "librivox_cache.sqlite")
+CACHE_NAME = "metadata_cache"
 SELECTED_FORMAT = "128Kbps MP3"  # "64Kbps MP3"
+CACHE_SIZE = 200  # a reasonable size for the cache for fielding oninput=search()
+CACHE_LIFE = 1800  # 30 minutes
+WAIT = 0.5  # Timeout between keystrokes for oninput=search()
 # "128Kbps MP3" is the original format of LibriVox collection, ~ CD quality.
 # Refer : https://archive.org/post/1053663/file-format
 
 
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+
+class Debouncer:
+    """
+    A class to debounce i.e. rate limit function calls in a
+    destructive way- ensure that only the function call that is
+    followed by minimum wait time is processed. Others are discarded.
+    """
+    def __init__(self, wait: float):
+
+        """ 
+        initialize the Debouncer class.
+        Args:
+            wait: The time to wait before calling the function
+        """
+        self.wait = wait
+        self.timer = None
+        self.result = None
+        self.lock = Lock()
+
+    def debounce(self, func: ty.Callable, *args: ty.Any, **kwargs: ty.Any) -> ty.Any:
+        """
+        Debounce a function call.
+        Args:
+            func: The function to call
+            *args: The arguments to call the func with
+            **kwargs: The keyword arguments to call func with
+        Returns:
+            The result of func(*args, **kwargs)
+        """
+        if self.timer:
+            self.timer.cancel()
+        self.timer = Timer(self.wait, self._call_func, [func, *args], kwargs)
+        self.timer.start()
+        self.timer.join()  # ensuring wait timeout before returning the result
+        return self.result
+
+    def _call_func(self, func: ty.Callable, *args: ty.Any, **kwargs: ty.Any) -> None:
+        with self.lock:
+            self.result = func(*args, **kwargs)
+
+
+# Configure a separate logger for requests
+requests_logger = logger.bind(name="requests_logger")
+requests_logger.add(stdout, format="{time} {message}", level="INFO")
 
 
 class LibriVox(Driver):
     """
     Driver for LibriVox.
     Making use of the internetarchive metadata API to browse/fetch audiobooks
-    while respecting rate limits.
+    from the LibriVox collection on archive.org.
+    while the respecting API rate limit.
+
     """
 
     site_url = "https://archive.org"
     downloader_factory = MP3Downloader
-
-    session = CachedSession(
-        cache_name=CACHE_NAME,
-        cache_control=CACHE_CONTROL,
-        backend=CACHE_BACKEND,
-        expire_after=CACHE_EXPIRATION,
-    )
 
     retries_adapter = Retry(
         total=MAX_RETRIES,
@@ -57,20 +95,20 @@ class LibriVox(Driver):
         status_forcelist=RETRY_STATUS_CODES,
         raise_on_status=False,
     )
-    session.mount(site_url, retries_adapter)
-
     ratelimit_adapter = LimiterAdapter(per_second=RATE_LIMIT)
+    backend = TTLCache(maxsize=CACHE_SIZE, ttl=CACHE_LIFE)
+
+    session = CachedSession(backend=backend)
+    session.mount(site_url, retries_adapter)
     session.mount(site_url, ratelimit_adapter)
-    threading.Thread(
-        target=session.cache.remove_expired_responses
-    ).start()  # an opportunity to clear up expired cache
+
+    def __init__(self):
+        super().__init__()
+        self.debouncer = Debouncer(wait=WAIT)
 
     def get_book(self, url: str) -> Book:
         """
-        def get_book(self, url: str) -> Book:
-
-
-        This method uses the rate-limited class-method 'self.session' to
+        This method uses  'self.session' to
         fetch metadata for an archive.org audiobook, specifically from the-
         -Librivox collection.
         The URL of the audiobook is passed into this function.
@@ -85,9 +123,7 @@ class LibriVox(Driver):
            and chapter information for the audiobook.
 
         """
-        threading.Thread(
-            target=self.session.cache.remove_expired_responses
-        ).start()  # an opportunity to clear up expired cache.
+        # an opportunity to clear up expired cache.
         # Had to tie it to some event to save the bother of a cron job.
 
         (
@@ -103,20 +139,23 @@ class LibriVox(Driver):
         ) = (None, None, None, None, None, [], None, None, {})
         identifier = url.strip("/").split("/")[-1]
         response = self.session.get(f"{self.site_url}/metadata/{identifier}")
-        print(f"cached response for {identifier}?: {response.from_cache}")
-        logger.debug(f"cached response for {identifier}?: {response.from_cache}")
         meta_item = response.json()
-
-        if "metadata" in meta_item.keys():
+        keys = meta_item.keys()
+        if "metadata" in keys:
             metadata = meta_item["metadata"]
-            if "creator" in metadata.keys():
+            if "creator" in metadata:
                 author = metadata["creator"]
-            if "title" in metadata.keys():
+                if isinstance(author,list):
+                    author = ", ".join(author)
+                else:
+                    author = str(author) #The usual (single name) or unknown type.
+            if "title" in metadata:
                 title = metadata["title"]
-            if "runtime" in metadata.keys():
+            if "runtime" in metadata:
                 duration = hms_to_sec(metadata["runtime"])
-            if "description" in metadata.keys():
+            if "description" in metadata:
                 description = html_to_text(metadata["description"])
+                
         if "files" in meta_item.keys():
             files = meta_item["files"]
             cover_filename = next(
@@ -148,20 +187,18 @@ class LibriVox(Driver):
                 except ValueError:
                     file_index = 0
             if "name" in keys:
-                file_url = f"{self.site_url}/download/{identifier}/{file['name']}"
-            if "title" in keys:
-                chapter_title = file["title"]
+                file_url = (f"{self.site_url}/download/{identifier}/"
+                f"{file['name']}")
             if "title" in keys:
                 chapter_title = file["title"]
             if "length" in keys:
                 if (
                     file["format"] == "64Kbps MP3"
-                ):  # special condition. lengthetadata for "64Kbps MP3" files is
-                    # in hh:mm:ss format
+                ):  # lengthetadata for "64Kbps MP3" files is in hh:mm:ss format
                     end_time = hms_to_sec(file["length"])
                 elif file["format"] == "128Kbps MP3":
                     end_time = floor(float(file["length"]))
-
+                    # lengthetadata for "64Kbps MP3" files is in seconds(float)
                 chapters.append(
                     BookItem(
                         file_url=file_url,
@@ -187,97 +224,81 @@ class LibriVox(Driver):
             items=chapters,
         )
 
-    def search_books(self, query: str, limit: int = 20, offset: int = 0) -> list[Book]:
+    def search_books(
+        self, query: str, limit: int = 20, offset: int = 0
+    ) -> ty.List[Book]:
+        """
+        This method uses 'self.session' to fetch metadata for audiobooks
+        that match description (title) of the query string.
+        it's a wrapper for the debounded search function.
+        search(query: str, offset: int, limit: int) -> ty.List[Book])
+        Args:
+            query (str): The search query string.
+            limit (int): The maximum number of search results to return.
+            offset (int): The number of search results to skip.
+        Returns:
+            ty.List[Book]: A list of Book objects containing metadata
+            for audiobooks that match the search query
 
-        def fetch_item(identifier):
-            """
-            a sub-function to fetch a single book's metadata
-                            from the archive.org metadata API
 
-            """
-            threading.Thread(
-                target=self.session.cache.remove_expired_responses
-            ).start()  # an opportunity to clear up expired cache
-            # logger.debug(f"Fetching book {identifier}")
-            ia_bookObj = self.session.get(
-                f"{self.site_url}/metadata/{identifier}"
-            ).json()
-            keys = ia_bookObj.keys()
-            files, author, name, duration, cover_filename, coverImg, reader = (
-                [],
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-            )
-            keys = ia_bookObj.keys()
-            if "metadata" in keys:
-                metadata = ia_bookObj["metadata"]
-                keys_2 = metadata.keys()
-                if "creator" in keys_2:
-                    author = metadata["creator"]
-                if "title" in keys_2:
-                    name = metadata["title"]
-                if "runtime" in keys_2:
-                    duration = metadata[
-                        "runtime"
-                    ]  # duration is in hh:mm:ss format (This is for preview)
-                if "reader" in keys:
-                    reader = metadata["reader"]
-            else:
-                logger.debug(f"No metadata found for {identifier}")
-            if "files" in keys:
-                files = ia_bookObj["files"]
-            cover_filename = next(
-                (item["name"] for item in files if item["format"] == "JPEG"), None
-            )
-            if cover_filename != None:
-                coverImg = f"{self.site_url}/download/{identifier}/{cover_filename}"
+        """
+        def search(query: str, offset: int, limit: int) -> ty.List[Book]:
 
-            return Book(
-                author=safe_name(author),
-                name=safe_name(name),
-                duration=duration,
-                url=f"{self.site_url}/details/{identifier}",
-                preview=coverImg if coverImg else "No Data",
-                driver=self.driver_name,
-                reader=reader if reader else "No Data",
-            )
-
-        def fetch_items(identifiers):
-            """
-            def fetch_items(identifiers): -> list[Book]
-
-            """
             books = []
-            with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-                futures = {
-                    executor.submit(fetch_item, identifier): identifier
-                    for identifier in identifiers
-                }
-                for future in as_completed(futures):
-                    try:
-                        identifier = futures[future]
-                        books.append(future.result())
-                    except Exception as e:
-                        logger.error(f"Error fetching book {identifier}: {e}")
+            page_number = 1
+
+            while True:
+                if len(books) >= limit:
+                    break
+
+                url =(f"https://archive.org/advancedsearch.php?q=({urlize(query)})"
+                    f"AND+collection:\"librivoxaudio\"&fl[]=creator&fl[]=identifier"
+                    f"&fl[]=title&rows={limit}&page={page_number}&output=json")
+                
+
+                response = self.session.get(url)
+                requests_logger.info(
+                    f"Request: {url} | Status: "
+                    f"{response.status_code} | Using Cached: {response.from_cache}"
+                )
+                if not 'response' in response.json():
+                    break
+                hits = response.json()["response"]["docs"]
+
+                if not hits:
+                    break
+
+                if offset:
+                    if offset >= len(hits):
+                        offset -= len(hits)
+                        hits.clear()
+                    else:
+                        hits = hits[offset:]
+                        offset = 0
+
+                for hit in hits:
+                    author = hit.get("creator", "Unknown Author")
+                    name = hit.get("title", "Unknown Title")
+                    url = f"https://archive.org/details/{hit['identifier']}"
+                    preview = f"https://archive.org/services/img/{hit['identifier']}"
+                    books.append(
+                        Book(
+                            author=safe_name(author),
+                            name=safe_name(name),
+                            url=url,
+                            preview=preview,
+                            driver=self.driver_name,
+                            duration="No Data",
+                        )
+                    )
+                    if len(books) >= limit:
+                        break
+
+                page_number += 1
 
             return books
 
-        page = offset + 1
-        books = []
-        result = self.session.get(
-            f"https://archive.org/advancedsearch.php?q={urlize('title:('+str(query)+')')}+AND+collection:%22librivoxaudio%22&fl[]=identifier&sort[]=&sort[]=&sort[]=&rows={limit}&page={page}&output=json"
-        ).json()["response"]["docs"]
-        hits = []
-        if len(result) > 0:
-            hits = [i["identifier"] for i in result]
-        else:
-            return []
-        books = fetch_items(hits)
-        return books
+        return self.debouncer.debounce(search, query=query, offset=offset, limit=limit)
 
     def get_book_series(self, url: str) -> ty.List[Book]:
         """
@@ -285,5 +306,5 @@ class LibriVox(Driver):
 
         Placeholder to enable class instantiation.
         """
-        books = ty.List()
+        books = []
         return books

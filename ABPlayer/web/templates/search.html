@@ -1,28 +1,17 @@
 <link rel="stylesheet" href="{{url_for('static', filename='css/search.css')}}">
 <script defer src="{{url_for('static', filename='js/search.js')}}"></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const searchInput = document.querySelector("#search-input");
-    //Only Enter key is allowed to submit the search query when input field is active
-    searchInput.addEventListener("keydown", function(event) {
-        if (event.key === "Enter" && searchInput.value.trim() !== "") {
-            searchBooks();
-        }
-    });
-  });
-</script>
 
 <div id="search-page-content">
 
 <div id="search-input-line-container">
   <div id="search-label-container">
-    <span>Search book</span>
+    <span>Поиск книги</span>
   </div>
   <div id="search-input-line" class="input-line">
-    <input id="search-input" placeholder="submit a title or an audiobook-url">
+    <input placeholder="начните писать или вставьте ссылку" oninput="searchBooks()">
     <div class="tools">
       <button class="icon-btn driver-btn" onclick="toggleDriverOptions()"></button>
-      <button class="icon-btn search-btn submit" onclick="searchBooks()"></button>
+      <button class="icon-btn search-btn"></button>
       <div id="drivers-container"></div>
     </div>
   </div>

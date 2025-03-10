@@ -121,15 +121,6 @@ def hms_to_sec(length: str) -> int:
         raise ValueError("Invalid length format")
 
 
-def sec_to_hms(seconds: int) -> str:
-    """
-    Converts the length of the audio file in seconds to format hh:mm:ss.
-    """
-    hours, remainder = divmod(seconds, 3600)
-    minutes, seconds = divmod(remainder, 60)
-    return f"{hours:02}:{minutes:02}:{seconds:02}"
-
-
 def html_to_text(html: str) -> str:
     """
     Converts HTML content to plain text while preserving URLs and paragraphing.
