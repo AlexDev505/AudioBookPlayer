@@ -1,35 +1,28 @@
 from models.book import Book, BookItems, BookItem
 from .base import Driver
 from .downloaders import MP3Downloader
-from .tools import safe_name, hms_to_sec, html_to_text
-
+from .tools import safe_name, hms_to_sec, html_to_text, sec_to_hms
 from math import floor
-from cachetools import TTLCache
 from requests_ratelimiter import LimiterAdapter
-from urllib3.util.retry import Retry
 from urllib.parse import quote as urlize
-from requests_cache import CachedSession
 from sys import stdout
 from loguru import logger
 from threading import Timer, Lock
+from requests import Session
 import typing as ty
-
+from cachetools import FIFOCache, cached
 
 
 # moderate, non aggressive strategy
 MAX_RETRIES = 3
-# CACHE_BACKEND = "sqlite" or "memory"
 BACKOFF_FACTOR = 1
 RATE_LIMIT = 5  # Beyond this would be too much.
 RETRY_STATUS_CODES = [500, 502, 503, 504]
-CACHE_NAME = "metadata_cache"
 SELECTED_FORMAT = "128Kbps MP3"  # "64Kbps MP3"
-CACHE_SIZE = 200  # a reasonable size for the cache for fielding oninput=search()
-CACHE_LIFE = 1800  # 30 minutes
 WAIT = 0.5  # Timeout between keystrokes for oninput=search()
+CACHE_SIZE = 50#more than sufficient for a smooth experience
 # "128Kbps MP3" is the original format of LibriVox collection, ~ CD quality.
 # Refer : https://archive.org/post/1053663/file-format
-
 
 
 class Debouncer:
@@ -38,9 +31,9 @@ class Debouncer:
     destructive way- ensure that only the function call that is
     followed by minimum wait time is processed. Others are discarded.
     """
-    def __init__(self, wait: float):
 
-        """ 
+    def __init__(self, wait: float):
+        """
         initialize the Debouncer class.
         Args:
             wait: The time to wait before calling the function
@@ -74,7 +67,7 @@ class Debouncer:
 
 # Configure a separate logger for requests
 requests_logger = logger.bind(name="requests_logger")
-requests_logger.add(stdout, format="{time} {message}", level="INFO")
+requests_logger.add("requests_log", format="{time} {message}", level="INFO")
 
 
 class LibriVox(Driver):
@@ -89,22 +82,18 @@ class LibriVox(Driver):
     site_url = "https://archive.org"
     downloader_factory = MP3Downloader
 
-    retries_adapter = Retry(
-        total=MAX_RETRIES,
-        backoff_factor=BACKOFF_FACTOR,
-        status_forcelist=RETRY_STATUS_CODES,
-        raise_on_status=False,
-    )
     ratelimit_adapter = LimiterAdapter(per_second=RATE_LIMIT)
-    backend = TTLCache(maxsize=CACHE_SIZE, ttl=CACHE_LIFE)
-
-    session = CachedSession(backend=backend)
-    session.mount(site_url, retries_adapter)
+    session = Session()
     session.mount(site_url, ratelimit_adapter)
 
     def __init__(self):
         super().__init__()
         self.debouncer = Debouncer(wait=WAIT)
+        #self.lock = Lock()
+
+    @cached(FIFOCache(maxsize=CACHE_SIZE))
+    def get(self, url):
+        return self.session.get(url)
 
     def get_book(self, url: str) -> Book:
         """
@@ -123,8 +112,6 @@ class LibriVox(Driver):
            and chapter information for the audiobook.
 
         """
-        # an opportunity to clear up expired cache.
-        # Had to tie it to some event to save the bother of a cron job.
 
         (
             identifier,
@@ -145,17 +132,17 @@ class LibriVox(Driver):
             metadata = meta_item["metadata"]
             if "creator" in metadata:
                 author = metadata["creator"]
-                if isinstance(author,list):
+                if isinstance(author, list):
                     author = ", ".join(author)
                 else:
-                    author = str(author) #The usual (single name) or unknown type.
+                    author = str(author)  # The usual (single name) or unknown type.
             if "title" in metadata:
                 title = metadata["title"]
             if "runtime" in metadata:
                 duration = hms_to_sec(metadata["runtime"])
             if "description" in metadata:
                 description = html_to_text(metadata["description"])
-                
+
         if "files" in meta_item.keys():
             files = meta_item["files"]
             cover_filename = next(
@@ -187,8 +174,7 @@ class LibriVox(Driver):
                 except ValueError:
                     file_index = 0
             if "name" in keys:
-                file_url = (f"{self.site_url}/download/{identifier}/"
-                f"{file['name']}")
+                file_url = f"{self.site_url}/download/{identifier}/" f"{file['name']}"
             if "title" in keys:
                 chapter_title = file["title"]
             if "length" in keys:
@@ -242,7 +228,33 @@ class LibriVox(Driver):
 
 
         """
+
         def search(query: str, offset: int, limit: int) -> ty.List[Book]:
+            if (
+                query[: len(self.site_url)] == self.site_url
+                or query[:11] == "archive.org"
+            ):
+
+                # on a lucky day. We have a direct link to the book
+                parts = query.strip("https://").split("/")
+                if len(parts) >= 3 and parts[1] in [
+                    "dtails",
+                    "stream",
+                    "metadata",
+                    "download",
+                    "embed",
+                ]:
+                    identifier = parts[2]  # third item in the list (sans https://)
+                    # out of self respect we will reject malformed URL
+                try:
+                    books = [self.get_book(f"{self.site_url}/details/{identifier}")]
+                    if len(books) == 1:
+                        return books
+                    else:
+                        raise ValueError("Invalid URL")
+                except ValueError as e:
+                    pass
+                    # Give it another chance as a search term down below.
 
             books = []
             page_number = 1
@@ -250,18 +262,17 @@ class LibriVox(Driver):
             while True:
                 if len(books) >= limit:
                     break
-
-                url =(f"https://archive.org/advancedsearch.php?q=({urlize(query)})"
-                    f"AND+collection:\"librivoxaudio\"&fl[]=creator&fl[]=identifier"
-                    f"&fl[]=title&rows={limit}&page={page_number}&output=json")
-                
-
-                response = self.session.get(url)
-                requests_logger.info(
-                    f"Request: {url} | Status: "
-                    f"{response.status_code} | Using Cached: {response.from_cache}"
+                    # query planned by AlexDev505. I removed
+                    # 'title:' and made it more generic.
+                    # User can now be more generic or specific.
+                url = (
+                    f"https://archive.org/advancedsearch.php?q=title:({urlize(query)})"
+                    f'AND+collection:"librivoxaudio"&fl[]=creator&fl[]=identifier'
+                    f"&fl[]=title&rows={limit}&page={page_number}&output=json"
                 )
-                if not 'response' in response.json():
+
+                response = self.get(url)
+                if not "response" in response.json():
                     break
                 hits = response.json()["response"]["docs"]
 
