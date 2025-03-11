@@ -1,23 +1,21 @@
+import typing as ty
 from models.book import Book, BookItems, BookItem
 from .base import Driver
 from .downloaders import MP3Downloader
 from .tools import safe_name, hms_to_sec, html_to_text
-from math import loor
+from math import floor
 from requests_ratelimiter import LimiterAdapter
 from urllib.parse import quote as urlize
-from sys import stdout
-from loguru import logger
-from threading import Timer, Loc
+from threading import Timer, Lock
 from requests import Session
-import typing as ty
 from cachetools import FIFOCache, cached
 
 
 # moderate, non aggressive strategy
 RATE_LIMIT = 5  # Beyond this would be too much.
-SELECTED_FORMAT = "128Kbps MP3"  # "64Kbps MP3"
-WAIT = 0.5  # Timeout between keystrokes for oninput=search()
-CACHE_SIZE = 50#more than sufficient for a smooth experience
+WAIT = .5  # Timeout between keystrokes for oninput=search()
+CACHE_SIZE = 50 # more than sufficient for a smooth experience
+SELECTED_FORMAT = "128Kbps MP3"
 # "128Kbps MP3" is the original format of LibriVox collection, ~ CD quality.
 # Refer : https://archive.org/post/1053663/file-format
 
@@ -77,7 +75,7 @@ class LibriVox(Driver):
     ratelimit_adapter = LimiterAdapter(per_second=RATE_LIMIT)
     session = Session()
     session.mount(site_url, ratelimit_adapter)
-    
+
 
     def __init__(self):
         super().__init__()
@@ -132,7 +130,7 @@ class LibriVox(Driver):
             if "title" in metadata:
                 title = metadata["title"]
             if "runtime" in metadata:
-                duration = metadata["runtime"]           
+                duration = metadata["runtime"]
             if "description" in metadata:
                 description = html_to_text(metadata["description"])
 
@@ -245,7 +243,7 @@ class LibriVox(Driver):
                         return books
                     else:
                         raise ValueError("Invalid URL")
-                        
+
                 except ValueError as e:
                     pass
                     # Give it another chance as a search term down below.
