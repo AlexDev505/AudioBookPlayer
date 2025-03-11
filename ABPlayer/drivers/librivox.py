@@ -1,23 +1,20 @@
 from models.book import Book, BookItems, BookItem
 from .base import Driver
 from .downloaders import MP3Downloader
-from .tools import safe_name, hms_to_sec, html_to_text, sec_to_hms
-from math import floor
+from .tools import safe_name, hms_to_sec, html_to_text
+from math import loor
 from requests_ratelimiter import LimiterAdapter
 from urllib.parse import quote as urlize
 from sys import stdout
 from loguru import logger
-from threading import Timer, Lock
+from threading import Timer, Loc
 from requests import Session
 import typing as ty
 from cachetools import FIFOCache, cached
 
 
 # moderate, non aggressive strategy
-MAX_RETRIES = 3
-BACKOFF_FACTOR = 1
 RATE_LIMIT = 5  # Beyond this would be too much.
-RETRY_STATUS_CODES = [500, 502, 503, 504]
 SELECTED_FORMAT = "128Kbps MP3"  # "64Kbps MP3"
 WAIT = 0.5  # Timeout between keystrokes for oninput=search()
 CACHE_SIZE = 50#more than sufficient for a smooth experience
@@ -65,11 +62,6 @@ class Debouncer:
             self.result = func(*args, **kwargs)
 
 
-# Configure a separate logger for requests
-requests_logger = logger.bind(name="requests_logger")
-requests_logger.add("requests_log", format="{time} {message}", level="INFO")
-
-
 class LibriVox(Driver):
     """
     Driver for LibriVox.
@@ -85,6 +77,7 @@ class LibriVox(Driver):
     ratelimit_adapter = LimiterAdapter(per_second=RATE_LIMIT)
     session = Session()
     session.mount(site_url, ratelimit_adapter)
+    
 
     def __init__(self):
         super().__init__()
@@ -125,7 +118,7 @@ class LibriVox(Driver):
             metadata,
         ) = (None, None, None, None, None, [], None, None, {})
         identifier = url.strip("/").split("/")[-1]
-        response = self.session.get(f"{self.site_url}/metadata/{identifier}")
+        response = self.get(f"{self.site_url}/metadata/{identifier}")
         meta_item = response.json()
         keys = meta_item.keys()
         if "metadata" in keys:
@@ -139,7 +132,7 @@ class LibriVox(Driver):
             if "title" in metadata:
                 title = metadata["title"]
             if "runtime" in metadata:
-                duration = hms_to_sec(metadata["runtime"])
+                duration = metadata["runtime"]           
             if "description" in metadata:
                 description = html_to_text(metadata["description"])
 
@@ -252,6 +245,7 @@ class LibriVox(Driver):
                         return books
                     else:
                         raise ValueError("Invalid URL")
+                        
                 except ValueError as e:
                     pass
                     # Give it another chance as a search term down below.
