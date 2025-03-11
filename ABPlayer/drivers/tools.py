@@ -120,17 +120,6 @@ def hms_to_sec(length: str) -> int:
     else:
         raise ValueError("Invalid length format")
 
-def sec_to_hms(seconds: int) -> str:
-    "accepts time in seconds and returns in hh:mm:ss or mm:ss format"
-    rem, hh = seconds % 3600, seconds // 3600
-    mm, ss = rem // 60, rem % 60
-    if hh > 0:
-        return f'{hh}:{mm:02}:{ss:02}'  # hh:mm:ss format
-    elif mm > 0:
-        return f'{mm}:{ss:02}'  # mm:ss format
-    else:
-        return f'00:{ss:02}'  # ss format
-
 
 def html_to_text(html: str) -> str:
     """
