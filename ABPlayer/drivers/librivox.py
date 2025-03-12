@@ -6,58 +6,53 @@ from .tools import safe_name, hms_to_sec, html_to_text
 from math import floor
 from requests_ratelimiter import LimiterAdapter
 from urllib.parse import quote as urlize
-from threading import Timer, Lock
 from requests import Session
-from cachetools import FIFOCache, cached
 
 
 # moderate, non aggressive strategy
 RATE_LIMIT = 5  # Beyond this would be too much.
-WAIT = .5  # Timeout between keystrokes for oninput=search()
-CACHE_SIZE = 50 # more than sufficient for a smooth experience
+CACHE_SIZE=50
 SELECTED_FORMAT = "128Kbps MP3"
 # "128Kbps MP3" is the original format of LibriVox collection, ~ CD quality.
 # Refer : https://archive.org/post/1053663/file-format
+from collections import OrderedDict
 
+from collections import OrderedDict
 
-class Debouncer:
-    """
-    A class to debounce i.e. rate limit function calls in a
-    destructive way- ensure that only the function call that is
-    followed by minimum wait time is processed. Others are discarded.
-    """
+class FIFOCache:
+    def __init__(self, maxsize=128):
+        self.capacity = maxsize
+        self.data = OrderedDict()
 
-    def __init__(self, wait: float):
-        """
-        initialize the Debouncer class.
-        Args:
-            wait: The time to wait before calling the function
-        """
-        self.wait = wait
-        self.timer = None
-        self.result = None
-        self.lock = Lock()
+    def __setitem__(self, key, value):
+        # Add or update a key-value pair, handling eviction
+        if key in self.data:
+            del self.data[key]
+        elif len(self.data) >= self.capacity:
+            self.data.popitem(last=False)  # FIFO eviction
+        self.data[key] = value
 
-    def debounce(self, func: ty.Callable, *args: ty.Any, **kwargs: ty.Any) -> ty.Any:
-        """
-        Debounce a function call.
-        Args:
-            func: The function to call
-            *args: The arguments to call the func with
-            **kwargs: The keyword arguments to call func with
-        Returns:
-            The result of func(*args, **kwargs)
-        """
-        if self.timer:
-            self.timer.cancel()
-        self.timer = Timer(self.wait, self._call_func, [func, *args], kwargs)
-        self.timer.start()
-        self.timer.join()  # ensuring wait timeout before returning the result
-        return self.result
+    def __getitem__(self, key):
+        # Retrieve a value for the given key
+        if key in self.data:
+            return self.data[key]
+        raise KeyError(f"Key '{key}' not found in cache.")
 
-    def _call_func(self, func: ty.Callable, *args: ty.Any, **kwargs: ty.Any) -> None:
-        with self.lock:
-            self.result = func(*args, **kwargs)
+    def __delitem__(self, key):
+        # Remove a specific key-value pair
+        if key in self.data:
+            del self.data[key]
+        else:
+            raise KeyError(f"Key '{key}' not found in cache.")
+
+    def __contains__(self, key):
+        # Check if a key exists in the cache
+        return key in self.data
+
+    def __repr__(self):
+        # Provide a string representation for debugging
+        return f"FIFOCache({self.data})"
+
 
 
 class LibriVox(Driver):
@@ -71,7 +66,6 @@ class LibriVox(Driver):
 
     site_url = "https://archive.org"
     downloader_factory = MP3Downloader
-
     ratelimit_adapter = LimiterAdapter(per_second=RATE_LIMIT)
     session = Session()
     session.mount(site_url, ratelimit_adapter)
@@ -79,12 +73,22 @@ class LibriVox(Driver):
 
     def __init__(self):
         super().__init__()
-        self.debouncer = Debouncer(wait=WAIT)
-        #self.lock = Lock()
+        self.cache=FIFOCache(maxsize=CACHE_SIZE)
 
-    @cached(FIFOCache(maxsize=CACHE_SIZE))
-    def get(self, url):
-        return self.session.get(url)
+    def get(self,url):
+        try:
+            if url in self.cache:
+                return self.cache[url]
+            else:
+                response = self.session.get(url)
+                if response.status_code == 200:
+                    self.cache[url]=response
+                    return response
+                else:
+                    response.raise_for_status()
+        except Exception as e:
+            return
+
 
     def get_book(self, url: str) -> Book:
         """
@@ -104,35 +108,22 @@ class LibriVox(Driver):
 
         """
 
-        (
-            identifier,
-            author,
-            title,
-            duration,
-            description,
-            files,
-            cover_filename,
-            preview,
-            metadata,
-        ) = (None, None, None, None, None, [], None, None, {})
         identifier = url.strip("/").split("/")[-1]
         response = self.get(f"{self.site_url}/metadata/{identifier}")
         meta_item = response.json()
         keys = meta_item.keys()
         if "metadata" in keys:
             metadata = meta_item["metadata"]
-            if "creator" in metadata:
-                author = metadata["creator"]
-                if isinstance(author, list):
-                    author = ", ".join(author)
-                else:
-                    author = str(author)  # The usual (single name) or unknown type.
-            if "title" in metadata:
-                title = metadata["title"]
-            if "runtime" in metadata:
-                duration = metadata["runtime"]
-            if "description" in metadata:
-                description = html_to_text(metadata["description"])
+            if not 'creator' in metadata.keys() or not 'title' in metadata.keys():
+                return None
+            author = metadata["creator"]
+            if isinstance(author, list):
+                author = ", ".join(author)
+            else:
+                author = str(author)  # The usual (single name) or unknown type.
+            title = metadata["title"]
+            duration = metadata.get("runtime", "No Data")
+            description = html_to_text(metadata.get("description", "No Data"))
 
         if "files" in meta_item.keys():
             files = meta_item["files"]
@@ -158,12 +149,7 @@ class LibriVox(Driver):
                 None,
             )
             keys = file.keys()
-            if "track" in keys:
-                try:
-                    if file["track"].strip(" ").isnumeric():
-                        file_index = int(file["track"].strip(" "))
-                except ValueError:
-                    file_index = 0
+
             if "name" in keys:
                 file_url = f"{self.site_url}/download/{identifier}/" f"{file['name']}"
             if "title" in keys:
@@ -186,12 +172,11 @@ class LibriVox(Driver):
                     )
                 )
 
-        # pdb.set_trace()
         return Book(
             author=author,
             name=title,
-            series_name=str(),
-            number_in_series=str(),
+            series_name="",
+            number_in_series="",
             description=description,
             reader="No Data",  # This information is available on librivox.org
             duration=duration,
@@ -201,107 +186,74 @@ class LibriVox(Driver):
             items=chapters,
         )
 
+
     def search_books(
         self, query: str, limit: int = 20, offset: int = 0
     ) -> ty.List[Book]:
         """
-        This method uses 'self.session' to fetch metadata for audiobooks
-        that match description (title) of the query string.
-        it's a wrapper for the debounded search function.
-        search(query: str, offset: int, limit: int) -> ty.List[Book])
         Args:
-            query (str): The search query string.
-            limit (int): The maximum number of search results to return.
-            offset (int): The number of search results to skip.
+            search terms
+            limit-maximum books to return
+            offset: how many books to skip from the first page of results. . helps determining pagination
+            offset
         Returns:
             ty.List[Book]: A list of Book objects containing metadata
             for audiobooks that match the search query
 
-
         """
 
-        def search(query: str, offset: int, limit: int) -> ty.List[Book]:
-            if (
-                query[: len(self.site_url)] == self.site_url
-                or query[:11] == "archive.org"
-            ):
+        books = []
+        page_number = 1
 
-                # on a lucky day. We have a direct link to the book
-                parts = query.strip("https://").split("/")
-                if len(parts) >= 3 and parts[1] in [
-                    "dtails",
-                    "stream",
-                    "metadata",
-                    "download",
-                    "embed",
-                ]:
-                    identifier = parts[2]  # third item in the list (sans https://)
-                    # out of self respect we will reject malformed URL
-                try:
-                    books = [self.get_book(f"{self.site_url}/details/{identifier}")]
-                    if len(books) == 1:
-                        return books
-                    else:
-                        raise ValueError("Invalid URL")
+        while True:
+            if len(books) >= limit:
+                break
+                # query planned by AlexDev505. I removed
+                # 'title:' and made it more generic.
+                # User can now be more generic or specific.
+            url = (
+                f"https://archive.org/advancedsearch.php?q=title:({urlize(query)})"
+                f'AND+collection:"librivoxaudio"&fl[]=creator&fl[]=identifier'
+                f"&fl[]=title&rows={limit}&page={page_number}&output=json"
+            )
 
-                except ValueError as e:
-                    pass
-                    # Give it another chance as a search term down below.
+            response = self.get(url)
+            if "response" not in response.json():
+                break
+            hits = response.json()["response"]["docs"]
 
-            books = []
-            page_number = 1
+            if not (hits:= response.json()["response"]["docs"]):
+                break
 
-            while True:
+            if offset:
+                if offset >= len(hits):
+                    offset -= len(hits)
+                    hits.clear()
+                else:
+                    hits = hits[offset:]
+                    offset = 0
+
+            for hit in hits:
+                author = hit.get("creator", "Unknown Author")
+                name = hit.get("title", "Unknown Title")
+                url = f"https://archive.org/details/{hit['identifier']}"
+                preview = f"https://archive.org/services/img/{hit['identifier']}"
+                books.append(
+                    Book(
+                        author=safe_name(author),
+                        name=safe_name(name),
+                        url=url,
+                        preview=preview,
+                        driver=self.driver_name,
+                        duration="No Data",
+                    )
+                )
                 if len(books) >= limit:
                     break
-                    # query planned by AlexDev505. I removed
-                    # 'title:' and made it more generic.
-                    # User can now be more generic or specific.
-                url = (
-                    f"https://archive.org/advancedsearch.php?q=title:({urlize(query)})"
-                    f'AND+collection:"librivoxaudio"&fl[]=creator&fl[]=identifier'
-                    f"&fl[]=title&rows={limit}&page={page_number}&output=json"
-                )
 
-                response = self.get(url)
-                if not "response" in response.json():
-                    break
-                hits = response.json()["response"]["docs"]
+            page_number += 1
 
-                if not hits:
-                    break
-
-                if offset:
-                    if offset >= len(hits):
-                        offset -= len(hits)
-                        hits.clear()
-                    else:
-                        hits = hits[offset:]
-                        offset = 0
-
-                for hit in hits:
-                    author = hit.get("creator", "Unknown Author")
-                    name = hit.get("title", "Unknown Title")
-                    url = f"https://archive.org/details/{hit['identifier']}"
-                    preview = f"https://archive.org/services/img/{hit['identifier']}"
-                    books.append(
-                        Book(
-                            author=safe_name(author),
-                            name=safe_name(name),
-                            url=url,
-                            preview=preview,
-                            driver=self.driver_name,
-                            duration="No Data",
-                        )
-                    )
-                    if len(books) >= limit:
-                        break
-
-                page_number += 1
-
-            return books
-
-        return self.debouncer.debounce(search, query=query, offset=offset, limit=limit)
+        return books
 
     def get_book_series(self, url: str) -> ty.List[Book]:
         """
