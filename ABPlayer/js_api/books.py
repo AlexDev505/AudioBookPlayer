@@ -22,13 +22,16 @@ if ty.TYPE_CHECKING:
 
 
 class BooksApi(JSApi):
+    SEARCH_LIMIT = 10
     _download_processes: dict[int, Driver] = {}
     _download_queue: list[int] = []
 
     def __init__(self):
-        self.search_query: str | None = None
+        self.library_search_query: str | None = None
         self.matched_books_bids: list[int] | None = None
         self.removed_books_files: dict[int, tuple[str, list[str]]] = {}
+        self.search_state: dict[str, [int, bool]] = {}
+        # {<driver name>: [<search offset>, <can load next>]}
 
     def book_by_bid(self, bid: int, listening_data: bool = False):
         logger.opt(colors=True).debug(f"request: <r>book by bid</r> | <y>{bid}</y>")
@@ -54,10 +57,10 @@ class BooksApi(JSApi):
         logger.opt(colors=True).debug("request: <r>library</r>")
         sort = sort if sort else "adding_date"
         reverse = not reverse if reverse is not None else True
-        if search_query is not None and search_query != self.search_query:
+        if search_query is not None and search_query != self.library_search_query:
             self.search_in_library(search_query)
-        if search_query is None and self.search_query is not None:
-            self.search_query = None
+        if search_query is None and self.library_search_query is not None:
+            self.library_search_query = None
             self.matched_books_bids = None
         bids = self.matched_books_bids
 
@@ -95,7 +98,7 @@ class BooksApi(JSApi):
         logger.opt(colors=True).debug(
             f"request: <r>search in library</r> | <y>{query}</y>"
         )
-        self.search_query = query
+        self.library_search_query = query
         with Database() as db:
             search_array = db.get_books_keywords()
             logger.opt(colors=True).trace(f"search array: {search_array}")
@@ -136,50 +139,50 @@ class BooksApi(JSApi):
     def search_books(
         self,
         query: str,
-        limit: int = 10,
-        offset: int = 0,
         required_drivers: list[str] | None = None,
     ):
-        logger.opt(colors=True).debug(f"request: <r>search books</r> | <y>{query}</y>")
         if query.startswith("https://"):
             if isinstance(resp := self._book_by_url(query), JSApiError):
                 return self.error(resp)
             return self.make_answer([make_book_preview(resp)] if resp else [])
 
-        drivers = (
-            [
-                driver
-                for driver in Driver.drivers
-                if driver.driver_name in required_drivers
-            ]
-            if required_drivers
-            else Driver.drivers
-        )
-        if not len(drivers):
-            return self.error(NoSuitableDriver())
+        if required_drivers is not None:
+            self.search_state = {
+                driver_name: [0, True] for driver_name in required_drivers
+            }
+            logger.opt(colors=True).debug(
+                f"request: <r>search books</r> | <y>{query}</y>"
+            )
+        else:
+            logger.opt(colors=True).debug(
+                f"request: <r>search more books</r> | <y>{self.search_state}</y>"
+            )
+
+        drivers = [
+            driver
+            for driver in Driver.drivers
+            if driver.driver_name in self.search_state
+            and self.search_state[driver.driver_name][1]
+        ]
 
         logger.opt(lazy=True).trace(
             "search params: {data}",
-            data=partial(
-                pretty_view,
-                dict(
-                    query=query,
-                    limit=limit,
-                    offset=offset,
-                    required_drivers=required_drivers,
-                ),
-            ),
+            data=partial(pretty_view, dict(query=query, states=self.search_state)),
         )
 
         result: list[dict] = []
-        limit_per_one_driver = limit // len(drivers)
-        offset_per_one_driver = offset // len(drivers)
+        limit_per_one_driver = self.SEARCH_LIMIT // (len(drivers) or 1)
         for driver in drivers:
             driver = driver()
             try:
                 books = driver.search_books(
-                    query, limit_per_one_driver, offset_per_one_driver
+                    query,
+                    limit_per_one_driver,
+                    self.search_state[driver.driver_name][0],
                 )
+                self.search_state[driver.driver_name][0] += len(books)
+                if len(books) < limit_per_one_driver:
+                    self.search_state[driver.driver_name][1] = False
             except (AttributeError, KeyError, ValueError) as err:
                 logger.opt().error(
                     f"searching book by {driver.driver_name} driver ({query}) "

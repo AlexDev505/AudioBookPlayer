@@ -40,7 +40,6 @@ function toggleDriverOptions() {
     else container.classList.add("shown")
 }
 
-search_offset = 0
 lastSearch = 0
 async function searchBooks() {
     var query = String(document.querySelector("#search-input-line input").value.trim())
@@ -55,9 +54,7 @@ async function searchBooks() {
     lastSearch = Date.now()
     addUrlParams({"search": query})
 
-    pywebview.api.search_books(
-        query, limit=20, offset=0, required_drivers=required_drivers
-    ).then(onSearchCompleted)
+    pywebview.api.search_books(query, required_drivers=required_drivers).then(onSearchCompleted)
 }
 
 function hideSearchAnimation() {
@@ -76,10 +73,7 @@ function onSearchResultContainerScroll() {
         searching = true
         showSearchAnimation()
         pywebview.api.search_books(
-            document.querySelector("#search-input-line input").value.trim(),
-            limit=10,
-            offset=search_offset,
-            required_drivers=required_drivers
+            document.querySelector("#search-input-line input").value.trim()
         ).then((resp) => {onSearchCompleted(resp, false)})
     }
 }
@@ -116,13 +110,11 @@ function onSearchCompleted(resp, clear=true) {
     if (clear) {
         container.innerHTML = html
         container.scrollTop = 0
-        search_offset = resp.length
         searching = false
         can_search_next = true
     } else {
         container.innerHTML = container.innerHTML + html
-        search_offset += resp.length
-        if (resp.length < 10)
+        if (resp.length == 0)
             can_search_next = false
     }
     pywebview.api.check_is_books_exists(urls).then(onCheckIsBooksExistsCompleted)
