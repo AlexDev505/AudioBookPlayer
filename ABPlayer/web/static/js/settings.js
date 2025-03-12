@@ -53,7 +53,7 @@ function checkForUpdates(resp) {
         return
     }
     if (!resp.data) return
-    if (resp.sable || !stable_version) {
+    if (resp.data.stable || !stable_version) {
         createNotification(
             `<div><b>Доступно обновление ${resp.data.version}</b></div>
             <a style="margin-top: 2px" href="${resp.data.url}" target="_blank">список изменений</a>
