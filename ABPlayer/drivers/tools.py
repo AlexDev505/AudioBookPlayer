@@ -1,11 +1,10 @@
 from __future__ import annotations
-
+from bs4 import BeautifulSoup
 import json
 import os
 import re
 import subprocess
 import typing as ty
-
 import eyed3
 from bs4 import BeautifulSoup
 
@@ -101,9 +100,29 @@ def instance_id(obj: ty.Any) -> int | None:
     return getattr(obj, "_instance_id", None)
 
 
-def html_to_text(html: str) -> str:
-    """
-    Fetches all text from HTML.
-    """
+def html_to_text(html):
     soup = BeautifulSoup(html, "html.parser")
     return soup.get_text()
+
+
+def hms_to_sec(length: str) -> int:
+    """
+    Converts the length of the audio file of format hh:mm:ss or ss or mm:ss to seconds.
+
+    """
+    parts = length.split(":")
+    parts = [int(part) for part in parts]
+
+    if len(parts) == 1:
+        # Only seconds
+        return parts[0]
+    elif len(parts) == 2:
+        # Minutes and seconds
+        minutes, seconds = parts
+        return minutes * 60 + seconds
+    elif len(parts) == 3:
+        # Hours, minutes, and seconds
+        hours, minutes, seconds = parts
+        return hours * 3600 + minutes * 60 + seconds
+    else:
+        raise ValueError("Invalid length format")
