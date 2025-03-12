@@ -102,7 +102,7 @@ function onSearchCompleted(resp, clear=true) {
                 <div class="item-author">${book.author}</div>
                 <div class="item-reader">${book.reader}</div>
                 <div class="item-duration">${book.duration}</div>
-                ${(book.series_name) ? `<div class="item-series-name">${book.series_name}</div>`: ""}
+                <div class="item-series-name">${book.series_name}</div>
                 <div class="item-driver">${book.driver}</div>
               </div>
             </div>
