@@ -7,52 +7,16 @@ from math import floor
 from requests_ratelimiter import LimiterAdapter
 from urllib.parse import quote as urlize
 from requests import Session
-
+from cachetools import TTLCache
 
 # moderate, non aggressive strategy
 RATE_LIMIT = 5  # Beyond this would be too much.
-CACHE_SIZE=50
+CACHE_SIZE=50 #not too big but enough for some tab switch and search
+CACHE_LIFE=600 #Short life prevents stale data. 10 min for an archive is ok.
+#a bigger and longer lived cache would warrant a UI to clear it.
 SELECTED_FORMAT = "128Kbps MP3"
 # "128Kbps MP3" is the original format of LibriVox collection, ~ CD quality.
 # Refer : https://archive.org/post/1053663/file-format
-from collections import OrderedDict
-
-from collections import OrderedDict
-
-class FIFOCache:
-    def __init__(self, maxsize=128):
-        self.capacity = maxsize
-        self.data = OrderedDict()
-
-    def __setitem__(self, key, value):
-        # Add or update a key-value pair, handling eviction
-        if key in self.data:
-            del self.data[key]
-        elif len(self.data) >= self.capacity:
-            self.data.popitem(last=False)  # FIFO eviction
-        self.data[key] = value
-
-    def __getitem__(self, key):
-        # Retrieve a value for the given key
-        if key in self.data:
-            return self.data[key]
-        raise KeyError(f"Key '{key}' not found in cache.")
-
-    def __delitem__(self, key):
-        # Remove a specific key-value pair
-        if key in self.data:
-            del self.data[key]
-        else:
-            raise KeyError(f"Key '{key}' not found in cache.")
-
-    def __contains__(self, key):
-        # Check if a key exists in the cache
-        return key in self.data
-
-    def __repr__(self):
-        # Provide a string representation for debugging
-        return f"FIFOCache({self.data})"
-
 
 
 class LibriVox(Driver):
@@ -63,17 +27,16 @@ class LibriVox(Driver):
     while the respecting API rate limit.
 
     """
-
     site_url = "https://archive.org"
     downloader_factory = MP3Downloader
+    session=Session()
+    #cache can be cleared with class_obj.cache.clear()
+    cache=TTLCache(maxsize=CACHE_SIZE,ttl=CACHE_LIFE)
     ratelimit_adapter = LimiterAdapter(per_second=RATE_LIMIT)
-    session = Session()
     session.mount(site_url, ratelimit_adapter)
-
 
     def __init__(self):
         super().__init__()
-        self.cache=FIFOCache(maxsize=CACHE_SIZE)
 
     def get(self,url):
         try:
@@ -89,10 +52,9 @@ class LibriVox(Driver):
         except Exception as e:
             return
 
-
     def get_book(self, url: str) -> Book:
         """
-        This method uses  'self.session' to
+        This method uses  'session' to
         fetch metadata for an archive.org audiobook, specifically from the-
         -Librivox collection.
         The URL of the audiobook is passed into this function.
@@ -101,13 +63,11 @@ class LibriVox(Driver):
             url (str): The URL of the audiobook on archive.org.
             This URL is used to fetch metadata and chapter information-
                                                     -for the audiobook.
-
         Returns:
            Book: A Book object containing metadata
            and chapter information for the audiobook.
 
         """
-
         identifier = url.strip("/").split("/")[-1]
         response = self.get(f"{self.site_url}/metadata/{identifier}")
         meta_item = response.json()
@@ -137,19 +97,15 @@ class LibriVox(Driver):
                 if cover_filename
                 else "No Data"
             )
-
         chapters = BookItems()
         audiofiles = [file for file in files if file["format"] == SELECTED_FORMAT]
         for file in audiofiles:
-            file_url, file_index, chatper_title, start_time, end_time = (
+            file_url, file_index, end_time = (
                 None,
                 0,
-                None,
-                None,
-                None,
+                None
             )
             keys = file.keys()
-
             if "name" in keys:
                 file_url = f"{self.site_url}/download/{identifier}/" f"{file['name']}"
             if "title" in keys:
@@ -171,7 +127,6 @@ class LibriVox(Driver):
                         end_time=end_time,
                     )
                 )
-
         return Book(
             author=author,
             name=title,
@@ -185,7 +140,6 @@ class LibriVox(Driver):
             driver=self.driver_name,
             items=chapters,
         )
-
 
     def search_books(
         self, query: str, limit: int = 20, offset: int = 0
@@ -212,15 +166,15 @@ class LibriVox(Driver):
                 # 'title:' and made it more generic.
                 # User can now be more generic or specific.
             url = (
-                f"https://archive.org/advancedsearch.php?q=title:({urlize(query)})"
+                f"https://archive.org/advancedsearch.php?q=title:({urlize(query.lower())})"
                 f'AND+collection:"librivoxaudio"&fl[]=creator&fl[]=identifier'
                 f"&fl[]=title&rows={limit}&page={page_number}&output=json"
-            )
+            )   # The query is case insensitive because of the parnthesis.
+                # normalizing the case makes cacheing more efficient
 
             response = self.get(url)
             if "response" not in response.json():
                 break
-            hits = response.json()["response"]["docs"]
 
             if not (hits:= response.json()["response"]["docs"]):
                 break

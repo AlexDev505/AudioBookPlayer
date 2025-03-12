@@ -5,7 +5,6 @@ import os
 import re
 import subprocess
 import typing as ty
-
 import eyed3
 
 
@@ -93,6 +92,13 @@ def create_instance_id(obj: ty.Any) -> int:
     return new_instance_id
 
 
+def instance_id(obj: ty.Any) -> int | None:
+    """
+    :returns: Идентификатор экземпляра.
+    """
+    return getattr(obj, "_instance_id", None)
+
+
 def html_to_text(html):
     soup = BeautifulSoup(html, "html.parser")
     return soup.get_text()
@@ -119,18 +125,3 @@ def hms_to_sec(length: str) -> int:
         return hours * 3600 + minutes * 60 + seconds
     else:
         raise ValueError("Invalid length format")
-
-
-def html_to_text(html: str) -> str:
-    """
-    Converts HTML content to plain text while preserving URLs and paragraphing.
-    """
-    soup = BeautifulSoup(html, "html.parser")
-    return soup.get_text()
-
-
-def instance_id(obj: ty.Any) -> int | None:
-    """
-    :returns: Идентификатор экземпляра.
-    """
-    return getattr(obj, "_instance_id", None)
