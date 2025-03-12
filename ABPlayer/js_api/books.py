@@ -124,6 +124,12 @@ class BooksApi(JSApi):
             book = driver().get_book(url)
             logger.opt(colors=True).debug(f"book found: {book:styled}")
             return book
+        except (AttributeError, KeyError, ValueError) as err:
+            logger.opt().error(
+                f"getting book ({url}) raises {type(err).__name__}: {err}"
+            )
+            logger.exception(err)
+            return
         except requests.exceptions.ConnectionError as err:
             return ConnectionFailedError(err=f"{type(err).__name__}: {err}")
 
@@ -138,8 +144,7 @@ class BooksApi(JSApi):
         if query.startswith("https://"):
             if isinstance(resp := self._book_by_url(query), JSApiError):
                 return self.error(resp)
-            print([resp])
-            return self.make_answer([make_book_preview(resp)])
+            return self.make_answer([make_book_preview(resp)] if resp else [])
 
         drivers = (
             [
@@ -175,7 +180,12 @@ class BooksApi(JSApi):
                 books = driver.search_books(
                     query, limit_per_one_driver, offset_per_one_driver
                 )
-            except AttributeError:
+            except (AttributeError, KeyError, ValueError) as err:
+                logger.opt().error(
+                    f"searching book by {driver.driver_name} driver ({query}) "
+                    f"raises {type(err).__name__}: {err}"
+                )
+                logger.exception(err)
                 continue
             except requests.exceptions.RequestException as err:
                 return self.error(
