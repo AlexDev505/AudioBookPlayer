@@ -1,5 +1,4 @@
 from __future__ import annotations
-
 import difflib
 import os
 import typing as ty
@@ -180,9 +179,7 @@ class BooksApi(JSApi):
                     limit_per_one_driver,
                     self.search_state[driver.driver_name][0],
                 )
-                self.search_state[driver.driver_name][0] += len(books)
-                if len(books) < limit_per_one_driver:
-                    self.search_state[driver.driver_name][1] = False
+
             except (AttributeError, KeyError, ValueError) as err:
                 logger.opt().error(
                     f"searching book by {driver.driver_name} driver ({query}) "
