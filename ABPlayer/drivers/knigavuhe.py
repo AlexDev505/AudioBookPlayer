@@ -27,7 +27,9 @@ class KnigaVUhe(Driver):
         playlist = orjson.loads(match.group(1))
 
         name = book["name"]
-        author = soup.select("span.book_title_elem > span > a")[0].text.strip()
+        author = "Неизвестный автор"
+        if element := soup.select("span.book_title_elem > span > a"):
+            author = element[0].text.strip()
 
         try:
             series_name = soup.select_one("div.book_serie_block_title > a").text.strip()
@@ -199,7 +201,7 @@ class KnigaVUhe(Driver):
                     try:
                         author = el.select_one("span.bookkitem_author > a").text.strip()
                     except AttributeError:
-                        author = "нет данных"
+                        author = "Неизвестный автор"
                     try:
                         reader = el.select_one(
                             "div.bookkitem_meta_block:has(span.-reader) a"

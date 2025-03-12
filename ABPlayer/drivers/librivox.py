@@ -69,7 +69,7 @@ class LibriVox(Driver):
         metadata = meta_item["metadata"]
         files = meta_item["files"]
 
-        author = metadata["creator"]
+        author = metadata.get("creator", "Unknown author")
         if isinstance(author, list):
             author = ", ".join(author)
         title = metadata["title"]
@@ -155,7 +155,7 @@ class LibriVox(Driver):
                     offset = 0
 
             for hit in hits:
-                author = hit.get("creator")
+                author = hit.get("creator", "Unknown author")
                 name = hit.get("title")
                 url = f"https://archive.org/details/{hit['identifier']}"
                 preview = f"https://archive.org/services/img/{hit['identifier']}"
