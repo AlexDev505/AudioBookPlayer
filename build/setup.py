@@ -1,6 +1,6 @@
 """
 
-Сборка exe и формирование NSIS сценариев.
+    Building exe and generating NSIS scripts.
 
 """
 

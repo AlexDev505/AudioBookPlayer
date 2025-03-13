@@ -4,19 +4,20 @@ from tools import pretty_view
 
 
 # CONFIG SETUP
-# Путь к директории приложения
+# Path to the application directory
 os.environ["APP_DIR"] = os.path.join(os.environ["LOCALAPPDATA"], "AudioBookPlayer")
 if not os.path.exists(os.environ["APP_DIR"]):
     os.mkdir(os.environ["APP_DIR"])
-# Путь к файлу конфигурации
+# Path to the configuration file
 os.environ["CONFIG_PATH"] = os.path.join(os.environ["APP_DIR"], "config.json")
-# Путь к файлу базы данных библиотеки
+# Path to the library database file
 os.environ["DATABASE_PATH"] = os.path.join(os.environ["APP_DIR"], "library.sqlite")
-# Путь к файлу отладки
+# Path to the debug file
 os.environ["DEBUG_PATH"] = os.path.join(os.environ["APP_DIR"], "debug.log")
-# Путь к файлу с временными данными
+# Path to the temporary data file
 os.environ["TEMP_PATH"] = os.path.join(os.environ["APP_DIR"], "temp.txt")
-# Версия приложения
+
+# Application version
 os.environ["VERSION"] = "2.1.4"
 
 # DEV

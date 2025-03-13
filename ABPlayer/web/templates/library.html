@@ -7,27 +7,27 @@
   <div id="filter-menu-toggle-btn" onclick="toggleFilterMenu()"></div>
   <div id="filters-container">
     <div id="search-in-library-input-line" class="input-line">
-      <input placeholder="найти в библиотеке" oninput="searchBooksInLibrary()">
+      <input placeholder="find in library" oninput="searchBooksInLibrary()">
       <button class="icon-btn search-btn"></button>
     </div>
-    <div id="reverse-checkbox" class="checkbox" onclick="toggleReverse()">в обратном порядке</div>
+    <div id="reverse-checkbox" class="checkbox" onclick="toggleReverse()">in reverse-order</div>
     <div id="filter-by-sections">
-      <div id="authors-section-btn" class="filter-by-section-btn">Авторы</div>
+      <div id="authors-section-btn" class="filter-by-section-btn">Authors</div>
       <div id="authors-section" class="filter-by-section"></div>
-      <div id="series-section-btn" class="filter-by-section-btn">Циклы</div>
+      <div id="series-section-btn" class="filter-by-section-btn">Series</div>
       <div id="series-section" class="filter-by-section"></div>
     </div>
   </div>
 </div>
 
 <div id="library">
-  <div id="library-title">Библиотека</div>
+  <div id="library-title">Library</div>
   <div id="library-sections">
     <div id="library-sections-buttons">
-      <div id="all-books-section-btn" class="section-button" onclick="section('all-books-section').show()">все</div>
-      <div id="new-books-section-btn" class="section-button" onclick="section('new-books-section').show()">новые</div>
-      <div id="in-progress-books-section-btn" class="section-button" onclick="section('in-progress-books-section').show()">в процессе</div>
-      <div id="listened-books-section-btn" class="section-button" onclick="section('listened-books-section').show()">прослушанные</div>
+      <div id="all-books-section-btn" class="section-button" onclick="section('all-books-section').show()">all</div>
+      <div id="new-books-section-btn" class="section-button" onclick="section('new-books-section').show()">new</div>
+      <div id="in-progress-books-section-btn" class="section-button" onclick="section('in-progress-books-section').show()">in progress</div>
+      <div id="listened-books-section-btn" class="section-button" onclick="section('listened-books-section').show()">listened</div>
     </div>
     <div id="library-sections-container" onscrollend="onLibraryScrollEnd(this)">
       <div id="all-books-section" class="books-section"></div>
@@ -39,3 +39,4 @@
 </div>
 
 </div>
+

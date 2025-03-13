@@ -19,7 +19,7 @@
   height: calc(95% - 8px);
 }
 #downloads-container::before {
-  content: "нет активных загрузок";
+  content: "No active downloads";
   top: 45%;
   left: 40%;
   position: relative;

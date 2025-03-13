@@ -103,8 +103,8 @@ class BooksApi(JSApi):
             logger.opt(colors=True).trace(f"search array: {search_array}")
             search_words = query.lower().split()
             logger.opt(colors=True).trace(f"search words: {search_words}")
-            matched_books_bids = []  # Идентификаторы найденных книг
-            # Поиск
+            matched_books_bids = []  # Identifiers of found books
+            # Search
             for i, array in search_array.items():
                 for search_word in search_words:
                     if difflib.get_close_matches(search_word, array):
@@ -491,24 +491,25 @@ class DownloadingProcessHandler(BaseDownloadProcessHandler):
 
 class NoSuitableDriver(JSApiError):
     code = 2
-    message = "Нет подходящего драйвера"
+    message = "No suitable driver"
 
 
 class BookAlreadyAdded(JSApiError):
     code = 3
-    message = "Книга уже добавлена в библиотеку"
+    message = "Book already added to the library"
 
 
 class BookNotFound(JSApiError):
     code = 4
-    message = "Книга не найдена"
+    message = "Book not found"
 
 
 class BookAlreadyDownloaded(JSApiError):
     code = 5
-    message = "Книга скачивается или уже скачана"
+    message = "Book is downloading or is already downloaded."
 
 
 class BookNotDownloaded(JSApiError):
     code = 6
-    message = "Книга не скачана"
+    message = "Book not downloaded."
+

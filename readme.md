@@ -1,57 +1,78 @@
 # AudioBook Player [![Python 3.12+](https://badgen.net/badge/Python/3.12+/blue)](https://www.python.org/downloads/) [![License: MIT](https://badgen.net/badge/License/MIT/blue)](https://github.com/AlexDev505/AudioBookPlayer/blob/master/LICENSE) [![Platform: Windows](https://badgen.net/badge/Platform/windows/blue?icon=windows)]()
 
-**Audio Book Player** - приложение для Windows, которое позволит вам бесплатно слушать и скачивать аудио книги.
+**Audio Book Player** - an application for Windows that allows you to listen to and download audiobooks for free.
 
-Приложению доступны все книги, которые есть на сайтах [_akniga.org_](https://akniga.org/) и [_knigavuhe.org_](https://knigavuhe.org/).
-У этих сайтов огромные библиотеки аудио книг различных жанров и авторов, 
-но как правило сайты с аудио книгами не дают пользователям возможности скачивать свои аудио книги.
-**Audio Book Player** же даёт такую возможность бесплатно без смс и регистрации.
+The application has access to all the books available on the websites [archive.org - Librivox Audiobook collection]([https://archive.org](https://archive.org/details/librivoxaudio), [_izibuk.uk_](https://izibuk.uk/), [_akniga.org_](https://akniga.org/) and [_knigavuhe.org_](https://knigavuhe.org/).
+These websites have huge libraries of audiobooks of various genres and authors,
+but typically audiobook websites do not allow users to download their audiobooks..
+**Audio Book Player** however, provides this opportunity for free without SMS and registration.
 
-## Обзор интерфейса
+## Interface Overview
 
-**Библиотека**
-![Библиотека](imgs/library.png "Библиотека")
-Здесь находятся все ваши книги.
+**Library**
+![Library](imgs/library.png "Library")
+Here are all your books.
 
-**Поиск**
-![Поиск](imgs/search.png "Поиск")
+**Search**
+![Search](imgs/search.png "Search")
 
-**Прослушивание**
-![Поиск](imgs/book.png "Прослушивание")
-Приложение дает возможность слушать, скачанные книги. 
-Удобная навигация по главам, настройка скорости воспроизведения, 
-сохранения прогресса прослушивания.
+**Listening**
+![Search](imgs/book.png "Listening")
+The application allows you to listen to downloaded books.
+Convenient chapter navigation, playback speed adjustment,
+and progress saving.
 
-## Установка
+## Installation
 
-Для начала скачайте установочный файл со [страницы последнего релиза](https://github.com/AlexDev505/AudioBookPlayer/releases/latest).
+First, download the installer from the [latest release page](https://github.com/AlexDev505/AudioBookPlayer/releases/latest) (Russian. For English, see build instructions).
 
-После запуска Вас поприветствует мастер установки, который поможет установить приложение.
+After launching, you will be greeted by the installation wizard, which will help you install the application.
 
-Для удобства мастер создает несколько ярлыков программы: один в меню Пуск, второй на рабочем столе.
+For convenience, the wizard creates several shortcuts for the program: one in the Start menu, and another on the desktop.
 
-Готово! Вы спокойно можете пользоваться приложением.
+Done! You can now use the application.
 
-## Для разработчиков
+## For Developers
 
-Вы можете скачать исходники проекта с помощью git.
+You can download the project source code using git.
+
+```commandline
+git clone https://github.com/Koladweep/AudioBookPlayer.git
+```
+or the original source: (Russian)
+
 ```commandline
 git clone https://github.com/AlexDev505/AudioBookPlayer.git
 ```
 
-или загрузить архив, используя [ссылку](https://github.com/AlexDev505/AudioBookPlayer/archive/refs/heads/master.zip).
+or download the archive using [this link](https://github.com/AlexDev505/AudioBookPlayer/archive/refs/heads/master.zip).
 
-Далее вам необходимо создать виртуальное окружение 
-и установить все зависимости проекта. Используйте это, находясь в директории проекта.
+Next, you need to create a virtual environment 
+and install all project dependencies. Use this while in the project directory.
 ```commandline
 python -m venv venv
 venv\Scripts\activate.bat
 pip install -r requirements.txt
 ```
 
-Для запуска приложения из консоли необходимо выполнить это, находясь в директории проекта:
+To run the application from the console, execute this while in the project directory:
 ```commandline
 venv\Scripts\activate.bat
 cd ABPlayer
 python main.py
 ```
+*Builds:
+I am not releasing a build. This isn't my project. I am just a minor contributor. 
+
+Build dependencies:
+1)  Pyinstaller [PyPi](https://pypi.org/project/pyinstaller/)
+2)  NSIS  [SourceForge](https://nsis.sourceforge.io/Download)
+
+But build instructions -
+follow the developer instructions and make sure build dependencies are installed.
+1) switch to cloned project directory and subdirectory
+   ```commandline
+       cd build
+       python setup.py
+   ```
+2) Use NSIS to compile the scripts installer.nsi (updater.nsi if you have a prior version installed)

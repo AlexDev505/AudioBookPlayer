@@ -17,11 +17,11 @@ EXECUTE = []
 
 def convert(x: int) -> str:
     """
-    Конвертирует число битов в другие.
+    Converts the number of bits to other units.
     """
 
     x /= 1024
-    _i = ["Кб", "Мб", "Гб"]
+    _i = ["KB", "MB", "GB"]
     i = 0
     while x > 1024:
         x /= 1024
@@ -31,10 +31,10 @@ def convert(x: int) -> str:
 
 def rows_count(all_info=True):
     """
-    Считает файлы и строки.
+    Counts files and lines.
     :param all_info:
-        Для True - выводит информацию по каждому файлу.
-        Для False - выводит только итоговую информацию.
+        For True - outputs information for each file.
+        For False - outputs only the summary information.
     """
     all_files = []
     all_rows = []
@@ -67,9 +67,9 @@ def rows_count(all_info=True):
         if all_info:
             logger.opt(colors=True).info(
                 f"\t<g>{name}</g>\n"
-                f"Кол-во строк: <e>{rows}</e>\n"
-                f"Кол-во строк (без комментариев): <e>{rows_without_docstrings}</e>\n"
-                f"Размер: <e>{convert(size)}</e>\n"
+                f"Number of lines: <e>{rows}</e>\n"
+                f"Number of lines (without comments): <e>{rows_without_docstrings}</e>\n"
+                f"Size: <e>{convert(size)}</e>\n"
             )
 
         return rows, rows_without_docstrings, size
@@ -86,16 +86,16 @@ def rows_count(all_info=True):
                     all_sizes.append(res[2])
 
     logger.opt(colors=True).info(
-        f"\n\t<g>Итоги</g>\n"
-        f"Всего файлов: <e>{len(all_files)}</e>\n"
-        f"Всего строк: <e>{sum(all_rows)}</e>\n"
-        f"Всего строк (без комментариев): <e>{sum(all_rows_without_docstrings)}</e>\n"
-        f"Всего строк комментариев: <e>{sum(all_rows) - sum(all_rows_without_docstrings)}</e>\n"
-        f"Общий размер: <e>{convert(sum(all_sizes))}</e>\n"
-        f"Среднее кол-во строк: <e>{sum(all_rows) // len(all_rows)}</e>\n"
-        f"Максимальное кол-во строк: <e>{max(all_rows)}</e> "
+        f"\n\t<g>Summary</g>\n"
+        f"Total files: <e>{len(all_files)}</e>\n"
+        f"Total lines: <e>{sum(all_rows)}</e>\n"
+        f"Total lines: (without comments): <e>{sum(all_rows_without_docstrings)}</e>\n"
+        f"Total lines: comments: <e>{sum(all_rows) - sum(all_rows_without_docstrings)}</e>\n"
+        f"Total size: <e>{convert(sum(all_sizes))}</e>\n"
+        f"Average number of lines: <e>{sum(all_rows) // len(all_rows)}</e>\n"
+        f"Maximum number of lines: <e>{max(all_rows)}</e> "
         f"(<g>{all_files[all_rows.index(max(all_rows))]}</g>)\n"
-        f"Максимальное кол-во строк (без комментариев): "
+        f"Maximum number of lines: (without comments): "
         f"<e>{max(all_rows_without_docstrings)}</e> (<g>"
         f"{all_files[all_rows_without_docstrings.index(
             max(all_rows_without_docstrings)

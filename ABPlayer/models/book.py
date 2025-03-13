@@ -20,27 +20,27 @@ DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 @dataclass
 class BookItem:
     """
-    Глава книги.
+    Book chapter.
     """
 
-    file_url: str  # Ссылка на файл, для скачивания
-    file_index: int  # Номер файла(Нумерация с единицы)
-    title: str  # Название главы
-    start_time: int  # Время (в секундах), когда начинается глава
-    end_time: int  # Время (в секундах), когда заканчивается глава
+    file_url: str  # File URL for downloading
+    file_index: int  # File number (Numbering starts from one)
+    title: str  # Chapter title
+    start_time: int  # Time (in seconds) when the chapter starts
+    end_time: int  # Time (in seconds) when the chapter ends
 
     @property
     def duration(self) -> int:
         """
-        Длительность главы (в секундах).
+        Chapter duration (in seconds).
         """
         return self.end_time - self.start_time
 
 
 class BookItems(list):
     """
-    Список глав.
-    Представлен списком словарей.
+    List of chapters.
+    Represented as a list of dictionaries.
     """
 
     def __init__(self, items: list[BookItem | dict[str, str | int]] = ()):
@@ -57,28 +57,28 @@ class BookItems(list):
 
 class Status(Enum):
     """
-    Статус книги.
+    Book status
     """
 
-    NEW = "new"  # Новая книга
-    STARTED = "started"  # Начал слушать
-    FINISHED = "finished"  # Закончил слушать
+    NEW = "new"  # New book
+    STARTED = "started"  # Started listening
+    FINISHED = "finished"  # Finished listening
 
 
 @dataclass
 class StopFlag:
     """
-    Отметка, на которой пользователь остановил прослушивание.
-    В базе данных храниться как словарь.
+    Bookmark where the user stopped listening.
+    Stored in the database as a dictionary.
     """
 
-    item: int = 0  # Глава(Индекс)
-    time: int = 0  # Секунда
+    item: int = 0  # Chapter (Index)
+    time: int = 0  # Second
 
 
 class BookFiles(dict):
     """
-    Аудио файлы книги. Словарь: dict[str, str] {<имя файла>: <хеш>}
+    # Audio files of the book. Dictionary: dict[str, str] {<file name>: <hash>}
     """
 
 
@@ -94,13 +94,13 @@ class Book:
     name: str = ""
     series_name: str = ""
     number_in_series: str = ""
-    description: str = ""  # Описание
-    reader: str = ""  # Чтец
-    duration: str = ""  # Длительность
-    url: str = ""  # Ссылка на книгу
-    preview: str = ""  # Ссылка на превью(обложку) книги
-    driver: str = ""  # Драйвер, с которым работает сайт
-    items: BookItems = field(default_factory=BookItems)  # Список глав
+    description: str = ""  # Description
+    reader: str = ""  # Narrator
+    duration: str = ""  # Duration
+    url: str = ""  # Book URL
+    preview: str = ""  # Book preview (cover) URL
+    driver: str = ""  # Driver that works with the website
+    items: BookItems = field(default_factory=BookItems)  # List of chapters
     status: Status = Status.NEW
     stop_flag: StopFlag = field(default_factory=StopFlag)
     favorite: bool = False
@@ -110,7 +110,7 @@ class Book:
     @property
     def book_path(self) -> str:
         """
-        :returns: Относительный путь к книге в библиотеке.
+        # :returns: Relative path to the book in the library.
         """
         if self.series_name:
             return os.path.join(
@@ -131,14 +131,14 @@ class Book:
     @property
     def preview_path(self) -> str:
         """
-        :returns: Абсолютный путь к файлу обложки книги.
+        # :returns: Absolute path to the book cover file.
         """
         return os.path.join(self.dir_path, "cover.jpg")
 
     @property
     def listening_progress(self) -> str:
         """
-        :returns: Прогресс прослушивания. (В процентах)
+        :returns: Listening progress. (In percentage)
         """
         total = sum([item.duration for item in self.items])
         if not total:
@@ -158,8 +158,8 @@ class Book:
     @classmethod
     def scan_dir(cls, dir_path: str) -> ty.Generator[Book, ty.Any, None]:
         """
-        Сканирует директорию на наличие `.abp` файлов.
-        :returns: Генератор экземпляров книг, загруженных из найденных файлов.
+        Scans the directory for `.abp` files.
+        :returns: Generator of book instances loaded from the found files.
         """
         logger.opt(colors=True).debug(f"scanning <y>{dir_path}</y> for <r>.abp</r>")
         books_found = 0
@@ -167,7 +167,7 @@ class Book:
             if ".abp" in file_names:
                 abp_path = os.path.join(root, ".abp")
                 if not (book := Book.load_from_storage(abp_path)):
-                    # Удаляем файл, если не получается загрузить книгу
+                    # Delete the file if the book cannot be loaded
                     try:
                         os.remove(abp_path)
                     except IOError:
@@ -181,8 +181,8 @@ class Book:
     @classmethod
     def load_from_storage(cls, file_path: str) -> Book | None:
         """
-        Создаёт экземпляр книги из `.abp` файла.
-        :returns: Экземпляр книги или None.
+        # Creates a book instance from a `.abp` file.
+        # :returns: Book instance or None.
         """
         logger.opt(colors=True).trace(
             f"loading data from <r>.abp</r> <y>{file_path}</y>"
@@ -244,7 +244,7 @@ class Book:
 
     def save_to_storage(self) -> None:
         """
-        Сохраняет книгу в `.abp` файл.
+        Saves the book to a .abp file.
         """
         logger.opt(colors=True).debug(
             f"{self:styled} saved to <r>.abp</r>: <y>{self.abp_file_path}</y>"
@@ -299,3 +299,4 @@ __all__ = [
     "Book",
     "DATETIME_FORMAT",
 ]
+

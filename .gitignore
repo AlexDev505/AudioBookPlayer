@@ -1,7 +1,7 @@
 venv/
 .idea/
 __pycache__/
-/build/installers/
-/build/updaters/
-/build/ABPlayer/
+build/installers/
+build/updaters/
+build/ABPlayer/
 AudioBookPlayerAppData.lnk
