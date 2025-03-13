@@ -77,7 +77,7 @@ def _validate_config(config: dict) -> dict:
     else:
         need_update_config = False
 
-        if config["dark_theme"] not in {"1", "2"}:
+        if config["dark_theme"] not in {"0", "1"}:
             config["dark_theme"] = FIELDS["dark_theme"]
             need_update_config = True
         if not (
