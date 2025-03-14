@@ -18,13 +18,13 @@
   padding-right: 8px;
   height: calc(95% - 8px);
 }
-#downloads-container::before {
-  content: "нет активных загрузок";
+#downloads-container #no-downloads {
+  width: fit-content;
   top: 45%;
   left: 40%;
   position: relative;
 }
-#downloads-container:has(.download-card)::before {display: none}
+#downloads-container:has(.download-card) #no-downloads {display: none}
 .download-card {
   position: relative;
   display: flex;

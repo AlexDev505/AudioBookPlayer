@@ -35,7 +35,7 @@ function createDownloadingCard(bid, title) {
     <div class="download-card" data-bid="${bid}">
       <div>
         <div class="book-title">${title}</div>
-        <div class="status">инициализация...</div>
+        <div class="status">{{ gettext("downloading.initializing") }}...</div>
         <div class="progress-info">
           <div class="percents"></div>
           <div class="data-size"></div>
@@ -53,12 +53,12 @@ function setDownloadingStatus(bid, status) {
     status_el.style = ((status == "downloading") ? "display: none" : "")
     if (status == "finished") document.querySelector(`.download-card[data-bid='${bid}']`).dataset["finished"] = "1"
 
-    if (status == "waiting") status_el.innerHTML = "ожидание..."
-    else if (status == "preparing") status_el.innerHTML = "подготовка..."
-    else if (status == "downloading") status_el.innerHTML = "скачивание..."
-    else if (status == "finishing") status_el.innerHTML = "завершение..."
-    else if (status == "finished") status_el.innerHTML = "скачивание завершено"
-    else if (status == "terminating") status_el.innerHTML = "остановка..."
+    if (status == "waiting") status_el.innerHTML = "{{ gettext("downloading.waiting") }}..."
+    else if (status == "preparing") status_el.innerHTML = "{{ gettext("downloading.preparing") }}..."
+    else if (status == "downloading") status_el.innerHTML = "{{ gettext("downloading.downloading") }}..."
+    else if (status == "finishing") status_el.innerHTML = "{{ gettext("downloading.ending") }}..."
+    else if (status == "finished") status_el.innerHTML = "{{ gettext("downloading.finished") }}"
+    else if (status == "terminating") status_el.innerHTML = "{{ gettext('downloading.terminating') }}..."
     else if (status == "terminated") removeDownloadingCard(bid)
 }
 function initTotalSize(bid, total_size) {
@@ -88,7 +88,7 @@ function removeDownloadingCard(bid) {
 
 function endLoading(bid) {
     title = document.querySelector(`.download-card[data-bid='${bid}'] .book-title`)
-    if (title) createNotification(`Книга <b>«${title.innerHTML}»</b> скачана`, 60, true)
+    if (title) createNotification(`Книга <b>«${title.innerHTML}»</b> {{ gettext("book.downloaded") }}`, 60, true)
     if (document.querySelector(`.book-card[data-bid='${bid}']`)) applyFilters()
     if (opened_book && opened_book.bid == bid) loadBookData(bid)
 }

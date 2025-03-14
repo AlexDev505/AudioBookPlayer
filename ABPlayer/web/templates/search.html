@@ -1,14 +1,13 @@
 <link rel="stylesheet" href="{{url_for('static', filename='css/search.css')}}">
-<script defer src="{{url_for('static', filename='js/search.js')}}"></script>
 
 <div id="search-page-content">
 
 <div id="search-input-line-container">
   <div id="search-label-container">
-    <span>Поиск книги</span>
+    <span>{{ gettext("search_for_book") }}</span>
   </div>
   <div id="search-input-line" class="input-line">
-    <input placeholder="начните писать или вставьте ссылку" oninput="searchBooks()">
+    <input placeholder="{{ gettext("begin_typing") }}" oninput="searchBooks()">
     <div class="tools">
       <button class="icon-btn driver-btn" onclick="toggleDriverOptions()"></button>
       <button class="icon-btn search-btn"></button>

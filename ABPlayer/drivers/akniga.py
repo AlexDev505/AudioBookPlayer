@@ -105,7 +105,7 @@ class AKniga(Driver):
 
         book_data = self.js_api().get_book_data(url)
 
-        author = book_data.get("author") or "Неизвестный автор"
+        author = book_data.get("author") or _("unknown_author")
         name = book_data["titleonly"]
         description = (
             soup.select_one("div.description__article-main")
@@ -249,7 +249,7 @@ class AKniga(Driver):
                 with suppress(AttributeError):
                     url = el.select_one("div.article--cover > a").attrs["href"]
                     preview = el.select_one("div.article--cover > a > img").attrs["src"]
-                    author = "Неизвестный автор"
+                    author = _("unknown_author")
                     if element := el.select_one(
                         "span.link__action--author"
                         r'> svg:has(use[xlink\:href="#author"]) ~ a'

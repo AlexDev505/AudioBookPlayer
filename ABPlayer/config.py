@@ -12,6 +12,7 @@ from tools import pretty_view
 FIELDS = {
     "books_folder": os.path.join(os.environ["USERPROFILE"], "documents", "Аудио книги"),
     "dark_theme": "1",
+    "language": "ru",
 }
 
 
@@ -77,15 +78,18 @@ def _validate_config(config: dict) -> dict:
     else:
         need_update_config = False
 
-        if config["dark_theme"] not in {"0", "1"}:
+        if config.get("dark_theme") not in {"0", "1"}:
             config["dark_theme"] = FIELDS["dark_theme"]
             need_update_config = True
         if not (
-            isinstance(config["books_folder"], str)
-            and os.path.isdir(config["books_folder"])
+            isinstance(config.get("books_folder"), str)
+            and os.path.isdir(config.get("books_folder"))
         ):
             config["books_folder"] = FIELDS["books_folder"]
             Path(FIELDS["books_folder"]).mkdir(parents=True, exist_ok=True)
+            need_update_config = True
+        if config.get("language") not in {"ru", "en"}:
+            config["language"] = FIELDS["language"]
             need_update_config = True
 
         if need_update_config:

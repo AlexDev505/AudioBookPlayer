@@ -19,7 +19,7 @@ class Izibuk(Driver):
         page = page.text
 
         name = soup.select_one("span[itemprop='name']").text.strip()
-        author = "Неизвестный автор"
+        author = _("unknown_author")
         if element := soup.select_one("span[itemprop='author'] a"):
             author = element.text.strip()
 
@@ -146,7 +146,7 @@ class Izibuk(Driver):
                 url = f"{self.site_url}{element.attrs["href"]}"
                 name = element.text.strip()
                 preview = book_card.select_one("img").attrs["src"]
-                author = "Неизвестный автор"
+                author = _("unknown_author")
                 if element := book_card.select_one("a[href^='/author']"):
                     author = element.text.strip()
                 reader = ""
