@@ -15,8 +15,8 @@ from .tools import safe_name
 
 
 """
-На сайте AKniga информация о книге загружается динамически через JavaScript.
-Поэтому для получения полных данных о книге нам необходима среда исполнения JS.
+On the AKniga website, book information is loaded dynamically via JavaScript.
+Therefore, to get complete book data, we need a JavaScript execution environment.
 """
 
 
@@ -24,25 +24,25 @@ class BaseJsApi(ABC):
     @abstractmethod
     def get_book_data(self, url: str) -> dict:
         """
-        Метод, возвращающий динамически загружаемые данные о книге.
+        Method that returns dynamically loaded book data.
         {
             "author": <str>,
-            "titleonly": <str>,  # название книги в чистом виде
+            "titleonly": <str>,  # clean book title
             "items": [{
-                "file": <int>,  # номер файла
-                "title": <str>,  # название главы
-                "time_from_start": <str>,  # точка начала
-                "time_finish": <str>,  # точка окончания
+            "file": <int>,  # file number
+            "title": <str>,  # chapter title
+            "time_from_start": <str>,  # start time
+            "time_finish": <str>,  # end time
             }, ...],
-            "m3u8": <str>,  # ссылка на файл m3u8
+            "m3u8": <str>,  # link to m3u8 file
         }
         """
 
 
 class PyWebViewJsApi(BaseJsApi):
     """
-    Среда исполнения JS, использующая Pywebview.
-    Создаёт скрытое окно, загружает там страницу книги и берет с нее данные.
+    JavaScript execution environment using Pywebview.
+    Creates a hidden window, loads the book page there, and retrieves data from it.
     """
 
     def __init__(self):
@@ -52,10 +52,10 @@ class PyWebViewJsApi(BaseJsApi):
 
     def get_book_data(self, url: str) -> dict:
         self._window = webview.create_window("", url=url, hidden=True)
-        # Выполнение `self._get_book_data` после загрузки страницы
+        # Execute `self._get_book_data` after the page loads
         self._window.events.loaded += self._get_book_data
         self._active = True
-        if len(webview.windows) == 1:  # На данный момент нет запущенных окон pywebview
+        if len(webview.windows) == 1:  # Currently, there are no running pywebview windows
             webview.start()
         else:
             while self._active:
