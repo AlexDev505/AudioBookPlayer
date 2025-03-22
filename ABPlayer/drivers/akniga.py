@@ -29,10 +29,10 @@ class BaseJsApi(ABC):
             "author": <str>,
             "titleonly": <str>,  # clean book title
             "items": [{
-            "file": <int>,  # file number
-            "title": <str>,  # chapter title
-            "time_from_start": <str>,  # start time
-            "time_finish": <str>,  # end time
+                "file": <int>,  # file number
+                "title": <str>,  # chapter title
+                "time_from_start": <str>,  # start time
+                "time_finish": <str>,  # end time
             }, ...],
             "m3u8": <str>,  # link to m3u8 file
         }
