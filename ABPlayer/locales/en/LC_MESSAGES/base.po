@@ -28,7 +28,7 @@ msgstr "Unknown author"
 
 #: ../../abplayer/js_api/books.py:497
 msgid "no_suitable_driver"
-msgstr "No sutiable driver"
+msgstr "No suitable driver"
 
 #: ../../abplayer/js_api/books.py:502
 msgid "book.already_exists"
@@ -349,4 +349,4 @@ msgstr "Do not suggest participation in testing"
 
 #: ../../abplayer/web/templates/js/settings.js:85
 msgid "update.downloading"
-msgstr "Downloading upate"
+msgstr "Downloading update"
