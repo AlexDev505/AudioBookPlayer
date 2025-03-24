@@ -8,5 +8,6 @@ else:
     ROOT_DIR = "."
 
 
-def set_language(lang: str) -> None:
+def set_language(lang: str='en') -> None:
+    print(os.path.abspath(os.path.join(ROOT_DIR, "locales")))
     gettext.translation("base", os.path.join(ROOT_DIR, "locales"), [lang]).install()

@@ -4,9 +4,9 @@ from functools import wraps, lru_cache
 
 def ttl_cache(max_age: int, maxsize: int = 128, typed: bool = False):
     """
-    Декоратор кэширующий результат вызова функции
-    в течении определенного промежутка времени.
-    max_age: Продолжительность сохранения кэша(в секундах).
+    A decorator that caches the result of a function call
+    for a specified period of time.
+    max_age: Duration to keep the cache (in seconds).
     """
 
     def _decorator(fn):

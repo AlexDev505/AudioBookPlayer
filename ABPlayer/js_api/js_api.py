@@ -16,7 +16,7 @@ class JSApi:
 
     def init(self, window: webview.Window):
         """
-        Регистрирует методы для дальнейшего вызова из среды JS.
+        Registers methods for further invocation from the JS environment.
         """
         for section in self.sections:
             section = section()
