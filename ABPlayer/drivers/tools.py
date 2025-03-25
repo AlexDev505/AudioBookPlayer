@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-import json
+import asyncio
 import os
 import re
 import subprocess
 import typing as ty
+from functools import wraps
 
 import eyed3
 
@@ -28,6 +29,62 @@ class NotImplementedVariable:
 
     def __get__(self, instance, owner):
         raise NotImplementedError()
+
+
+class IOTasksManager:
+    """
+    Asynchronous task manager.
+    Implements a queue and limits the number of simultaneously executing tasks.
+    """
+
+    def __init__(self, max_tasks: int = 1):
+        self.max_tasks: int = max_tasks
+        self.tasks_count: int = 0
+        self.planed_tasks_count: int = 0
+        self.planed_coroutines: list[
+            tuple[ty.Coroutine, ty.Callable[[asyncio.Task], None]]
+        ] = []
+
+    def add_task(
+        self,
+        coro: ty.Coroutine,
+        callback: ty.Callable[[asyncio.Task], None],
+    ) -> None:
+        """
+        Adds a task to the queue or runs it if there is a quota.
+        """
+        self.planed_tasks_count += 1
+        self.planed_coroutines.append((coro, callback))
+        if self.tasks_count < self.max_tasks and self.planed_tasks_count:
+            self._run_next()
+
+    def _run_next(self) -> None:
+        """
+        Start the next task.
+        """
+        coro, callback = self.planed_coroutines.pop(0)
+        self.planed_tasks_count -= 1
+        self.tasks_count += 1
+        asyncio.create_task(coro).add_done_callback(
+            self._task_callback_decorator(callback)
+        )
+
+    def _task_callback_decorator(
+        self, callback: ty.Callable[[asyncio.Task], None]
+    ) -> ty.Callable[[asyncio.Task], None]:
+        """
+        A wrapper for task callbacks that reduces the running task counter
+        and starts tasks from the queue.
+        """
+
+        @wraps(callback)
+        def _wrapper(task: asyncio.Task) -> None:
+            callback(task)
+            self.tasks_count -= 1
+            if self.planed_tasks_count:
+                self._run_next()
+
+        return _wrapper
 
 
 def prepare_file_metadata(
@@ -57,11 +114,21 @@ def get_audio_file_duration(file_path: Path) -> float:
     :returns: Длительность аудио файла в секундах.
     """
     result = subprocess.check_output(
-        rf'{os.environ["FFPROBE_PATH"]} -v quiet -show_streams -of json "{file_path}"',
-        shell=True,
+        rf'{os.environ["FFMPEG_PATH"]} -v quiet -stats -i "{file_path}" -f null -',
+        stderr=subprocess.STDOUT,
     ).decode()
-    fields = json.loads(result)["streams"][0]
-    return float(fields["duration"])
+    if not (
+        match := re.search(
+            r"time=(?P<h>\d+):(?P<m>\d{2}):(?P<s>\d{2}).(?P<ms>\d{2})", result
+        )
+    ):
+        return 0
+    return (
+        int(match.group("h")) * 3600
+        + int(match.group("m")) * 60
+        + int(match.group("s"))
+        + int(match.group("ms")) / 100
+    )
 
 
 def safe_name(text: str) -> str:

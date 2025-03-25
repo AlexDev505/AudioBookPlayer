@@ -11,4 +11,4 @@ if getattr(sys, "frozen", False):
 else:
     ROOT_DIR = os.path.dirname(__file__)
 
-os.environ["FFPROBE_PATH"] = os.path.join(ROOT_DIR, r"bin\ffprobe.exe")
+os.environ["FFMPEG_PATH"] = os.path.join(ROOT_DIR, r"bin\ffmpeg.exe")

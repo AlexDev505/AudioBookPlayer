@@ -26,19 +26,18 @@ if ty.TYPE_CHECKING:
     from ..base import BaseDownloadProcessHandler
 
 
-"""
+def merge_ts_files(ts_file_paths: list[Path], output_file_path: Path) -> None:
+    os.system(
+        f'copy /b {"+".join(map(lambda x: f'"{x}"', ts_file_paths))} '
+        f'"{output_file_path}"'
+    )
 
-TODO: 
-Файлы, которые выдает этот загрузчик открываются стандартным проигрывателем, 
-но не работают в самом приложении.
 
-Можно попробовать
-copy /b seq1.ts+seq2.ts+seq3.ts all.ts
-ffmpeg -i all.ts -acodec copy all.mp4
-
-ffmpeg лежит в `drivers/bin`, так же мб он может заменить ffprobe
-
-"""
+def convert_ts_to_mp3(ts_file_path: Path, mp3_file_path: Path) -> None:
+    os.system(
+        f'{os.environ["FFMPEG_PATH"]} -v quiet -i "{ts_file_path}" -vn '
+        f'"{mp3_file_path}"'
+    )
 
 
 class M3U8Downloader(BaseDownloader):
@@ -70,19 +69,22 @@ class M3U8Downloader(BaseDownloader):
     def _download_book(self) -> None:
         files = BookFiles()
 
-        item_index = 0
-        item = self.book.items[item_index]
-        file_path = self._get_file_path(item_index)
-        self._file = open(file_path, "wb")
+        if not (book_dir_path := Path(self.book.dir_path)).exists():
+            book_dir_path.mkdir(parents=True, exist_ok=True)
+            logger.opt(colors=True).debug(
+                f"book dir <y>{self.book.dir_path}</y> crated"
+            )
 
+        ts_paths = []
         for segment_index, segment in enumerate(self._m3u8_data.segments):
             if self._terminated:
                 break
 
-            logger.opt(colors=True).debug(
-                f"downloading segment <y>{segment_index}</y> "
-                f"of item <y>{item_index}</y>"
-            )
+            logger.opt(colors=True).debug(f"downloading segment <y>{segment_index}</y>")
+            ts_path = Path(os.path.join(self.book.dir_path, f"seq{segment_index}.ts"))
+            ts_paths.append(ts_path)
+            self._file = open(ts_path, "wb")
+
             while True:
                 try:
                     if not self._terminated:
@@ -96,29 +98,45 @@ class M3U8Downloader(BaseDownloader):
                     logger.opt(colors=True).trace(
                         f"retrying download segment <y>{segment_index}</y>"
                     )
+            self._file.close()
+            self.file = None
+
             if self._terminated:
                 break
-
-            # Если длительность получившегося файла равна длительности главы
-            # (погрешность 2 сек)
-            if item.duration - get_audio_file_duration(file_path) < 2:
-                logger.debug("item completed")
-                self._file.close()
-                self._file = None
+        else:
+            self.process_handler.status = DownloadProcessStatus.FINISHING
+            for item_index, item in enumerate(self.book.items):
+                tss_duration = 0
+                for i in range(len(ts_paths)):
+                    tss_duration += get_audio_file_duration(ts_paths[i])
+                    # Если общая длительность сегментов равна длительности главы
+                    # (погрешность 2 сек)
+                    if item.duration - tss_duration < 2:
+                        item_file_path = self._merge_ts_files(
+                            item_index, ts_paths[: i + 1]
+                        )
+                        ts_paths = ts_paths[i + 1 :]
+                        break
+                else:
+                    item_file_path = self._merge_ts_files(item_index, ts_paths)
                 logger.trace("preparing file metadata")
                 prepare_file_metadata(
-                    file_path, self.book.author, item.title, item_index
+                    item_file_path, self.book.author, item.title, item_index
                 )
                 logger.trace("hashing file")
-                files[file_path.name] = get_file_hash(file_path)
-                # Переход к следующей главе
-                if item_index + 1 < len(self.book.items):
-                    item_index += 1
-                    item = self.book.items[item_index]
-                    file_path = self._get_file_path(item_index)
-                    self._file = open(file_path, "wb")
-        else:
+                files[item_file_path.name] = get_file_hash(item_file_path)
             self.book.files = files
+
+    def _merge_ts_files(self, item_index: int, ts_file_paths: list[Path]) -> Path:
+        item_file_path = self._get_file_path(item_index)
+        ts_item_fp = Path(f"{item_file_path}.ts")
+        mp3_item_fp = Path(f"{item_file_path}.mp3")
+        merge_ts_files(ts_file_paths, ts_item_fp)
+        for ts_path in ts_file_paths:
+            os.remove(ts_path)
+        convert_ts_to_mp3(ts_item_fp, mp3_item_fp)
+        os.remove(ts_item_fp)
+        return mp3_item_fp
 
     def _download_segment(self, segment_index: int, segment):
         ts_url = os.path.join(self._host_uri, segment.uri)  # Ссылка на сегмент
@@ -197,11 +215,8 @@ class M3U8Downloader(BaseDownloader):
         file_path = Path(
             os.path.join(
                 self.book.dir_path,
-                f"{str(item_index + 1).rjust(2, '0')}. {item_title}.mp3",
+                f"{str(item_index + 1).rjust(2, '0')}. {item_title}",
             )
         )
-        if not file_path.parent.exists():
-            file_path.parent.mkdir(parents=True, exist_ok=True)
-            logger.opt(colors=True).debug(f"book dir <y>{file_path.parent}</y> crated")
 
         return file_path
