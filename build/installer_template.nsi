@@ -44,7 +44,7 @@ SetCompressor lzma
 ; MUI end ------
 
 Name "${PRODUCT_NAME}"
-OutFile "installers\ABPlayerSetup ${PRODUCT_VERSION}.exe"
+OutFile "installers\ABPlayerSetup ${PRODUCT_VERSION}{arch}.exe"
 InstallDir "$PROGRAMFILES\ABPlayer"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show

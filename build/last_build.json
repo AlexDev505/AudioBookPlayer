@@ -1,5 +1,5 @@
 {
-    "version": "2.1.4",
+    "version": "2.2.0",
     "files": {
         "ABPlayer": [
             "ABPlayer.exe"
@@ -73,8 +73,25 @@
             "_wmi.pyd",
             "_zoneinfo.pyd"
         ],
+        "ABPlayer\\_internal\\aiohttp": [
+            "_http_parser.cp312-win_amd64.pyd",
+            "_http_writer.cp312-win_amd64.pyd"
+        ],
+        "ABPlayer\\_internal\\aiohttp\\_websocket": [
+            "mask.cp312-win_amd64.pyd",
+            "reader_c.cp312-win_amd64.pyd"
+        ],
+        "ABPlayer\\_internal\\attrs-25.1.0.dist-info": [
+            "INSTALLER",
+            "METADATA",
+            "RECORD",
+            "WHEEL"
+        ],
+        "ABPlayer\\_internal\\attrs-25.1.0.dist-info\\licenses": [
+            "LICENSE"
+        ],
         "ABPlayer\\_internal\\bin": [
-            "ffprobe.exe"
+            "ffmpeg.exe"
         ],
         "ABPlayer\\_internal\\blinker-1.8.2.dist-info": [
             "INSTALLER",
@@ -163,6 +180,9 @@
             "REQUESTED",
             "WHEEL"
         ],
+        "ABPlayer\\_internal\\frozenlist": [
+            "_frozenlist.cp312-win_amd64.pyd"
+        ],
         "ABPlayer\\_internal\\itsdangerous-2.2.0.dist-info": [
             "INSTALLER",
             "LICENSE.txt",
@@ -170,11 +190,34 @@
             "RECORD",
             "WHEEL"
         ],
+        "ABPlayer\\_internal\\locales": [
+            "messages.pot",
+            "__init__.py"
+        ],
+        "ABPlayer\\_internal\\locales\\en": [],
+        "ABPlayer\\_internal\\locales\\en\\LC_MESSAGES": [
+            "base.mo",
+            "base.po"
+        ],
+        "ABPlayer\\_internal\\locales\\ru": [],
+        "ABPlayer\\_internal\\locales\\ru\\LC_MESSAGES": [
+            "base.mo",
+            "base.po"
+        ],
+        "ABPlayer\\_internal\\locales\\__pycache__": [
+            "__init__.cpython-312.pyc"
+        ],
         "ABPlayer\\_internal\\markupsafe": [
             "_speedups.cp312-win_amd64.pyd"
         ],
+        "ABPlayer\\_internal\\multidict": [
+            "_multidict.cp312-win_amd64.pyd"
+        ],
         "ABPlayer\\_internal\\orjson": [
             "orjson.cp312-win_amd64.pyd"
+        ],
+        "ABPlayer\\_internal\\propcache": [
+            "_helpers_c.cp312-win_amd64.pyd"
         ],
         "ABPlayer\\_internal\\pythonnet": [],
         "ABPlayer\\_internal\\pythonnet\\runtime": [
@@ -200,15 +243,6 @@
             "WHEEL"
         ],
         "ABPlayer\\_internal\\setuptools\\_vendor\\importlib_metadata-8.0.0.dist-info": [
-            "INSTALLER",
-            "LICENSE",
-            "METADATA",
-            "RECORD",
-            "REQUESTED",
-            "top_level.txt",
-            "WHEEL"
-        ],
-        "ABPlayer\\_internal\\setuptools\\_vendor\\importlib_resources-6.4.0.dist-info": [
             "INSTALLER",
             "LICENSE",
             "METADATA",
@@ -271,7 +305,7 @@
             "REQUESTED",
             "WHEEL"
         ],
-        "ABPlayer\\_internal\\setuptools\\_vendor\\packaging-24.1.dist-info": [
+        "ABPlayer\\_internal\\setuptools\\_vendor\\packaging-24.2.dist-info": [
             "INSTALLER",
             "LICENSE",
             "LICENSE.APACHE",
@@ -315,7 +349,7 @@
             "RECORD",
             "WHEEL"
         ],
-        "ABPlayer\\_internal\\setuptools\\_vendor\\wheel-0.43.0.dist-info": [
+        "ABPlayer\\_internal\\setuptools\\_vendor\\wheel-0.45.1.dist-info": [
             "entry_points.txt",
             "INSTALLER",
             "LICENSE.txt",
@@ -392,14 +426,6 @@
             "window.svg",
             "x.svg"
         ],
-        "ABPlayer\\_internal\\static\\js": [
-            "base.js",
-            "book.js",
-            "downloads.js",
-            "library.js",
-            "search.js",
-            "settings.js"
-        ],
         "ABPlayer\\_internal\\templates": [
             "base.html",
             "book.html",
@@ -408,6 +434,14 @@
             "search.html",
             "settings.html",
             "starting_window.html"
+        ],
+        "ABPlayer\\_internal\\templates\\js": [
+            "base.js",
+            "book.js",
+            "downloads.js",
+            "library.js",
+            "search.js",
+            "settings.js"
         ],
         "ABPlayer\\_internal\\typeguard-4.3.0.dist-info": [
             "entry_points.txt",
@@ -455,7 +489,7 @@
             "RECORD",
             "WHEEL"
         ],
-        "ABPlayer\\_internal\\wheel-0.44.0.dist-info": [
+        "ABPlayer\\_internal\\wheel-0.45.1.dist-info": [
             "entry_points.txt",
             "INSTALLER",
             "LICENSE.txt",
@@ -463,6 +497,9 @@
             "RECORD",
             "REQUESTED",
             "WHEEL"
+        ],
+        "ABPlayer\\_internal\\yarl": [
+            "_quoting_c.cp312-win_amd64.pyd"
         ]
     }
 }

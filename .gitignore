@@ -4,4 +4,5 @@ __pycache__/
 /build/installers/
 /build/updaters/
 /build/ABPlayer/
+/build/ABPlayer x32/
 AudioBookPlayerAppData.lnk

@@ -35,7 +35,7 @@ AutoCloseWindow true
 ; MUI end ------
 
 Name "${PRODUCT_NAME}"
-OutFile "updaters\ABPlayerUpdate.${PRODUCT_VERSION}.exe"
+OutFile "updaters\ABPlayerUpdate.${PRODUCT_VERSION}{arch}.exe"
 InstallDir "$PROGRAMFILES\ABPlayer"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show

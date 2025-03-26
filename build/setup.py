@@ -6,6 +6,7 @@
 
 import json
 import os
+import platform
 import re
 import shutil
 
@@ -17,16 +18,18 @@ from version import Version
 
 
 DEV: bool = False
-__version__ = Version(2, 1, 4)
+__version__ = Version(2, 2, 0)
+arch = " x32" if platform.architecture()[0] == "32bit" else ""
 dev_path = os.path.join(os.path.dirname(__file__), "..", "ABPlayer")
 run_file_path = os.path.join(dev_path, "run.py")
 main_file_path = os.path.join(dev_path, "main.py")
+last_build_fp = f"last_build{arch}.json"
 
 
 # CHECK LAST BUILD
 
-if os.path.exists("last_build.json"):
-    with open("last_build.json", encoding="utf-8") as file:
+if os.path.exists(last_build_fp):
+    with open(last_build_fp, encoding="utf-8") as file:
         last_build = orjson.loads(file.read())
 
     last_build_version = Version.from_str(last_build["version"])
@@ -71,12 +74,12 @@ with open(r"sources/version_file", "w") as file:
     file.write(text)
 
 # BUILD
-shutil.rmtree("ABPlayer", ignore_errors=True)
+shutil.rmtree(f"ABPlayer{arch}", ignore_errors=True)
 PyInstaller.__main__.run(
     [
         run_file_path,
         "-D",
-        "-n=ABPlayer",
+        f"-n=ABPlayer{arch}",
         f"--version-file=version_file",
         "--icon=icon.ico",
         "--distpath=.",
@@ -84,11 +87,12 @@ PyInstaller.__main__.run(
         "--specpath=sources",
         "-y",
         "--clean",
-        "-w" if not DEV else "",
+        *(("-w",) if not DEV else ()),
         # "--onefile",
         f"--add-data={os.path.join(dev_path, 'web', 'static')};static",
         f"--add-data={os.path.join(dev_path, 'web', 'templates')};templates",
         f"--add-data={os.path.join(dev_path, 'drivers', 'bin')};bin",
+        f"--add-data={os.path.join(dev_path, 'locales')};locales",
     ]
 )
 shutil.rmtree("temp")
@@ -103,10 +107,10 @@ if not DEV and dev_env_vars:
 # SAVING INFO ABOUT CURRENT BUILD
 print("\nSaving build info")
 current_build = {"version": str(__version__), "files": {}}
-for root, _, file_names in os.walk("ABPlayer"):
+for root, _, file_names in os.walk(f"ABPlayer{arch}"):
     current_build["files"][root] = file_names
-with open("last_build.json", "w", encoding="utf-8") as file:
+with open(last_build_fp, "w", encoding="utf-8") as file:
     file.write(json.dumps(current_build, indent=4))
 
 print("Preparing nsis")
-prepare_nsis(current_build)
+prepare_nsis(current_build, arch)
