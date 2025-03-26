@@ -80,7 +80,9 @@ class M3U8Downloader(BaseDownloader):
 
     def _finish(self) -> None:
         # Merging ts files and converting they to mp3 files
-        ts_files = list(self.downloaded_files.values())
+        ts_files = [
+            self.downloaded_files[i] for i in sorted(self.downloaded_files.keys())
+        ]
         self.downloaded_files = {}
         for item_index, item in enumerate(self.book.items):
             tss_duration = 0
