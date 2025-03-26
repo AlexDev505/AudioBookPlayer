@@ -10,3 +10,5 @@ pygments==2.17.2
 pycryptodome==3.19.1
 cachetools==5.5.2
 requests-ratelimiter==0.7.0
+aiohttp==3.11.14
+aiofiles==24.1.0
