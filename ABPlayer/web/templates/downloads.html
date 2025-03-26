@@ -1,27 +1,11 @@
 <link rel="stylesheet" href="{{url_for('static', filename='css/downloads.css')}}">
-<script defer src="{{url_for('static', filename='js/downloads.js')}}"></script>
 
 <div id="downloads-page-content">
 
-<div id="downloads-title">Загрузки</div>
+<div id="downloads-title">{{ gettext("downloads") }}</div>
 
 <div id="downloads-container">
-  {% for i in range(0) %}
-  <div class="download-card">
-    <div>
-      <div class="book-title">abooooooooooooooooooba {{ i }}</div>
-      <div class="progress-info">
-        <div class="status" style="display: none"></div>
-        <div class="percent">{{ 2 * i }}%</div>
-        <div class="data-size">1mb/1mb</div>
-      </div>
-    </div>
-    <div>
-      <div class="icon-btn cancel-btn"></div>
-    </div>
-    <div class="progress-bar" style="width: {{ 2 * i }}%"></div>
-  </div>
-  {% endfor %}
+  <div id="no-downloads">{{ gettext("no_downloads") }}</div>
 </div>
 
 </div>

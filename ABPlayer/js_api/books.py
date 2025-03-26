@@ -494,24 +494,24 @@ class DownloadingProcessHandler(BaseDownloadProcessHandler):
 
 class NoSuitableDriver(JSApiError):
     code = 2
-    message = "Нет подходящего драйвера"
+    message = _("no_suitable_driver")
 
 
 class BookAlreadyAdded(JSApiError):
     code = 3
-    message = "Книга уже добавлена в библиотеку"
+    message = _("book.already_exists")
 
 
 class BookNotFound(JSApiError):
     code = 4
-    message = "Книга не найдена"
+    message = _("book.not_found")
 
 
 class BookAlreadyDownloaded(JSApiError):
     code = 5
-    message = "Книга скачивается или уже скачана"
+    message = _("book.already_downloaded")
 
 
 class BookNotDownloaded(JSApiError):
     code = 6
-    message = "Книга не скачана"
+    message = _("book.not_downloaded")

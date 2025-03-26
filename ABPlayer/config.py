@@ -12,6 +12,7 @@ from tools import pretty_view
 FIELDS = {
     "books_folder": os.path.join(os.environ["USERPROFILE"], "documents", "Аудио книги"),
     "dark_theme": "1",
+    "language": "ru",
 }
 
 
@@ -30,7 +31,7 @@ def init() -> None:
 
 def _create_config() -> None:
     """
-    Создает файл конфигурации со значениями по умолчанию.
+    Creates a configuration file with default values.
     """
     with open(os.environ["CONFIG_PATH"], "wb") as file:
         file.write(orjson.dumps(FIELDS))
@@ -38,7 +39,7 @@ def _create_config() -> None:
 
 def _load_config() -> dict:
     """
-    Загружает данные из файла конфигурации.
+    Loads data from the configuration file.
     """
     try:
         with open(os.environ["CONFIG_PATH"], "rb") as file:
@@ -50,9 +51,9 @@ def _load_config() -> dict:
 
 def update_config(*, update_env=True, **fields: [str, ty.Any]) -> None:
     """
-    Обновляет поля в файле конфигурации.
-    :param update_env: True - произойдет обновление переменных окружения.
-    :param fields: Поля для обновления.
+    Updates fields in the configuration file.
+    :param update_env: True - environment variables will be updated.
+    :param fields: Fields to update.
     """
     logger.opt(colors=True).debug(
         "Configuration update. "
@@ -67,9 +68,9 @@ def update_config(*, update_env=True, **fields: [str, ty.Any]) -> None:
 
 def _validate_config(config: dict) -> dict:
     """
-    Проверяет валидность данных конфигурации.
-    Исправляет в случае ошибок.
-    :returns: Данные конфигурации.
+    Validates the configuration data.
+    Fixes in case of errors.
+    :returns: Configuration data.
     """
     if any(key not in FIELDS for key in config):
         config = {field: config.get(field, FIELDS[field]) for field in FIELDS}
@@ -77,15 +78,18 @@ def _validate_config(config: dict) -> dict:
     else:
         need_update_config = False
 
-        if config["dark_theme"] not in {"0", "1"}:
+        if config.get("dark_theme") not in {"0", "1"}:
             config["dark_theme"] = FIELDS["dark_theme"]
             need_update_config = True
         if not (
-            isinstance(config["books_folder"], str)
-            and os.path.isdir(config["books_folder"])
+            isinstance(config.get("books_folder"), str)
+            and os.path.isdir(config.get("books_folder"))
         ):
             config["books_folder"] = FIELDS["books_folder"]
             Path(FIELDS["books_folder"]).mkdir(parents=True, exist_ok=True)
+            need_update_config = True
+        if config.get("language") not in {"ru", "en"}:
+            config["language"] = FIELDS["language"]
             need_update_config = True
 
         if need_update_config:
@@ -96,7 +100,7 @@ def _validate_config(config: dict) -> dict:
 
 def _add_to_env(config: dict) -> None:
     """
-    Добавляет данные конфигурации в переменные окружения.
+    Adds configuration data to environment variables.
     """
     logger.trace("adding configuration to the virtual environment")
     for field in FIELDS:

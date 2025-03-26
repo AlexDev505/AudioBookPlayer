@@ -96,6 +96,7 @@ function PWVReady() {
     pywebview.api.get_downloads().then(showDownloads)
     pywebview.api.get_available_drivers().then(loadAvailableDrivers)
     toggleDarkThemeCheckBox(dark_theme)
+    toggleLanguageButton(lang)
     loadLastListenedBook()
 }
 function parseUrlParams() {

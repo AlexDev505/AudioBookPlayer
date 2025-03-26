@@ -6,6 +6,7 @@ import webview
 from loguru import logger
 
 import config
+import locales
 from database import Database
 from models.book import Book
 from tools import pretty_view
@@ -60,6 +61,7 @@ def start_app(window: webview.Window) -> None:
         os.remove(updater_path)
 
     config.init()
+    locales.set_language(os.environ["language"])
     Database.init()
     init_library(window)
 
