@@ -367,7 +367,7 @@ class BooksApi(JSApi):
 
     @staticmethod
     def _delete_book_files(dir_path: str, files: list[str]) -> None:
-        for file in [*files, "cover.jpg"]:
+        for file in [*files, "cover.jpg", ".abp"]:
             file_path = os.path.join(dir_path, file)
             try:
                 logger.opt(colors=True).trace(f"deleting <y>{file_path}</y>")
