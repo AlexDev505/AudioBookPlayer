@@ -1,12 +1,14 @@
 from __future__ import annotations
 
-import json
+import asyncio
 import os
 import re
 import subprocess
 import typing as ty
+from contextlib import suppress
 
 import eyed3
+from bs4 import BeautifulSoup
 
 
 if ty.TYPE_CHECKING:
@@ -30,6 +32,67 @@ class NotImplementedVariable:
         raise NotImplementedError()
 
 
+class IOTasksManager:
+    """
+    Asynchronous task manager.
+    Implements a queue and limits the number of simultaneously executing tasks.
+    Executes all tasks from `_tasks_generator`.
+    """
+
+    def __init__(self, max_tasks: int = 1):
+        self.max_tasks: int = max_tasks
+        self.tasks_count: int = 0
+        self._tasks_generator: ty.Generator[ty.Coroutine] | None = None
+        self._future: asyncio.Future | None = None
+
+    def execute_tasks_factory(
+        self, tasks_generator: ty.Generator[ty.Coroutine]
+    ) -> None:
+        """
+        Setups `_tasks_generator` and waits for finishing.
+        """
+        self._tasks_generator = tasks_generator
+        asyncio.run(self._wait_finishing())
+
+    def _run_next(self) -> None:
+        """
+        Starts the next task.
+        """
+        if not self._future:
+            return
+        if coro := next(self._tasks_generator, None):
+            self.tasks_count += 1
+            asyncio.create_task(coro).add_done_callback(self._task_done_callback)
+        elif self.tasks_count == 0:
+            self.terminate()
+
+    def _task_done_callback(self, _: asyncio.Task) -> None:
+        """
+        Calls when task is done.
+        Starts the next task.
+        """
+        self.tasks_count -= 1
+        self._run_next()
+
+    async def _wait_finishing(self) -> None:
+        """
+        Creates start tasks pool and waits `_future`
+        """
+        self._future = asyncio.Future()
+        for _ in range(self.max_tasks):
+            self._run_next()
+        with suppress(asyncio.CancelledError):
+            await self._future
+
+    def terminate(self) -> None:
+        """
+        Stops running next tasks.
+        """
+        if self._future:
+            self._future.cancel()
+            self._future = None
+
+
 def prepare_file_metadata(
     file_path: ty.Union[str, Path],
     author: str,
@@ -37,11 +100,11 @@ def prepare_file_metadata(
     item_index: int,
 ) -> None:
     """
-    Изменяет метаданные аудио файла.
-    :param file_path: Путь к аудио файлу.
-    :param author: Автор книги.
-    :param title: Название главы.
-    :param item_index: Порядковый номер файла.
+    Modifies the metadata of the audio file.
+    :param file_path: Path to the audio file.
+    :param author: Author of the book.
+    :param title: Title of the chapter.
+    :param item_index: Sequential number of the file.
     """
     file = eyed3.load(file_path)
     file.initTag()
@@ -53,20 +116,30 @@ def prepare_file_metadata(
 
 def get_audio_file_duration(file_path: Path) -> float:
     """
-    :param file_path: Путь к аудио файлу.
-    :returns: Длительность аудио файла в секундах.
+    :param file_path: Path to the audio file.
+    :returns: Duration of the audio file in seconds.
     """
     result = subprocess.check_output(
-        rf'{os.environ["FFPROBE_PATH"]} -v quiet -show_streams -of json "{file_path}"',
-        shell=True,
+        rf'{os.environ["FFMPEG_PATH"]} -v quiet -stats -i "{file_path}" -f null -',
+        stderr=subprocess.STDOUT,
     ).decode()
-    fields = json.loads(result)["streams"][0]
-    return float(fields["duration"])
+    if not (
+        match := re.search(
+            r"time=(?P<h>\d+):(?P<m>\d{2}):(?P<s>\d{2}).(?P<ms>\d{2})", result
+        )
+    ):
+        return 0
+    return (
+        int(match.group("h")) * 3600
+        + int(match.group("m")) * 60
+        + int(match.group("s"))
+        + int(match.group("ms")) / 100
+    )
 
 
 def safe_name(text: str) -> str:
     """
-    Убирает или заменяет символы не допустимые для имени файла Windows.
+    Removes or replaces characters not allowed in Windows file names.
     """
     while text.count('"') >= 2:
         text = re.sub(r'"(.*?)"', r"«\g<1>»", text)
@@ -75,7 +148,7 @@ def safe_name(text: str) -> str:
 
 def create_instance_id(obj: ty.Any) -> int:
     """
-    Создает идентификатор экземпляра.
+    Creates an instance identifier.
     >>> class A:
     ...     def __init__(self):
     ...         create_instance_id(self)
@@ -95,6 +168,14 @@ def create_instance_id(obj: ty.Any) -> int:
 
 def instance_id(obj: ty.Any) -> int | None:
     """
-    :returns: Идентификатор экземпляра.
+    :returns: Instance identifier.
     """
     return getattr(obj, "_instance_id", None)
+
+
+def html_to_text(html: str) -> str:
+    """
+    Fetches all text from HTML.
+    """
+    soup = BeautifulSoup(html, "html.parser")
+    return soup.get_text()

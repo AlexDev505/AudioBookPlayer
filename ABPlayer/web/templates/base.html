@@ -12,6 +12,7 @@
     var menu_opened = {{ is_main_menu_opened|tojson }}
     var filter_menu_opened = {{ is_filter_menu_opened|tojson }}
     var required_drivers = {{ [] if not required_drivers else required_drivers|tojson }}
+    var lang = {{ lang|tojson }}
     var dark_theme = {{ (true if dark_theme else false)|tojson }}
     var last_volume = {{ volume|tojson }}
     var last_speed = {{ speed|tojson }}
@@ -19,7 +20,7 @@
     var only_stable = {{ only_stable|tojson }}
     var stable_version = {{ stable_version|tojson }}
   </script>
-  <script defer src="{{url_for('static', filename='js/base.js')}}"></script>
+  <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
 </head>
 <body>
   <div id="top-bar">
@@ -34,16 +35,16 @@
   <div id="central-frame">
     <div id="side-menu" class="{{ 'collapsed' if not is_main_menu_opened else '' }}">
       <div>
-        <div id="menu-btn" class="iconned-btn" onclick="toggleMenu()"><span>скрыть меню</span></div>
+        <div id="menu-btn" class="iconned-btn" onclick="toggleMenu()"><span>{{ gettext('base.hide_menu') }}</span></div>
         <hr>
-        <div id="library-btn" class="iconned-btn" onclick="openLibraryPage()"><span>мои книги</span></div>
-        <div id="favorite-btn" class="iconned-btn" onclick="openLibraryPage(true)"><span>избранные</span></div>
-        <div id="add-book-btn" class="iconned-btn" onclick="page('search-page').show()"><span>новая книга</span></div>
-        <div id="downloads-btn" class="iconned-btn" onclick="page('downloads-page').show()"><span>загрузки</span></div>
+        <div id="library-btn" class="iconned-btn" onclick="openLibraryPage()"><span>{{ gettext("base.library") }}</span></div>
+        <div id="favorite-btn" class="iconned-btn" onclick="openLibraryPage(true)"><span>{{ gettext("base.favorite") }}</span></div>
+        <div id="add-book-btn" class="iconned-btn" onclick="page('search-page').show()"><span>{{ gettext("base.search_book") }}</span></div>
+        <div id="downloads-btn" class="iconned-btn" onclick="page('downloads-page').show()"><span>{{ gettext("base.downloads") }}</span></div>
       </div>
       <div>
-        <div id="library-dir-btn" class="iconned-btn" onclick="openLibraryDir()"><span>папка с книгами</span></div>
-        <div id="settings-btn" class="iconned-btn" onclick="page('settings-page').show()"><span>настройки</span></div>
+        <div id="library-dir-btn" class="iconned-btn" onclick="openLibraryDir()"><span>{{ gettext("base.books_folder") }}</span></div>
+        <div id="settings-btn" class="iconned-btn" onclick="page('settings-page').show()"><span>{{ gettext("base.settings") }}</span></div>
       </div>
     </div>
     <div id="content-frame">
@@ -51,8 +52,8 @@
         <div>
           <div class="icon-btn small-playback-control play" onclick="player.togglePlay()"></div>
           <div class="book-info">
-            <div class="book-title">Тринитротолуол. Метка хаоса как образ мышления</div>
-            <div class="listening-progres">88% прослушано</div>
+            <div class="book-title"></div>
+            <div class="listening-progres"></div>
           </div>
         </div>
         <div>
@@ -90,5 +91,12 @@
   <div class="size-grip side-grip" data-place="top"></div>
   <div class="size-grip side-grip" data-place="right"></div>
   <div class="size-grip side-grip" data-place="bottom"></div>
+
+  <script defer>{% include "js/base.js" %}</script>
+  <script defer>{% include "js/settings.js" %}</script>
+  <script defer>{% include "js/book.js" %}</script>
+  <script defer>{% include "js/library.js" %}</script>
+  <script defer>{% include "js/downloads.js" %}</script>
+  <script defer>{% include "js/search.js" %}</script>
 </body>
 </html>

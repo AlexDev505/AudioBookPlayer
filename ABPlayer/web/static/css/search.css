@@ -125,10 +125,13 @@
   margin-right: 4px;
 }
 .item-author::before {content: url(../images/person.svg)}
+.item-reader:empty {display: none}
 .item-reader::before {content: url(../images/mic.svg)}
+.item-duration:empty {display: none}
 .item-duration::before {content: url(../images/clock.svg)}
-.item-driver::before {content: url(../images/hdd.svg)}
+.item-series-name:empty {display: none}
 .item-series-name::before {content: url(../images/book.svg)}
+.item-driver::before {content: url(../images/hdd.svg)}
 
 .add-book-btn {
   display: flex;

@@ -18,6 +18,9 @@
 #library-dir-setting {display: flex; align-items: center;}
 #library-dir-setting > div:not(:last-child) {margin-right: 8px}
 
+#language-setting {display: flex}
+.lang-checkbox:not(:last-child) {margin-right: 10px}
+
 #about-app {padding: 0 8px 12px 0}
 #about-app hr {
   border-radius: 20%;

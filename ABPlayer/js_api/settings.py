@@ -15,6 +15,7 @@ from loguru import logger
 from orjson import orjson
 
 import config
+import locales
 import temp_file
 from database import Database
 from models.book import Book
@@ -41,6 +42,12 @@ class SettingsApi(JSApi):
     def set_dark_mode(self, value: bool):
         logger.opt(colors=True).debug(f"request: <r>set dark mode</r> | <y>{value}</y>")
         config.update_config(dark_theme=str(int(value)))
+        return self.make_answer()
+
+    def set_language(self, lang: str):
+        logger.opt(colors=True).debug(f"request: <r>set language</r> | <y>{lang}</y>")
+        config.update_config(language=lang)
+        locales.set_language(lang)
         return self.make_answer()
 
     def change_library_dir(self):
@@ -219,7 +226,7 @@ class SettingsApi(JSApi):
             return self.error(last_release)
 
         last_version = last_release["tag_name"]
-        updater_file_name = f"ABPlayerUpdate.{last_version}.exe"
+        updater_file_name = f"ABPlayerUpdate.{last_version}{os.environ["ARCH"]}.exe"
         for asset in last_release["assets"]:
             if updater_file_name == asset["name"]:
                 updater_url = asset["browser_download_url"]
@@ -273,9 +280,9 @@ class SettingsApi(JSApi):
 
 class RequestCanceled(JSApiError):
     code = 7
-    message = "Операция отменена"
+    message = _("canceled")
 
 
 class UpdateFileNotFound(JSApiError):
     code = 8
-    message = "Файл обновления не найден"
+    message = _("update.file_not_found")

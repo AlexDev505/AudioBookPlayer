@@ -1,0 +1,348 @@
+# English translations for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-03-15 01:45+0700\n"
+"PO-Revision-Date: 2025-03-14 23:58+0700\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../abplayer/drivers/akniga.py:108 ../../abplayer/drivers/akniga.py:252
+#: ../../abplayer/drivers/izibuk.py:22 ../../abplayer/drivers/izibuk.py:149
+#: ../../abplayer/drivers/knigavuhe.py:30
+#: ../../abplayer/drivers/knigavuhe.py:204
+#: ../../abplayer/drivers/librivox.py:72 ../../abplayer/drivers/librivox.py:158
+msgid "unknown_author"
+msgstr "Unknown author"
+
+#: ../../abplayer/js_api/books.py:497
+msgid "no_suitable_driver"
+msgstr "No suitable driver"
+
+#: ../../abplayer/js_api/books.py:502
+msgid "book.already_exists"
+msgstr "The book is already in the library"
+
+#: ../../abplayer/js_api/books.py:507
+msgid "book.not_found"
+msgstr "Book not found"
+
+#: ../../abplayer/js_api/books.py:512
+msgid "book.already_downloaded"
+msgstr "The book being downloaded or has already been downloaded"
+
+#: ../../abplayer/js_api/books.py:517
+msgid "book.not_downloaded"
+msgstr "The book is not downloaded"
+
+#: ../../abplayer/js_api/js_api.py:70
+msgid "connection_issues"
+msgstr "Connection issues"
+
+#: ../../abplayer/js_api/settings.py:283
+msgid "canceled"
+msgstr "Operation cancelled"
+
+#: ../../abplayer/js_api/settings.py:288
+msgid "update.file_not_found"
+msgstr "Update file not found"
+
+#: ../../abplayer/web/templates/base.html:38
+msgid "base.hide_menu"
+msgstr "Hide menu"
+
+#: ../../abplayer/web/templates/base.html:40
+msgid "base.library"
+msgstr "My books"
+
+#: ../../abplayer/web/templates/base.html:41
+msgid "base.favorite"
+msgstr "Favourites"
+
+#: ../../abplayer/web/templates/base.html:42
+msgid "base.search_book"
+msgstr "New book"
+
+#: ../../abplayer/web/templates/base.html:43
+msgid "base.downloads"
+msgstr "Downloads"
+
+#: ../../abplayer/web/templates/base.html:46
+msgid "base.books_folder"
+msgstr "Books folder"
+
+#: ../../abplayer/web/templates/base.html:47
+msgid "base.settings"
+msgstr "Settings"
+
+#: ../../abplayer/web/templates/book.html:30
+#: ../../abplayer/web/templates/book.html:32
+msgid "s"
+msgstr "s"
+
+#: ../../abplayer/web/templates/book.html:36
+msgid "wait_for_downloading_end"
+msgstr "Wait for the download to finish"
+
+#: ../../abplayer/web/templates/book.html:38
+msgid "online_listening_not_provided"
+msgstr ""
+"Online listening is currently unavailable\n"
+"Download the book to start listening"
+
+#: ../../abplayer/web/templates/book.html:39
+msgid "book.download"
+msgstr "Download"
+
+#: ../../abplayer/web/templates/downloads.html:5
+msgid "downloads"
+msgstr "Downloads"
+
+#: ../../abplayer/web/templates/downloads.html:8
+msgid "no_downloads"
+msgstr "No active downloads"
+
+#: ../../abplayer/web/templates/library.html:9
+msgid "filters.query"
+msgstr "Search in library"
+
+#: ../../abplayer/web/templates/library.html:12
+msgid "filters.reverse_order"
+msgstr "In reverse order"
+
+#: ../../abplayer/web/templates/library.html:14
+msgid "filters.authors"
+msgstr "Authors"
+
+#: ../../abplayer/web/templates/library.html:16
+msgid "filters.series"
+msgstr "Series"
+
+#: ../../abplayer/web/templates/js/library.js:151
+#: ../../abplayer/web/templates/library.html:23
+msgid "library"
+msgstr "Library"
+
+#: ../../abplayer/web/templates/library.html:26
+msgid "library.all"
+msgstr "All"
+
+#: ../../abplayer/web/templates/library.html:27
+msgid "library.new"
+msgstr "New"
+
+#: ../../abplayer/web/templates/library.html:28
+msgid "library.in_process"
+msgstr "In process"
+
+#: ../../abplayer/web/templates/library.html:29
+msgid "library.listened"
+msgstr "Listened"
+
+#: ../../abplayer/web/templates/search.html:7
+msgid "search_for_book"
+msgstr "Search for book"
+
+#: ../../abplayer/web/templates/search.html:10
+msgid "begin_typing"
+msgstr "Start typing or paste a link"
+
+#: ../../abplayer/web/templates/settings.html:7
+msgid "interface"
+msgstr "Interface"
+
+#: ../../abplayer/web/templates/settings.html:10
+msgid "dark_theme"
+msgstr "Dark theme"
+
+#: ../../abplayer/web/templates/settings.html:15
+msgid "language"
+msgstr "Language 🌐"
+
+#: ../../abplayer/web/templates/settings.html:24
+msgid "storage"
+msgstr "Storage"
+
+#: ../../abplayer/web/templates/settings.html:27
+msgid "books_folder"
+msgstr "Books folder"
+
+#: ../../abplayer/web/templates/settings.html:28
+msgid "open"
+msgstr "Open"
+
+#: ../../abplayer/web/templates/settings.html:29
+msgid "change"
+msgstr "Change"
+
+#: ../../abplayer/web/templates/settings.html:41
+msgid "version"
+msgstr "Version"
+
+#: ../../abplayer/web/templates/settings.html:44
+msgid "developer"
+msgstr "Developer"
+
+#: ../../abplayer/web/templates/settings.html:45
+msgid "project_page"
+msgstr "Project page"
+
+#: ../../abplayer/web/templates/js/book.js:21
+#: ../../abplayer/web/templates/js/book.js:122
+#: ../../abplayer/web/templates/js/book.js:124
+#: ../../abplayer/web/templates/js/book.js:145
+#: ../../abplayer/web/templates/js/library.js:231
+msgid "book.listening_progress"
+msgstr "Listening progress"
+
+#: ../../abplayer/web/templates/js/book.js:22
+#: ../../abplayer/web/templates/js/library.js:232
+msgid "book.added"
+msgstr "Added"
+
+#: ../../abplayer/web/templates/js/downloads.js:38
+msgid "downloading.initializing"
+msgstr "Initializing"
+
+#: ../../abplayer/web/templates/js/downloads.js:56
+msgid "downloading.waiting"
+msgstr "Waiting"
+
+#: ../../abplayer/web/templates/js/downloads.js:57
+msgid "downloading.preparing"
+msgstr "Preparing"
+
+#: ../../abplayer/web/templates/js/downloads.js:58
+msgid "downloading.downloading"
+msgstr "Downloading"
+
+#: ../../abplayer/web/templates/js/downloads.js:59
+msgid "downloading.ending"
+msgstr "Ending"
+
+#: ../../abplayer/web/templates/js/downloads.js:60
+msgid "downloading.finished"
+msgstr "Download finished"
+
+#: ../../abplayer/web/templates/js/downloads.js:61
+msgid "downloading.terminating"
+msgstr "Stopping"
+
+#: ../../abplayer/web/templates/js/downloads.js:91
+msgid "book.downloaded"
+msgstr "Downloaded"
+
+#: ../../abplayer/web/templates/js/library.js:149
+msgid "library.favorite"
+msgstr "Library: Favourites"
+
+#: ../../abplayer/web/templates/js/library.js:297
+msgid "book.book_deleted_but_files_already_exists"
+msgstr "Deleted from library, but downloaded files remain"
+
+#: ../../abplayer/web/templates/js/library.js:298
+msgid "book.delete_files"
+msgstr "Delete remaining files"
+
+#: ../../abplayer/web/templates/js/library.js:301
+msgid "book.deleted_from_library"
+msgstr "Deleted from library"
+
+#: ../../abplayer/web/templates/js/library.js:320
+msgid "book.files_deleted"
+msgstr "%s book files deleted"
+
+#: ../../abplayer/web/templates/js/search.js:104
+msgid "book.add_to_library"
+msgstr "Add to library"
+
+#: ../../abplayer/web/templates/js/search.js:107
+msgid "search.empty"
+msgstr "Nothing found"
+
+#: ../../abplayer/web/templates/js/settings.js:34
+msgid "books_folder.changed"
+msgstr "Books folder changed"
+
+#: ../../abplayer/web/templates/js/settings.js:34
+msgid "books_folder.books_added"
+msgstr "Books discovered"
+
+#: ../../abplayer/web/templates/js/settings.js:38
+msgid "books_folder.downloaded_books_in_old_folder"
+msgstr "Book files are in previous location"
+
+#: ../../abplayer/web/templates/js/settings.js:39
+msgid "books_folder.move_to_new_folder"
+msgstr "Move everything to new location"
+
+#: ../../abplayer/web/templates/js/settings.js:40
+msgid "books_folder.delete_old_books"
+msgstr "Delete files in previous location"
+
+#: ../../abplayer/web/templates/js/settings.js:46
+msgid "books_folder.moving_files"
+msgstr "Moving files to new location"
+
+#: ../../abplayer/web/templates/js/settings.js:46
+#: ../../abplayer/web/templates/js/settings.js:54
+#: ../../abplayer/web/templates/js/settings.js:85
+msgid "it_can_take_some_time"
+msgstr "This may take some time"
+
+#: ../../abplayer/web/templates/js/settings.js:50
+msgid "books_folder.moving_finished"
+msgstr "Transfer complete"
+
+#: ../../abplayer/web/templates/js/settings.js:50
+msgid "books_folder.books_moved"
+msgstr "Book Files moved"
+
+#: ../../abplayer/web/templates/js/settings.js:54
+msgid "books_folder.deleting_files"
+msgstr "Delete files"
+
+#: ../../abplayer/web/templates/js/settings.js:58
+msgid "books_folder.deleting_finished"
+msgstr "Deletion complete"
+
+#: ../../abplayer/web/templates/js/settings.js:58
+msgid "books_folder.books_deleted"
+msgstr "Book files deleted"
+
+#: ../../abplayer/web/templates/js/settings.js:70
+msgid "update.available"
+msgstr "Update available"
+
+#: ../../abplayer/web/templates/js/settings.js:71
+#: ../../abplayer/web/templates/js/settings.js:77
+msgid "update.changelog"
+msgstr "Changelog"
+
+#: ../../abplayer/web/templates/js/settings.js:72
+#: ../../abplayer/web/templates/js/settings.js:78
+msgid "update.install"
+msgstr "Install"
+
+#: ../../abplayer/web/templates/js/settings.js:76
+msgid "update.new_testing_version"
+msgstr "New testing version available"
+
+#: ../../abplayer/web/templates/js/settings.js:79
+msgid "update.no_suggest_tests"
+msgstr "Do not suggest participation in testing"
+
+#: ../../abplayer/web/templates/js/settings.js:85
+msgid "update.downloading"
+msgstr "Downloading update"

@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import asyncio
 import os
+import re
 import shutil
 import threading
 import typing as ty
@@ -8,19 +10,29 @@ from abc import ABC, abstractmethod
 from enum import Enum
 from pathlib import Path
 
+import aiofiles
+import aiohttp
 import requests
 from loguru import logger
 
-from .tools import NotImplementedVariable, create_instance_id, instance_id
+from models.book import BookFiles
+from tools import convert_from_bytes, get_file_hash
+from .tools import (
+    NotImplementedVariable,
+    create_instance_id,
+    instance_id,
+    IOTasksManager,
+    prepare_file_metadata,
+)
 
 
 if ty.TYPE_CHECKING:
-    from models.book import Book
+    from models.book import Book, BookItem
 
 
 class DownloadProcessStatus(Enum):
     """
-    Статусы прогресса скачивания.
+    Download progress statuses.
     """
 
     WAITING = "waiting"
@@ -34,8 +46,8 @@ class DownloadProcessStatus(Enum):
 
 class BaseDownloadProcessHandler(ABC):
     """
-    Обработчик процесса скачивания.
-    Визуализирует процесс скачивания книги.
+    Download process handler.
+    Visualizes the book download process.
     >>> N = 10
     >>> process_handler = BaseDownloadProcessHandler()
     >>> process_handler.init(N, status=DownloadProcessStatus.DOWNLOADING)
@@ -72,7 +84,7 @@ class BaseDownloadProcessHandler(ABC):
     @abstractmethod
     def show_progress(self) -> None:
         """
-        Отображает прогресс.
+        Displays the progress.
         """
 
     def __repr__(self):
@@ -86,23 +98,23 @@ class BaseDownloadProcessHandler(ABC):
 
 class BaseDownloader(ABC):
     """
-    Загрузчик файлов.
+    File downloader.
     """
 
     def __init__(
         self, book: Book, process_handler: BaseDownloadProcessHandler | None = None
     ):
         self.book = book
+        self.downloaded_files: dict[int, Path] = {}
         self.process_handler = process_handler
+        self.tasks_manager = IOTasksManager(10)
 
-        # Общий размер файлов(в байтах)
-        # Определяется, только если передан `process_handler`
+        # [(<file_name>, <file_url>), ...]
+        self._files: list[tuple[str, str]] = []
+        # Total size of files (in bytes)
+        # Determined only if `process_handler` is passed
         self.total_size: int | None = None
 
-        # Файл открытый для записи
-        self._file: ty.TextIO | None = None
-        # Поток скачивания файла
-        self._file_stream: requests.Response | None = None
         self._terminated: bool = False
 
         create_instance_id(self)
@@ -110,22 +122,174 @@ class BaseDownloader(ABC):
         logger.opt(colors=True).debug(f"initialized. book: {book:styled}")
 
     @abstractmethod
-    def _prepare(self) -> None:
+    def _prepare_files_data(self) -> list[tuple[str, str]]:
         """
-        Подготавливает загрузчик к скачиванию.
-        Метод должен быть реализован в наследуемом классе.
+        Prepares files data: file names and urls.
+        This method must be implemented in the subclass.
         """
 
-    @abstractmethod
-    def _download_book(self) -> None:
+    def download_book(self) -> bool:
         """
-        Скачивает файлы.
-        Метод должен быть реализован в наследуемом классе.
+        Downloads book files.
+        :returns: True - if the download was successful
         """
+        logger.debug("preparing downloading")
+        self._prepare()
+        if not self._terminated:
+            logger.debug("downloading started")
+        if self.process_handler:
+            self.process_handler.init(
+                self.total_size, status=DownloadProcessStatus.DOWNLOADING
+            )
+            self._download_files()
+        if not self._terminated:
+            logger.debug("finishing downloading")
+            if self.process_handler:
+                self.process_handler.status = DownloadProcessStatus.FINISHING
+            self._finish()
+
+        if self._terminated:
+            if self.process_handler:
+                self.process_handler.status = DownloadProcessStatus.TERMINATED
+            logger.debug("terminated")
+
+        return not self._terminated
+
+    def _prepare(self) -> None:
+        """
+        Prepares the downloader for downloading.
+        """
+        self._files = self._prepare_files_data()
+        if self.process_handler:
+            self.total_size = 0
+            # Инициализируем прогресс подготовки
+            self.process_handler.init(
+                len(self._files), status=DownloadProcessStatus.PREPARING
+            )
+            self._calc_total_size()
+
+    def _calc_total_size(self) -> None:
+        """
+        Calculates the total size of the files.
+        """
+        self.process_handler.init(
+            len(self._files), status=DownloadProcessStatus.PREPARING
+        )
+        self.tasks_manager.execute_tasks_factory(
+            (self._add_file_size(file_url) for _, file_url in self._files)
+        )
+
+    async def _add_file_size(self, file_url: str) -> None:
+        """
+        Gets and adds size of file.
+        """
+        if self._terminated:
+            return
+        async with aiohttp.ClientSession() as session:
+            async with session.get(file_url) as response:
+                file_size = response.headers.get("content-length")
+        if not file_size:
+            await asyncio.sleep(1)
+            return await self._add_file_size(file_url)
+        self.total_size += int(file_size)
+        self.process_handler.progress(1)
+
+    def _download_files(self) -> None:
+        """
+        Downloads files.
+        """
+        if not (book_dir_path := Path(self.book.dir_path)).exists():
+            book_dir_path.mkdir(parents=True, exist_ok=True)
+            logger.opt(colors=True).debug(
+                f"book dir <y>{self.book.dir_path}</y> crated"
+            )
+
+        self.tasks_manager.execute_tasks_factory(
+            (
+                self._download_file(i, file_url, file_name)
+                for i, (file_name, file_url) in enumerate(self._files)
+            )
+        )
+
+    async def _download_file(
+        self, file_index: int, file_url: str, file_name: str
+    ) -> None:
+        """
+        Downloads one file.
+        """
+        file_path = Path(os.path.join(self.book.dir_path, file_name))
+        logger.opt(colors=True).debug(f"downloading file <y>{file_index}</y>")
+        logger.opt(colors=True).trace(f"file <y>{file_path}</y> {file_url}")
+
+        async with aiofiles.open(file_path, mode="wb") as file:
+            while not self._terminated:
+                downloaded_size = 0
+                try:
+                    async for chunk in self._iter_chunks(file_url, downloaded_size):
+                        if self._terminated:
+                            return
+                        downloaded_size += len(chunk)
+                        await file.write(chunk)
+                        await file.flush()
+                    break
+                except Exception as err:
+                    logger.opt(colors=True).debug(
+                        f"downloading failed {type(err).__name__}: {err}"
+                    )
+                    await asyncio.sleep(5)
+                    logger.opt(colors=True).trace(
+                        f"retrying download file <y>{file_index}</y>"
+                    )
+
+        self.downloaded_files[file_index] = file_path
+
+    async def _iter_chunks(
+        self, file_url: str, offset: int = 0
+    ) -> ty.AsyncGenerator[bytes]:
+        """
+        Iterates over the bytes chunks.
+        """
+        async with aiohttp.ClientSession(
+            timeout=aiohttp.ClientTimeout(sock_read=240)
+        ) as session:
+            async with session.get(
+                file_url, headers={"Range": f"bytes={offset}-"}
+            ) as response:
+                logger.opt(colors=True).trace(
+                    "{}: <y>{}</y>".format(
+                        file_url,
+                        convert_from_bytes(int(response.headers.get("content-length"))),
+                    )
+                )
+                async for chunk in response.content.iter_chunked(5120):
+                    if self.process_handler:
+                        self.process_handler.progress(len(chunk))
+                    yield chunk
+
+    def _finish(self) -> None:
+        """
+        Finalizes downloading.
+        Prepare files metadata and hashes, downloads preview, saves `.abp` file.
+        """
+        files = BookFiles()
+        for i, item in enumerate(self.book.items):
+            if self._terminated:
+                return
+            file_path = self.downloaded_files[i]
+            logger.trace(f"preparing file metadata {file_path}")
+            prepare_file_metadata(file_path, self.book.author, item.title, i)
+            logger.trace(f"hashing file {file_path}")
+            files[file_path.name] = get_file_hash(file_path)
+        self.book.files = files
+        self.save_preview()
+        self.book.save_to_storage()
+        if self.process_handler:
+            self.process_handler.finish()
+        logger.debug("finished")
 
     def save_preview(self) -> None:
         """
-        Скачивает и сохраняет обложку книги.
+        Downloads and saves the book cover.
         """
         if not self.book.preview:
             return
@@ -144,31 +308,6 @@ class BaseDownloader(ABC):
         except IOError as err:
             logger.error(f"loading preview failed. {type(err).__name__}: {err}")
 
-    def download_book(self) -> bool:
-        """
-        Скачивает файлы книги.
-        :returns: Список с путями к скачанным файлам.
-        """
-        logger.debug("preparing downloading")
-        self._prepare()
-        logger.debug("downloading started")
-        self._download_book()
-
-        if not self._terminated:
-            if self.process_handler:
-                self.process_handler.status = DownloadProcessStatus.FINISHING
-            self.save_preview()
-            self.book.save_to_storage()
-            if self.process_handler:
-                self.process_handler.finish()
-            logger.debug("finished")
-        else:
-            if self.process_handler:
-                self.process_handler.status = DownloadProcessStatus.TERMINATED
-            logger.debug("terminated")
-
-        return not self._terminated  # True - при успешном скачивании
-
     def terminate(self) -> None:
         """
         Прерывает загрузку.
@@ -176,13 +315,7 @@ class BaseDownloader(ABC):
         logger.opt(colors=True).debug(f"<y>{self}</y> terminating")
         self.process_handler.status = DownloadProcessStatus.TERMINATING
         self._terminated = True
-        if self._file:
-            if not self._file.closed:
-                logger.trace("closing file")
-                self._file.close()
-        if self._file_stream:
-            logger.trace("closing file stream")
-            self._file_stream.close()
+        self.tasks_manager.terminate()
 
         logger.opt(colors=True).debug(
             f"<y>{self}</y> clearing tree <y>{self.book.dir_path}</y>"
@@ -193,12 +326,18 @@ class BaseDownloader(ABC):
         except OSError:
             pass
 
+    @staticmethod
+    def _get_item_file_name(item: BookItem) -> str:
+        # Убираем номер файла из названия
+        item_title = re.sub(r"^(\d+) (.+)", r"\g<2>", item.title)
+        return f"{str(item.file_index + 1).rjust(2, '0')}. {item_title}.mp3"
+
     def __repr__(self):
         return f"BookDownloader-{instance_id(self)}"
 
 
 class Driver(ABC):
-    drivers: list[ty.Type[Driver]] = []  # Все доступные драйверы
+    drivers: list[ty.Type[Driver]] = []  # All available drivers
 
     site_url = NotImplementedVariable()
     downloader_factory = NotImplementedVariable()
@@ -218,48 +357,48 @@ class Driver(ABC):
     @staticmethod
     def get_page(url: str) -> requests.Response:
         """
-        :param url: Ссылка на книгу.
-        :returns: Результат GET запроса.
+        :param url: URL of the book.
+        :returns: Result of the GET request.
         """
         return requests.get(url)
 
     @abstractmethod
     def get_book(self, url: str) -> Book:
         """
-        Метод, получающий информацию о книге.
-        Должен быть реализован для каждого драйвера отдельно.
-        :param url: Ссылка на книгу.
-        :returns: Экземпляр книги.
+        Method that retrieves information about a book.
+        Must be implemented for each driver separately.
+        :param url: URL of the book.
+        :returns: Instance of the book.
         """
 
     @abstractmethod
     def get_book_series(self, url: str) -> list[Book]:
         """
-        Метод, получающий информацию о книгах из серии.
-        Должен быть реализован для каждого драйвера отдельно.
-        :param url: Ссылка на книгу.
-        :returns: Список неполных экземпляров книг.
+        Method that retrieves information about books in a series.
+        Must be implemented for each driver separately.
+        :param url: URL of the book.
+        :returns: List of incomplete book instances.
         """
 
     @abstractmethod
     def search_books(self, query: str, limit: int = 10, offset: int = 0) -> list[Book]:
         """
-        Метод, выполняющий поиск книг по запросу.
-        Должен быть реализован для каждого драйвера отдельно.
-        :param query: Поисковый запрос.
-        :param limit: Кол-во книг, которое нужно вернуть.
-        :param offset: Будет пропущено `offset` первых книг.
-        :returns: Список неполных экземпляров книг.
+        Method that performs a search for books by query.
+        Must be implemented for each driver separately.
+        :param query: Search query.
+        :param limit: Number of books to return.
+        :param offset: Number of books to skip from the start.
+        :returns: List of incomplete book instances.
         """
 
     def download_book(
         self, book: Book, process_handler: BaseDownloadProcessHandler | None = None
     ) -> bool:
         """
-        Метод, скачивающий аудио файлы книги.
-        :param book: Экземпляр книги.
-        :param process_handler: Обработчик процесса скачивания.
-        :return: Список путей к файлам.
+        Method that downloads the book's audio files.
+        :param book: Instance of the book.
+        :param process_handler: Handler for the download process.
+        :return: List of file paths.
         """
         self.downloader = self.downloader_factory(book, process_handler)
         return self.downloader.download_book()

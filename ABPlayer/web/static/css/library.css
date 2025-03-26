@@ -229,7 +229,10 @@
   margin-right: 4px
 }
 .book-author::before {content: url(../images/person.svg)}
+.book-reader:empty {display: none}
 .book-reader::before {content: url(../images/mic.svg)}
+.book-duration:empty {display: none}
 .book-duration::before {content: url(../images/clock.svg)}
+.book-series:empty {display: none}
 .book-series::before {content: url(../images/tag.svg)}
 .book-driver::before {content: url(../images/hdd.svg)}

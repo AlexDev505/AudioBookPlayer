@@ -12,7 +12,7 @@ ADDITIONAL_UNINSTALL = (
 )
 
 
-def prepare_nsis(build: dict) -> None:
+def prepare_nsis(build: dict, arch: str) -> None:
     install = ""
     uninstall_files = ""
     uninstall_dirs = []
@@ -31,17 +31,20 @@ def prepare_nsis(build: dict) -> None:
         ADDITIONAL_UNINSTALL + uninstall_files + "\n\n" + "\n".join(uninstall_dirs)
     )
 
-    _prepare_file("installer", build["version"], install, uninstall)
-    _prepare_file("updater", build["version"], install, uninstall)
+    _prepare_file("installer", arch, build["version"], install, uninstall)
+    _prepare_file("updater", arch, build["version"], install, uninstall)
 
 
-def _prepare_file(target: str, version: str, install: str, uninstall: str) -> None:
+def _prepare_file(
+    target: str, arch: str, version: str, install: str, uninstall: str
+) -> None:
     with open(f"{target}_template.nsi") as file:
         text = file.read()
 
+    text = text.replace("{arch}", arch)
     text = text.replace("{version}", version)
     text = text.replace("{install}", install)
     text = text.replace("{uninstall}", uninstall)
 
-    with open(f"{target}.nsi", "w") as file:
+    with open(f"{target}{arch}.nsi", "w") as file:
         file.write(text)

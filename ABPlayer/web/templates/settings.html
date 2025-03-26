@@ -1,24 +1,32 @@
 <link rel="stylesheet" href="{{url_for('static', filename='css/settings.css')}}">
-<script defer src="{{url_for('static', filename='js/settings.js')}}"></script>
 
 <div id="settings-page-content">
 
 <div id="settings-container">
   <div class="settings-section">
-    <div class="settings-section-title">Интерфейс</div>
+    <div class="settings-section-title">{{ gettext("interface") }}</div>
     <div class="settings-section-container">
       <div class="settings-section-item" id="color-scheme-setting">
-        <div class="checkbox" onclick="toggleDarkTheme()" id="dark-theme-checkbox">Тёмная тема</div>
+        <div class="checkbox" onclick="toggleDarkTheme()" id="dark-theme-checkbox">{{ gettext("dark_theme") }}</div>
       </div>
     </div>
   </div>
   <div class="settings-section">
-    <div class="settings-section-title">Хранилище</div>
+    <div class="settings-section-title">{{ gettext("language") }}</div>
+    <div class="settings-section-container">
+      <div class="settings-section-item" id="language-setting">
+        <div class="checkbox lang-checkbox" data-lang="ru" onclick="setLanguage(this)">Русский</div>
+        <div class="checkbox lang-checkbox" data-lang="en" onclick="setLanguage(this)">English</div>
+      </div>
+    </div>
+  </div>
+  <div class="settings-section">
+    <div class="settings-section-title">{{ gettext("storage") }}</div>
     <div class="settings-section-container">
       <div class="settings-section-item" id="library-dir-setting">
-        <div class="settings-section-item-title">Папка для книг</div>
-        <div class="button" onclick="openLibraryDir()">Открыть</div>
-        <div class="button" onclick="changeLibraryDir()">Изменить</div>
+        <div class="settings-section-item-title">{{ gettext("books_folder") }}</div>
+        <div class="button" onclick="openLibraryDir()">{{ gettext("open") }}</div>
+        <div class="button" onclick="changeLibraryDir()">{{ gettext("change") }}</div>
       </div>
     </div>
   </div>
@@ -30,11 +38,11 @@
     <div id="app-icon"></div>
     <div>
       <div id="app-title">Audio Book Player</div>
-      <div id="app-version">Версия: {{ app_version }}</div>
+      <div id="app-version">{{ gettext("version") }}: {{ app_version }}</div>
     </div>
   </div>
-  <div id="developer-link">Разработчик: <a href="https://github.com/AlexDev505" target="_blank">AlexDev505</a></div>
-  <a id="project-link" href="https://github.com/AlexDev505/AudioBookPlayer" target="_blank">Страница проекта</a>
+  <div id="developer-link">{{ gettext("developer") }}: <a href="https://github.com/AlexDev505" target="_blank">AlexDev505</a></div>
+  <a id="project-link" href="https://github.com/AlexDev505/AudioBookPlayer" target="_blank">{{ gettext("project_page") }}</a>
 </div>
 
 </div>

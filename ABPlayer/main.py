@@ -1,4 +1,5 @@
 import os
+import platform
 
 from tools import pretty_view
 
@@ -16,13 +17,13 @@ os.environ["DATABASE_PATH"] = os.path.join(os.environ["APP_DIR"], "library.sqlit
 os.environ["DEBUG_PATH"] = os.path.join(os.environ["APP_DIR"], "debug.log")
 # Путь к файлу с временными данными
 os.environ["TEMP_PATH"] = os.path.join(os.environ["APP_DIR"], "temp.txt")
+# Архитектура системы
+os.environ["ARCH"] = " x32" if platform.architecture()[0] == "32bit" else ""
 # Версия приложения
-os.environ["VERSION"] = "2.1.4"
+os.environ["VERSION"] = "2.2.0"
 
 # DEV
-os.environ["CONSOLE"] = "1"
-os.environ["DEBUG"] = "1"
-os.environ["LOGGING_LEVEL"] = "TRACE"
+
 
 
 from logger import logger  # noqa
