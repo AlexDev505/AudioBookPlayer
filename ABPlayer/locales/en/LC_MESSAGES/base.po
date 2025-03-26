@@ -277,8 +277,7 @@ msgstr "Books folder changed"
 
 #: ../../abplayer/web/templates/js/settings.js:34
 msgid "books_folder.books_added"
-#,fuzzy
-msgstr "Books moved to new folder"
+msgstr "Books discovered"
 
 #: ../../abplayer/web/templates/js/settings.js:38
 msgid "books_folder.downloaded_books_in_old_folder"
@@ -304,12 +303,10 @@ msgstr "This may take some time"
 
 #: ../../abplayer/web/templates/js/settings.js:50
 msgid "books_folder.moving_finished"
-#,fuzzy
 msgstr "Transfer complete"
 
 #: ../../abplayer/web/templates/js/settings.js:50
 msgid "books_folder.books_moved"
-#,fuzzy
 msgstr "Book Files moved"
 
 #: ../../abplayer/web/templates/js/settings.js:54
@@ -322,7 +319,6 @@ msgstr "Deletion complete"
 
 #: ../../abplayer/web/templates/js/settings.js:58
 msgid "books_folder.books_deleted"
-#,fuzzy
 msgstr "Book files deleted"
 
 #: ../../abplayer/web/templates/js/settings.js:70
