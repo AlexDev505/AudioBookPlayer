@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-import json
+import asyncio
 import os
 import re
 import subprocess
 import typing as ty
+from contextlib import suppress
 
 import eyed3
 from bs4 import BeautifulSoup
@@ -29,6 +30,67 @@ class NotImplementedVariable:
 
     def __get__(self, instance, owner):
         raise NotImplementedError()
+
+
+class IOTasksManager:
+    """
+    Asynchronous task manager.
+    Implements a queue and limits the number of simultaneously executing tasks.
+    Executes all tasks from `_tasks_generator`.
+    """
+
+    def __init__(self, max_tasks: int = 1):
+        self.max_tasks: int = max_tasks
+        self.tasks_count: int = 0
+        self._tasks_generator: ty.Generator[ty.Coroutine] | None = None
+        self._future: asyncio.Future | None = None
+
+    def execute_tasks_factory(
+        self, tasks_generator: ty.Generator[ty.Coroutine]
+    ) -> None:
+        """
+        Setups `_tasks_generator` and waits for finishing.
+        """
+        self._tasks_generator = tasks_generator
+        asyncio.run(self._wait_finishing())
+
+    def _run_next(self) -> None:
+        """
+        Starts the next task.
+        """
+        if not self._future:
+            return
+        if coro := next(self._tasks_generator, None):
+            self.tasks_count += 1
+            asyncio.create_task(coro).add_done_callback(self._task_done_callback)
+        elif self.tasks_count == 0:
+            self.terminate()
+
+    def _task_done_callback(self, _: asyncio.Task) -> None:
+        """
+        Calls when task is done.
+        Starts the next task.
+        """
+        self.tasks_count -= 1
+        self._run_next()
+
+    async def _wait_finishing(self) -> None:
+        """
+        Creates start tasks pool and waits `_future`
+        """
+        self._future = asyncio.Future()
+        for _ in range(self.max_tasks):
+            self._run_next()
+        with suppress(asyncio.CancelledError):
+            await self._future
+
+    def terminate(self) -> None:
+        """
+        Stops running next tasks.
+        """
+        if self._future:
+            self._future.cancel()
+            self._future = None
 
 
 def prepare_file_metadata(
@@ -58,11 +120,21 @@ def get_audio_file_duration(file_path: Path) -> float:
     :returns: Длительность аудио файла в секундах.
     """
     result = subprocess.check_output(
-        rf'{os.environ["FFPROBE_PATH"]} -v quiet -show_streams -of json "{file_path}"',
-        shell=True,
+        rf'{os.environ["FFMPEG_PATH"]} -v quiet -stats -i "{file_path}" -f null -',
+        stderr=subprocess.STDOUT,
     ).decode()
-    fields = json.loads(result)["streams"][0]
-    return float(fields["duration"])
+    if not (
+        match := re.search(
+            r"time=(?P<h>\d+):(?P<m>\d{2}):(?P<s>\d{2}).(?P<ms>\d{2})", result
+        )
+    ):
+        return 0
+    return (
+        int(match.group("h")) * 3600
+        + int(match.group("m")) * 60
+        + int(match.group("s"))
+        + int(match.group("ms")) / 100
+    )
 
 
 def safe_name(text: str) -> str:
