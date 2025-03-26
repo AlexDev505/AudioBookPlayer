@@ -5,7 +5,7 @@ import os
 import re
 import subprocess
 import typing as ty
-from functools import wraps
+from contextlib import suppress
 
 import eyed3
 
@@ -35,56 +35,61 @@ class IOTasksManager:
     """
     Asynchronous task manager.
     Implements a queue and limits the number of simultaneously executing tasks.
+    Executes all tasks from `_tasks_generator`.
     """
 
     def __init__(self, max_tasks: int = 1):
         self.max_tasks: int = max_tasks
         self.tasks_count: int = 0
-        self.planed_tasks_count: int = 0
-        self.planed_coroutines: list[
-            tuple[ty.Coroutine, ty.Callable[[asyncio.Task], None]]
-        ] = []
+        self._tasks_generator: ty.Generator[ty.Coroutine] | None = None
+        self._future: asyncio.Future | None = None
 
-    def add_task(
-        self,
-        coro: ty.Coroutine,
-        callback: ty.Callable[[asyncio.Task], None],
+    def execute_tasks_factory(
+        self, tasks_generator: ty.Generator[ty.Coroutine]
     ) -> None:
         """
-        Adds a task to the queue or runs it if there is a quota.
+        Setups `_tasks_generator` and waits for finishing.
         """
-        self.planed_tasks_count += 1
-        self.planed_coroutines.append((coro, callback))
-        if self.tasks_count < self.max_tasks and self.planed_tasks_count:
-            self._run_next()
+        self._tasks_generator = tasks_generator
+        asyncio.run(self._wait_finishing())
 
     def _run_next(self) -> None:
         """
-        Start the next task.
+        Starts the next task.
         """
-        coro, callback = self.planed_coroutines.pop(0)
-        self.planed_tasks_count -= 1
-        self.tasks_count += 1
-        asyncio.create_task(coro).add_done_callback(
-            self._task_callback_decorator(callback)
-        )
+        if not self._future:
+            return
+        if coro := next(self._tasks_generator, None):
+            self.tasks_count += 1
+            asyncio.create_task(coro).add_done_callback(self._task_done_callback)
+        elif self.tasks_count == 0:
+            self.terminate()
 
-    def _task_callback_decorator(
-        self, callback: ty.Callable[[asyncio.Task], None]
-    ) -> ty.Callable[[asyncio.Task], None]:
+    def _task_done_callback(self, _: asyncio.Task) -> None:
         """
-        A wrapper for task callbacks that reduces the running task counter
-        and starts tasks from the queue.
+        Calls when task is done.
+        Starts the next task.
         """
+        self.tasks_count -= 1
+        self._run_next()
 
-        @wraps(callback)
-        def _wrapper(task: asyncio.Task) -> None:
-            callback(task)
-            self.tasks_count -= 1
-            if self.planed_tasks_count:
-                self._run_next()
+    async def _wait_finishing(self) -> None:
+        """
+        Creates start tasks pool and waits `_future`
+        """
+        self._future = asyncio.Future()
+        for _ in range(self.max_tasks):
+            self._run_next()
+        with suppress(asyncio.CancelledError):
+            await self._future
 
-        return _wrapper
+    def terminate(self) -> None:
+        """
+        Stops running next tasks.
+        """
+        if self._future:
+            self._future.cancel()
+            self._future = None
 
 
 def prepare_file_metadata(
