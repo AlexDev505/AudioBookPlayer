@@ -226,7 +226,7 @@ class SettingsApi(JSApi):
             return self.error(last_release)
 
         last_version = last_release["tag_name"]
-        updater_file_name = f"ABPlayerUpdate.{last_version}.exe"
+        updater_file_name = f"ABPlayerUpdate.{last_version}{os.environ["ARCH"]}.exe"
         for asset in last_release["assets"]:
             if updater_file_name == asset["name"]:
                 updater_url = asset["browser_download_url"]
