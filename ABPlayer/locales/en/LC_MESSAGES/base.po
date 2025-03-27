@@ -346,3 +346,9 @@ msgstr "Do not suggest participation in testing"
 #: ../../abplayer/web/templates/js/settings.js:85
 msgid "update.downloading"
 msgstr "Downloading update"
+
+msgid "localization_by_url"
+msgstr "https://github.com/Koladweep"
+
+msgid "localization_by_name"
+msgstr "Koladweep"

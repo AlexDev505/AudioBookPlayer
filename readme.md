@@ -1,8 +1,10 @@
 # AudioBook Player [![Python 3.12+](https://badgen.net/badge/Python/3.12+/blue)](https://www.python.org/downloads/) [![License: MIT](https://badgen.net/badge/License/MIT/blue)](https://github.com/AlexDev505/AudioBookPlayer/blob/master/LICENSE) [![Platform: Windows](https://badgen.net/badge/Platform/windows/blue?icon=windows)]()
 
+[_english version_](https://github.com/AlexDev505/AudioBookPlayer/blob/master/readme_en.md)
+
 **Audio Book Player** - приложение для Windows, которое позволит вам бесплатно слушать и скачивать аудио книги.
 
-Приложению доступны все книги, которые есть на сайтах [_akniga.org_](https://akniga.org/) и [_knigavuhe.org_](https://knigavuhe.org/).
+Приложению доступны все книги, которые есть на сайтах [_akniga.org_](https://akniga.org/), [_knigavuhe.org_](https://knigavuhe.org/), [_izib.uk_](https://izib.uk) и [_librivoxaudio_](https://archive.org/details/librivoxaudio).
 У этих сайтов огромные библиотеки аудио книг различных жанров и авторов, 
 но как правило сайты с аудио книгами не дают пользователям возможности скачивать свои аудио книги.
 **Audio Book Player** же даёт такую возможность бесплатно без смс и регистрации.

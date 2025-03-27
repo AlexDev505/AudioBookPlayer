@@ -41,7 +41,11 @@
       <div id="app-version">{{ gettext("version") }}: {{ app_version }}</div>
     </div>
   </div>
-  <div id="developer-link">{{ gettext("developer") }}: <a href="https://github.com/AlexDev505" target="_blank">AlexDev505</a></div>
+  <div id="developer-link">{{ gettext("developer") }}: <a href="https://github.com/AlexDev505" target="_blank">AlexDev505</a>
+    {% if gettext("localization_by_name") != "localization_by_name" %}
+    Localization by: <a href="{{ gettext('localization_by_url') }}" target="_blank">{{ gettext('localization_by_name') }}</a>
+    {% endif %}
+  </div>
   <a id="project-link" href="https://github.com/AlexDev505/AudioBookPlayer" target="_blank">{{ gettext("project_page") }}</a>
 </div>
 
