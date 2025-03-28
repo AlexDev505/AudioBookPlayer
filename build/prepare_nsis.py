@@ -42,6 +42,9 @@ def _prepare_file(
         text = file.read()
 
     text = text.replace("{arch}", arch)
+    text = text.replace(
+        "{installdir}", "$PROGRAMFILES32" if arch == " x32" else "$PROGRAMFILES64"
+    )
     text = text.replace("{version}", version)
     text = text.replace("{install}", install)
     text = text.replace("{uninstall}", uninstall)
