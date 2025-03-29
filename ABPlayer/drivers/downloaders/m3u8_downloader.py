@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import binascii
 import os
+import subprocess
 import typing as ty
 from pathlib import Path
 from urllib.parse import urljoin, urlparse
@@ -33,9 +34,10 @@ def convert_ts_to_mp3(ts_file_path: Path, mp3_file_path: Path) -> None:
     """
     Converts ts files to mp3 by ffmpeg.
     """
-    os.system(
+    subprocess.check_output(
         f'{os.environ["FFMPEG_PATH"]} -y -v quiet -i "{ts_file_path}" -vn '
-        f'"{mp3_file_path}"'
+        f'"{mp3_file_path}"',
+        stderr=subprocess.STDOUT,
     )
 
 
