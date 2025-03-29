@@ -27,7 +27,7 @@ from .tools import (
 
 
 if ty.TYPE_CHECKING:
-    from models.book import Book, BookItem
+    from models.book import Book
 
 
 class DownloadProcessStatus(Enum):
@@ -107,7 +107,7 @@ class BaseDownloader(ABC):
         self.book = book
         self.downloaded_files: dict[int, Path] = {}
         self.process_handler = process_handler
-        self.tasks_manager = IOTasksManager(10)
+        self.tasks_manager = IOTasksManager(20)
 
         # [(<file_name>, <file_url>), ...]
         self._files: list[tuple[str, str]] = []
@@ -326,11 +326,11 @@ class BaseDownloader(ABC):
         except OSError:
             pass
 
-    @staticmethod
-    def _get_item_file_name(item: BookItem) -> str:
+    def _get_item_file_name(self, item_index: int) -> str:
+        item = self.book.items[item_index]
         # Убираем номер файла из названия
         item_title = re.sub(r"^(\d+) (.+)", r"\g<2>", item.title)
-        return f"{str(item.file_index + 1).rjust(2, '0')}. {item_title}.mp3"
+        return f"{str(item_index + 1).rjust(2, '0')}. {item_title}.mp3"
 
     def __repr__(self):
         return f"BookDownloader-{instance_id(self)}"

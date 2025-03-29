@@ -17,5 +17,6 @@ class MP3Downloader(BaseDownloader):
 
     def _prepare_files_data(self):
         return [
-            (self._get_item_file_name(item), item.file_url) for item in self.book.items
+            (self._get_item_file_name(i), item.file_url)
+            for i, item in enumerate(self.book.items)
         ]

@@ -15,6 +15,7 @@ page("search-page").onShow = function(el) {
 
 function loadAvailableDrivers(resp) {
     container = document.getElementById("drivers-container")
+    if (required_drivers.length == 0) required_drivers = resp.data
     _required_drivers = required_drivers.slice(0, required_drivers.length)
     required_drivers = []
     for (driver of resp.data) {
@@ -30,8 +31,7 @@ function toggleDriver(driver) {
     if (required_drivers.includes(driver)) {
         required_drivers = required_drivers.filter(v => v !== driver)
     } else required_drivers.push(driver)
-    if (option.classList.contains("checked")) option.classList.remove("checked")
-    else option.classList.add("checked")
+    option.classList.toggle("checked")
     if (document.querySelector("#search-input-line input").value.trim()) searchBooks()
 }
 function toggleDriverOptions() {

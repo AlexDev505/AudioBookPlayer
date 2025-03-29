@@ -4,14 +4,14 @@
 
 <div id="search-input-line-container">
   <div id="search-label-container">
-    <span>{{ gettext("search_for_book") }}</span>
+    <span id="search-label">{{ gettext("search_for_book") }}</span>
+    <button class="icon-btn driver-btn" onclick="toggleDriverOptions()">выбрать источники</button>
+    <div id="drivers-container"></div>
   </div>
   <div id="search-input-line" class="input-line">
     <input placeholder="{{ gettext("begin_typing") }}" oninput="searchBooks()">
     <div class="tools">
-      <button class="icon-btn driver-btn" onclick="toggleDriverOptions()"></button>
       <button class="icon-btn search-btn"></button>
-      <div id="drivers-container"></div>
     </div>
   </div>
 </div>
