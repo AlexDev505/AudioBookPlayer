@@ -4,6 +4,7 @@ import asyncio
 import os
 import re
 import subprocess
+import time
 import typing as ty
 from contextlib import suppress
 
@@ -91,6 +92,8 @@ class IOTasksManager:
         if self._future:
             self._future.cancel()
             self._future = None
+        while self.tasks_count:
+            time.sleep(0.01)
 
 
 def prepare_file_metadata(
