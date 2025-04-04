@@ -26,12 +26,15 @@ def merge_ts_files(ts_file_paths: list[Path], output_file_path: Path) -> None:
     """
     Merges ts files to one.
     """
-    subprocess.check_output(
-        f'copy /b {"+".join(map(lambda x: f'"{x}"', ts_file_paths))} '
+    result = subprocess.check_output(
+        f'copy /b {"+".join(map(lambda x: x.name, ts_file_paths))} '
         f'"{output_file_path}"',
+        cwd=output_file_path.parent,
         shell=True,
         stderr=subprocess.STDOUT,
-    )
+    ).decode()
+    if result:
+        logger.debug(result)
 
 
 def convert_ts_to_mp3(ts_file_path: Path, mp3_file_path: Path) -> None:

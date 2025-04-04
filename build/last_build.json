@@ -1,5 +1,5 @@
 {
-    "version": "2.2.1",
+    "version": "2.2.2",
     "files": {
         "ABPlayer": [
             "ABPlayer.exe"
@@ -49,6 +49,7 @@
             "libffi-8.dll",
             "libssl-3.dll",
             "pyexpat.pyd",
+            "python3.dll",
             "python312.dll",
             "select.pyd",
             "sqlite3.dll",
@@ -89,6 +90,9 @@
         ],
         "ABPlayer\\_internal\\attrs-25.1.0.dist-info\\licenses": [
             "LICENSE"
+        ],
+        "ABPlayer\\_internal\\bcrypt": [
+            "_bcrypt.pyd"
         ],
         "ABPlayer\\_internal\\bin": [
             "ffmpeg.exe"
@@ -170,6 +174,22 @@
         "ABPlayer\\_internal\\Crypto\\Util": [
             "_cpuid_c.pyd",
             "_strxor.pyd"
+        ],
+        "ABPlayer\\_internal\\cryptography": [],
+        "ABPlayer\\_internal\\cryptography\\hazmat": [],
+        "ABPlayer\\_internal\\cryptography\\hazmat\\bindings": [
+            "_rust.pyd"
+        ],
+        "ABPlayer\\_internal\\cryptography-44.0.2.dist-info": [
+            "INSTALLER",
+            "METADATA",
+            "RECORD",
+            "WHEEL"
+        ],
+        "ABPlayer\\_internal\\cryptography-44.0.2.dist-info\\licenses": [
+            "LICENSE",
+            "LICENSE.APACHE",
+            "LICENSE.BSD"
         ],
         "ABPlayer\\_internal\\flask-3.0.1.dist-info": [
             "entry_points.txt",

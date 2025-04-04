@@ -18,7 +18,7 @@ from version import Version
 
 
 DEV: bool = False
-__version__ = Version(2, 2, 1)
+__version__ = Version(2, 2, 2)
 arch = " x32" if platform.architecture()[0] == "32bit" else ""
 dev_path = os.path.join(os.path.dirname(__file__), "..", "ABPlayer")
 run_file_path = os.path.join(dev_path, "run.py")
