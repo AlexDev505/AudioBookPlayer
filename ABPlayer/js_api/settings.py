@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import os
-import re
 import shutil
 import sys
 import time
@@ -19,11 +18,19 @@ import locales
 import temp_file
 from database import Database
 from models.book import Book
+from tools import Version
 from .js_api import JSApi, JSApiError, ConnectionFailedError
 
 
 if ty.TYPE_CHECKING:
     pass
+
+
+RELEASE_PAGE_URL = "https://github.com/AlexDev505/AudioBookPlayer/releases/tag/{tag}"
+UPDATER_FILE_URL = (
+    f"https://sourceforge.net/projects/audiobookplayer/files/"
+    f"ABPlayerUpdater{os.environ["ARCH"]}.exe/download"
+)
 
 
 class SettingsApi(JSApi):
@@ -184,50 +191,106 @@ class SettingsApi(JSApi):
     def check_for_updates(self):
         logger.opt(colors=True).debug("request: <r>check for updates</r>")
 
-        if isinstance(last_release := self._get_last_release(), JSApiError):
-            return self.error(last_release)
+        if os.environ.get("DEBUG"):  # do not update the DEV build
+            return self.make_answer(False)
 
-        last_version = last_release["tag_name"]
-        if last_version == os.environ["VERSION"]:
+        if isinstance(updates := self._get_updates(), JSApiError):
+            return self.error(updates)
+
+        if list(updates.keys())[0] == os.environ["VERSION"]:
             logger.debug("The same version is installed now")
             return self.make_answer(False)
 
-        stable = re.fullmatch(r"\d+\.\d+\.\d+", last_version) is not None
-
-        return self.make_answer(
-            dict(version=last_version, stable=stable, url=last_release["html_url"])
+        versions = list(updates.keys())
+        last_stable_version = next(
+            version for version in versions if Version.from_str(version).is_stable
         )
-
-    @staticmethod
-    def _get_last_release() -> dict | JSApiError:
-        logger.debug("Getting last release")
-        try:
-            response = requests.get(
-                "https://api.github.com/repos/AlexDev505/AudioBookPlayer/releases"
-            )
-            if response.status_code != 200:
-                raise requests.RequestException(
-                    f"Response status code: {response.status_code}"
+        if os.environ["VERSION"] not in versions:
+            return self.make_answer(
+                dict(
+                    version=last_stable_version,
+                    stable=True,
+                    manual=True,
+                    url=RELEASE_PAGE_URL.format(tag=last_stable_version),
                 )
-        except requests.exceptions.RequestException as err:
-            return ConnectionFailedError(err=f"{type(err).__name__}: {err}")
+            )
 
-        releases = orjson.loads(response.text)
-        last_release = releases[0]
-        logger.opt(colors=True).debug(
-            f"Last release: <y>{last_release['html_url']}</y>"
+        new_versions = versions[: versions.index(os.environ["VERSION"])]
+        if any(updates[version].get("manual") for version in new_versions):
+            return self.make_answer(
+                dict(
+                    version=last_stable_version,
+                    stable=True,
+                    manual=True,
+                    url=RELEASE_PAGE_URL.format(tag=last_stable_version),
+                )
+            )
+
+        temp_data = temp_file.load()
+        if not (
+            last_version := next(
+                (
+                    version
+                    for version_str in new_versions
+                    if (version := Version.from_str(version_str)).is_stable
+                    or not temp_data.get("only_stable", False)
+                ),
+                None,
+            )
+        ):
+            return self.make_answer(False)
+        return self.make_answer(
+            dict(
+                version=last_version,
+                stable=last_version.is_stable,
+                url=RELEASE_PAGE_URL.format(tag=last_version),
+            )
         )
-        return last_release
 
-    def update_app(self):
-        logger.opt(colors=True).debug("request: <r>update appy</r>")
+    def update_app(self, version: str | None = None):
+        if version:
+            return self._manual_update(version)
 
-        if isinstance(last_release := self._get_last_release(), JSApiError):
-            return self.error(last_release)
+        logger.opt(colors=True).debug("request: <r>update app</r>")
 
-        last_version = last_release["tag_name"]
-        updater_file_name = f"ABPlayerUpdate.{last_version}{os.environ["ARCH"]}.exe"
-        for asset in last_release["assets"]:
+        if isinstance(updates := self._get_updates(), JSApiError):
+            return self.error(updates)
+
+        updater_file_name = f"ABPlayerUpdater{os.environ["ARCH"]}.exe"
+        updater_path = os.path.abspath(os.path.join(".", updater_file_name))
+
+        versions = list(updates.keys())
+        new_versions = versions[: versions.index(os.environ["VERSION"])]
+        if next(
+            (True for version in new_versions if updates[version].get("updater")),
+            False,
+        ):
+            logger.debug("needs new updater")
+            logger.opt(colors=True).debug(
+                "downloading updater file. "
+                f"<y>url={UPDATER_FILE_URL} path={updater_path}</y>"
+            )
+            if not self._download_updater(UPDATER_FILE_URL, updater_path):
+                return self.error(ConnectionFailedError())
+
+        logger.info("closing app")
+        self._window.destroy()
+        cmd = [sys.executable, "--run-update"]
+        temp_data = temp_file.load()
+        if temp_data.get("only_stable", False):
+            cmd.append("--only-stable")
+        Popen(cmd)
+
+    def _manual_update(self, version: str):
+        logger.opt(colors=True).debug(f"request: <r>manual update app to {version}</r>")
+
+        if isinstance(release := self._get_release(version), JSApiError):
+            return self.error(release)
+
+        updater_file_name = (
+            f"ABPlayerSetup.{version}{os.environ["ARCH"].replace(" ", ".")}.exe"
+        )
+        for asset in release["assets"]:
             if updater_file_name == asset["name"]:
                 updater_url = asset["browser_download_url"]
                 break
@@ -246,12 +309,39 @@ class SettingsApi(JSApi):
 
         logger.info("closing app")
         self._window.destroy()
-        Popen([sys.executable, f"--run-update={updater_path}"])
+        Popen([sys.executable, f"--manual-update={updater_path}"])
 
     def unsubscribe_not_stable(self):
         temp_file.update(only_stable=True)
         logger.debug("unsubscribed from not stable releases")
         return self.make_answer()
+
+    @staticmethod
+    def _request(url: str) -> dict | JSApiError:
+        try:
+            response = requests.get(url)
+            if response.status_code != 200:
+                raise requests.RequestException(
+                    f"Response status code: {response.status_code}"
+                )
+        except requests.exceptions.RequestException as err:
+            return ConnectionFailedError(err=f"{type(err).__name__}: {err}")
+
+        return orjson.loads(response.text)
+
+    def _get_updates(self) -> dict | JSApiError:
+        logger.debug("Getting updates")
+        return self._request(
+            "https://sourceforge.net/projects/audiobookplayer/files/"
+            "updates.json/download"
+        )
+
+    def _get_release(self, version: str) -> dict | JSApiError:
+        logger.debug(f"getting release {version}")
+        return self._request(
+            "https://api.github.com/repos/AlexDev505/AudioBookPlayer/releases/tags/"
+            f"{version}"
+        )
 
     def _download_updater(
         self, updater_url: str, updater_path: str, _retries: int = 0

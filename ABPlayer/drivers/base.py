@@ -137,10 +137,10 @@ class BaseDownloader(ABC):
         self._prepare()
         if not self._terminated:
             logger.debug("downloading started")
-        if self.process_handler:
-            self.process_handler.init(
-                self.total_size, status=DownloadProcessStatus.DOWNLOADING
-            )
+            if self.process_handler:
+                self.process_handler.init(
+                    self.total_size, status=DownloadProcessStatus.DOWNLOADING
+                )
             self._download_files()
         if not self._terminated:
             logger.debug("finishing downloading")

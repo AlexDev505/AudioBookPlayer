@@ -29,7 +29,7 @@ SetCompressor lzma
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
 ; Finish page
-!define MUI_FINISHPAGE_RUN "$INSTDIR\ABPlayer.exe"
+!define MUI_FINISHPAGE_RUN "$INSTDIR\ABPlayer{arch}.exe"
 !insertmacro MUI_PAGE_FINISH
 
 ; Uninstaller pages
@@ -52,16 +52,19 @@ ShowUnInstDetails show
 
 Section "ABPlayer" SEC01
   SetOverwrite try{install}
-  CreateShortCut "$SMPROGRAMS\ABPlayer.lnk" "$INSTDIR\ABPlayer.exe"
-  CreateShortCut "$DESKTOP\ABPlayer.lnk" "$INSTDIR\ABPlayer.exe"
+  
+  SetOutPath "$INSTDIR"
+  File "ABPlayer\ABPlayerUpdater{arch}.exe"
+  CreateShortCut "$SMPROGRAMS\ABPlayer.lnk" "$INSTDIR\ABPlayer{arch}.exe"
+  CreateShortCut "$DESKTOP\ABPlayer.lnk" "$INSTDIR\ABPlayer{arch}.exe"
 SectionEnd
 
 Section -Post
   WriteUninstaller "$INSTDIR\uninst.exe"
-  WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\ABPlayer.exe"
+  WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\ABPlayer{arch}.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst.exe"
-  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\ABPlayer.exe"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\ABPlayer{arch}.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
@@ -79,12 +82,22 @@ Function un.onInit
 FunctionEnd
 
 Section Uninstall
+  RMDir /r "$LocalAppData\AudioBookPlayer\WebViewCache"
+  Delete "$LocalAppData\AudioBookPlayer\debug.log"
+  Delete "$LocalAppData\AudioBookPlayer\library.sqlite"
+  Delete "$LocalAppData\AudioBookPlayer\config.json"
+  Delete "$LocalAppData\AudioBookPlayer\temp.txt"
+  RMDir "$LocalAppData\AudioBookPlayer"
+
   Delete "$INSTDIR\uninst.exe"
-  {uninstall}
-  
+  Delete "$INSTDIR\ABPlayerUpdater{arch}.exe"
+
+  Delete "$INSTDIR\ABPlayer{arch}.exe"
+  RMDir /r "$INSTDIR\_internal"
+
   Delete "$DESKTOP\ABPlayer.lnk"
   Delete "$SMPROGRAMS\ABPlayer.lnk"
-  
+
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
   SetAutoClose true

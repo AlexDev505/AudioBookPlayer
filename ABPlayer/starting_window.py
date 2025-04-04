@@ -55,7 +55,9 @@ def start_app(window: webview.Window) -> None:
     start_time = time.time()
 
     updater_path = os.path.join(
-        os.environ["APP_DIR"], f"ABPlayerUpdate.{os.environ['VERSION']}.exe"
+        os.environ["APP_DIR"],
+        f"ABPlayerSetup.{os.environ['VERSION']}"
+        f"{os.environ["ARCH"].replace(" ", ".")}.exe",
     )
     if os.path.isfile(updater_path):
         os.remove(updater_path)

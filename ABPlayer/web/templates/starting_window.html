@@ -38,12 +38,11 @@
 </head>
 <body>
   <div id="loading-gif"></div>
-  <div id="status">запуск...</div>
+  <div id="status"></div>
   <div id="made-by">by AlexDev505</div>
   <script>
-    var status = document.getElementById("status")
     function setStatus(text) {
-        status.innerHTML = text
+        document.getElementById("status").innerHTML = text
     }
   </script>
 </body>
