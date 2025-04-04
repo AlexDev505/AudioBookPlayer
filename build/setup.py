@@ -4,6 +4,7 @@
 
 """
 
+import argparse
 import hashlib
 import json
 import os
@@ -14,15 +15,17 @@ from pathlib import Path
 
 import PyInstaller.__main__
 import orjson
-from paramiko import SSHClient
-from scp import SCPClient
 
 from prepare_nsis import prepare_nsis
 from version import Version
 
 
+parser = argparse.ArgumentParser()
+parser.add_argument("version", type=str)
+args = parser.parse_args()
+
 DEV: bool = False
-__version__ = Version(2, 2, 1)
+__version__ = Version.from_str(args.version)
 arch = " x32" if platform.architecture()[0] == "32bit" else ""
 dev_path = os.path.join(os.path.dirname(__file__), "..", "ABPlayer")
 run_file_path = os.path.join(dev_path, "run.py")
@@ -171,34 +174,14 @@ if save_update:
     with open(update_file_path, "w", encoding="utf-8") as file:
         json.dump(current_update, file, indent=4)
     with open(updates_file_path, encoding="utf-8") as file:
-        updates = orjson.loads(file.read())
-    updates.insert(0, str(__version__))
+        updates_ = orjson.loads(file.read())
+    updates = {str(__version__): {}}
+    updates.update(updates_)
     with open(updates_file_path, "w", encoding="utf-8") as file:
         json.dump(updates, file, indent=4)
     if __version__.is_stable:
         with open(last_build_file_path, "w", encoding="utf-8") as file:
             file.write(str(__version__))
-
-    if os.environ.get("SOURCEFORGE_PASS"):
-        print("Uploading update")
-        ssh = SSHClient()
-        ssh.load_system_host_keys()
-        ssh.connect(
-            "frs.sourceforge.net",
-            username="alexdev-py",
-            password=os.environ["SOURCEFORGE_PASS"],
-        )
-        scp = SCPClient(ssh.get_transport())
-        scp.put(
-            f"updates/{__version__}",
-            recursive=True,
-            remote_path="/home/frs/project/audiobookplayer/",
-        )
-        scp.put(
-            f"updates/updates.json",
-            remote_path="/home/frs/project/audiobookplayer/",
-        )
-        scp.close()
 
     print("Preparing nsis")
     prepare_nsis(current_update, arch)
