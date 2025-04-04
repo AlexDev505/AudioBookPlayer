@@ -1,4 +1,2 @@
 installer.nsi linguist-generated
 installer x32.nsi linguist-generated
-updater.nsi linguist-generated
-updater x32.nsi linguist-generated
