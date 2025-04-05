@@ -20,7 +20,7 @@ os.environ["TEMP_PATH"] = os.path.join(os.environ["APP_DIR"], "temp.txt")
 # Архитектура системы
 os.environ["ARCH"] = " x32" if platform.architecture()[0] == "32bit" else ""
 # Версия приложения
-os.environ["VERSION"] = "2.2.1"
+os.environ["VERSION"] = "2.2.3"
 
 # DEV
 os.environ["CONSOLE"] = "1"
