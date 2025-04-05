@@ -22,10 +22,12 @@ from version import Version
 
 parser = argparse.ArgumentParser()
 parser.add_argument("version", type=str)
+parser.add_argument("--dev", action="store_true", default=False)
 args = parser.parse_args()
 
-DEV: bool = False
+DEV: bool = args.dev
 __version__ = Version.from_str(args.version)
+locales = ["en", "ru"]
 arch = " x32" if platform.architecture()[0] == "32bit" else ""
 dev_path = os.path.join(os.path.dirname(__file__), "..", "ABPlayer")
 run_file_path = os.path.join(dev_path, "run.py")
@@ -92,7 +94,12 @@ PyInstaller.__main__.run(
         f"--add-data={os.path.join(dev_path, 'web', 'static')};static",
         f"--add-data={os.path.join(dev_path, 'web', 'templates')};templates",
         f"--add-data={os.path.join(dev_path, 'drivers', 'bin')};bin",
-        f"--add-data={os.path.join(dev_path, 'locales')};locales",
+        *(
+            "--add-data="
+            f"{os.path.join(dev_path, 'locales', lang, 'LC_MESSAGES', 'base.mo')};"
+            f"locales/{lang}/LC_MESSAGES"
+            for lang in locales
+        ),
     ]
 )
 shutil.rmtree("temp")
