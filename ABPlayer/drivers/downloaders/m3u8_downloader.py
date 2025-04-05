@@ -32,7 +32,7 @@ def merge_ts_files(ts_file_paths: list[Path], output_file_path: Path) -> None:
         cwd=output_file_path.parent,
         shell=True,
         stderr=subprocess.STDOUT,
-    ).decode()
+    ).decode("cp866")
     if result:
         logger.debug(result)
 
