@@ -185,10 +185,15 @@ class BaseDownloader(ABC):
         """
         if self._terminated:
             return
-        async with aiohttp.ClientSession() as session:
-            async with session.get(file_url) as response:
-                file_size = response.headers.get("content-length")
-        if not file_size:
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(file_url) as response:
+                    if not (file_size := response.headers.get("content-length")):
+                        raise RuntimeError("No content-length found")
+        except Exception as err:
+            logger.opt(colors=True).debug(
+                f"getting file size failed {type(err).__name__}: {err}. retrying"
+            )
             await asyncio.sleep(1)
             return await self._add_file_size(file_url)
         self.total_size += int(file_size)
@@ -218,8 +223,9 @@ class BaseDownloader(ABC):
         Downloads one file.
         """
         file_path = Path(os.path.join(self.book.dir_path, file_name))
-        logger.opt(colors=True).debug(f"downloading file <y>{file_index}</y>")
-        logger.opt(colors=True).trace(f"file <y>{file_path}</y> {file_url}")
+        logger.opt(colors=True).trace(
+            f"downloading file <y>{file_index}</y> <y>{file_path}</y> {file_url}"
+        )
 
         async with aiofiles.open(file_path, mode="wb") as file:
             while not self._terminated:
