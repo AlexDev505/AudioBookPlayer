@@ -64,6 +64,37 @@ class Database:
             "(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, %s)" % (", ".join(fields))
         )
 
+    def validate_columns(self) -> None:
+        exists_fields = [
+            field[1] for field in self._fetchall("PRAGMA table_info(books)")
+        ]
+        columns_to_delete = []
+        columns_to_add = []
+        for field in BOOK_SIGNATURE.values():
+            if field.field_name not in exists_fields:
+                columns_to_add.append(field.field_name)
+        for field in exists_fields:
+            if field not in BOOK_SIGNATURE:
+                columns_to_delete.append(field.field_name)
+        for field in columns_to_delete:
+            self._execute(f"ALTER TABLE books DROP COLUMN {field}")
+        for field in columns_to_add:
+            self._execute(
+                f"ALTER TABLE books ADD COLUMN {field} {BOOK_SIGNATURE[field].sql_type}"
+            )
+        if columns_to_add:
+            book = Book()
+            self._execute(
+                "UPDATE books SET "
+                + ", ".join(f"{field}=?" for field in columns_to_add),
+                *(getattr(book, field) for field in columns_to_add),
+            )
+        if columns_to_delete or columns_to_add:
+            logger.debug(
+                f"Columns {columns_to_delete} deleted; Columns {columns_to_add} added"
+            )
+            self.commit()
+
     def get_libray(
         self,
         limit: int | None = None,
@@ -117,7 +148,9 @@ class Database:
 
     def get_books_by_bid(self, *bids: int) -> list[Book] | None:
         if books := self._fetchall(
-            f"SELECT * FROM books WHERE id IN [{','.join(['?'] * len(bids))}]", *bids
+            f"SELECT {", ".join(BOOK_SIGNATURE.keys())} FROM books "
+            f"WHERE id IN [{','.join(['?'] * len(bids))}]",
+            *bids,
         ):
             return [_convert_book(book) for book in books]
 
@@ -207,6 +240,7 @@ class Database:
         logger.trace("database initialization")
         with cls() as db:
             db.create_library()
+            db.validate_columns()
 
 
 def _convert_book(data: tuple[ty.Any]) -> Book:
