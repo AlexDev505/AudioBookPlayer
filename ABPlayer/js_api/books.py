@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import difflib
 import os
+import shutil
 import typing as ty
 from dataclasses import asdict
 from datetime import datetime
 from functools import partial
+from pathlib import Path
 
 import requests.exceptions
 from loguru import logger
@@ -212,6 +214,14 @@ class BooksApi(JSApi):
         with Database(autocommit=True) as db:
             if db.check_is_books_exists([url]):
                 return self.error(BookAlreadyAdded())
+            if exists_book := db.mark_multi_readers(book):
+                if exists_book.id in self._download_processes:
+                    return self.error(WaitForDownloadingEnd())
+                logger.opt(colors=True).debug(
+                    f"{book:styled} marked as multi_reader with {exists_book:styled}"
+                )
+                if exists_book.files:
+                    self._move_multi_reader_book(exists_book)
             book.adding_date = datetime.now()
             db.add_book(book)
 
@@ -379,6 +389,32 @@ class BooksApi(JSApi):
 
         os.removedirs(dir_path)
 
+    def _move_multi_reader_book(self, book: Book, _retry: bool = False):
+        logger.opt(colors=True).debug(
+            f"request: <r>move_multi_reader_book</r> | {book:styled}"
+        )
+        new_path = book.dir_path
+        book.multi_readers = False
+        old_path = book.dir_path
+        Path(new_path).mkdir(parents=True, exist_ok=True)
+
+        for file in [*book.files, "cover.jpg", ".abp"]:
+            file_path = os.path.join(old_path, file)
+            dst = os.path.join(new_path, file)
+            try:
+                logger.opt(colors=True).trace(
+                    f"moving <y>{file_path}</y> to <y>{dst}</y>"
+                )
+                shutil.move(file_path, dst)
+            except PermissionError:
+                logger.error(f"file locked. {file_path}")
+                self.evaluate_js("clearPlayingBook()")
+                if not _retry:
+                    logger.debug("retrying move_multi_reader_book")
+                    return self._move_multi_reader_book(book, True)
+            except Exception as err:
+                logger.exception(f"moving file {file_path} failed: {err}")
+
     def delete_book(self, bid: int):
         logger.opt(colors=True).debug(f"request: <r>delete book</r> | <y>{bid}</y>")
         with Database() as db:
@@ -515,3 +551,8 @@ class BookAlreadyDownloaded(JSApiError):
 class BookNotDownloaded(JSApiError):
     code = 6
     message = _("book.not_downloaded")
+
+
+class WaitForDownloadingEnd(JSApiError):
+    code = 9
+    message = _("book.wait_for_similar_book_downloading")

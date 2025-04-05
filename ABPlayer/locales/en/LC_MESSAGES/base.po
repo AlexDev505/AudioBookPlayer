@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-03-15 01:45+0700\n"
+"POT-Creation-Date: 2025-04-05 18:32+0700\n"
 "PO-Revision-Date: 2025-03-14 23:58+0700\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -26,35 +26,40 @@ msgstr ""
 msgid "unknown_author"
 msgstr "Unknown author"
 
-#: ../../abplayer/js_api/books.py:497
+#: ../../abplayer/js_api/books.py:533
 msgid "no_suitable_driver"
 msgstr "No suitable driver"
 
-#: ../../abplayer/js_api/books.py:502
+#: ../../abplayer/js_api/books.py:538
 msgid "book.already_exists"
 msgstr "The book is already in the library"
 
-#: ../../abplayer/js_api/books.py:507
+#: ../../abplayer/js_api/books.py:543
 msgid "book.not_found"
 msgstr "Book not found"
 
-#: ../../abplayer/js_api/books.py:512
+#: ../../abplayer/js_api/books.py:548
 msgid "book.already_downloaded"
 msgstr "The book being downloaded or has already been downloaded"
 
-#: ../../abplayer/js_api/books.py:517
+#: ../../abplayer/js_api/books.py:553
 msgid "book.not_downloaded"
 msgstr "The book is not downloaded"
+
+#: ../../abplayer/js_api/books.py:558
+#, fuzzy
+msgid "book.wait_for_similar_book_downloading"
+msgstr "Wait for the download of similar book to finish"
 
 #: ../../abplayer/js_api/js_api.py:70
 msgid "connection_issues"
 msgstr "Connection issues"
 
-#: ../../abplayer/js_api/settings.py:283
+#: ../../abplayer/js_api/settings.py:373
 msgid "canceled"
 msgstr "Operation cancelled"
 
-#: ../../abplayer/js_api/settings.py:288
+#: ../../abplayer/js_api/settings.py:378
 msgid "update.file_not_found"
 msgstr "Update file not found"
 
@@ -154,7 +159,7 @@ msgstr "Listened"
 msgid "search_for_book"
 msgstr "Search for book"
 
-#: ../../abplayer/web/templates/search.html:10
+#: ../../abplayer/web/templates/search.html:12
 msgid "begin_typing"
 msgstr "Start typing or paste a link"
 
@@ -195,6 +200,15 @@ msgid "developer"
 msgstr "Developer"
 
 #: ../../abplayer/web/templates/settings.html:45
+#: ../../abplayer/web/templates/settings.html:46
+msgid "localization_by_name"
+msgstr "Koladweep"
+
+#: ../../abplayer/web/templates/settings.html:46
+msgid "localization_by_url"
+msgstr "https://github.com/Koladweep"
+
+#: ../../abplayer/web/templates/settings.html:49
 msgid "project_page"
 msgstr "Project page"
 
@@ -346,9 +360,3 @@ msgstr "Do not suggest participation in testing"
 #: ../../abplayer/web/templates/js/settings.js:85
 msgid "update.downloading"
 msgstr "Downloading update"
-
-msgid "localization_by_url"
-msgstr "https://github.com/Koladweep"
-
-msgid "localization_by_name"
-msgstr "Koladweep"

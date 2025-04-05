@@ -181,6 +181,18 @@ class Database:
             )
         ]
 
+    def mark_multi_readers(self, book: Book) -> Book | None:
+        if books := self._fetchall(
+            "SELECT id, multi_readers FROM books WHERE author=? AND name=?",
+            book.author,
+            book.name,
+        ):
+            book.multi_readers = True
+            bid = next((book[0] for book in books if not book[1]), None)
+            if bid is not None:
+                self._execute(f"UPDATE books SET multi_readers=? WHERE id=?", True, bid)
+                return self.get_book_by_bid(bid)
+
     def add_book(self, book: Book) -> None:
         fields = {
             field_name: adapt_value(getattr(book, field_name))
