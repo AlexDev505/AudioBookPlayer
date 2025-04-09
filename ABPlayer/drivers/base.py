@@ -228,8 +228,8 @@ class BaseDownloader(ABC):
         )
 
         async with aiofiles.open(file_path, mode="wb") as file:
+            downloaded_size = 0
             while not self._terminated:
-                downloaded_size = 0
                 try:
                     async for chunk in self._iter_chunks(file_url, downloaded_size):
                         if self._terminated:
