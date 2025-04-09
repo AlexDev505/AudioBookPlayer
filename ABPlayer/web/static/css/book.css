@@ -24,6 +24,24 @@
   justify-content: space-between;
   height: fit-content;
 }
+#book-header .book-actions {
+  align-items: center;
+}
+#book-header .book-actions > * {margin-left: 6px; margin-right: 6px;}
+.open-in-browser::after {background-image: url(../images/box-arrow-up-right.svg)}
+.search-series::after {background-image: url(../images/tag.svg)}
+.hidden-text-button {display: flex; align-items: center}
+.hidden-text-button span {
+  max-width: 0;
+  overflow: hidden;
+  text-wrap-mode: nowrap;
+  transition: all ease-in-out .1s;
+}
+.hidden-text-button:hover {transform: none;}
+.hidden-text-button:hover span {
+  margin-right: 10px;
+  max-width: 500px;
+}
 #book-page-content .book-title {
   font-size: x-large;
   font-weight: bold;

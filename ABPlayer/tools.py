@@ -189,6 +189,7 @@ def make_book_preview(book: Book) -> dict:
         author=book.author,
         name=book.name,
         series_name=book.series_name,
+        number_in_series=book.number_in_series,
         reader=book.reader,
         duration=book.duration,
         url=book.url,

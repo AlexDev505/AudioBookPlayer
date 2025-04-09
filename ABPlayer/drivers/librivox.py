@@ -71,10 +71,10 @@ class LibriVox(Driver):
 
         author = metadata.get("creator", _("unknown_author"))
         if isinstance(author, list):
-            author = ", ".join(author)
+            author = author[0]
         title = metadata["title"]
-        duration = metadata.get("runtime")
-        description = html_to_text(metadata.get("description"))
+        duration = metadata.get("runtime", "")
+        description = html_to_text(metadata.get("description", ""))
 
         preview = ""
         # only one jpg file i.e. cover img has label "JPEG".
@@ -94,15 +94,15 @@ class LibriVox(Driver):
                 BookItem(
                     file_url=file_url,
                     file_index=i + 1,
-                    title=chapter_title,
+                    title=safe_name(chapter_title),
                     start_time=0,
                     end_time=end_time,
                 )
             )
 
         return Book(
-            author=author,
-            name=title,
+            author=safe_name(author),
+            name=safe_name(title),
             series_name="",
             number_in_series="",
             description=description,

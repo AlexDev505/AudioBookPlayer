@@ -8,7 +8,7 @@ from orjson import orjson
 from models.book import Book, BookItems, BookItem
 from .base import Driver
 from .downloaders import MP3Downloader
-from .tools import safe_name
+from .tools import safe_name, find_in_soup
 
 
 class KnigaVUhe(Driver):
@@ -27,39 +27,24 @@ class KnigaVUhe(Driver):
         playlist = orjson.loads(match.group(1))
 
         name = book["name"]
-        author = _("unknown_author")
-        if element := soup.select("span.book_title_elem > span > a"):
-            author = element[0].text.strip()
+        author = find_in_soup(
+            soup, "span.book_title_elem > span > a", _("unknown_author")
+        )
 
-        try:
-            series_name = soup.select_one("div.book_serie_block_title > a").text.strip()
-        except AttributeError:
-            series_name = ""
-        try:
-            number_in_series = (
-                soup.select_one("div.book_serie_block_item > span:has(+ strong)")
-                .text.strip()
-                .strip(".")
-            )
-        except AttributeError:
-            number_in_series = ""
+        series_name = find_in_soup(soup, "div.book_serie_block_title > a")
+        number_in_series = find_in_soup(
+            soup,
+            "div.book_serie_block_item > span:has(+ strong)",
+            modification=lambda x: x.strip().strip("."),
+        )
 
-        description = soup.select_one("div.book_description").text.strip()
-        reader = ""
-        elements = soup.select("span.book_title_elem")
-        for element in elements:
-            children = element.select("*")
-            if children:
-                if children[0].text in ["читает", "читают"]:
-                    reader = children[1].text.strip()
+        description = find_in_soup(soup, "div.book_description")
+        reader = find_in_soup(soup, "a[href^='/reader/']")
         duration = ""
-        elements = soup.select("div.book_blue_block > div")
-        for element in elements:
-            info = element.select("span.book_info_label")
-            if info:
-                if info[0].text == "Время звучания:":
-                    duration = element.text.replace("Время звучания:", "").strip()
-
+        with suppress(AttributeError, TypeError):
+            duration = (
+                soup.find("span", string="Время звучания:").parent.contents[-1].strip()
+            )  # Do not translate
         preview = soup.select_one("div.book_cover > img").attrs["src"]
 
         items = BookItems()
@@ -91,78 +76,42 @@ class KnigaVUhe(Driver):
     def get_book_series(self, url: str) -> ty.List[Book]:
         page = self.get_page(url)
         soup = BeautifulSoup(page.content, "html.parser")
-
-        series_page_link = (
-            self.site_url
-            + soup.select_one("div.book_serie_block_title > a").attrs["href"]
+        author = find_in_soup(
+            soup, "span.book_title_elem > span > a", _("unknown_author")
         )
-        series_name = soup.select_one("div.book_serie_block_title > a").text
+
+        if not (el := soup.select_one("div.book_serie_block_title > a")):
+            return []  # book has no series
+        series_page_link = self.site_url + el.attrs["href"]
+        series_name = el.text
 
         page = self.get_page(series_page_link)
         soup = BeautifulSoup(page.content, "html.parser")
 
         books = []
-        for book in soup.select("div.bookkitem_right"):
-            try:
-                number = book.select_one("span.bookkitem_serie_index").text
-            except AttributeError:
-                number = ""
-            elem = book.select_one("div.bookkitem_name > a")
-            url = self.site_url + elem.attrs["href"]
-            name: str = elem.text
-            if name.startswith(number):
-                name = name[len(number) :].strip()
-            if number.endswith("."):
-                number = number[:-1]
-            try:
-                reader = book.select_one(
-                    "div.bookkitem_meta_block:has(span.-reader) "
-                    "> span.single_reader > a"
-                ).text
-            except AttributeError:
-                reader = book.select_one(
-                    "div.bookkitem_meta_block:has(span.-reader) > a"
-                ).text
-            books.append(
-                Book(
-                    name=safe_name(name),
-                    url=url,
-                    reader=safe_name(reader),
-                    series_name=safe_name(series_name),
-                    number_in_series=number,
-                )
-            )
-            with suppress(AttributeError):
+        for card in soup.select("div.bookkitem:not(:has(.bookkitem_litres_icon))"):
+            if book := self._parse_book_card(card, author, series_name):
+                books.append(book)
                 url = name = reader = ""
-                for elem in book.select("div.bookkitem_other_versions_list > *"):
-                    if elem.name == "a":
-                        if url == "":
-                            url = self.site_url + elem.attrs["href"]
-                            name = elem.text
-                        elif reader == "":
-                            reader = elem.text
-                    else:
-                        if url and reader:
-                            books.append(
-                                Book(
-                                    name=safe_name(name),
-                                    url=url,
-                                    reader=safe_name(reader),
-                                    series_name=safe_name(series_name),
-                                    number_in_series=number,
-                                )
+                for element in card.select("div.bookkitem_other_versions_list > a"):
+                    if url == "":
+                        url = self.site_url + element.attrs["href"]
+                        name = element.text
+                    elif reader == "":
+                        reader = element.text
+                        books.append(
+                            Book(
+                                author=safe_name(author),
+                                name=safe_name(name),
+                                series_name=safe_name(series_name),
+                                number_in_series=book.number_in_series,
+                                reader=safe_name(reader),
+                                url=url,
+                                preview=book.preview,
+                                driver=self.driver_name,
                             )
-                        url = reader = ""
-                if url and reader:
-                    books.append(
-                        Book(
-                            name=safe_name(name),
-                            url=url,
-                            reader=safe_name(reader),
-                            series_name=safe_name(series_name),
-                            number_in_series=number,
                         )
-                    )
+                        url = name = reader = ""
 
         return books
 
@@ -179,10 +128,11 @@ class KnigaVUhe(Driver):
             page = self.get_page(url)
             soup = BeautifulSoup(page.text, "html.parser")
 
-            elements = soup.select(
-                "div#books_list > div.bookkitem:not(:has(span.bookkitem_litres_icon))"
-            )
-            if not elements:
+            if not (
+                elements := soup.select(
+                    "div.bookkitem:not(:has(span.bookkitem_litres_icon))"
+                )
+            ):
                 break
 
             if offset:
@@ -193,43 +143,42 @@ class KnigaVUhe(Driver):
                     elements = elements[offset:]
                     offset = 0
 
-            for el in elements:
-                with suppress(AttributeError):
-                    url = el.select_one("a.bookkitem_cover").attrs["href"]
-                    preview = el.select_one("img.bookkitem_cover_img").attrs["src"]
-                    name = el.select_one("a.bookkitem_name").text.strip()
-                    try:
-                        author = el.select_one("span.bookkitem_author > a").text.strip()
-                    except AttributeError:
-                        author = _("unknown_author")
-                    try:
-                        reader = el.select_one(
-                            "div.bookkitem_meta_block:has(span.-reader) a"
-                        ).text.strip()
-                    except AttributeError:
-                        reader = "нет данных"
-                    duration = el.select_one("span.bookkitem_meta_time").text.strip()
-                    try:
-                        series_name = el.select_one(
-                            "div.bookkitem_meta_block:has(span.-serie) a"
-                        ).text.strip()
-                    except AttributeError:
-                        series_name = ""
-                    books.append(
-                        Book(
-                            author=safe_name(author),
-                            name=safe_name(name),
-                            series_name=safe_name(series_name),
-                            reader=reader,
-                            duration=duration,
-                            url=self.site_url + url,
-                            preview=preview,
-                            driver=self.driver_name,
-                        )
-                    )
-                    if len(books) == limit:
-                        break
+            for card in elements:
+                if book := self._parse_book_card(card, _("unknown_author"), ""):
+                    books.append(book)
+                if len(books) == limit:
+                    break
 
             page_number += 1
 
         return books
+
+    def _parse_book_card(
+        self, card: BeautifulSoup, author: str, series_name: str
+    ) -> Book | None:
+        with suppress(AttributeError, KeyError, TypeError):
+            url = card.select_one("a.bookkitem_cover").attrs["href"]
+            preview = card.select_one("img.bookkitem_cover_img").attrs["src"]
+            number_in_series = find_in_soup(
+                card,
+                "span.bookkitem_serie_index",
+                modification=lambda x: x.strip("."),
+            )
+            name = find_in_soup(card, "a.bookkitem_name")
+            if number_in_series:
+                name = name.removeprefix(f"{number_in_series}. ")
+            author = find_in_soup(card, "span.bookkitem_author > a", author)
+            reader = find_in_soup(card, "a[href^='/reader/']")
+            duration = find_in_soup(card, "span.bookkitem_meta_time")
+            series_name = find_in_soup(card, "a[href^='/serie/']", series_name)
+            return Book(
+                author=safe_name(author),
+                name=safe_name(name),
+                series_name=safe_name(series_name),
+                number_in_series=number_in_series,
+                reader=safe_name(reader),
+                duration=duration,
+                url=self.site_url + url,
+                preview=preview,
+                driver=self.driver_name,
+            )

@@ -191,7 +191,7 @@
 .book-actions {display: flex}
 .book-actions > * {padding: 4px; border-radius: 4px;}
 .book-actions > *:not(:first-child):not(:last-child) {margin-left: 12px; margin-right: 12px;}
-.book-actions > *:hover:not(.disabled) {transform: scale(1.1)}
+.book-actions > *:hover:not(.disabled)::after {transform: scale(1.1)}
 .book-actions > *:active:not(.disabled) {margin-bottom: -4px}
 .book-actions .icon-btn::after {
   width: 1.5em;

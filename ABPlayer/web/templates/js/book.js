@@ -33,6 +33,12 @@ function loadBookData(bid) {
         document.getElementById("player-controls").style = "display: none"
         document.getElementById("player-downloading-required").style = "display: none"
         document.getElementById("player-downloading").style = "display: none"
+        document.querySelector("#book-page-content .toggle-favorite-btn").onclick = function () {toggleFavorite(this, resp.data.bid)}
+        document.querySelector("#book-page-content .open-in-browser").dataset.url = resp.data.url
+        if (resp.data.series_name) {
+            document.querySelector("#book-page-content .search-series").style = ""
+            document.querySelector("#book-page-content .search-series").onclick = function () {searchBookSeries(resp.data.url, resp.data.series_name)}
+        } else document.querySelector("#book-page-content .search-series").style = "display: none"
         if (resp.data.downloaded) {
             let playBtn = document.getElementById("toggle-playback-btn")
             playBtn.classList.remove("pause-button")

@@ -57,6 +57,16 @@ async function searchBooks() {
     pywebview.api.search_books(query, required_drivers=required_drivers).then(onSearchCompleted)
 }
 
+function searchBookSeries(url, series_name) {
+    document.querySelector("#search-input-line input").value = series_name
+    page('search-page').show()
+    showSearchAnimation()
+    pywebview.api.search_book_series(url).then((resp) => {
+        onSearchCompleted(resp)
+        can_search_next = false
+    })
+}
+
 function hideSearchAnimation() {
     document.querySelector("#search-input-line .search-btn").classList.remove("loading")
 }
@@ -96,7 +106,7 @@ function onSearchCompleted(resp, clear=true) {
                 <div class="item-author">${book.author}</div>
                 <div class="item-reader">${book.reader}</div>
                 <div class="item-duration">${book.duration}</div>
-                <div class="item-series-name">${book.series_name}</div>
+                <div class="item-series-name">${book.series_name} ${(book.number_in_series)? ` (${book.number_in_series})` : ''}</div>
                 <div class="item-driver">${book.driver}</div>
               </div>
             </div>

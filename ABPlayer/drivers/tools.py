@@ -182,3 +182,14 @@ def html_to_text(html: str) -> str:
     """
     soup = BeautifulSoup(html, "html.parser")
     return soup.get_text()
+
+
+def find_in_soup(
+    soup: BeautifulSoup,
+    selector: str,
+    default: str = "",
+    modification: ty.Callable[[str], str] = str.strip,
+) -> str:
+    if el := soup.select_one(selector):
+        return modification(el.text)
+    return default

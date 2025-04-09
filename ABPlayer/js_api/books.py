@@ -205,6 +205,28 @@ class BooksApi(JSApi):
 
         return self.make_answer(result)
 
+    def search_book_series(self, url: str):
+        logger.opt(colors=True).debug(
+            f"request: <r>search book series</r> | <y>{url}</y>"
+        )
+        if not (driver := Driver.get_suitable_driver(url)):
+            return NoSuitableDriver(book_url=url)
+        try:
+            result = [make_book_preview(book) for book in driver().get_book_series(url)]
+            logger.opt(colors=True).debug(
+                f"<y>{len(result)}</y> books found. "
+                f"urls: {pretty_view([book['url'] for book in result])}"
+            )
+            return self.make_answer(result)
+        except (AttributeError, KeyError, ValueError) as err:
+            logger.opt().error(
+                f"getting book ({url}) raises {type(err).__name__}: {err}"
+            )
+            logger.exception(err)
+            return self.make_answer([])
+        except requests.exceptions.ConnectionError as err:
+            return self.error(ConnectionFailedError(err=f"{type(err).__name__}: {err}"))
+
     def add_book_to_library(self, url: str):
         logger.opt(colors=True).debug(
             f"request: <r>add book to library</r> | <y>{url}</y>"
@@ -463,6 +485,7 @@ class BooksApi(JSApi):
             name=book.name,
             series_name=book.series_name,
             number_in_series=book.number_in_series,
+            url=book.url,
             description=book.description,
             reader=book.reader,
             duration=book.duration,
