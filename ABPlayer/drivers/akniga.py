@@ -257,7 +257,7 @@ class AKniga(Driver):
                 card,
                 r'span.link__action--author> svg:has(use[xlink\:href="#series"]) ~ a',
             ):
-                if match := re.fullmatch(r"(?P<name>.+? \((?P<number>\d+)\))", series):
+                if match := re.fullmatch(r"(?P<name>.+?) \((?P<number>\d+)\)", series):
                     series_name = match.group("name")
                     number_in_series = match.group("number")
                 else:
