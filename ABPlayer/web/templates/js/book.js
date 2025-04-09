@@ -40,6 +40,12 @@ function loadBookData(bid) {
             document.querySelector("#book-page-content .search-series").onclick = function () {searchBookSeries(resp.data.url, resp.data.series_name)}
         } else document.querySelector("#book-page-content .search-series").style = "display: none"
         if (resp.data.downloaded) {
+            document.querySelector("#book-page-content .open-book-dir").style = ""
+            document.querySelector("#book-page-content .open-book-dir").onclick = function () {
+                pywebview.api.open_book_dir(resp.data.bid).then((response) => {
+                    if (response.status != "ok") showError(response.message)
+                })
+            }
             let playBtn = document.getElementById("toggle-playback-btn")
             playBtn.classList.remove("pause-button")
             playBtn.classList.add("play-button")
@@ -78,6 +84,7 @@ function loadBookData(bid) {
                 }
             }
         } else {
+            document.querySelector("#book-page-content .open-book-dir").style = "display: none"
             document.getElementById("player").classList.add("not-available")
             if (resp.data.downloading) document.getElementById("player-downloading").style = "display: block"
             else {

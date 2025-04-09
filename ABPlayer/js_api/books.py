@@ -506,6 +506,16 @@ class BooksApi(JSApi):
             if book.files:
                 book.save_to_storage()
 
+    def open_book_dir(self, bid: int):
+        logger.opt(colors=True).debug(f"request: <r>open book dir</r> | <y>{bid}</y>")
+        with Database() as db:
+            if not (book := db.get_book_by_bid(bid)):
+                return self.error(BookNotFound(bid=bid))
+        if not os.path.exists(book.dir_path):
+            return self.error(BookNotDownloaded(bid=bid))
+        os.startfile(book.dir_path)
+        return self.make_answer()
+
     def _answer_book(self, book: Book, listening_data: bool = False) -> dict:
         data = dict(
             bid=book.id,
