@@ -129,6 +129,8 @@ function onSearchCompleted(resp, clear=true) {
     }
     pywebview.api.check_is_books_exists(urls).then(onCheckIsBooksExistsCompleted)
     hideSearchAnimation()
+    container = document.getElementById("search-results-container")
+    if (container.scrollHeight - container.offsetHeight - container.scrollTop == 0) onSearchResultContainerScroll()
 }
 
 function onCheckIsBooksExistsCompleted(resp) {
