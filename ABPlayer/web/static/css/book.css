@@ -30,6 +30,7 @@
 #book-header .book-actions > * {margin-left: 6px; margin-right: 6px;}
 .open-in-browser::after {background-image: url(../images/box-arrow-up-right.svg)}
 .search-series::after {background-image: url(../images/tag.svg)}
+.open-book-dir::after {background-image: url(../images/folder.svg)}
 .hidden-text-button {display: flex; align-items: center}
 .hidden-text-button span {
   max-width: 0;
@@ -50,7 +51,10 @@
 #book-page-content .book-preview {
   min-height: 220px;
   max-height: 220px;
-  min-width: 159px
+  min-width: 159px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 #book-player {
   display: flex;
