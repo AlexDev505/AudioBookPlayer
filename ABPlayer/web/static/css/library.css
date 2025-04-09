@@ -145,12 +145,22 @@
 }
 .book-card:hover {box-shadow: -1px 1px 5px 1px rgba(0, 0, 0, 0.1)}
 .book-preview {
-  background-size: cover;
-  background-position: center;
   min-width: 130px;
   min-height: 180px;
-  max-height: 180px;
+  width: 130px;
+  height: 180px;
+}
+.book-preview:empty {
+  background-position: center;
+  background-size: 3em;
+  background-repeat: no-repeat;
+  background-image: url("../images/loading.gif");
+}
+.book-preview img {
+  width: inherit;
+  height: inherit;
   border-radius: 4px;
+  object-fit: cover;
 }
 .book-content {
   display: flex;

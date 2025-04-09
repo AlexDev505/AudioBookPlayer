@@ -226,8 +226,8 @@ function showBooks(response, status) {
     html = ""
     for (book of response.data) {
         html = html + `
-          <div class="book-card" data-bid="${book.bid}", onclick="openBookPage(${book.bid})">
-            <div class="book-preview" style="background-image: url('${book.preview}'), url('/library/${book.local_preview}');"></div>
+          <div class="book-card" data-bid="${book.bid}" onclick="openBookPage(${book.bid})">
+            <div class="book-preview"></div>
             <div class="book-content">
               <div class="book-main-info-container">
                 <div class="book-main-info">
@@ -253,6 +253,7 @@ function showBooks(response, status) {
               </div>
             </div>
           </div>`
+        loadPreview(book)
     }
 
     fetching_books = false
@@ -260,6 +261,23 @@ function showBooks(response, status) {
     books_in_sections[container.id] = books_in_sections[container.id] + response.data.length
     container.innerHTML = container.innerHTML + html
     container.classList.remove("loading")
+}
+
+function loadPreview(book) {
+    var img = new Image();
+    img.src = book.preview;
+    img.onload = function(){
+        var el = document.querySelector(`.book-card[data-bid='${book.bid}'] .book-preview`)
+        if (!el) return
+        el.appendChild(img);
+    }
+    img.onerror = function(){
+        startPreviewFix(book)
+        img.src = `/library/${book.local_preview}`
+        img.onerror = function(){
+            document.querySelector(`.book-card[data-bid='${book.bid}'] .book-preview`).style = "background-image: url(static/images/book.svg)"
+        }
+    }
 }
 
 function _toggleFavoriteActive(el) {

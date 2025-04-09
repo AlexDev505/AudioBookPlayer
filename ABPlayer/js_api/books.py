@@ -490,6 +490,22 @@ class BooksApi(JSApi):
         logger.opt(colors=True).info(f"book removed: <y>{book:styled}</y>")
         return self.make_answer()
 
+    @staticmethod
+    def fix_preview(bid: int):
+        logger.opt(colors=True).debug(f"request: <r>fix preview</r> | <y>{bid}</y>")
+        with Database(autocommit=True) as db:
+            if not (book := db.get_book_by_bid(bid)):
+                return
+            driver = Driver.get_suitable_driver(book.url)()
+            new_data = driver.get_book(book.url)
+            book.preview = new_data.preview
+            logger.opt(colors=True).info(
+                f"new book <y>{bid}</y> preview: {book.preview}"
+            )
+            db.save(book)
+            if book.files:
+                book.save_to_storage()
+
     def _answer_book(self, book: Book, listening_data: bool = False) -> dict:
         data = dict(
             bid=book.id,

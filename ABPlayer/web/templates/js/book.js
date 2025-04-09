@@ -270,3 +270,7 @@ function clearPlayingBook() {
     player.stop()
     player.current_book = null
 }
+
+function startPreviewFix(book) {
+    pywebview.api.fix_preview(book.bid)
+}
