@@ -45,7 +45,7 @@
 }
 #reverse-checkbox {margin-top: 6px; margin-bottom: 16px;}
 
-#filter-by-sections {display: inline; max-height: 90%}
+#filter-by-sections {height: calc(100% - 2em - 26px)}
 .filter-by-section-btn {
   margin-bottom: 4px;
   font-size: medium;
@@ -56,7 +56,7 @@
   overflow:auto;
   margin-bottom: 16px;
   text-wrap: pretty;
-  max-height: 38%;
+  max-height: calc(50% - 2em - 13px);
 }
 .filter-by-section::-webkit-scrollbar-thumb {border-radius: 4px}
 .filter-by-section-item {margin-bottom: 2px}
@@ -81,7 +81,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
+  height: calc(100% - 8px);
   margin-top: 8px;
   margin-left: 8px;
 }
@@ -92,9 +92,9 @@
 }
 
 #library-sections {
-  width: 100%;
-  height: calc(100% - 1.1em - 7px);
+  height: calc(100% - 1.1em - 10px);
   margin-top: 4px;
+  padding-right: 2px;
   border-top: solid 3px var(--cards-bg);
 }
 #library-sections-buttons {display: flex}
@@ -109,9 +109,7 @@
   border-top-color: var(--dim-fg);
 }
 #library-sections-container {
-  max-height: 90%;
-  height: 90%;
-  padding-right: 8px;
+  height: calc(100% - 1em - 15px);
   overflow-y: auto;
 }
 .books-section::before {
@@ -120,7 +118,11 @@
   left: 40%;
   position: relative;
 }
-.books-section {height: 100%}
+.books-section {
+  height: 100%;
+  border-radius: 5px;
+  padding-right: 8px;
+}
 .books-section:has(.book-card)::before {display: none}
 .books-section.loading::after {
   content: "";

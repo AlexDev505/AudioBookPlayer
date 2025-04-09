@@ -238,14 +238,13 @@ input[type="range"]::after {
   display: none;
   justify-content: space-between;
   padding: 5px 15px;
-  max-height: 15%;
-  height: 15%;
+  max-height: 55px;
+  height: 55px;
   order: 2;
   background-color: var(--side-menu-bg);
 }
 #small-player.visible {display: flex}
-#small-player.visible ~ .page {max-height: 85%}
-#small-player.visible ~ .page .filter-by-section {max-height: 35%}
+#small-player.visible ~ .page {max-height: calc(100% - 65px);}
 #small-player.visible ~ .page #book-page-content .book-description {max-height: 22%}
 #small-player > div {
   height: 100%;
