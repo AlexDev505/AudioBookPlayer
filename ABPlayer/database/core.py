@@ -173,6 +173,14 @@ class Database:
     def get_all_series(self) -> list[str]:
         return [obj[0] for obj in set(self._fetchall("SELECT series_name FROM books"))]
 
+    def get_series_durations(self, series_name: str) -> list[str]:
+        return [
+            obj[0]
+            for obj in self._fetchall(
+                "SELECT duration FROM books WHERE series_name=?", series_name
+            )
+        ]
+
     def check_is_books_exists(self, urls: list[str]) -> list[str]:
         return [
             url[0]

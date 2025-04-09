@@ -4,6 +4,7 @@ import difflib
 import os
 import shutil
 import typing as ty
+from contextlib import suppress
 from dataclasses import asdict
 from datetime import datetime
 from functools import partial
@@ -17,6 +18,7 @@ from drivers import Driver, BaseDownloadProcessHandler, DownloadProcessStatus
 from models.book import DATETIME_FORMAT, Status
 from tools import convert_from_bytes, make_book_preview, pretty_view
 from .js_api import JSApi, JSApiError, ConnectionFailedError
+from .tools import duration_str_to_sec, duration_sec_to_str
 
 
 if ty.TYPE_CHECKING:
@@ -311,6 +313,16 @@ class BooksApi(JSApi):
             series = db.get_all_series()
         logger.opt(colors=True).debug(f"series found: <y>{len(series)}</y>")
         return self.make_answer(series)
+
+    def get_series_duration(self, series_name: str):
+        logger.opt(colors=True).debug("request: <r>all series</r>")
+        with Database() as db:
+            durations = db.get_series_durations(series_name)
+        total_duration = 0
+        for duration in durations:
+            with suppress(ValueError):
+                total_duration += duration_str_to_sec(duration)
+        return self.make_answer(duration_sec_to_str(total_duration))
 
     def check_is_books_exists(self, urls: list[str]):
         logger.opt(colors=True).debug("request: <r>check is books exists</r>")

@@ -145,10 +145,15 @@ function onOpenLibrary(el) {
     if (Section.current) Section.current.hide()
     section("all-books-section").show()
     fillFilterBySections()
-    if (urlParams.get("favorite"))
-        document.getElementById("library-title").innerHTML = "{{ gettext("library.favorite") }}"
-    else
-        document.getElementById("library-title").innerHTML = "{{ gettext("library") }}"
+    var base_text = (urlParams.get("favorite"))? "{{ gettext('library.favorite') }}" : "{{ gettext('library') }}"
+    if (urlParams.get("author")) base_text += ` - ${urlParams.get("author")}`
+    else if (urlParams.get("series")) {
+        base_text += ` - ${(urlParams.get("series"))}`
+        pywebview.api.get_series_duration((urlParams.get("series"))).then((response) => {
+            document.getElementById("library-title").innerHTML += ` (${response.data})`
+        })
+    }
+    document.getElementById("library-title").innerHTML = base_text
     if (urlParams.get("reverse")) toggleReverseCheckbox(1)
     else toggleReverseCheckbox(0)
 }
