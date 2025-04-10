@@ -155,6 +155,9 @@ class M3U8Downloader(BaseDownloader):
         # getting full file for correctly decryption
         data = bytearray()
         async for chunk in super()._iter_chunks(file_url):
+            if isinstance(chunk, int):
+                yield chunk
+                continue
             data.extend(chunk)
         yield data if not decrypt_func else decrypt_func(data)
 

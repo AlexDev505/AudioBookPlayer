@@ -228,17 +228,26 @@ class BaseDownloader(ABC):
         )
 
         async with aiofiles.open(file_path, mode="wb") as file:
+            file_size = 0
             downloaded_size = 0
             while not self._terminated:
                 try:
                     async for chunk in self._iter_chunks(file_url, downloaded_size):
                         if self._terminated:
                             return
+                        if isinstance(chunk, int):
+                            if not file_size:
+                                file_size = chunk
+                            continue
                         downloaded_size += len(chunk)
                         await file.write(chunk)
                         await file.flush()
+                    if downloaded_size < file_size:
+                        raise RuntimeError(f"downloaded size lower than file size")
                     break
                 except Exception as err:
+                    if isinstance(err, aiohttp.ClientPayloadError):
+                        continue
                     logger.opt(colors=True).debug(
                         f"downloading failed {type(err).__name__}: {err}"
                     )
@@ -251,9 +260,10 @@ class BaseDownloader(ABC):
 
     async def _iter_chunks(
         self, file_url: str, offset: int = 0
-    ) -> ty.AsyncGenerator[bytes]:
+    ) -> ty.AsyncGenerator[int | bytes]:
         """
         Iterates over the bytes chunks.
+        At the first iteration yields content length.
         """
         async with aiohttp.ClientSession(
             timeout=aiohttp.ClientTimeout(sock_read=240)
@@ -261,12 +271,11 @@ class BaseDownloader(ABC):
             async with session.get(
                 file_url, headers={"Range": f"bytes={offset}-"}
             ) as response:
+                file_size = int(response.headers.get("content-length"))
                 logger.opt(colors=True).trace(
-                    "{}: <y>{}</y>".format(
-                        file_url,
-                        convert_from_bytes(int(response.headers.get("content-length"))),
-                    )
+                    "{}: <y>{}</y>".format(file_url, convert_from_bytes(file_size))
                 )
+                yield file_size
                 async for chunk in response.content.iter_chunked(5120):
                     if self.process_handler:
                         self.process_handler.progress(len(chunk))
