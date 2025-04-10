@@ -503,7 +503,10 @@ class BooksApi(JSApi):
             if not (book := db.get_book_by_bid(bid)):
                 return
             driver = Driver.get_suitable_driver(book.url)()
-            new_data = driver.get_book(book.url)
+            try:
+                new_data = driver.get_book(book.url)
+            except requests.exceptions.ConnectionError as err:
+                return
             book.preview = new_data.preview
             logger.opt(colors=True).info(
                 f"new book <y>{bid}</y> preview: {book.preview}"
