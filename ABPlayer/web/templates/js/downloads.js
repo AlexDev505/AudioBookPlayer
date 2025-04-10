@@ -16,8 +16,10 @@ function startDownloading(button, bid, title) {
         if (button.classList.contains("loading")) return
         button.classList.add("loading")
     }
+    createDownloadingCard(bid, title)
     pywebview.api.download_book(bid).then((response) => {
         if (response.status != "ok") {
+            button.classList.remove("loading")
             showError(response.message)
             removeDownloadingCard(response.extra.bid)
             return
@@ -26,7 +28,6 @@ function startDownloading(button, bid, title) {
                 setDownloadingStatus(response.data.bid, "waiting")
         }
     })
-    createDownloadingCard(bid, title)
 }
 
 function createDownloadingCard(bid, title) {

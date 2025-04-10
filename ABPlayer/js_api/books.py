@@ -377,6 +377,11 @@ class BooksApi(JSApi):
             if not (book := db.get_book_by_bid(bid)):
                 return self.error(BookNotFound(bid=bid))
 
+        try:
+            requests.get(book.url)
+        except requests.exceptions.ConnectionError:
+            return self.error(ConnectionFailedError())
+
         if len(self._download_processes) >= 5:
             self._download_queue.append(bid)
             logger.opt(colors=True).debug(f"added to download queue: {book:styled}")
