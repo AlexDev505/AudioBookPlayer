@@ -59,7 +59,6 @@ function setDownloadingStatus(bid, status) {
     else if (status == "finishing") status_el.innerHTML = "{{ gettext("downloading.ending") }}..."
     else if (status == "finished") status_el.innerHTML = "{{ gettext("downloading.finished") }}"
     else if (status == "terminating") status_el.innerHTML = "{{ gettext('downloading.terminating') }}..."
-    else if (status == "terminated") removeDownloadingCard(bid)
 }
 function initTotalSize(bid, total_size) {
     data_size = document.querySelector(`.download-card[data-bid='${bid}'] .data-size`)
@@ -78,7 +77,7 @@ function terminateDownloading(bid) {
         removeDownloadingCard(bid)
     else {
         document.querySelector(`.download-card[data-bid='${bid}'] .cancel-btn`).classList.add("loading")
-        pywebview.api.terminate_downloading(bid)
+        pywebview.api.terminate_downloading(bid).then((resp) => {removeDownloadingCard(bid)})
     }
 }
 
