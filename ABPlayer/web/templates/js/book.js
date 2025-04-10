@@ -161,7 +161,7 @@ document.addEventListener("DOMContentLoaded", event => {
 
 function initBook(book) {
     smallPlayer.classList.add("visible")
-    smallPlayer.querySelector(".small-playback-control").style = `background-image: url(${book.preview});`
+    smallPlayer.querySelector(".small-playback-control").style = `background-image: url('${book.preview}'), url('/library/${book.local_preview}');`
     smallPlayer.querySelector(".book-title").innerText = `${book.name}`
     smallPlayer.querySelector(".listening-progres").innerText = `${book.listening_progress}% {{ gettext("book.listening_progress") }}`
     smallPlayer.querySelector(".book-info").onclick = function() {
