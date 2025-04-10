@@ -408,10 +408,11 @@ class BooksApi(JSApi):
         elif download_process := self._download_processes.get(bid):
             download_process.downloader.terminate()
         logger.opt(colors=True).debug(f"downloading of book <y>{bid}</y> terminated")
+        return self.make_answer()
 
     @staticmethod
     def _delete_book_files(dir_path: str, files: list[str]) -> None:
-        for file in [*files, "cover.jpg", ".abp"]:
+        for file in files:
             file_path = os.path.join(dir_path, file)
             try:
                 logger.opt(colors=True).trace(f"deleting <y>{file_path}</y>")
@@ -465,7 +466,9 @@ class BooksApi(JSApi):
             return self.error(BookNotDownloaded(bid=bid))
 
         logger.opt(colors=True).debug(f"deleting book: {book:styled}")
-        self._delete_book_files(book.dir_path, list(book.files.keys()))
+        self._delete_book_files(
+            book.dir_path, [*book.files.keys(), "cover.jpg", ".abp"]
+        )
 
         logger.opt(colors=True).debug(f"clearing files data from db: {book:styled}")
         book.files.clear()
@@ -482,7 +485,10 @@ class BooksApi(JSApi):
                 return self.error(BookNotFound(bid=bid))
 
             if book.files:
-                self.removed_books_files[bid] = (book.dir_path, list(book.files.keys()))
+                self.removed_books_files[bid] = (
+                    book.dir_path,
+                    [*book.files.keys(), "cover.jpg"],
+                )
                 os.remove(book.abp_file_path)
             db.remove_book(bid)
             db.commit()
