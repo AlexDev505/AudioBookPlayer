@@ -35,7 +35,7 @@ AutoCloseWindow true
 ; MUI end ------
 
 Name "${PRODUCT_NAME}"
-OutFile "installers\ABPlayerSetup ${PRODUCT_VERSION}{arch}.exe"
+OutFile "updaters\ABPlayerUpdate.${PRODUCT_VERSION}{arch}.exe"
 InstallDir "{installdir}\ABPlayer"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
@@ -55,11 +55,11 @@ Section "ABPlayer" SEC01
   SetOutPath "$INSTDIR"
   FileIsLocked:
     ${IfFileLocked} FileLocked
-    File "ABPlayer\ABPlayer{arch}.exe"
+    File "ABPlayer{arch}\ABPlayer{arch}.exe"
     RMDir /r "$INSTDIR\_internal"{install}
 
     SetOutPath "$INSTDIR"
-    File "ABPlayer\ABPlayerUpdater{arch}.exe"
+    File "ABPlayerUpdater{arch}.exe"
     Goto Done
   FileLocked:
     Goto FileIsLocked

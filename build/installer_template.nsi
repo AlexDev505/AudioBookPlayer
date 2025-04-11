@@ -54,7 +54,7 @@ Section "ABPlayer" SEC01
   SetOverwrite try{install}
   
   SetOutPath "$INSTDIR"
-  File "ABPlayer\ABPlayerUpdater{arch}.exe"
+  File "ABPlayerUpdater{arch}.exe"
   CreateShortCut "$SMPROGRAMS\ABPlayer.lnk" "$INSTDIR\ABPlayer{arch}.exe"
   CreateShortCut "$DESKTOP\ABPlayer.lnk" "$INSTDIR\ABPlayer{arch}.exe"
 SectionEnd
