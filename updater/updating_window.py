@@ -58,38 +58,43 @@ def update_app(window) -> None:
 
     window.evaluate_js("setStatus('проверка наличия обновлений...')")
 
-    updater_version = Version.from_str(os.environ["UPDATER_VERSION"])
+    current_updater_version = Version.from_str(os.environ["UPDATER_VERSION"])
     arch = "x64" if not os.environ["ARCH"] else "x32"
     resp = urllib.request.urlopen(
         "https://sourceforge.net/projects/audiobookplayer/files/updates.json/download"
     )
+    # all updates
     updates: dict[str, dict[str, ...]] = json.loads(resp.read().decode("utf-8"))
-    versions = list(updates.keys())
-    new_versions = versions[: versions.index(os.environ["VERSION"])]
-    if any(updates[version].get("manual") for version in new_versions):
-        logger.debug("needs manual update")
-        window.evaluate_js("setStatus('требуется ручное обновление')")
-        return
-    if any(
-        Version.from_str(upd_version) > updater_version
-        for version in new_versions
-        if (upd_version := updates[version].get("updater"))
-    ):
-        logger.debug("needs new updater")
-        window.evaluate_js("setStatus('требуется новый апдейтер')")
-        return
+    versions = list(updates.keys())  # all versions. versions[0] - latest version
+    all_new_versions = versions[: versions.index(os.environ["VERSION"])]
     new_versions = [
         version
-        for version_str in new_versions
+        for version_str in all_new_versions
         if (version := Version.from_str(version_str)).is_stable
-        or not os.environ.get("ONLY_STABLE", False)
-    ]
+    ]  # only stable releases
+    if (
+        not os.environ.get("ONLY_STABLE", False)
+        and not (version := Version.from_str(all_new_versions[0])).is_stable
+    ):  # if not ONLY_STABLE and latest release is not stable, add it to new releases
+        new_versions.insert(0, version)
     if not new_versions:
         logger.info("no new versions available")
         window.evaluate_js("setStatus('нет обновлений')")
         return
+    if any(updates[str(version)].get("manual") for version in new_versions):
+        logger.info("needs manual update")
+        window.evaluate_js("setStatus('требуется ручное обновление')")
+        return
+    if any(
+        Version.from_str(upd_version) > current_updater_version
+        for version in new_versions
+        if (upd_version := updates[str(version)].get("updater"))
+    ):
+        logger.info("needs new updater")
+        window.evaluate_js("setStatus('требуется новый апдейтер')")
+        return
 
-    logger.opt(colors=True).info(
+    logger.opt(colors=True).debug(
         f"new versions: {", ".join(map(lambda x: f"<y>{x}</y>", new_versions))}"
     )
     window.evaluate_js("setStatus('получение информации')")
@@ -99,7 +104,7 @@ def update_app(window) -> None:
         resp = urllib.request.urlopen(
             f"https://sourceforge.net/projects/audiobookplayer/files/{version}/{arch}"
             "/update.json/download"
-        )
+        )  # getting full info about release
         update = json.loads(resp.read().decode("utf-8"))
         files_to_remove.extend(update["update"]["remove"])
         files_to_update.update({file: version for file in update["update"]["new"]})
@@ -111,7 +116,7 @@ def update_app(window) -> None:
     files_count = len(files_to_update)
     downloaded = 0
     window.evaluate_js(f"initProgresBar({files_count})")
-    for file, version in files_to_update.items():
+    for file, version in files_to_update.items():  # downloading files
         fp = f"{version}/{arch}/{file.replace("\\", "/")}"
         logger.debug(f"downloading {fp}")
         resp = urllib.request.urlopen(
@@ -135,7 +140,7 @@ def update_app(window) -> None:
         if os.path.exists(path):
             os.remove(path)
 
-    for file, file_hash in hashes.items():
+    for file, file_hash in hashes.items():  # installing files
         dst_path = Path(*file.split("\\")[1:])
         if not os.path.exists(dst_path.parent):
             dst_path.parent.mkdir(parents=True, exist_ok=True)

@@ -215,8 +215,23 @@ class SettingsApi(JSApi):
                 )
             )
 
-        new_versions = versions[: versions.index(os.environ["VERSION"])]
-        if any(updates[version].get("manual") for version in new_versions):
+        temp_data = temp_file.load()
+        all_new_versions = versions[: versions.index(os.environ["VERSION"])]
+        new_versions = [
+            version
+            for version_str in all_new_versions
+            if (version := Version.from_str(version_str)).is_stable
+        ]  # only stable releases
+        if (
+            not temp_data.get("only_stable", False)
+            and not (version := Version.from_str(all_new_versions[0])).is_stable
+        ):
+            # if not only_stable and latest release is not stable,
+            # add it to new releases
+            new_versions.insert(0, version)
+        if not new_versions:
+            return self.make_answer(False)
+        if any(updates[str(version)].get("manual") for version in new_versions):
             return self.make_answer(
                 dict(
                     version=last_stable_version,
@@ -225,25 +240,11 @@ class SettingsApi(JSApi):
                     url=RELEASE_PAGE_URL.format(tag=last_stable_version),
                 )
             )
-
-        temp_data = temp_file.load()
-        if not (
-            last_version := next(
-                (
-                    version
-                    for version_str in new_versions
-                    if (version := Version.from_str(version_str)).is_stable
-                    or not temp_data.get("only_stable", False)
-                ),
-                None,
-            )
-        ):
-            return self.make_answer(False)
         return self.make_answer(
             dict(
-                version=last_version,
-                stable=last_version.is_stable,
-                url=RELEASE_PAGE_URL.format(tag=last_version),
+                version=str(new_versions[0]),
+                stable=new_versions[0].is_stable,
+                url=RELEASE_PAGE_URL.format(tag=str(new_versions[0])),
             )
         )
 
