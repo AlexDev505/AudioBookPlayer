@@ -34,7 +34,7 @@ def main_window() -> webview.Window:
         frameless=True,
         easy_drag=False,
         min_size=(920, 520),
-        background_color="#000000",
+        background_color="#202225",
         js_api=js_api,
     )
 
