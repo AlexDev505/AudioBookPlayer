@@ -10,6 +10,7 @@
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 
 SetCompressor lzma
+AutoCloseWindow true
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
@@ -19,18 +20,8 @@ SetCompressor lzma
 !define MUI_ICON "sources\icon.ico"
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\orange-uninstall.ico"
 
-; Welcome page
-!insertmacro MUI_PAGE_WELCOME
-; License page
-!define MUI_LICENSEPAGE_CHECKBOX
-!insertmacro MUI_PAGE_LICENSE "..\LICENSE.txt"
-; Directory page
-!insertmacro MUI_PAGE_DIRECTORY
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
-; Finish page
-!define MUI_FINISHPAGE_RUN "$INSTDIR\ABPlayer{arch}.exe"
-!insertmacro MUI_PAGE_FINISH
 
 ; Uninstaller pages
 !insertmacro MUI_UNPAGE_INSTFILES
@@ -50,13 +41,29 @@ InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
 
+!define IfFileLocked "!insertmacro _IfFileLocked"
+
+!macro _IfFileLocked label
+  ClearErrors
+  FileOpen $0 "$INSTDIR\ABPlayer{arch}.exe" w
+  IfErrors ${label}
+  FileClose $0
+!macroend
+
 Section "ABPlayer" SEC01
-  SetOverwrite try{install}
-  
+  SetOverwrite try
   SetOutPath "$INSTDIR"
-  File "ABPlayer\ABPlayerUpdater{arch}.exe"
-  CreateShortCut "$SMPROGRAMS\ABPlayer.lnk" "$INSTDIR\ABPlayer{arch}.exe"
-  CreateShortCut "$DESKTOP\ABPlayer.lnk" "$INSTDIR\ABPlayer{arch}.exe"
+  FileIsLocked:
+    ${IfFileLocked} FileLocked
+    File "ABPlayer\ABPlayer{arch}.exe"
+    RMDir /r "$INSTDIR\_internal"{install}
+
+    SetOutPath "$INSTDIR"
+    File "ABPlayer\ABPlayerUpdater{arch}.exe"
+    Goto Done
+  FileLocked:
+    Goto FileIsLocked
+  Done:
 SectionEnd
 
 Section -Post
