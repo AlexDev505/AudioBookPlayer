@@ -47,7 +47,6 @@ msgid "book.not_downloaded"
 msgstr "The book is not downloaded"
 
 #: ../../abplayer/js_api/books.py:558
-#, fuzzy
 msgid "book.wait_for_similar_book_downloading"
 msgstr "Wait for the download of similar book to finish"
 

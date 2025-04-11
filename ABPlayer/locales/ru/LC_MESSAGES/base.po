@@ -286,14 +286,12 @@ msgid "search.empty"
 msgstr "Ничего не найдено"
 
 #: ../../abplayer/web/templates/js/settings.js:34
-#, fuzzy
 msgid "books_folder.changed"
-msgstr "Папка для книг"
+msgstr "Папка с книгами изменена"
 
 #: ../../abplayer/web/templates/js/settings.js:34
-#, fuzzy
 msgid "books_folder.books_added"
-msgstr "Папка для книг"
+msgstr "Книг добавлено"
 
 #: ../../abplayer/web/templates/js/settings.js:38
 msgid "books_folder.downloaded_books_in_old_folder"
@@ -304,14 +302,12 @@ msgid "books_folder.move_to_new_folder"
 msgstr "Перенести всё в новое место"
 
 #: ../../abplayer/web/templates/js/settings.js:40
-#, fuzzy
 msgid "books_folder.delete_old_books"
-msgstr "удалить оставшиеся файлы"
+msgstr "Удалить старые книги из библиотеки"
 
 #: ../../abplayer/web/templates/js/settings.js:46
-#, fuzzy
 msgid "books_folder.moving_files"
-msgstr "Папка для книг"
+msgstr "Перенести всё в новое место"
 
 #: ../../abplayer/web/templates/js/settings.js:46
 #: ../../abplayer/web/templates/js/settings.js:54
@@ -320,17 +316,14 @@ msgid "it_can_take_some_time"
 msgstr "это может занять некоторое время"
 
 #: ../../abplayer/web/templates/js/settings.js:50
-#, fuzzy
 msgid "books_folder.moving_finished"
-msgstr "Папка для книг"
+msgstr "Перенос завершен"
 
 #: ../../abplayer/web/templates/js/settings.js:50
-#, fuzzy
 msgid "books_folder.books_moved"
-msgstr "Папка для книг"
+msgstr "Книг перенесено"
 
 #: ../../abplayer/web/templates/js/settings.js:54
-#, fuzzy
 msgid "books_folder.deleting_files"
 msgstr "удалить оставшиеся файлы"
 
@@ -339,9 +332,8 @@ msgid "books_folder.deleting_finished"
 msgstr "Удаление завершено"
 
 #: ../../abplayer/web/templates/js/settings.js:58
-#, fuzzy
 msgid "books_folder.books_deleted"
-msgstr "Папка для книг"
+msgstr "Книг удалено"
 
 #: ../../abplayer/web/templates/js/settings.js:70
 msgid "update.available"
@@ -366,6 +358,5 @@ msgid "update.no_suggest_tests"
 msgstr "не предлагать участие в тестировании"
 
 #: ../../abplayer/web/templates/js/settings.js:85
-#, fuzzy
 msgid "update.downloading"
-msgstr "загрузки"
+msgstr "загрузка"
