@@ -1,6 +1,22 @@
 """
 
-Assembly EXE, Formation of NSIS Scenario.
+Assembly EXE, Formation of NSIS Scenario, prepare update.
+
+All non -DEV builds are stored in the `updates` directory as new updates.
+Creates `updates/<version>/<arch>/update.json` that stored:
+hashes of all files, a list of changed and deleted files from the last stable release.
+Inserts new versions at start of `updates/updates.json`
+ (updates.keys()[0] - latest release).
+In `updates/updates.json` u can mark version as `manual`
+ and specify new versions of updater.
+If release marked as `manual` - ABPlayerSetup.exe will be used, while updating.
+
+
+Startup args:
+    version: str
+    --dev if given build will be DEV.
+    --manual if given update will be marked as `manual`.
+    --updater=<str> specify version of updater for this release.
 
 """
 
@@ -23,6 +39,8 @@ from version import Version
 parser = argparse.ArgumentParser()
 parser.add_argument("version", type=str)
 parser.add_argument("--dev", action="store_true", default=False)
+parser.add_argument("--manual", action="store_true", default=False)
+parser.add_argument("--updater", type=str, default="")
 args = parser.parse_args()
 
 DEV: bool = args.dev
@@ -182,10 +200,15 @@ if save_update:
     with open(updates_file_path, encoding="utf-8") as file:
         updates_ = orjson.loads(file.read())
     updates = {str(__version__): {}}
+    if args.manual:
+        updates[str(__version__)]["manual"] = True
+    if args.updater:
+        updates[str(__version__)]["updater"] = args.updater
     updates.update(updates_)
     with open(updates_file_path, "w", encoding="utf-8") as file:
         json.dump(updates, file, indent=4)
     if __version__.is_stable:
+        # save __version__ as latest if it`s stable version
         with open(last_build_file_path, "w", encoding="utf-8") as file:
             file.write(str(__version__))
 
