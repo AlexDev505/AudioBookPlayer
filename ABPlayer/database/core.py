@@ -1,3 +1,9 @@
+"""
+
+All DB queries described in `Database` class.
+
+"""
+
 from __future__ import annotations
 
 import os

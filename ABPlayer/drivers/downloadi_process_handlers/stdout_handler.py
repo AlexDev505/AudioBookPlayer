@@ -5,8 +5,8 @@ from ..base import BaseDownloadProcessHandler
 
 class StdoutDownloadProcessHandler(BaseDownloadProcessHandler):
     """
-    Обработчик процесса скачивания.
-    Визуализирует процесс скачивания книги в консоли.
+    Download processor.
+    Visualizes the process of downloading a book in the console.
     """
 
     def show_progress(self) -> None:

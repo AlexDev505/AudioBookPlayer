@@ -14,8 +14,8 @@ from web.app import app
 
 def create_updating_window() -> webview.Window:
     """
-    Создает окно обновления приложения.
-    :returns: Экземпляр окна.
+    Creates an application update window.
+    :returns: window copy.
     """
 
     def _on_shown():
@@ -46,7 +46,7 @@ def create_updating_window() -> webview.Window:
         background_color="#000000",
     )
 
-    # Добавляем обработчики событий
+    # Add events handlers
     window.events.loaded += _on_loaded
     window.events.shown += _on_shown
 

@@ -1,3 +1,9 @@
+"""
+
+Uploads update to SourceForge.
+
+"""
+
 import argparse
 import os
 import sys

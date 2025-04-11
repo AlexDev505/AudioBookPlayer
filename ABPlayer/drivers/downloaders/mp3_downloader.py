@@ -11,8 +11,8 @@ if ty.TYPE_CHECKING:
 
 class MP3Downloader(BaseDownloader):
     """
-    Загрузчик, предназначенный для книг в которых файлы представлены
-    отдельными MP3 файлами.
+    A loader designed for books in which files are presented
+    separate mp3 files.
     """
 
     def _prepare_files_data(self):

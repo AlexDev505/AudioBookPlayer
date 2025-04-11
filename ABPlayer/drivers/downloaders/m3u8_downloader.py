@@ -49,6 +49,10 @@ def convert_ts_to_mp3(ts_file_path: Path, mp3_file_path: Path) -> None:
 
 
 def split_ts(ts_file_path: Path, on: int) -> tuple[Path, Path]:
+    """
+    Splits one ts file at `on` sec.
+    Creates two new files with same names and suffixes `-1` and `-2`.
+    """
     first_part = Path(
         os.path.join(
             ts_file_path.parent, f"{ts_file_path.name.removesuffix(".ts")}-1.ts"
@@ -74,8 +78,7 @@ def split_ts(ts_file_path: Path, on: int) -> tuple[Path, Path]:
 
 class M3U8Downloader(BaseDownloader):
     """
-    Загрузчик, предназначенный для книг в которых файлы представлены
-    m3u8 файлом.
+    A loader designed for books in which files are presented M3U8 file.
     """
 
     def __init__(
@@ -83,9 +86,9 @@ class M3U8Downloader(BaseDownloader):
     ):
         super().__init__(book, process_handler)
 
-        self._m3u8_data = None  # Объект m3u8
+        self._m3u8_data = None  # Object m3u8
         self._host_uri: str | None = None
-        self._encryption_key: str | None = None  # Ключ шифрования фрагментов
+        self._encryption_key: str | None = None  # The encryption key of fragments
 
         self._next_seq_index: int = 0
         self._ts_file_paths: list[Path] = []
@@ -191,7 +194,7 @@ class M3U8Downloader(BaseDownloader):
         self._real_item_paths.append(mp3_item_fp)
 
     def _get_decryption_func(self, segment_index: int, segment):
-        # Определяем функцию дешифрования фрагмента
+        # Determine the function of decryption of the fragment
         decrypt_func = None
         if segment.key.method == "AES-128":
             if not self._encryption_key:

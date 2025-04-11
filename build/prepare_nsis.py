@@ -1,3 +1,9 @@
+"""
+
+Prepares NSIS files.
+
+"""
+
 import os
 
 

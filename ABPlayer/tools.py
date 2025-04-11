@@ -81,8 +81,8 @@ class Version:
 
 def convert_from_bytes(bytes_value: int) -> str:
     """
-    :param bytes_value: Число байт.
-    :returns: Строка вида <Число> <Единица измерения>
+    :param bytes_value: The number of bytes.
+    :returns: line of view <number> <unit of measurement>
     """
     if bytes_value == 0:
         return "0B"
@@ -95,14 +95,14 @@ def convert_from_bytes(bytes_value: int) -> str:
 
 def get_file_hash(file_path: ty.Union[str, Path], hash_func=hashlib.sha256) -> str:
     """
-    :param file_path: Путь к файлу.
-    :param hash_func: Функция хеширования.
-    :returns: Хеш файла.
+    :param file_path: The Way to the File.
+    :param hash_func: hash function.
+    :returns: hash file.
     """
-    hash_func = hash_func()  # Инициализируем хеш функцию
+    hash_func = hash_func()  # Initialize the hash function
     with open(file_path, "rb") as file:
-        # Читаем файл по блокам в 64кб,
-        # для избежания загрузки больших файлов в оперативную память
+        # We read the file by blocks in 64kb,
+        # to avoid loading large files into RAM
         for block in iter(lambda: file.read(65536), b""):
             hash_func.update(block)
     file_hash = hash_func.hexdigest()
@@ -116,8 +116,8 @@ def pretty_view(
     obj: ty.Any, *, multiline: bool = False, indent: int = 4, __finish=True
 ) -> str:
     """
-    Формирует удобно читаемое представление списка/словаря.
-    :returns: Строка.
+    Creates a readable representation of a list/dictionary.
+    :returns: String.
     """
     result = ""
 
@@ -182,8 +182,8 @@ def pretty_view(
 
 def make_book_preview(book: Book) -> dict:
     """
-    :param book: Экземпляр книги.
-    :returns: Словарь с основными полями книги.
+    :param book: Instance of the book.
+    :returns: Dictionary with the main fields of the book.
     """
     return dict(
         author=book.author,

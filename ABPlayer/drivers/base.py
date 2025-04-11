@@ -325,7 +325,7 @@ class BaseDownloader(ABC):
 
     def terminate(self) -> None:
         """
-        Прерывает загрузку.
+        Interrupts loading.
         """
         logger.opt(colors=True).debug(f"<y>{self}</y> terminating")
         self.process_handler.status = DownloadProcessStatus.TERMINATING
@@ -343,7 +343,7 @@ class BaseDownloader(ABC):
 
     def _get_item_file_name(self, item_index: int) -> str:
         item = self.book.items[item_index]
-        # Убираем номер файла из названия
+        # Removes series_number from capture name
         item_title = re.sub(r"^(\d+) (.+)", r"\g<2>", item.title)
         return f"{str(item_index + 1).rjust(2, '0')}. {item_title}.mp3"
 

@@ -25,6 +25,14 @@ def ttl_cache(max_age: int, maxsize: int = 128, typed: bool = False):
 
 
 def duration_str_to_sec(duration: str) -> int:
+    """
+    Converts a duration string to a duration in seconds.
+    Available formats:
+        - <h>:<m><s>
+        - <h> час(а|ов) <m> минут(а|ы)
+        - <h> ч. <m> мин.
+        or parts of this formats.
+    """
     for pattern in [
         r"(((?P<h>\d+):)?(?P<m>\d{1,2}):)?(?P<s>\d{1,2})?",
         r"((?P<h>\d+) час(а|ов)?)?\s?((?P<m>\d{1,2}) минут[аы]?)?(?P<s>)",
@@ -41,6 +49,10 @@ def duration_str_to_sec(duration: str) -> int:
 
 
 def duration_sec_to_str(sec: int) -> str:
+    """
+    Converts a duration in seconds to a duration string
+    in format <h>:<mm>:<ss> or <m>:<ss> or <s>.
+    """
     h, m, s = sec // 3600, sec % 3600 // 60, sec % 60
     return (
         f"{f"{h}:" if h else ""}"

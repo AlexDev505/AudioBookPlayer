@@ -1,6 +1,6 @@
 """
 
-Сборка exe апдейтера.
+Builds updater to .exe
 
 """
 

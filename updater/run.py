@@ -1,3 +1,13 @@
+"""
+
+Running the updater.
+
+Startup parameters:
+    --version=<str> current version of app
+    --only-stable if given updates to stable version
+
+"""
+
 import argparse
 import sys
 

@@ -1,6 +1,6 @@
 """
 
-Сборка exe, формирование NSIS сценария, загрузка обновления на SourceForge.
+Assembly EXE, Formation of NSIS Scenario.
 
 """
 
@@ -41,9 +41,6 @@ update_dir_path = os.path.join(
 update_file_path = os.path.join(update_dir_path, "update.json")
 last_build_file_path = os.path.join("last_build")
 
-
-# CHECK LAST BUILD
-
 save_update = not DEV
 if not DEV and os.path.exists(update_dir_path):
     save_update = (
@@ -59,6 +56,7 @@ text = re.sub(
     text,
 )
 dev_env_vars = re.search(r"# DEV\s((.+\s)+\s)", text, re.MULTILINE)
+# remove dev environ variables in not dev build
 if not DEV and dev_env_vars:
     dev_env_vars = dev_env_vars.group(1).strip()
     text = text.replace(dev_env_vars, "")
@@ -104,6 +102,7 @@ PyInstaller.__main__.run(
 )
 shutil.rmtree("temp")
 
+# returning dev env vars
 if not DEV and dev_env_vars:
     with open(main_file_path, encoding="utf-8") as file:
         text = file.read()

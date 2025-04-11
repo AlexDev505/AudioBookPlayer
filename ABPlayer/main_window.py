@@ -8,8 +8,8 @@ from web.app import app
 
 def main_window() -> webview.Window:
     """
-    Создает главное окно приложения.
-    :returns: Экземпляр окна.
+    Creates the main application window.
+    :returns: An instance of the window.
     """
 
     def _on_loaded():
@@ -38,7 +38,7 @@ def main_window() -> webview.Window:
         js_api=js_api,
     )
 
-    # Добавляем обработчики событий
+    # Adding event handlers
     window.events.loaded += _on_loaded
     window.events.closed += _on_closed
     window.events.shown += _on_shown
