@@ -10,6 +10,7 @@
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 
 SetCompressor lzma
+AutoCloseWindow true
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
@@ -19,18 +20,8 @@ SetCompressor lzma
 !define MUI_ICON "sources\icon.ico"
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\orange-uninstall.ico"
 
-; Welcome page
-!insertmacro MUI_PAGE_WELCOME
-; License page
-!define MUI_LICENSEPAGE_CHECKBOX
-!insertmacro MUI_PAGE_LICENSE "..\LICENSE.txt"
-; Directory page
-!insertmacro MUI_PAGE_DIRECTORY
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
-; Finish page
-!define MUI_FINISHPAGE_RUN "$INSTDIR\ABPlayer.exe"
-!insertmacro MUI_PAGE_FINISH
 
 ; Uninstaller pages
 !insertmacro MUI_UNPAGE_INSTFILES
@@ -44,14 +35,28 @@ SetCompressor lzma
 ; MUI end ------
 
 Name "${PRODUCT_NAME}"
-OutFile "installers\ABPlayerSetup ${PRODUCT_VERSION}.exe"
+OutFile "updaters\ABPlayerUpdate.${PRODUCT_VERSION}.exe"
 InstallDir "$PROGRAMFILES64\ABPlayer"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
 
+!define IfFileLocked "!insertmacro _IfFileLocked"
+
+!macro _IfFileLocked label
+  ClearErrors
+  FileOpen $0 "$INSTDIR\ABPlayer.exe" w
+  IfErrors ${label}
+  FileClose $0
+!macroend
+
 Section "ABPlayer" SEC01
   SetOverwrite try
+  SetOutPath "$INSTDIR"
+  FileIsLocked:
+    ${IfFileLocked} FileLocked
+    File "ABPlayer\ABPlayer.exe"
+    RMDir /r "$INSTDIR\_internal"
   SetOutPath "$INSTDIR"
   File "ABPlayer\ABPlayer.exe"
   SetOutPath "$INSTDIR\_internal"
@@ -523,11 +528,13 @@ Section "ABPlayer" SEC01
   File "ABPlayer\_internal\wheel-0.45.1.dist-info\WHEEL"
   SetOutPath "$INSTDIR\_internal\yarl"
   File "ABPlayer\_internal\yarl\_quoting_c.cp312-win_amd64.pyd"
-  
-  SetOutPath "$INSTDIR"
-  File "ABPlayerUpdater.exe"
-  CreateShortCut "$SMPROGRAMS\ABPlayer.lnk" "$INSTDIR\ABPlayer.exe"
-  CreateShortCut "$DESKTOP\ABPlayer.lnk" "$INSTDIR\ABPlayer.exe"
+
+    SetOutPath "$INSTDIR"
+    File "ABPlayerUpdater.exe"
+    Goto Done
+  FileLocked:
+    Goto FileIsLocked
+  Done:
 SectionEnd
 
 Section -Post

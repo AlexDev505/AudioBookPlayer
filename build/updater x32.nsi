@@ -10,6 +10,7 @@
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 
 SetCompressor lzma
+AutoCloseWindow true
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
@@ -19,18 +20,8 @@ SetCompressor lzma
 !define MUI_ICON "sources\icon.ico"
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\orange-uninstall.ico"
 
-; Welcome page
-!insertmacro MUI_PAGE_WELCOME
-; License page
-!define MUI_LICENSEPAGE_CHECKBOX
-!insertmacro MUI_PAGE_LICENSE "..\LICENSE.txt"
-; Directory page
-!insertmacro MUI_PAGE_DIRECTORY
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
-; Finish page
-!define MUI_FINISHPAGE_RUN "$INSTDIR\ABPlayer x32.exe"
-!insertmacro MUI_PAGE_FINISH
 
 ; Uninstaller pages
 !insertmacro MUI_UNPAGE_INSTFILES
@@ -44,14 +35,28 @@ SetCompressor lzma
 ; MUI end ------
 
 Name "${PRODUCT_NAME}"
-OutFile "installers\ABPlayerSetup ${PRODUCT_VERSION} x32.exe"
+OutFile "updaters\ABPlayerUpdate.${PRODUCT_VERSION} x32.exe"
 InstallDir "$PROGRAMFILES32\ABPlayer"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
 
+!define IfFileLocked "!insertmacro _IfFileLocked"
+
+!macro _IfFileLocked label
+  ClearErrors
+  FileOpen $0 "$INSTDIR\ABPlayer x32.exe" w
+  IfErrors ${label}
+  FileClose $0
+!macroend
+
 Section "ABPlayer" SEC01
   SetOverwrite try
+  SetOutPath "$INSTDIR"
+  FileIsLocked:
+    ${IfFileLocked} FileLocked
+    File "ABPlayer x32\ABPlayer x32.exe"
+    RMDir /r "$INSTDIR\_internal"
   SetOutPath "$INSTDIR x32"
   File "ABPlayer x32\ABPlayer x32.exe"
   SetOutPath "$INSTDIR x32\_internal"
@@ -363,11 +368,13 @@ Section "ABPlayer" SEC01
   File "ABPlayer x32\_internal\wheel-0.45.1.dist-info\WHEEL"
   SetOutPath "$INSTDIR x32\_internal\yarl"
   File "ABPlayer x32\_internal\yarl\_quoting_c.cp312-win32.pyd"
-  
-  SetOutPath "$INSTDIR"
-  File "ABPlayerUpdater x32.exe"
-  CreateShortCut "$SMPROGRAMS\ABPlayer.lnk" "$INSTDIR\ABPlayer x32.exe"
-  CreateShortCut "$DESKTOP\ABPlayer.lnk" "$INSTDIR\ABPlayer x32.exe"
+
+    SetOutPath "$INSTDIR"
+    File "ABPlayerUpdater x32.exe"
+    Goto Done
+  FileLocked:
+    Goto FileIsLocked
+  Done:
 SectionEnd
 
 Section -Post
