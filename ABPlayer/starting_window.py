@@ -8,6 +8,8 @@ from loguru import logger
 import config
 import locales
 from database import Database
+from drivers import Driver
+from drivers.base import LicensedDriver
 from models.book import Book
 from tools import pretty_view
 from web.app import app
@@ -68,6 +70,14 @@ def start_app(window: webview.Window) -> None:
     init_library(window)
 
     window.evaluate_js("setStatus('запуск...')")
+
+    success = 0
+    for driver in Driver.drivers:
+        if not issubclass(driver, LicensedDriver):
+            continue
+        if driver.auth_from_storage():
+            success += 1
+    logger.opt(colors=True).debug(f"<y>{success}</y> drivers successfully authed")
 
     if (sub := time.time() - start_time) < 2:
         logger.trace(f"sleeping {round(2 - sub, 2)}s （*＾-＾*）")

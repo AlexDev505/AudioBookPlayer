@@ -248,7 +248,7 @@ function showBooks(response, status) {
                 <div class="book-author">${book.author}</div>
                 <div class="book-reader">${book.reader}</div>
                 <div class="book-duration">${book.duration}</div>
-                <div class="book-series">${book.series_name} (${book.number_in_series})</div>
+                <div class="book-series">${book.series_name}${(book.number_in_series)? ` (${book.number_in_series})` : ''}</div>
                 <div class="book-driver">${book.driver}</div>
               </div>
             </div>

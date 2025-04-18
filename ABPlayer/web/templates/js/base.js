@@ -184,3 +184,27 @@ function setVolume(value) {
 function setSpeed(value) {
     player.speed = Number(value)
 }
+function loadAvailableDrivers(resp) {
+    container = document.getElementById("drivers-container")
+    licensed_container = document.getElementById("licensed-container")
+    if (required_drivers.length == 0) {
+        for (driver of resp.data) required_drivers.push(driver.name)
+    }
+    _required_drivers = required_drivers.slice(0, required_drivers.length)
+    required_drivers = []
+    for (driver of resp.data) {
+        if (_required_drivers.includes(driver.name)) required_drivers.push(driver.name)
+        container.innerHTML += `
+          <div class="driver-option checkbox ${(_required_drivers.includes(driver.name) && driver.authed) ? 'checked' : ''} ${(!driver.authed)? 'inactive': ''}" data-driver="${driver.name}" onclick="toggleDriver('${driver.name}', this)">${driver.name}</div>
+        `
+        if (driver.licensed) {
+            licensed_container.innerHTML += `
+              <div class="licensed-card">
+                <a class="book-title" href="${driver.url}" target="_blank">${driver.name}</a>
+                <div class="licensed-status">${(driver.authed)? "{{ gettext('licensed.authed') }}": "{{ gettext('licensed.not_authed') }}"}</div>
+                <div class="button licensed-btn" data-driver="${driver.name}" data-authed="${driver.authed}" onclick="licensedBtnClicked(this)">${(driver.authed)? "{{ gettext('licensed.logout') }}": "{{ gettext('licensed.login') }}"}</div>
+              </div>
+            `
+        }
+    }
+}

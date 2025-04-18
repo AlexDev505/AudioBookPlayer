@@ -7,13 +7,11 @@ import subprocess
 import time
 import typing as ty
 from contextlib import suppress
+from pathlib import Path
 
 import eyed3
 from bs4 import BeautifulSoup
-
-
-if ty.TYPE_CHECKING:
-    from pathlib import Path
+from loguru import logger
 
 
 class NotImplementedVariable:
@@ -109,6 +107,8 @@ def prepare_file_metadata(
     :param title: Title of the chapter.
     :param item_index: Sequential number of the file.
     """
+    if not str(file_path).endswith(".mp3"):
+        return
     file = eyed3.load(file_path)
     file.initTag()
     file.tag.title = title
@@ -124,7 +124,9 @@ def get_audio_file_duration(file_path: Path) -> float:
     """
     result = subprocess.check_output(
         rf'{os.environ["FFMPEG_PATH"]} -v quiet -stats -i "{file_path}" -f null -',
+        shell=True,
         stderr=subprocess.STDOUT,
+        stdin=subprocess.DEVNULL,
     ).decode()
     if not (
         match := re.search(
@@ -138,6 +140,67 @@ def get_audio_file_duration(file_path: Path) -> float:
         + int(match.group("s"))
         + int(match.group("ms")) / 100
     )
+
+
+def merge_ts_files(ts_file_paths: list[Path], output_file_path: Path) -> None:
+    """
+    Merges ts files to one.
+    """
+    result = subprocess.check_output(
+        f'copy /b {"+".join(map(lambda x: x.name, ts_file_paths))} '
+        f'"{output_file_path}"',
+        cwd=output_file_path.parent,
+        shell=True,
+        stdin=subprocess.DEVNULL,
+        stderr=subprocess.STDOUT,
+    ).decode("cp866")
+    if result:
+        logger.debug(result)
+
+
+def convert_ts_to_mp3(ts_file_path: Path, mp3_file_path: Path) -> None:
+    """
+    Converts ts files to mp3 by ffmpeg.
+    """
+    subprocess.check_output(
+        f'{os.environ["FFMPEG_PATH"]} -y -v quiet -i "{ts_file_path}" -vn '
+        f'"{mp3_file_path}"',
+        shell=True,
+        stdin=subprocess.DEVNULL,
+        stderr=subprocess.STDOUT,
+    )
+
+
+def split_ts(ts_file_path: Path, on: int) -> tuple[Path, Path]:
+    """
+    Splits one ts file at `on` sec.
+    Creates two new files with same names and suffixes `-1` and `-2`.
+    """
+    first_part = Path(
+        os.path.join(
+            ts_file_path.parent, f"{ts_file_path.name.removesuffix(".ts")}-1.ts"
+        )
+    )
+    second_part = Path(
+        os.path.join(
+            ts_file_path.parent, f"{ts_file_path.name.removesuffix(".ts")}-2.ts"
+        )
+    )
+    subprocess.check_output(
+        f'{os.environ["FFMPEG_PATH"]} -i "{ts_file_path}" -to {on} -c copy '
+        f'"{first_part}"',
+        shell=True,
+        stdin=subprocess.DEVNULL,
+        stderr=subprocess.STDOUT,
+    )
+    subprocess.check_output(
+        f'{os.environ["FFMPEG_PATH"]} -i "{ts_file_path}" -ss {on} -c copy '
+        f'"{second_part}"',
+        shell=True,
+        stdin=subprocess.DEVNULL,
+        stderr=subprocess.STDOUT,
+    )
+    return first_part, second_part
 
 
 def safe_name(text: str) -> str:
@@ -193,3 +256,40 @@ def find_in_soup(
     if el := soup.select_one(selector):
         return modification(el.text)
     return default
+
+
+def duration_str_to_sec(duration: str) -> int:
+    """
+    Converts a duration string to a duration in seconds.
+    Available formats:
+        - <h>:<m><s>
+        - <h> час(а|ов) <m> минут(а|ы)
+        - <h> ч. <m> мин.
+        or parts of this formats.
+    """
+    for pattern in [
+        r"(((?P<h>\d+):)?(?P<m>\d{1,2}):)?(?P<s>\d{1,2})?",
+        r"((?P<h>\d+) час(а|ов)?)?\s?((?P<m>\d{1,2}) минут[аы]?)?(?P<s>)",
+        r"((?P<h>\d+) ч\.)?\s?((?P<m>\d{1,2}) мин\.)?(?P<s>)",
+    ]:
+        if match := re.fullmatch(pattern, duration):
+            if sec := (
+                int(match.group("h") or 0) * 3600
+                + int(match.group("m") or 0) * 60
+                + int(match.group("s") or 0)
+            ):
+                return sec
+    raise ValueError(f"Invalid duration: {duration}")
+
+
+def duration_sec_to_str(sec: int) -> str:
+    """
+    Converts a duration in seconds to a duration string
+    in format <h>:<mm>:<ss> or <m>:<ss> or <s>.
+    """
+    h, m, s = sec // 3600, sec % 3600 // 60, sec % 60
+    return (
+        f"{f"{h}:" if h else ""}"
+        f"{f"{str(m).rjust(2, "0") if h else m}:" if m else ("00:" if h else "")}"
+        f"{(str(s).rjust(2, "0") if m or h else s) if s else ("00" if m or h else "")}"
+    )

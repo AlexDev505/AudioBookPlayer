@@ -13,19 +13,8 @@ page("search-page").onShow = function(el) {
     }
 }
 
-function loadAvailableDrivers(resp) {
-    container = document.getElementById("drivers-container")
-    if (required_drivers.length == 0) required_drivers = resp.data
-    _required_drivers = required_drivers.slice(0, required_drivers.length)
-    required_drivers = []
-    for (driver of resp.data) {
-        if (_required_drivers.includes(driver)) required_drivers.push(driver)
-        container.innerHTML = container.innerHTML + `
-          <div class="driver-option checkbox ${(_required_drivers.includes(driver)) ? 'checked' : ''}" data-driver="${driver}" onclick="toggleDriver('${driver}')">${driver}</div>
-        `
-    }
-}
-function toggleDriver(driver) {
+function toggleDriver(driver, btn) {
+    if (btn.classList.contains("inactive")) return
     option = document.querySelector(`.driver-option[data-driver='${driver}']`)
     if (required_drivers.length == 1 & required_drivers.includes(driver)) return
     if (required_drivers.includes(driver)) {
@@ -106,7 +95,7 @@ function onSearchCompleted(resp, clear=true) {
                 <div class="item-author">${book.author}</div>
                 <div class="item-reader">${book.reader}</div>
                 <div class="item-duration">${book.duration}</div>
-                <div class="item-series-name">${book.series_name} ${(book.number_in_series)? ` (${book.number_in_series})` : ''}</div>
+                <div class="item-series-name">${book.series_name}${(book.number_in_series)? ` (${book.number_in_series})` : ''}</div>
                 <div class="item-driver">${book.driver}</div>
               </div>
             </div>

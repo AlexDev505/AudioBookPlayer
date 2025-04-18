@@ -17,6 +17,8 @@ os.environ["DATABASE_PATH"] = os.path.join(os.environ["APP_DIR"], "library.sqlit
 os.environ["DEBUG_PATH"] = os.path.join(os.environ["APP_DIR"], "debug.log")
 # Path to the temporary data file
 os.environ["TEMP_PATH"] = os.path.join(os.environ["APP_DIR"], "temp.txt")
+# Path to the dir with licensed drivers auth
+os.environ["AUTH_DIR"] = os.path.join(os.environ["APP_DIR"], "auth")
 # System architecture
 os.environ["ARCH"] = " x32" if platform.architecture()[0] == "32bit" else ""
 # App version

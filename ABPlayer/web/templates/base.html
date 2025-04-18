@@ -41,6 +41,7 @@
         <div id="favorite-btn" class="iconned-btn" onclick="openLibraryPage(true)"><span>{{ gettext("base.favorite") }}</span></div>
         <div id="add-book-btn" class="iconned-btn" onclick="page('search-page').show()"><span>{{ gettext("base.search_book") }}</span></div>
         <div id="downloads-btn" class="iconned-btn" onclick="page('downloads-page').show()"><span>{{ gettext("base.downloads") }}</span></div>
+        <div id="licensed-btn" class="iconned-btn" onclick="page('licensed-page').show()"><span>{{ gettext("base.licensed") }}</span></div>
       </div>
       <div>
         <div id="library-dir-btn" class="iconned-btn" onclick="openLibraryDir()"><span>{{ gettext("base.books_folder") }}</span></div>
@@ -78,6 +79,9 @@
       <div class="page" id="settings-page">
         {% include "settings.html" %}
       </div>
+      <div class="page" id="licensed-page">
+        {% include "licensed.html" %}
+      </div>
     </div>
   </div>
 
@@ -98,5 +102,6 @@
   <script>{% include "js/library.js" %}</script>
   <script>{% include "js/downloads.js" %}</script>
   <script>{% include "js/search.js" %}</script>
+  <script>{% include "js/licensed.js" %}</script>
 </body>
 </html>

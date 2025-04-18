@@ -7,6 +7,7 @@ import shutil
 import threading
 import typing as ty
 from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 
@@ -96,6 +97,16 @@ class BaseDownloadProcessHandler(ABC):
         return repr(self)
 
 
+@dataclass
+class File:
+    index: int
+    name: str
+    url: str
+    duration: float | None = None
+    size: int | None = None
+    extra: dict = field(default_factory=dict)
+
+
 class BaseDownloader(ABC):
     """
     File downloader.
@@ -109,8 +120,7 @@ class BaseDownloader(ABC):
         self.process_handler = process_handler
         self.tasks_manager = IOTasksManager(20)
 
-        # [(<file_name>, <file_url>), ...]
-        self._files: list[tuple[str, str]] = []
+        self._files: list[File] = []
         # Total size of files (in bytes)
         # Determined only if `process_handler` is passed
         self.total_size: int | None = None
@@ -122,7 +132,7 @@ class BaseDownloader(ABC):
         logger.opt(colors=True).debug(f"initialized. book: {book:styled}")
 
     @abstractmethod
-    def _prepare_files_data(self) -> list[tuple[str, str]]:
+    def _prepare_files_data(self) -> list[File]:
         """
         Prepares files data: file names and urls.
         This method must be implemented in the subclass.
@@ -172,31 +182,34 @@ class BaseDownloader(ABC):
         """
         Calculates the total size of the files.
         """
-        self.process_handler.init(
-            len(self._files), status=DownloadProcessStatus.PREPARING
-        )
         self.tasks_manager.execute_tasks_factory(
-            (self._add_file_size(file_url) for _, file_url in self._files)
+            (self._add_file_size(file) for file in self._files)
         )
 
-    async def _add_file_size(self, file_url: str) -> None:
+    async def _add_file_size(self, file: File) -> None:
         """
         Gets and adds size of file.
         """
         if self._terminated:
             return
-        try:
-            async with aiohttp.ClientSession() as session:
-                async with session.get(file_url) as response:
-                    if not (file_size := response.headers.get("content-length")):
-                        raise RuntimeError("No content-length found")
-        except Exception as err:
-            logger.opt(colors=True).debug(
-                f"getting file size failed {type(err).__name__}: {err}. retrying"
-            )
-            await asyncio.sleep(1)
-            return await self._add_file_size(file_url)
-        self.total_size += int(file_size)
+        if not file.size:
+            try:
+                async with aiohttp.ClientSession(
+                    cookies=file.extra.get("cookies")
+                ) as session:
+                    async with session.get(
+                        file.url, headers=file.extra.get("headers")
+                    ) as response:
+                        if not (file_size := response.headers.get("content-length")):
+                            raise RuntimeError("No content-length found")
+                        file.size = int(file_size)
+            except Exception as err:
+                logger.opt(colors=True).debug(
+                    f"getting file size failed {type(err).__name__}: {err}. retrying"
+                )
+                await asyncio.sleep(1)
+                return await self._add_file_size(file)
+        self.total_size += file.size
         self.process_handler.progress(1)
 
     def _download_files(self) -> None:
@@ -210,40 +223,32 @@ class BaseDownloader(ABC):
             )
 
         self.tasks_manager.execute_tasks_factory(
-            (
-                self._download_file(i, file_url, file_name)
-                for i, (file_name, file_url) in enumerate(self._files)
-            )
+            (self._download_file(file) for file in self._files)
         )
 
-    async def _download_file(
-        self, file_index: int, file_url: str, file_name: str
-    ) -> None:
+    async def _download_file(self, file: File) -> None:
         """
         Downloads one file.
         """
-        file_path = Path(os.path.join(self.book.dir_path, file_name))
+        file_path = Path(os.path.join(self.book.dir_path, file.name))
         logger.opt(colors=True).trace(
-            f"downloading file <y>{file_index}</y> <y>{file_path}</y> {file_url}"
+            f"downloading file <y>{file.index}</y> <y>{file_path}</y> {file.url}"
         )
 
-        async with aiofiles.open(file_path, mode="wb") as file:
-            file_size = 0
+        async with aiofiles.open(file_path, mode="wb") as file_io:
             downloaded_size = 0
             while not self._terminated:
                 try:
-                    async for chunk in self._iter_chunks(file_url, downloaded_size):
+                    async for chunk in self._iter_chunks(file, downloaded_size):
                         if self._terminated:
                             return
-                        if isinstance(chunk, int):
-                            if not file_size:
-                                file_size = chunk
-                            continue
+                        if self.process_handler:
+                            self.process_handler.progress(len(chunk))
                         downloaded_size += len(chunk)
-                        await file.write(chunk)
-                        await file.flush()
-                    if downloaded_size < file_size:
-                        raise RuntimeError(f"downloaded size lower than file size")
+                        await file_io.write(chunk)
+                        await file_io.flush()
+                    if downloaded_size < file.size:
+                        raise RuntimeError("downloaded size lower than file size")
                     break
                 except Exception as err:
                     if isinstance(err, aiohttp.ClientPayloadError):
@@ -253,32 +258,33 @@ class BaseDownloader(ABC):
                     )
                     await asyncio.sleep(5)
                     logger.opt(colors=True).trace(
-                        f"retrying download file <y>{file_index}</y>"
+                        f"retrying download file <y>{file.index}</y>"
                     )
 
-        self.downloaded_files[file_index] = file_path
+        self.downloaded_files[file.index] = file_path
 
     async def _iter_chunks(
-        self, file_url: str, offset: int = 0
-    ) -> ty.AsyncGenerator[int | bytes]:
+        self, file: File, offset: int = 0
+    ) -> ty.AsyncGenerator[bytes]:
         """
         Iterates over the bytes chunks.
-        At the first iteration yields content length.
         """
         async with aiohttp.ClientSession(
-            timeout=aiohttp.ClientTimeout(sock_read=240)
+            timeout=aiohttp.ClientTimeout(sock_read=240),
+            cookies=file.extra.get("cookies"),
         ) as session:
+
             async with session.get(
-                file_url, headers={"Range": f"bytes={offset}-"}
+                file.url,
+                headers={"Range": f"bytes={offset}-", **file.extra.get("headers", {})},
             ) as response:
-                file_size = int(response.headers.get("content-length"))
                 logger.opt(colors=True).trace(
-                    "{}: <y>{}</y>".format(file_url, convert_from_bytes(file_size))
+                    "{}: <y>{}</y>".format(
+                        file.url,
+                        convert_from_bytes(int(response.headers.get("content-length"))),
+                    )
                 )
-                yield file_size
                 async for chunk in response.content.iter_chunked(5120):
-                    if self.process_handler:
-                        self.process_handler.progress(len(chunk))
                     yield chunk
 
     def _finish(self) -> None:
@@ -341,11 +347,11 @@ class BaseDownloader(ABC):
         except OSError:
             pass
 
-    def _get_item_file_name(self, item_index: int) -> str:
+    def _get_item_file_name(self, item_index: int, extension: str = ".mp3") -> str:
         item = self.book.items[item_index]
         # Removes series_number from capture name
         item_title = re.sub(r"^(\d+) (.+)", r"\g<2>", item.title)
-        return f"{str(item_index + 1).rjust(2, '0')}. {item_title}.mp3"
+        return f"{str(item_index + 1).rjust(2, '0')}. {item_title}{extension}"
 
     def __repr__(self):
         return f"BookDownloader-{instance_id(self)}"
@@ -361,7 +367,8 @@ class Driver(ABC):
         self.downloader: BaseDownloader | None = None
 
     def __init_subclass__(cls, **kwargs):
-        Driver.drivers.append(cls)
+        if ABC not in cls.__bases__:
+            Driver.drivers.append(cls)
 
     @classmethod
     def get_suitable_driver(cls, url: str) -> ty.Type[Driver] | None:
@@ -422,3 +429,44 @@ class Driver(ABC):
     @property
     def driver_name(cls) -> str:
         return cls.__name__
+
+
+class LicensedDriver(Driver, ABC):
+    AUTH_FILE: str
+    is_authed: bool = False
+
+    def __init_subclass__(cls, **kwargs):
+        cls.AUTH_FILE = os.path.join(os.environ["AUTH_DIR"], f"{cls.driver_name}.dat")
+        super().__init_subclass__(**kwargs)
+
+    @classmethod
+    def auth(cls) -> bool:
+        if not cls._auth():
+            return False
+        cls.is_authed = True
+        return True
+
+    @classmethod
+    def auth_from_storage(cls) -> bool:
+        if not cls._load_auth():
+            return False
+        cls.is_authed = True
+        return True
+
+    @classmethod
+    @abstractmethod
+    def _load_auth(cls) -> bool: ...
+
+    @classmethod
+    @abstractmethod
+    def _auth(cls) -> bool: ...
+
+    @classmethod
+    def logout(cls) -> None:
+        cls.is_authed = False
+        if os.path.exists(cls.AUTH_FILE):
+            os.remove(cls.AUTH_FILE)
+
+
+class DriverNotAuthenticated(Exception):
+    pass

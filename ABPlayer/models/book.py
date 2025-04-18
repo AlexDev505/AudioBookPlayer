@@ -37,7 +37,7 @@ class BookItem:
         return self.end_time - self.start_time
 
 
-class BookItems(list):
+class BookItems(list[BookItem]):
     """
     List of chapters.
     Represented as a list of dictionaries.
@@ -47,9 +47,6 @@ class BookItems(list):
         super().__init__(
             BookItem(**item) if isinstance(item, dict) else item for item in items
         )
-
-    def __getitem__(self, item) -> BookItem:
-        return super().__getitem__(item)
 
     def to_dump(self) -> list[dict]:
         return [asdict(item) for item in self]

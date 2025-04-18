@@ -10,7 +10,7 @@ from loguru import logger
 
 from models.book import Book, BookItem, BookItems
 from .base import Driver
-from .downloaders import M3U8Downloader
+from .downloaders import MergedM3U8Downloader
 from .tools import safe_name, find_in_soup
 
 
@@ -95,7 +95,7 @@ class PyWebViewJsApi(BaseJsApi):
 
 class AKniga(Driver):
     site_url = "https://akniga.org"
-    downloader_factory = M3U8Downloader
+    downloader_factory = MergedM3U8Downloader
 
     def __init__(self, js_api: ty.Type[BaseJsApi] = PyWebViewJsApi):
         super().__init__()

@@ -15,10 +15,11 @@ from loguru import logger
 
 from database import Database
 from drivers import Driver, BaseDownloadProcessHandler, DownloadProcessStatus
+from drivers.base import LicensedDriver
+from drivers.tools import duration_str_to_sec, duration_sec_to_str
 from models.book import DATETIME_FORMAT, Status
 from tools import convert_from_bytes, make_book_preview, pretty_view
 from .js_api import JSApi, JSApiError, ConnectionFailedError
-from .tools import duration_str_to_sec, duration_sec_to_str
 
 
 if ty.TYPE_CHECKING:
@@ -335,11 +336,48 @@ class BooksApi(JSApi):
 
     def get_available_drivers(self):
         logger.opt(colors=True).debug("request: <r>available drivers</r>")
-        available_drivers = [driver.driver_name for driver in Driver.drivers]
+        available_drivers = [
+            dict(
+                name=driver.driver_name,
+                licensed=issubclass(driver, LicensedDriver),
+                authed=getattr(driver, "is_authed", True),
+                url=driver.site_url,
+            )
+            for driver in Driver.drivers
+        ]
         logger.opt(colors=True).debug(
             f"available drivers count: <y>{len(available_drivers)}</y>"
         )
         return self.make_answer(available_drivers)
+
+    def logout_driver(self, driver_name: str):
+        logger.opt(colors=True).debug(
+            f"request: <r>logout driver</r> | <y>{driver_name}</y>"
+        )
+        driver = next(
+            (driver for driver in Driver.drivers if driver.driver_name == driver_name),
+            None,
+        )
+        if not driver or not issubclass(driver, LicensedDriver):
+            return self.error(NoSuitableDriver())
+        driver.logout()
+        logger.opt(colors=True).debug(f"Logout from <y>{driver}</y>")
+        return self.make_answer()
+
+    def login_driver(self, driver_name: str):
+        logger.opt(colors=True).debug(
+            f"request: <r>login driver</r> | <y>{driver_name}</y>"
+        )
+        driver = next(
+            (driver for driver in Driver.drivers if driver.driver_name == driver_name),
+            None,
+        )
+        if not driver or not issubclass(driver, LicensedDriver):
+            return self.error(NoSuitableDriver())
+        if not driver.auth():
+            return self.error(NotAuthenticated())
+        logger.opt(colors=True).debug(f"Login to <y>{driver}</y>")
+        return self.make_answer()
 
     def get_downloads(self):
         logger.opt(colors=True).debug("request: <r>get downloads</r>")
@@ -631,3 +669,8 @@ class BookNotDownloaded(JSApiError):
 class WaitForDownloadingEnd(JSApiError):
     code = 9
     message = _("book.wait_for_similar_book_downloading")
+
+
+class NotAuthenticated(JSApiError):
+    code = 10
+    message = _("driver.not_authenticated")

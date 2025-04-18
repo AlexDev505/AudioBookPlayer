@@ -1,12 +1,4 @@
-from __future__ import annotations
-
-import typing as ty
-
-from ..base import BaseDownloader
-
-
-if ty.TYPE_CHECKING:
-    pass
+from ..base import BaseDownloader, File
 
 
 class MP3Downloader(BaseDownloader):
@@ -17,6 +9,6 @@ class MP3Downloader(BaseDownloader):
 
     def _prepare_files_data(self):
         return [
-            (self._get_item_file_name(i), item.file_url)
+            File(i, self._get_item_file_name(i), item.file_url)
             for i, item in enumerate(self.book.items)
         ]
