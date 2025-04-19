@@ -306,6 +306,7 @@ class BooksApi(JSApi):
         logger.opt(colors=True).debug("request: <r>all authors</r>")
         with Database() as db:
             authors = db.get_all_authors()
+        authors.sort()
         logger.opt(colors=True).debug(f"authors found: <y>{len(authors)}</y>")
         return self.make_answer(authors)
 
@@ -313,6 +314,7 @@ class BooksApi(JSApi):
         logger.opt(colors=True).debug("request: <r>all series</r>")
         with Database() as db:
             series = db.get_all_series()
+        series.sort()
         logger.opt(colors=True).debug(f"series found: <y>{len(series)}</y>")
         return self.make_answer(series)
 
