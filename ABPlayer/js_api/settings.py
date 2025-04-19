@@ -258,8 +258,7 @@ class SettingsApi(JSApi):
             return self.error(updates)
 
         updater_file_name = f"ABPlayerUpdater{os.environ["ARCH"]}.exe"
-        root_dir = os.path.abspath(__file__).split(r"\_internal")[0]
-        updater_path = os.path.abspath(os.path.join(root_dir, updater_file_name))
+        updater_path = os.path.abspath(os.path.join(".", updater_file_name))
 
         versions = list(updates.keys())
         new_versions = versions[: versions.index(os.environ["VERSION"])]

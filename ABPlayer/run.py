@@ -25,6 +25,12 @@ parser.add_argument("--only-stable", action="store_true", default=False)
 parser.add_argument("--manual-update", type=str, default="")
 args = parser.parse_args()
 
+# if you run the application with a shortcut,
+# the working directory will be "./_internal/yarl"
+# moving to root dir necessary for correct work of updater
+if getattr(sys, "frozen", False):
+    os.chdir(os.path.dirname(sys.executable))
+
 if args.manual_update:
     from ctypes import windll
 
@@ -35,13 +41,10 @@ elif args.run_update:
     from ctypes import windll
 
     logger.info("Running updater")
-    root_dir = os.path.abspath(__file__).removesuffix(r"_internal\run.py")
     windll.shell32.ShellExecuteW(
         None,
         "runas",
-        os.path.abspath(
-            os.path.join(root_dir, f"ABPlayerUpdater{os.environ["ARCH"]}.exe")
-        ),
+        os.path.abspath(os.path.join(".", f"ABPlayerUpdater{os.environ["ARCH"]}.exe")),
         (
             f"--version={os.environ["VERSION"]}"
             + (" --only-stable" if args.only_stable else "")
