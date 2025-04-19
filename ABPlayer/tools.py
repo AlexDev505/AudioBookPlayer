@@ -71,6 +71,8 @@ class Version:
         other_revision_index = Version.revisions.index(other.revision)
         if self_revision_index != other_revision_index:
             return self_revision_index < other_revision_index
+        if self_revision_index == other_revision_index == 0:
+            return False
         return self.revision_number > other.revision_number
 
     def __repr__(self):
