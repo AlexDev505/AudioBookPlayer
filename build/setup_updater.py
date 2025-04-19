@@ -14,7 +14,7 @@ import PyInstaller.__main__
 from version import Version
 
 
-__version__ = Version(1, 0, 0)
+__version__ = Version(1, 1, 0)
 
 arch = " x32" if platform.architecture()[0] == "32bit" else ""
 dev_path = os.path.join(os.path.dirname(__file__), "..", "updater")

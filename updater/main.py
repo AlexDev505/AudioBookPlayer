@@ -11,7 +11,7 @@ if not os.path.exists(os.environ["APP_DIR"]):
 os.environ["DEBUG_PATH"] = os.path.join(os.environ["APP_DIR"], "debug.log")
 # System architecture
 os.environ["ARCH"] = " x32" if platform.architecture()[0] == "32bit" else ""
-os.environ["UPDATER_VERSION"] = "1.0.0"
+os.environ["UPDATER_VERSION"] = "1.1.0"
 
 # DEV
 os.environ["CONSOLE"] = "1"
@@ -38,4 +38,4 @@ def main(version: str, only_stable: bool) -> None:
 
 
 if __name__ == "__main__":
-    main("2.2.1", False)
+    main("2.2.4", False)

@@ -2,9 +2,11 @@ import hashlib
 import json
 import os
 import shutil
+import typing as ty
 import urllib.request
 from pathlib import Path
 
+import requests
 import webview
 from loguru import logger
 
@@ -114,22 +116,15 @@ def update_app(window) -> None:
     hashes = {}
     logger.info("downloading updates")
     files_count = len(files_to_update)
-    downloaded = 0
-    window.evaluate_js(f"initProgresBar({files_count})")
+    window.evaluate_js(f"initDownloading({files_count})")
     for file, version in files_to_update.items():  # downloading files
         fp = f"{version}/{arch}/{file.replace("\\", "/")}"
+        url = f"https://sourceforge.net/projects/audiobookplayer/files/{fp}/download"
         logger.debug(f"downloading {fp}")
-        resp = urllib.request.urlopen(
-            f"https://sourceforge.net/projects/audiobookplayer/files/{fp}/download"
-        )
         file_name = hashlib.md5(file.encode("utf-8")).hexdigest()
         hashes[file] = file_name
         with open(os.path.join(update_path, file_name), "wb") as f:
-            f.write(resp.read())
-        downloaded += 1
-        window.evaluate_js(
-            f"downloadingCallback({downloaded / (files_count / 100)}, {downloaded})"
-        )
+            _download_file(url, f, window)
 
     logger.info("installing updates")
     window.evaluate_js("setStatus('установка')")
@@ -145,3 +140,20 @@ def update_app(window) -> None:
         if not os.path.exists(dst_path.parent):
             dst_path.parent.mkdir(parents=True, exist_ok=True)
         shutil.move(os.path.join(update_path, file_hash), dst_path)
+
+
+def _download_file(
+    url: str, file: ty.BinaryIO, window: webview.Window, offset: int = 0
+) -> None:
+    try:
+        resp = requests.get(url, headers={"Range": f"bytes={offset}-"}, stream=True)
+        total_size = int(resp.headers["content-length"])
+        chunk_size = 1024 if total_size > 1024 else total_size // 2
+        for chunk in resp.iter_content(chunk_size=1024):
+            offset += len(chunk)
+            file.write(chunk)
+            window.evaluate_js(f"downloadingCallback({offset / (total_size / 100)})")
+    except requests.exceptions.ConnectionError:
+        return _download_file(url, file, window, offset)
+
+    window.evaluate_js("fileDownloaded()")
