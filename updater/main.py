@@ -38,4 +38,4 @@ def main(version: str, only_stable: bool) -> None:
 
 
 if __name__ == "__main__":
-    main("2.2.4", False)
+    main("3.0.0-alpha.2", False)
