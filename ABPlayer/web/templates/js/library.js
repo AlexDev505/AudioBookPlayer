@@ -33,15 +33,21 @@ function toggleReverseCheckbox(value) {
 }
 
 function filterByAuthor(value) {
-    if (urlParams.get("series")) urlParams.delete("series")
+    if (urlParams.get("series")) {
+        urlParams.delete("series")
+        urlParams.delete("sort")
+    }
     if (value == urlParams.get("author")) urlParams.delete("author")
     else addUrlParams({"author": value})
     applyFilters()
 }
 function filterBySeries(value) {
     if (urlParams.get("author")) urlParams.delete("author")
-    if (value == urlParams.get("series")) urlParams.delete("series")
-    else addUrlParams({"series": value})
+    if (value == urlParams.get("series")) {
+        urlParams.delete("series")
+        urlParams.delete("sort")
+    }
+    else addUrlParams({"series": value, "sort": "cast(number_in_series as real)"})
     applyFilters()
 }
 function selectFilterBy(value) {
