@@ -151,6 +151,7 @@ input[type="range"]::after {
   border-radius: 5px;
   color: var(--dim-fg);
   cursor: pointer;
+  overflow: visible;
 }
 .iconned-btn > span {
   text-wrap: nowrap;
