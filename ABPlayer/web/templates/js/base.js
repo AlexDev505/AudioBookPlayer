@@ -193,7 +193,7 @@ function loadAvailableDrivers(resp) {
     _required_drivers = required_drivers.slice(0, required_drivers.length)
     required_drivers = []
     for (driver of resp.data) {
-        if (_required_drivers.includes(driver.name)) required_drivers.push(driver.name)
+        if (_required_drivers.includes(driver.name) && driver.authed) required_drivers.push(driver.name)
         container.innerHTML += `
           <div class="driver-option checkbox ${(_required_drivers.includes(driver.name) && driver.authed) ? 'checked' : ''} ${(!driver.authed)? 'inactive': ''}" data-driver="${driver.name}" onclick="toggleDriver('${driver.name}', this)">${driver.name}</div>
         `
