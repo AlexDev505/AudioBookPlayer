@@ -35,10 +35,13 @@ elif args.run_update:
     from ctypes import windll
 
     logger.info("Running updater")
+    root_dir = os.path.abspath(__file__).removesuffix(r"_internal\run.py")
     windll.shell32.ShellExecuteW(
         None,
         "runas",
-        os.path.abspath(os.path.join(".", f"ABPlayerUpdater{os.environ["ARCH"]}.exe")),
+        os.path.abspath(
+            os.path.join(root_dir, f"ABPlayerUpdater{os.environ["ARCH"]}.exe")
+        ),
         (
             f"--version={os.environ["VERSION"]}"
             + (" --only-stable" if args.only_stable else "")
