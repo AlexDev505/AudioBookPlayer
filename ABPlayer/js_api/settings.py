@@ -272,8 +272,9 @@ class SettingsApi(JSApi):
                 "downloading updater file. "
                 f"<y>url={UPDATER_FILE_URL} path={updater_path}</y>"
             )
-            if not self._download_updater(UPDATER_FILE_URL, updater_path):
-                return self.error(ConnectionFailedError())
+            with open(updater_path, "wb") as file:
+                if not self._download_updater(UPDATER_FILE_URL, file):
+                    return self.error(ConnectionFailedError())
 
         logger.info("closing app")
         self._window.destroy()
@@ -306,8 +307,9 @@ class SettingsApi(JSApi):
         logger.opt(colors=True).debug(
             f"downloading updater file. <y>url={updater_url} path={updater_path}</y>"
         )
-        if not self._download_updater(updater_url, updater_path):
-            return self.error(ConnectionFailedError())
+        with open(updater_path, "wb") as file:
+            if not self._download_updater(updater_url, file):
+                return self.error(ConnectionFailedError())
 
         logger.info("closing app")
         self._window.destroy()
@@ -346,18 +348,17 @@ class SettingsApi(JSApi):
         )
 
     def _download_updater(
-        self, updater_url: str, updater_path: str, _retries: int = 0
+        self, updater_url: str, file: ty.BinaryIO, offset: int = 0, _retries: int = 0
     ) -> bool:
         try:
-            response = requests.get(updater_url)
-            if response.status_code != 200:
-                logger.error(
-                    "updater downloading failed. "
-                    f"Response status code {response.status_code}"
-                )
-                return False
-            with open(updater_path, "wb") as file:
-                file.write(response.content)
+            response = requests.get(
+                updater_url, headers={"Range": f"bytes={offset}-"}, stream=True
+            )
+            total_size = int(response.headers["content-length"])
+            for chunk in response.iter_content(chunk_size=1024):
+                offset += len(chunk)
+                file.write(chunk)
+                self.evaluate_js(f"updaterDownloading({offset / (total_size / 100)})")
             return True
         except IOError as err:
             logger.error(
@@ -366,8 +367,8 @@ class SettingsApi(JSApi):
             )
             if _retries == 3:
                 return False
-            time.sleep(10 * _retries)
-            return self._download_updater(updater_url, updater_path, _retries + 1)
+            time.sleep(2 * _retries)
+            return self._download_updater(updater_url, file, offset, _retries + 1)
 
 
 class RequestCanceled(JSApiError):
