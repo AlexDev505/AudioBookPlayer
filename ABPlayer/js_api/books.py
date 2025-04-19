@@ -15,7 +15,7 @@ from loguru import logger
 
 from database import Database
 from drivers import Driver, BaseDownloadProcessHandler, DownloadProcessStatus
-from drivers.base import LicensedDriver
+from drivers.base import LicensedDriver, DriverNotAuthenticated
 from drivers.tools import duration_str_to_sec, duration_sec_to_str
 from models.book import DATETIME_FORMAT, Status
 from tools import convert_from_bytes, make_book_preview, pretty_view
@@ -121,8 +121,7 @@ class BooksApi(JSApi):
             )
             self.matched_books_bids = matched_books_bids
 
-    @staticmethod
-    def _book_by_url(url: str):
+    def _book_by_url(self, url: str):
         logger.opt(colors=True).debug(
             f"request: <r>search book by url</r> | <y>{url}</y>"
         )
@@ -137,7 +136,9 @@ class BooksApi(JSApi):
                 f"getting book ({url}) raises {type(err).__name__}: {err}"
             )
             logger.exception(err)
-            return
+        except DriverNotAuthenticated:
+            self.logout_driver(driver.driver_name)
+            return NotAuthenticated()
         except requests.exceptions.ConnectionError as err:
             return ConnectionFailedError(err=f"{type(err).__name__}: {err}")
 

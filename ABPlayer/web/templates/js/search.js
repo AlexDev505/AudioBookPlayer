@@ -80,7 +80,14 @@ function onSearchResultContainerScroll() {
 function onSearchCompleted(resp, clear=true) {
     if (!page("search-page").shown) return
     searching = false
-    if (resp.status != "ok") {showError(resp.message); return}
+    if (resp.status != "ok") {
+        showError(resp.message);
+        if (resp.code == 10) {
+            document.querySelector("#search-input-line input").value = ""
+            location.reload()
+        }
+        return
+    }
     resp = resp.data
     html = ""
     urls = []
