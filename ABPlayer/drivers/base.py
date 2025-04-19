@@ -351,6 +351,8 @@ class BaseDownloader(ABC):
         item = self.book.items[item_index]
         # Removes series_number from capture name
         item_title = re.sub(r"^(\d+) (.+)", r"\g<2>", item.title)
+        if item_title.endswith(".wav"):
+            extension = ""
         return f"{str(item_index + 1).rjust(2, '0')}. {item_title}{extension}"
 
     def __repr__(self):
