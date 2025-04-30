@@ -1,5 +1,6 @@
-const player = new Plyr("#audio-player", {storage: true, controls: []})
 var urlParams = new URLSearchParams(window.location.search);
+
+var player = null
 
 for (size_grip of document.getElementsByClassName("size-grip")) {
     size_grip.addEventListener("mousedown", event => {
@@ -16,8 +17,7 @@ document.getElementById("top-bar").addEventListener("mousedown", event => {
     }
 })
 
-function getHttpRequestObject()
-{
+function getHttpRequestObject() {
     // Define and initialize as false
     var xmlHttpRequst = false;
 
@@ -34,7 +34,7 @@ function getHttpRequestObject()
     return xmlHttpRequst;
 }
 
-sideMenu = document.getElementById("side-menu")
+var sideMenu = document.getElementById("side-menu")
 function toggleMenu() {
     if (menu_opened)
         sideMenu.classList.add("collapsed")
@@ -72,7 +72,7 @@ class Page {
 }
 
 var pages = {}
-for (page_el of document.getElementsByClassName("page")) {
+for (let page_el of document.getElementsByClassName("page")) {
     page_ = new Page(page_el)
     pages[page_el.id] = page_
     page_.hide()
@@ -81,7 +81,7 @@ function page(el_id) {return pages[el_id]}
 
 function addUrlParams(params) {
     var refresh = window.location.protocol + "//" + window.location.host + "?";
-    for ([name, value] of Object.entries(params)) {
+    for (let [name, value] of Object.entries(params)) {
         urlParams.set(name, value)
     }
     urlParams.forEach((v, k) => {
@@ -100,9 +100,9 @@ function PWVReady() {
     loadLastListenedBook()
 }
 function parseUrlParams() {
-    page_name = urlParams.get("page")
+    var page_name = urlParams.get("page")
     if (page_name) {
-        page_obj = page(page_name)
+        var page_obj = page(page_name)
         if (page_obj) {
             page_obj.show()
             return
@@ -184,7 +184,27 @@ function setVolume(value) {
 function setSpeed(value) {
     player.speed = Number(value)
 }
-for (let scale of document.querySelectorAll('input[type="range"]')) {
-    scale.oninput = scaleOninputDecorator(scale.oninput)
-    scale.oninput()
+function loadAvailableDrivers(resp) {
+    container = document.getElementById("drivers-container")
+    licensed_container = document.getElementById("licensed-container")
+    if (required_drivers.length == 0) {
+        for (driver of resp.data) required_drivers.push(driver.name)
+    }
+    _required_drivers = required_drivers.slice(0, required_drivers.length)
+    required_drivers = []
+    for (driver of resp.data) {
+        if (_required_drivers.includes(driver.name) && driver.authed) required_drivers.push(driver.name)
+        container.innerHTML += `
+          <div class="driver-option checkbox ${(_required_drivers.includes(driver.name) && driver.authed) ? 'checked' : ''} ${(!driver.authed)? 'inactive': ''}" data-driver="${driver.name}" onclick="toggleDriver('${driver.name}', this)">${driver.name}</div>
+        `
+        if (driver.licensed) {
+            licensed_container.innerHTML += `
+              <div class="licensed-card">
+                <a class="book-title" href="${driver.url}" target="_blank">${driver.name}</a>
+                <div class="licensed-status">${(driver.authed)? "{{ gettext('licensed.authed') }}": "{{ gettext('licensed.not_authed') }}"}</div>
+                <div class="button licensed-btn" data-driver="${driver.name}" data-authed="${driver.authed}" onclick="licensedBtnClicked(this)">${(driver.authed)? "{{ gettext('licensed.logout') }}": "{{ gettext('licensed.login') }}"}</div>
+              </div>
+            `
+        }
+    }
 }

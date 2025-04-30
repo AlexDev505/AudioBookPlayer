@@ -50,7 +50,7 @@
   transform-origin: top;
 }
 #drivers-container.shown {transform: scaleY(1)}
-.driver-option {}
+.driver-option.inactive {opacity: 0.5}
 .tools {position: relative}
 
 #no-search-result {margin: auto}

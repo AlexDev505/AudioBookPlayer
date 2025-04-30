@@ -1,4 +1,1 @@
-deactivate;
-..\venv\scripts\python setup.py
-..\venv32\scripts\python setup.py
-..\venv\scripts\activate
+deactivate & ..\venv\scripts\python setup.py %1 %2 %3 && ..\venv32\scripts\python setup.py %1 %2 %3 && ..\venv\scripts\activate && FOR /F "tokens=*" %%i in ('type .env') do SET "%%i" && python upload_update.py %1 && python setup.py %1 --dev

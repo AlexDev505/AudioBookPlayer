@@ -1,4 +1,5 @@
 import re
+from contextlib import suppress
 
 from bs4 import BeautifulSoup
 from orjson import orjson
@@ -6,7 +7,7 @@ from orjson import orjson
 from models.book import Book, BookItems, BookItem
 from .base import Driver
 from .downloaders import MP3Downloader
-from .tools import safe_name
+from .tools import safe_name, find_in_soup
 
 
 class Izibuk(Driver):
@@ -19,32 +20,28 @@ class Izibuk(Driver):
         page = page.text
 
         name = soup.select_one("span[itemprop='name']").text.strip()
-        author = _("unknown_author")
-        if element := soup.select_one("span[itemprop='author'] a"):
-            author = element.text.strip()
+        author = find_in_soup(soup, "a[href^='/author']", _("unknown_author"))
 
-        series_name = ""
-        if element := soup.select_one("a[href^='/serie']"):
-            series_name = element.text.strip()
-        number_in_series = ""
-        if element := soup.select_one(
-            "div:has(>div>a[href^='/serie']) div:has(>strong) span"
-        ):
-            number_in_series = element.text.strip().removesuffix(".")
+        series_name = find_in_soup(soup, "a[href^='/serie']")
+        number_in_series = find_in_soup(
+            soup,
+            "div:has(>div>a[href^='/serie']) div:has(>strong) span",
+            modification=lambda x: x.strip().removesuffix("."),
+        )
 
-        description = soup.select_one("div[itemprop='description']").text.strip()
+        description = find_in_soup(soup, "div[itemprop='description']")
 
-        reader = ""
-        if elements := soup.select(
-            "div:has(>div>span[itemprop='author']) a[href^='/reader']"
-        ):
-            reader = ", ".join(el.text.strip() for el in elements)
+        reader = find_in_soup(
+            soup, "div:has(>div>span[itemprop='author']) a[href^='/reader']"
+        )
 
-        duration = ""
-        if element := soup.select_one(
-            "div:has(>div>span[itemprop='author']) > div:last-child"
-        ):
-            duration = element.text.strip().removeprefix("Время: ")  # Do not translate
+        duration = find_in_soup(
+            soup,
+            "div:has(>div>span[itemprop='author']) > div:last-child",
+            modification=lambda x: x.strip().removeprefix(
+                "Время: "  # Do not translate
+            ),
+        )
 
         preview = soup.select_one("img").attrs["src"]
 
@@ -69,7 +66,7 @@ class Izibuk(Driver):
             series_name=safe_name(series_name),
             number_in_series=number_in_series,
             description=description,
-            reader=reader,
+            reader=safe_name(reader),
             duration=duration,
             url=url,
             preview=preview,
@@ -80,8 +77,9 @@ class Izibuk(Driver):
     def get_book_series(self, url: str) -> list[Book]:
         page = self.get_page(url)
         soup = BeautifulSoup(page.content, "html.parser")
+        author = find_in_soup(soup, "a[href^='/author']", _("unknown_author"))
 
-        if not (element := soup.select_one("a[href^='/serie']")):
+        if not (element := soup.select_one("a[href^='/serie']")):  # book has no series
             return []
         series_page_link = element.attrs["href"]
         series_name = element.text.strip()
@@ -90,28 +88,9 @@ class Izibuk(Driver):
         soup = BeautifulSoup(page.content, "html.parser")
 
         books = []
-        for book in soup.select("#books_list > div"):
-            number = book.select_one("div").text.strip().removeprefix("#")
-            element = book.select_one("div>a:not(:has(>img))")
-            url = f"{self.site_url}{element.attrs["href"]}"
-            name = element.text.strip()
-            preview = book.select_one("img").attrs["src"]
-            reader = ""
-            if elements := book.select("a[href^='/reader']"):
-                reader = ", ".join(element.text.strip() for element in elements)
-            description = book.select_one("div:last-child>div:last-child").text.strip()
-            books.append(
-                Book(
-                    name=safe_name(name),
-                    series_name=safe_name(series_name),
-                    number_in_series=number,
-                    description=description,
-                    reader=reader,
-                    url=url,
-                    preview=preview,
-                    driver=self.driver_name,
-                )
-            )
+        for card in soup.select("#books_list>div:not(:has(a[href^='/book']+span))"):
+            if book := self._parse_book_card(card, author, series_name):
+                books.append(book)
 
         return books
 
@@ -128,7 +107,7 @@ class Izibuk(Driver):
             page = self.get_page(url)
             soup = BeautifulSoup(page.content, "html.parser")
             if not soup.select_one("#books_list > div a[href^='/book']"):
-                return books
+                break
             elements = soup.select(
                 "#books_list>div>div:not(:has(a[href^='/book']+span))"
             )
@@ -141,38 +120,43 @@ class Izibuk(Driver):
                     elements = elements[offset:]
                     offset = 0
 
-            for book_card in elements:
-                element = book_card.select_one("div>a[href^='/book']:not(:has(>img))")
-                url = f"{self.site_url}{element.attrs["href"]}"
-                name = element.text.strip()
-                preview = book_card.select_one("img").attrs["src"]
-                author = _("unknown_author")
-                if element := book_card.select_one("a[href^='/author']"):
-                    author = element.text.strip()
-                reader = ""
-                if elements := book_card.select("a[href^='/reader']"):
-                    reader = ", ".join(element.text.strip() for element in elements)
-                series_name = ""
-                if element := book_card.select_one("a[href^='/serie']"):
-                    series_name = element.text.strip()
-                description = book_card.select_one(
-                    "div:last-child>div:last-child"
-                ).text.strip()
-                books.append(
-                    Book(
-                        author=safe_name(author),
-                        name=safe_name(name),
-                        series_name=series_name,
-                        reader=reader,
-                        url=url,
-                        preview=preview,
-                        description=description,
-                        driver=self.driver_name,
-                    )
-                )
+            for card in elements:
+                if book := self._parse_book_card(card, _("unknown_author"), ""):
+                    books.append(book)
                 if len(books) == limit:
                     break
 
             page_number += 1
 
         return books
+
+    def _parse_book_card(
+        self, card: BeautifulSoup, author: str, series_name: str
+    ) -> Book | None:
+        with suppress(AttributeError, KeyError, TypeError):
+            number = find_in_soup(
+                card,
+                "div",
+                modification=lambda x: (
+                    ""
+                    if not re.fullmatch(r"#\d+", x.strip())
+                    else x.strip().removeprefix("#")
+                ),
+            )
+            element = card.select_one("div>a[href^='/book']:not(:has(>img))")
+            url = f"{self.site_url}{element.attrs["href"]}"
+            name = element.text.strip()
+            preview = card.select_one("img").attrs["src"]
+            author = find_in_soup(card, "a[href^='/author']", author)
+            reader = find_in_soup(card, "a[href^='/reader']")
+            series_name = find_in_soup(card, "a[href^='/serie']", series_name)
+            return Book(
+                author=safe_name(author),
+                name=safe_name(name),
+                series_name=safe_name(series_name),
+                number_in_series=number,
+                reader=safe_name(reader),
+                url=url,
+                preview=preview,
+                driver=self.driver_name,
+            )

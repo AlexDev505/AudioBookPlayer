@@ -2,16 +2,21 @@ from __future__ import annotations
 
 import difflib
 import os
+import shutil
 import typing as ty
+from contextlib import suppress
 from dataclasses import asdict
 from datetime import datetime
 from functools import partial
+from pathlib import Path
 
 import requests.exceptions
 from loguru import logger
 
 from database import Database
 from drivers import Driver, BaseDownloadProcessHandler, DownloadProcessStatus
+from drivers.base import LicensedDriver, DriverNotAuthenticated
+from drivers.tools import duration_str_to_sec, duration_sec_to_str
 from models.book import DATETIME_FORMAT, Status
 from tools import convert_from_bytes, make_book_preview, pretty_view
 from .js_api import JSApi, JSApiError, ConnectionFailedError
@@ -116,8 +121,7 @@ class BooksApi(JSApi):
             )
             self.matched_books_bids = matched_books_bids
 
-    @staticmethod
-    def _book_by_url(url: str):
+    def _book_by_url(self, url: str):
         logger.opt(colors=True).debug(
             f"request: <r>search book by url</r> | <y>{url}</y>"
         )
@@ -132,7 +136,9 @@ class BooksApi(JSApi):
                 f"getting book ({url}) raises {type(err).__name__}: {err}"
             )
             logger.exception(err)
-            return
+        except DriverNotAuthenticated:
+            self.logout_driver(driver.driver_name)
+            return NotAuthenticated()
         except requests.exceptions.ConnectionError as err:
             return ConnectionFailedError(err=f"{type(err).__name__}: {err}")
 
@@ -203,6 +209,28 @@ class BooksApi(JSApi):
 
         return self.make_answer(result)
 
+    def search_book_series(self, url: str):
+        logger.opt(colors=True).debug(
+            f"request: <r>search book series</r> | <y>{url}</y>"
+        )
+        if not (driver := Driver.get_suitable_driver(url)):
+            return NoSuitableDriver(book_url=url)
+        try:
+            result = [make_book_preview(book) for book in driver().get_book_series(url)]
+            logger.opt(colors=True).debug(
+                f"<y>{len(result)}</y> books found. "
+                f"urls: {pretty_view([book['url'] for book in result])}"
+            )
+            return self.make_answer(result)
+        except (AttributeError, KeyError, ValueError) as err:
+            logger.opt().error(
+                f"getting book ({url}) raises {type(err).__name__}: {err}"
+            )
+            logger.exception(err)
+            return self.make_answer([])
+        except requests.exceptions.ConnectionError as err:
+            return self.error(ConnectionFailedError(err=f"{type(err).__name__}: {err}"))
+
     def add_book_to_library(self, url: str):
         logger.opt(colors=True).debug(
             f"request: <r>add book to library</r> | <y>{url}</y>"
@@ -212,6 +240,14 @@ class BooksApi(JSApi):
         with Database(autocommit=True) as db:
             if db.check_is_books_exists([url]):
                 return self.error(BookAlreadyAdded())
+            if exists_book := db.mark_multi_readers(book):
+                if exists_book.id in self._download_processes:
+                    return self.error(WaitForDownloadingEnd())
+                logger.opt(colors=True).debug(
+                    f"{book:styled} marked as multi_reader with {exists_book:styled}"
+                )
+                if exists_book.files:
+                    self._move_multi_reader_book(exists_book)
             book.adding_date = datetime.now()
             db.add_book(book)
 
@@ -270,6 +306,7 @@ class BooksApi(JSApi):
         logger.opt(colors=True).debug("request: <r>all authors</r>")
         with Database() as db:
             authors = db.get_all_authors()
+        authors.sort()
         logger.opt(colors=True).debug(f"authors found: <y>{len(authors)}</y>")
         return self.make_answer(authors)
 
@@ -277,8 +314,19 @@ class BooksApi(JSApi):
         logger.opt(colors=True).debug("request: <r>all series</r>")
         with Database() as db:
             series = db.get_all_series()
+        series.sort()
         logger.opt(colors=True).debug(f"series found: <y>{len(series)}</y>")
         return self.make_answer(series)
+
+    def get_series_duration(self, series_name: str):
+        logger.opt(colors=True).debug("request: <r>all series</r>")
+        with Database() as db:
+            durations = db.get_series_durations(series_name)
+        total_duration = 0
+        for duration in durations:
+            with suppress(ValueError):
+                total_duration += duration_str_to_sec(duration)
+        return self.make_answer(duration_sec_to_str(total_duration))
 
     def check_is_books_exists(self, urls: list[str]):
         logger.opt(colors=True).debug("request: <r>check is books exists</r>")
@@ -291,11 +339,48 @@ class BooksApi(JSApi):
 
     def get_available_drivers(self):
         logger.opt(colors=True).debug("request: <r>available drivers</r>")
-        available_drivers = [driver.driver_name for driver in Driver.drivers]
+        available_drivers = [
+            dict(
+                name=driver.driver_name,
+                licensed=issubclass(driver, LicensedDriver),
+                authed=getattr(driver, "is_authed", True),
+                url=driver.site_url,
+            )
+            for driver in Driver.drivers
+        ]
         logger.opt(colors=True).debug(
             f"available drivers count: <y>{len(available_drivers)}</y>"
         )
         return self.make_answer(available_drivers)
+
+    def logout_driver(self, driver_name: str):
+        logger.opt(colors=True).debug(
+            f"request: <r>logout driver</r> | <y>{driver_name}</y>"
+        )
+        driver = next(
+            (driver for driver in Driver.drivers if driver.driver_name == driver_name),
+            None,
+        )
+        if not driver or not issubclass(driver, LicensedDriver):
+            return self.error(NoSuitableDriver())
+        driver.logout()
+        logger.opt(colors=True).debug(f"Logout from <y>{driver}</y>")
+        return self.make_answer()
+
+    def login_driver(self, driver_name: str):
+        logger.opt(colors=True).debug(
+            f"request: <r>login driver</r> | <y>{driver_name}</y>"
+        )
+        driver = next(
+            (driver for driver in Driver.drivers if driver.driver_name == driver_name),
+            None,
+        )
+        if not driver or not issubclass(driver, LicensedDriver):
+            return self.error(NoSuitableDriver())
+        if not driver.auth():
+            return self.error(NotAuthenticated())
+        logger.opt(colors=True).debug(f"Login to <y>{driver}</y>")
+        return self.make_answer()
 
     def get_downloads(self):
         logger.opt(colors=True).debug("request: <r>get downloads</r>")
@@ -333,6 +418,11 @@ class BooksApi(JSApi):
             if not (book := db.get_book_by_bid(bid)):
                 return self.error(BookNotFound(bid=bid))
 
+        try:
+            requests.get(book.url)
+        except requests.exceptions.ConnectionError:
+            return self.error(ConnectionFailedError())
+
         if len(self._download_processes) >= 5:
             self._download_queue.append(bid)
             logger.opt(colors=True).debug(f"added to download queue: {book:styled}")
@@ -364,10 +454,11 @@ class BooksApi(JSApi):
         elif download_process := self._download_processes.get(bid):
             download_process.downloader.terminate()
         logger.opt(colors=True).debug(f"downloading of book <y>{bid}</y> terminated")
+        return self.make_answer()
 
     @staticmethod
     def _delete_book_files(dir_path: str, files: list[str]) -> None:
-        for file in [*files, "cover.jpg", ".abp"]:
+        for file in files:
             file_path = os.path.join(dir_path, file)
             try:
                 logger.opt(colors=True).trace(f"deleting <y>{file_path}</y>")
@@ -378,6 +469,32 @@ class BooksApi(JSApi):
                 logger.exception(err)
 
         os.removedirs(dir_path)
+
+    def _move_multi_reader_book(self, book: Book, _retry: bool = False):
+        logger.opt(colors=True).debug(
+            f"request: <r>move_multi_reader_book</r> | {book:styled}"
+        )
+        new_path = book.dir_path
+        book.multi_readers = False
+        old_path = book.dir_path
+        Path(new_path).mkdir(parents=True, exist_ok=True)
+
+        for file in [*book.files, "cover.jpg", ".abp"]:
+            file_path = os.path.join(old_path, file)
+            dst = os.path.join(new_path, file)
+            try:
+                logger.opt(colors=True).trace(
+                    f"moving <y>{file_path}</y> to <y>{dst}</y>"
+                )
+                shutil.move(file_path, dst)
+            except PermissionError:
+                logger.error(f"file locked. {file_path}")
+                self.evaluate_js("clearPlayingBook()")
+                if not _retry:
+                    logger.debug("retrying move_multi_reader_book")
+                    return self._move_multi_reader_book(book, True)
+            except Exception as err:
+                logger.exception(f"moving file {file_path} failed: {err}")
 
     def delete_book(self, bid: int):
         logger.opt(colors=True).debug(f"request: <r>delete book</r> | <y>{bid}</y>")
@@ -395,7 +512,9 @@ class BooksApi(JSApi):
             return self.error(BookNotDownloaded(bid=bid))
 
         logger.opt(colors=True).debug(f"deleting book: {book:styled}")
-        self._delete_book_files(book.dir_path, list(book.files.keys()))
+        self._delete_book_files(
+            book.dir_path, [*book.files.keys(), "cover.jpg", ".abp"]
+        )
 
         logger.opt(colors=True).debug(f"clearing files data from db: {book:styled}")
         book.files.clear()
@@ -412,12 +531,44 @@ class BooksApi(JSApi):
                 return self.error(BookNotFound(bid=bid))
 
             if book.files:
-                self.removed_books_files[bid] = (book.dir_path, list(book.files.keys()))
+                self.removed_books_files[bid] = (
+                    book.dir_path,
+                    [*book.files.keys(), "cover.jpg"],
+                )
                 os.remove(book.abp_file_path)
             db.remove_book(bid)
             db.commit()
 
         logger.opt(colors=True).info(f"book removed: <y>{book:styled}</y>")
+        return self.make_answer()
+
+    @staticmethod
+    def fix_preview(bid: int):
+        logger.opt(colors=True).debug(f"request: <r>fix preview</r> | <y>{bid}</y>")
+        with Database(autocommit=True) as db:
+            if not (book := db.get_book_by_bid(bid)):
+                return
+            driver = Driver.get_suitable_driver(book.url)()
+            try:
+                new_data = driver.get_book(book.url)
+            except requests.exceptions.ConnectionError as err:
+                return
+            book.preview = new_data.preview
+            logger.opt(colors=True).info(
+                f"new book <y>{bid}</y> preview: {book.preview}"
+            )
+            db.save(book)
+            if book.files:
+                book.save_to_storage()
+
+    def open_book_dir(self, bid: int):
+        logger.opt(colors=True).debug(f"request: <r>open book dir</r> | <y>{bid}</y>")
+        with Database() as db:
+            if not (book := db.get_book_by_bid(bid)):
+                return self.error(BookNotFound(bid=bid))
+        if not os.path.exists(book.dir_path):
+            return self.error(BookNotDownloaded(bid=bid))
+        os.startfile(book.dir_path)
         return self.make_answer()
 
     def _answer_book(self, book: Book, listening_data: bool = False) -> dict:
@@ -427,6 +578,7 @@ class BooksApi(JSApi):
             name=book.name,
             series_name=book.series_name,
             number_in_series=book.number_in_series,
+            url=book.url,
             description=book.description,
             reader=book.reader,
             duration=book.duration,
@@ -515,3 +667,13 @@ class BookAlreadyDownloaded(JSApiError):
 class BookNotDownloaded(JSApiError):
     code = 6
     message = _("book.not_downloaded")
+
+
+class WaitForDownloadingEnd(JSApiError):
+    code = 9
+    message = _("book.wait_for_similar_book_downloading")
+
+
+class NotAuthenticated(JSApiError):
+    code = 10
+    message = _("driver.not_authenticated")

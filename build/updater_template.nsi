@@ -18,7 +18,7 @@ AutoCloseWindow true
 ; MUI Settings
 !define MUI_ABORTWARNING
 !define MUI_ICON "sources\icon.ico"
-!define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
+!define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\orange-uninstall.ico"
 
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
@@ -36,7 +36,7 @@ AutoCloseWindow true
 
 Name "${PRODUCT_NAME}"
 OutFile "updaters\ABPlayerUpdate.${PRODUCT_VERSION}{arch}.exe"
-InstallDir "$PROGRAMFILES\ABPlayer"
+InstallDir "{installdir}\ABPlayer"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
@@ -45,7 +45,7 @@ ShowUnInstDetails show
 
 !macro _IfFileLocked label
   ClearErrors
-  FileOpen $0 "$INSTDIR\ABPlayer.exe" w
+  FileOpen $0 "$INSTDIR\ABPlayer{arch}.exe" w
   IfErrors ${label}
   FileClose $0
 !macroend
@@ -55,8 +55,11 @@ Section "ABPlayer" SEC01
   SetOutPath "$INSTDIR"
   FileIsLocked:
     ${IfFileLocked} FileLocked
-    File "ABPlayer\ABPlayer.exe"
+    File "ABPlayer{arch}\ABPlayer{arch}.exe"
     RMDir /r "$INSTDIR\_internal"{install}
+
+    SetOutPath "$INSTDIR"
+    File "ABPlayerUpdater{arch}.exe"
     Goto Done
   FileLocked:
     Goto FileIsLocked
@@ -64,19 +67,16 @@ Section "ABPlayer" SEC01
 SectionEnd
 
 Section -Post
-  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
   WriteUninstaller "$INSTDIR\uninst.exe"
+  WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\ABPlayer{arch}.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst.exe"
-  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\ABPlayer.exe"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\ABPlayer{arch}.exe"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
 SectionEnd
 
-Function .OnInstSuccess
-  SetOutPath "$INSTDIR"
-  Exec "ABPlayer.exe"
-FunctionEnd
 
 Function un.onUninstSuccess
   HideWindow
@@ -89,8 +89,18 @@ Function un.onInit
 FunctionEnd
 
 Section Uninstall
+  RMDir /r "$LocalAppData\AudioBookPlayer\WebViewCache"
+  Delete "$LocalAppData\AudioBookPlayer\debug.log"
+  Delete "$LocalAppData\AudioBookPlayer\library.sqlite"
+  Delete "$LocalAppData\AudioBookPlayer\config.json"
+  Delete "$LocalAppData\AudioBookPlayer\temp.txt"
+  RMDir "$LocalAppData\AudioBookPlayer"
+
   Delete "$INSTDIR\uninst.exe"
-  {uninstall}
+  Delete "$INSTDIR\ABPlayerUpdater{arch}.exe"
+
+  Delete "$INSTDIR\ABPlayer{arch}.exe"
+  RMDir /r "$INSTDIR\_internal"
 
   Delete "$DESKTOP\ABPlayer.lnk"
   Delete "$SMPROGRAMS\ABPlayer.lnk"

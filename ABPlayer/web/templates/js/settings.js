@@ -82,7 +82,7 @@ function checkForUpdates(resp) {
 }
 
 function updateApp() {
-    n = createNotification("<div><b>{{ gettext("update.downloading") }}</b></div><div>{{ gettext("it_can_take_some_time") }}</div>", 0, false)
+    n = createNotification("<div><b>{{ gettext('update.downloading') }}</b></div><div>{{ gettext('it_can_take_some_time') }}</div><div id='updaterDownloadingPB' class='small-progress-bar'></div>", 0, false)
     pywebview.api.update_app().then((resp) => {
         n.querySelector(".cross-btn").click()
         if (resp.status != "ok") showError(resp.message)
@@ -90,4 +90,7 @@ function updateApp() {
 }
 function unsubscribeNotStable() {
     pywebview.api.unsubscribe_not_stable()
+}
+function updaterDownloading(percents) {
+    document.getElementById(`updaterDownloadingPB`).style.width = `${percents}%`
 }

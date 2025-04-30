@@ -1,0 +1,1 @@
+deactivate & ..\venv\scripts\python setup_updater.py && ..\venv32\scripts\python setup_updater.py && ..\venv\scripts\activate

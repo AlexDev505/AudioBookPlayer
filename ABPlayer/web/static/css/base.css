@@ -121,14 +121,29 @@ input[type="range"]::after {
 }
 
 .button {
+  position: relative;
+  overflow: hidden;
   background-color: var(--ui-element-bg);
   padding: 8px;
   border: 1px solid var(--side-menu-bg);
   border-radius: 4px;
   transition: all 0.15s ease-in-out;
 }
-.button:hover {transform: scale(1.05);}
-.button:active {transform: translateY(1px)}
+.button:not(.loading):hover {transform: scale(1.05);}
+.button:not(.loading):active {transform: translateY(1px)}
+.button.loading::after {
+  content: "";
+  background-color: var(--ui-element-bg);
+  background-image: url(../images/loading.gif);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
 
 .iconned-btn {
   display: flex;
@@ -136,6 +151,7 @@ input[type="range"]::after {
   border-radius: 5px;
   color: var(--dim-fg);
   cursor: pointer;
+  overflow: visible;
 }
 .iconned-btn > span {
   text-wrap: nowrap;
@@ -221,6 +237,7 @@ input[type="range"]::after {
 #favorite-btn::before {content: url(../images/star_fill.svg)}
 #add-book-btn::before {content: url(../images/plus.svg)}
 #downloads-btn::before {content: url(../images/download.svg)}
+#licensed-btn::before {content: url(../images/licensed.svg)}
 #library-dir-btn::before {content: url(../images/folder.svg)}
 #settings-btn::before {content: url(../images/settings.svg)}
 
@@ -238,14 +255,13 @@ input[type="range"]::after {
   display: none;
   justify-content: space-between;
   padding: 5px 15px;
-  max-height: 15%;
-  height: 15%;
+  max-height: 55px;
+  height: 55px;
   order: 2;
   background-color: var(--side-menu-bg);
 }
 #small-player.visible {display: flex}
-#small-player.visible ~ .page {max-height: 85%}
-#small-player.visible ~ .page .filter-by-section {max-height: 35%}
+#small-player.visible ~ .page {max-height: calc(100% - 65px);}
 #small-player.visible ~ .page #book-page-content .book-description {max-height: 22%}
 #small-player > div {
   height: 100%;
@@ -318,6 +334,14 @@ input[type="range"]::after {
   height: 0.8em;
   background-repeat: no-repeat;
   background-position: center;
+}
+
+.small-progress-bar {
+  margin-top: 4px;
+  height: 4px;
+  width: 0;
+  border-radius: 2px;
+  background-color: var(--dim-fg);
 }
 
 .size-grip {

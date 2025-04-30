@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-03-15 01:45+0700\n"
+"POT-Creation-Date: 2025-04-19 12:57+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,43 +17,52 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-#: ../../abplayer/drivers/akniga.py:108 ../../abplayer/drivers/akniga.py:252
-#: ../../abplayer/drivers/izibuk.py:22 ../../abplayer/drivers/izibuk.py:149
-#: ../../abplayer/drivers/knigavuhe.py:30
-#: ../../abplayer/drivers/knigavuhe.py:204
+#: ../../abplayer/drivers/akniga.py:110 ../../abplayer/drivers/akniga.py:239
+#: ../../abplayer/drivers/izibuk.py:23 ../../abplayer/drivers/izibuk.py:80
+#: ../../abplayer/drivers/izibuk.py:124 ../../abplayer/drivers/knigavuhe.py:31
+#: ../../abplayer/drivers/knigavuhe.py:80
+#: ../../abplayer/drivers/knigavuhe.py:147
 #: ../../abplayer/drivers/librivox.py:72 ../../abplayer/drivers/librivox.py:158
 msgid "unknown_author"
 msgstr ""
 
-#: ../../abplayer/js_api/books.py:497
+#: ../../abplayer/js_api/books.py:647
 msgid "no_suitable_driver"
 msgstr ""
 
-#: ../../abplayer/js_api/books.py:502
+#: ../../abplayer/js_api/books.py:652
 msgid "book.already_exists"
 msgstr ""
 
-#: ../../abplayer/js_api/books.py:507
+#: ../../abplayer/js_api/books.py:657
 msgid "book.not_found"
 msgstr ""
 
-#: ../../abplayer/js_api/books.py:512
+#: ../../abplayer/js_api/books.py:662
 msgid "book.already_downloaded"
 msgstr ""
 
-#: ../../abplayer/js_api/books.py:517
+#: ../../abplayer/js_api/books.py:667
 msgid "book.not_downloaded"
+msgstr ""
+
+#: ../../abplayer/js_api/books.py:672
+msgid "book.wait_for_similar_book_downloading"
+msgstr ""
+
+#: ../../abplayer/js_api/books.py:677
+msgid "driver.not_authenticated"
 msgstr ""
 
 #: ../../abplayer/js_api/js_api.py:70
 msgid "connection_issues"
 msgstr ""
 
-#: ../../abplayer/js_api/settings.py:283
+#: ../../abplayer/js_api/settings.py:374
 msgid "canceled"
 msgstr ""
 
-#: ../../abplayer/js_api/settings.py:288
+#: ../../abplayer/js_api/settings.py:379
 msgid "update.file_not_found"
 msgstr ""
 
@@ -77,11 +86,15 @@ msgstr ""
 msgid "base.downloads"
 msgstr ""
 
-#: ../../abplayer/web/templates/base.html:46
-msgid "base.books_folder"
+#: ../../abplayer/web/templates/base.html:44
+msgid "base.licensed"
 msgstr ""
 
 #: ../../abplayer/web/templates/base.html:47
+msgid "base.books_folder"
+msgstr ""
+
+#: ../../abplayer/web/templates/base.html:48
 msgid "base.settings"
 msgstr ""
 
@@ -126,7 +139,7 @@ msgstr ""
 msgid "filters.series"
 msgstr ""
 
-#: ../../abplayer/web/templates/js/library.js:151
+#: ../../abplayer/web/templates/js/library.js:148
 #: ../../abplayer/web/templates/library.html:23
 msgid "library"
 msgstr ""
@@ -147,11 +160,15 @@ msgstr ""
 msgid "library.listened"
 msgstr ""
 
+#: ../../abplayer/web/templates/licensed.html:5
+msgid "licensed-drivers"
+msgstr ""
+
 #: ../../abplayer/web/templates/search.html:7
 msgid "search_for_book"
 msgstr ""
 
-#: ../../abplayer/web/templates/search.html:10
+#: ../../abplayer/web/templates/search.html:12
 msgid "begin_typing"
 msgstr ""
 
@@ -192,47 +209,72 @@ msgid "developer"
 msgstr ""
 
 #: ../../abplayer/web/templates/settings.html:45
+#: ../../abplayer/web/templates/settings.html:46
+msgid "localization_by_name"
+msgstr ""
+
+#: ../../abplayer/web/templates/settings.html:46
+msgid "localization_by_url"
+msgstr ""
+
+#: ../../abplayer/web/templates/settings.html:49
 msgid "project_page"
 msgstr ""
 
+#: ../../abplayer/web/templates/js/base.js:204
+msgid "licensed.authed"
+msgstr ""
+
+#: ../../abplayer/web/templates/js/base.js:204
+msgid "licensed.not_authed"
+msgstr ""
+
+#: ../../abplayer/web/templates/js/base.js:205
+msgid "licensed.logout"
+msgstr ""
+
+#: ../../abplayer/web/templates/js/base.js:205
+msgid "licensed.login"
+msgstr ""
+
 #: ../../abplayer/web/templates/js/book.js:21
-#: ../../abplayer/web/templates/js/book.js:122
-#: ../../abplayer/web/templates/js/book.js:124
-#: ../../abplayer/web/templates/js/book.js:145
-#: ../../abplayer/web/templates/js/library.js:231
+#: ../../abplayer/web/templates/js/book.js:142
+#: ../../abplayer/web/templates/js/book.js:144
+#: ../../abplayer/web/templates/js/book.js:166
+#: ../../abplayer/web/templates/js/library.js:236
 msgid "book.listening_progress"
 msgstr ""
 
 #: ../../abplayer/web/templates/js/book.js:22
-#: ../../abplayer/web/templates/js/library.js:232
+#: ../../abplayer/web/templates/js/library.js:237
 msgid "book.added"
 msgstr ""
 
-#: ../../abplayer/web/templates/js/downloads.js:38
+#: ../../abplayer/web/templates/js/downloads.js:39
 msgid "downloading.initializing"
 msgstr ""
 
-#: ../../abplayer/web/templates/js/downloads.js:56
+#: ../../abplayer/web/templates/js/downloads.js:57
 msgid "downloading.waiting"
 msgstr ""
 
-#: ../../abplayer/web/templates/js/downloads.js:57
+#: ../../abplayer/web/templates/js/downloads.js:58
 msgid "downloading.preparing"
 msgstr ""
 
-#: ../../abplayer/web/templates/js/downloads.js:58
+#: ../../abplayer/web/templates/js/downloads.js:59
 msgid "downloading.downloading"
 msgstr ""
 
-#: ../../abplayer/web/templates/js/downloads.js:59
+#: ../../abplayer/web/templates/js/downloads.js:60
 msgid "downloading.ending"
 msgstr ""
 
-#: ../../abplayer/web/templates/js/downloads.js:60
+#: ../../abplayer/web/templates/js/downloads.js:61
 msgid "downloading.finished"
 msgstr ""
 
-#: ../../abplayer/web/templates/js/downloads.js:61
+#: ../../abplayer/web/templates/js/downloads.js:62
 msgid "downloading.terminating"
 msgstr ""
 
@@ -240,31 +282,31 @@ msgstr ""
 msgid "book.downloaded"
 msgstr ""
 
-#: ../../abplayer/web/templates/js/library.js:149
+#: ../../abplayer/web/templates/js/library.js:148
 msgid "library.favorite"
 msgstr ""
 
-#: ../../abplayer/web/templates/js/library.js:297
+#: ../../abplayer/web/templates/js/library.js:320
 msgid "book.book_deleted_but_files_already_exists"
 msgstr ""
 
-#: ../../abplayer/web/templates/js/library.js:298
+#: ../../abplayer/web/templates/js/library.js:321
 msgid "book.delete_files"
 msgstr ""
 
-#: ../../abplayer/web/templates/js/library.js:301
+#: ../../abplayer/web/templates/js/library.js:324
 msgid "book.deleted_from_library"
 msgstr ""
 
-#: ../../abplayer/web/templates/js/library.js:320
-msgid "book.filed_deleted"
+#: ../../abplayer/web/templates/js/library.js:343
+msgid "book.files_deleted"
 msgstr ""
 
-#: ../../abplayer/web/templates/js/search.js:104
+#: ../../abplayer/web/templates/js/search.js:110
 msgid "book.add_to_library"
 msgstr ""
 
-#: ../../abplayer/web/templates/js/search.js:107
+#: ../../abplayer/web/templates/js/search.js:113
 msgid "search.empty"
 msgstr ""
 

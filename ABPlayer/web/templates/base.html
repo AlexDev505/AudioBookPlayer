@@ -20,7 +20,7 @@
     var only_stable = {{ only_stable|tojson }}
     var stable_version = {{ stable_version|tojson }}
   </script>
-  <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+  <script type="module" src="/static/js/plyr/plyr.js"></script>
 </head>
 <body>
   <div id="top-bar">
@@ -41,6 +41,7 @@
         <div id="favorite-btn" class="iconned-btn" onclick="openLibraryPage(true)"><span>{{ gettext("base.favorite") }}</span></div>
         <div id="add-book-btn" class="iconned-btn" onclick="page('search-page').show()"><span>{{ gettext("base.search_book") }}</span></div>
         <div id="downloads-btn" class="iconned-btn" onclick="page('downloads-page').show()"><span>{{ gettext("base.downloads") }}</span></div>
+        <div id="licensed-btn" class="iconned-btn" onclick="page('licensed-page').show()"><span>{{ gettext("base.licensed") }}</span></div>
       </div>
       <div>
         <div id="library-dir-btn" class="iconned-btn" onclick="openLibraryDir()"><span>{{ gettext("base.books_folder") }}</span></div>
@@ -78,6 +79,9 @@
       <div class="page" id="settings-page">
         {% include "settings.html" %}
       </div>
+      <div class="page" id="licensed-page">
+        {% include "licensed.html" %}
+      </div>
     </div>
   </div>
 
@@ -92,11 +96,12 @@
   <div class="size-grip side-grip" data-place="right"></div>
   <div class="size-grip side-grip" data-place="bottom"></div>
 
-  <script defer>{% include "js/base.js" %}</script>
-  <script defer>{% include "js/settings.js" %}</script>
-  <script defer>{% include "js/book.js" %}</script>
-  <script defer>{% include "js/library.js" %}</script>
-  <script defer>{% include "js/downloads.js" %}</script>
-  <script defer>{% include "js/search.js" %}</script>
+  <script>{% include "js/base.js" %}</script>
+  <script>{% include "js/settings.js" %}</script>
+  <script>{% include "js/book.js" %}</script>
+  <script>{% include "js/library.js" %}</script>
+  <script>{% include "js/downloads.js" %}</script>
+  <script>{% include "js/search.js" %}</script>
+  <script>{% include "js/licensed.js" %}</script>
 </body>
 </html>

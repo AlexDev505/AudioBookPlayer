@@ -1,15 +1,15 @@
 """
 
-Реализует взаимодействие с файлом, хранящим временные данные.
+Implements interaction with a file that stores temporary data.
 
-В файле данные хранятся в таком виде:
-<ключ>: <тип данных> = <значение>
-<ключ>: <тип данных> = <значение>
-<ключ>: <тип данных> = <значение>
+The data in the file is stored in the following format:
+<key>: <data type> = <value>
+<key>: <data type> = <value>
+<key>: <data type> = <value>
 ...
 
-Каждая запись начинается с новой строки.
-Для хранения доступны такие типы данных как: str, int, float, bool.
+Each entry starts on a new line.
+The following data types are available for storage: str, int, float, bool.
 
 """
 
@@ -24,8 +24,8 @@ from tools import pretty_view
 
 def load() -> dict[str, str | int | float | bool]:
     """
-    Считывает данные из файла.
-    :returns: Словарь с данными.
+    Reads data from the file.
+    :returns: Dictionary with data.
     """
     logger.opt(colors=True).trace(f"loading data from <y>{os.environ['TEMP_PATH']}</y>")
     # Создаём файл
@@ -42,7 +42,7 @@ def load() -> dict[str, str | int | float | bool]:
     for item in data:
         match = re.fullmatch(
             r"(?P<key>\w+): (?P<type>str|int|float|bool) = (?P<value>.+)", item.strip()
-        )  # Проверка шаблона
+        )  # Pattern matching
         if match:
             result[match.group("key")] = _adapt_value(
                 match.group("value"), match.group("type")
@@ -57,8 +57,8 @@ def load() -> dict[str, str | int | float | bool]:
 
 def dump(data: dict[str, str | int | float | bool]) -> None:
     """
-    Сохраняет данные в файл.
-    :param data: Словарь с данными.
+    Saves data to a file.
+    :param data: Dictionary with data.
     """
     logger.opt(lazy=True).trace(
         "new temp data: {data}", data=partial(pretty_view, data)
@@ -74,7 +74,7 @@ def dump(data: dict[str, str | int | float | bool]) -> None:
 
 def update(**fields: str | int | float | bool) -> None:
     """
-    Обновляет/добавляет значения в файле.
+    Updates/adds values in the file.
     """
     data = load()
     data.update(**fields)
@@ -83,8 +83,8 @@ def update(**fields: str | int | float | bool) -> None:
 
 def delete_items(*keys: str) -> None:
     """
-    Удаляет записи в файле.
-    :param keys: Ключи записей.
+    Deletes entries in the file.
+    :param keys: Keys of the entries.
     """
     data = load()
     for name in keys:
@@ -95,10 +95,10 @@ def delete_items(*keys: str) -> None:
 
 def _adapt_value(value: str, value_type: str) -> str | int | float | bool:
     """
-    Преобразует значение полученное из файла в тип данных Python.
-    :param value: Значение из файла.
-    :param value_type: Тип данных.
-    :returns: Преобразованное значение.
+    Converts a value obtained from the file to a Python data type.
+    :param value: Value from the file.
+    :param value_type: Data type.
+    :returns: Converted value.
     """
     try:
         if value_type == "int":
@@ -118,15 +118,15 @@ def _adapt_value(value: str, value_type: str) -> str | int | float | bool:
 @logger.catch
 def _convert_value(value: str | int | float | bool) -> str:
     """
-    Подготавливает данные для сохранения в файл.
-    :param value: Исходное значение.
-    :returns: Преобразованное значение.
+    Prepares data for saving to a file.
+    :param value: Original value.
+    :returns: Converted value.
     """
     if isinstance(value, bool):
         return str(int(value))
     elif isinstance(value, (str, int, float)):
         return str(value).replace("\n", "\\n")
     raise ValueError(
-        f"Недопустимый тип данных {type(value).__name__}, "
-        "можно хранить только str, int, float, bool"
+        f"Invalid data type {type(value).__name__}, "
+        "only str, int, float, bool are expected."
     )

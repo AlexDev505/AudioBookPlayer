@@ -37,7 +37,7 @@ class BookItem:
         return self.end_time - self.start_time
 
 
-class BookItems(list):
+class BookItems(list[BookItem]):
     """
     List of chapters.
     Represented as a list of dictionaries.
@@ -47,9 +47,6 @@ class BookItems(list):
         super().__init__(
             BookItem(**item) if isinstance(item, dict) else item for item in items
         )
-
-    def __getitem__(self, item) -> BookItem:
-        return super().__getitem__(item)
 
     def to_dump(self) -> list[dict]:
         return [asdict(item) for item in self]
@@ -106,20 +103,22 @@ class Book:
     favorite: bool = False
     files: BookFiles = field(default_factory=BookFiles)
     adding_date: datetime = field(default=datetime(2007, 5, 23))
+    multi_readers: bool = False
 
     @property
     def book_path(self) -> str:
         """
         :returns: Relative path to the book in the library.
         """
+        path = path = os.path.join("./", self.author)
         if self.series_name:
-            return os.path.join(
-                "./",
-                self.author,
-                self.series_name,
-                f"{str(self.number_in_series).rjust(2, '0')}. {self.name}",
-            )
-        return os.path.join("./", self.author, self.name)
+            book_name = f"{str(self.number_in_series).rjust(2, '0')}. {self.name}"
+            path = os.path.join(path, self.series_name, book_name)
+        else:
+            path = os.path.join(path, self.name)
+        if self.multi_readers:
+            path = os.path.join(path, self.reader)
+        return path
 
     @property
     def dir_path(self) -> str:
@@ -204,6 +203,9 @@ class Book:
             )
             return
 
+        if "multi_readers" not in data:
+            data["multi_readers"] = False
+
         signature = ty.get_type_hints(cls)
         del signature["id"]
         try:
@@ -270,6 +272,7 @@ class Book:
             favorite=self.favorite,
             files=self.files,
             adding_date=self.adding_date.strftime(DATETIME_FORMAT),
+            multi_readers=self.multi_readers,
         )
 
     @property

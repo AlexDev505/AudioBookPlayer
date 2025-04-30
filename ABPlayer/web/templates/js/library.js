@@ -33,15 +33,21 @@ function toggleReverseCheckbox(value) {
 }
 
 function filterByAuthor(value) {
-    if (urlParams.get("series")) urlParams.delete("series")
+    if (urlParams.get("series")) {
+        urlParams.delete("series")
+        urlParams.delete("sort")
+    }
     if (value == urlParams.get("author")) urlParams.delete("author")
     else addUrlParams({"author": value})
     applyFilters()
 }
 function filterBySeries(value) {
     if (urlParams.get("author")) urlParams.delete("author")
-    if (value == urlParams.get("series")) urlParams.delete("series")
-    else addUrlParams({"series": value})
+    if (value == urlParams.get("series")) {
+        urlParams.delete("series")
+        urlParams.delete("sort")
+    }
+    else addUrlParams({"series": value, "sort": "cast(number_in_series as real)"})
     applyFilters()
 }
 function selectFilterBy(value) {
@@ -145,10 +151,15 @@ function onOpenLibrary(el) {
     if (Section.current) Section.current.hide()
     section("all-books-section").show()
     fillFilterBySections()
-    if (urlParams.get("favorite"))
-        document.getElementById("library-title").innerHTML = "{{ gettext("library.favorite") }}"
-    else
-        document.getElementById("library-title").innerHTML = "{{ gettext("library") }}"
+    var base_text = (urlParams.get("favorite"))? "{{ gettext('library.favorite') }}" : "{{ gettext('library') }}"
+    if (urlParams.get("author")) base_text += ` - ${urlParams.get("author")}`
+    else if (urlParams.get("series")) {
+        base_text += ` - ${(urlParams.get("series"))}`
+        pywebview.api.get_series_duration((urlParams.get("series"))).then((response) => {
+            document.getElementById("library-title").innerHTML += ` (${response.data})`
+        })
+    }
+    document.getElementById("library-title").innerHTML = base_text
     if (urlParams.get("reverse")) toggleReverseCheckbox(1)
     else toggleReverseCheckbox(0)
 }
@@ -221,8 +232,8 @@ function showBooks(response, status) {
     html = ""
     for (book of response.data) {
         html = html + `
-          <div class="book-card" data-bid="${book.bid}", onclick="openBookPage(${book.bid})">
-            <div class="book-preview" style="background-image: url('${book.preview}'), url('/library/${book.local_preview}');"></div>
+          <div class="book-card" data-bid="${book.bid}" onclick="openBookPage(${book.bid})">
+            <div class="book-preview"></div>
             <div class="book-content">
               <div class="book-main-info-container">
                 <div class="book-main-info">
@@ -243,11 +254,12 @@ function showBooks(response, status) {
                 <div class="book-author">${book.author}</div>
                 <div class="book-reader">${book.reader}</div>
                 <div class="book-duration">${book.duration}</div>
-                <div class="book-series">${book.series_name} (${book.number_in_series})</div>
+                <div class="book-series">${book.series_name}${(book.number_in_series)? ` (${book.number_in_series})` : ''}</div>
                 <div class="book-driver">${book.driver}</div>
               </div>
             </div>
           </div>`
+        loadPreview(book)
     }
 
     fetching_books = false
@@ -255,6 +267,23 @@ function showBooks(response, status) {
     books_in_sections[container.id] = books_in_sections[container.id] + response.data.length
     container.innerHTML = container.innerHTML + html
     container.classList.remove("loading")
+}
+
+function loadPreview(book) {
+    var img = new Image();
+    img.src = book.preview;
+    img.onload = function(){
+        var el = document.querySelector(`.book-card[data-bid='${book.bid}'] .book-preview`)
+        if (!el) return
+        el.appendChild(img);
+    }
+    img.onerror = function(){
+        startPreviewFix(book)
+        img.src = `/library/${book.local_preview}`
+        img.onerror = function(){
+            document.querySelector(`.book-card[data-bid='${book.bid}'] .book-preview`).style = "background-image: url(static/images/book.svg)"
+        }
+    }
 }
 
 function _toggleFavoriteActive(el) {

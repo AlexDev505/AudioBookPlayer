@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * {
+      color: rgb(215,214,217);
+      font-family: Arial;
+      user-select: none;
+    }
+    html, body {
+      height: -webkit-fill-available;
+      margin: 0;
+      background-color: rgb(32,34,37);
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 16px;
+      align-items: center;
+    }
+    #loading-gif {
+      background-image: url(static/images/loading_app.gif);
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: contain;
+      min-width: 115px;
+      min-height: 115px;
+      max-width: 115px;
+      max-height: 115px;
+    }
+    #status {text-align: center;}
+    #made-by {
+      font-family: "Comic Sans MS", Arial;
+      font-weight: bold;
+      font-size: 0.9em;
+    }
+    #progressBar {
+      position: relative;
+      width: 150px;
+      text-align: center;
+    }
+    .progress-bar {
+      height: 4px;
+      width: 0;
+      border-radius: 2px;
+      background-color: rgb(148,155,164);
+    }
+  </style>
+</head>
+<body>
+  <div id="loading-gif"></div>
+  <div id="status"></div>
+  <div id="progressBar" style="display:none;">
+    <div class="files-count"></div>
+    <div class="progress-bar"></div>
+  </div>
+  <div id="made-by">by AlexDev505</div>
+  <script>
+    function setStatus(text) {
+        document.getElementById("status").innerHTML = text
+    }
+    function initDownloading(files_count) {
+        var files_count_el = document.querySelector(`#progressBar .files-count`)
+        files_count_el.dataset["files_count"] = files_count
+        files_count_el.dataset["downloading"] = 1
+        files_count_el.innerHTML = `1 / ${files_count}`
+        document.querySelector("#progressBar").style = ""
+        document.querySelector("#status").style = "display: none"
+    }
+    function fileDownloaded() {
+        var files_count_el = document.querySelector(`#progressBar .files-count`)
+        files_count_el.dataset["downloading"] = Number(files_count_el.dataset["downloading"]) + 1
+        files_count_el.innerHTML = `${files_count_el.dataset["downloading"]} / ${files_count_el.dataset["files_count"]}`
+        document.querySelector(`#progressBar .progress-bar`).style.width = `0%`
+    }
+    function downloadingCallback(percents) {
+        document.querySelector(`#progressBar .progress-bar`).style.width = `${percents}%`
+    }
+    function finishDownloading() {
+        document.querySelector("#progressBar").style = "display: none"
+        document.querySelector("#status").style = ""
+    }
+  </script>
+</body>
+</html>
