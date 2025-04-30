@@ -22,7 +22,7 @@ os.environ["AUTH_DIR"] = os.path.join(os.environ["APP_DIR"], "auth")
 # System architecture
 os.environ["ARCH"] = " x32" if platform.architecture()[0] == "32bit" else ""
 # App version
-os.environ["VERSION"] = "3.0.0-alpha.3"
+os.environ["VERSION"] = "3.0.0"
 
 # DEV
 os.environ["CONSOLE"] = "1"
