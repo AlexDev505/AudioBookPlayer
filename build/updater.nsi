@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "ABPlayer"
-!define PRODUCT_VERSION "3.0.0"
+!define PRODUCT_VERSION "3.0.1"
 !define PRODUCT_PUBLISHER "AlexDev505"
 !define PRODUCT_WEB_SITE "https://github.com/AlexDev505/AudioBookPlayer"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\ABPlayer.exe"
@@ -93,6 +93,7 @@ Section "ABPlayer" SEC01
   File "ABPlayer\_internal\api-ms-win-crt-heap-l1-1-0.dll"
   File "ABPlayer\_internal\api-ms-win-crt-locale-l1-1-0.dll"
   File "ABPlayer\_internal\api-ms-win-crt-math-l1-1-0.dll"
+  File "ABPlayer\_internal\api-ms-win-crt-private-l1-1-0.dll"
   File "ABPlayer\_internal\api-ms-win-crt-process-l1-1-0.dll"
   File "ABPlayer\_internal\api-ms-win-crt-runtime-l1-1-0.dll"
   File "ABPlayer\_internal\api-ms-win-crt-stdio-l1-1-0.dll"
@@ -100,6 +101,7 @@ Section "ABPlayer" SEC01
   File "ABPlayer\_internal\api-ms-win-crt-time-l1-1-0.dll"
   File "ABPlayer\_internal\api-ms-win-crt-utility-l1-1-0.dll"
   File "ABPlayer\_internal\base_library.zip"
+  File "ABPlayer\_internal\libcrypto-3-x64.dll"
   File "ABPlayer\_internal\libcrypto-3.dll"
   File "ABPlayer\_internal\libffi-8.dll"
   File "ABPlayer\_internal\libssl-3.dll"
@@ -245,6 +247,8 @@ Section "ABPlayer" SEC01
   File "ABPlayer\_internal\multidict\_multidict.cp312-win_amd64.pyd"
   SetOutPath "$INSTDIR\_internal\orjson"
   File "ABPlayer\_internal\orjson\orjson.cp312-win_amd64.pyd"
+  SetOutPath "$INSTDIR\_internal\ossl-modules"
+  File "ABPlayer\_internal\ossl-modules\legacy.dll"
   SetOutPath "$INSTDIR\_internal\propcache"
   File "ABPlayer\_internal\propcache\_helpers_c.cp312-win_amd64.pyd"
   SetOutPath "$INSTDIR\_internal\pythonnet\runtime"
