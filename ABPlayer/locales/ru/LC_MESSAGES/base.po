@@ -90,7 +90,7 @@ msgstr "загрузки"
 
 #: ../../abplayer/web/templates/base.html:44
 msgid "base.licensed"
-msgstr "прослушанные"
+msgstr "подписки"
 
 #: ../../abplayer/web/templates/base.html:47
 msgid "base.books_folder"
@@ -336,7 +336,7 @@ msgstr "Удалить старые книги из библиотеки"
 
 #: ../../abplayer/web/templates/js/settings.js:46
 msgid "books_folder.moving_files"
-msgstr "Перенести всё в новое место"
+msgstr "Перенос файлов..."
 
 #: ../../abplayer/web/templates/js/settings.js:46
 #: ../../abplayer/web/templates/js/settings.js:54

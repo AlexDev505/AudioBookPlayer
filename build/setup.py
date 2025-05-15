@@ -16,6 +16,7 @@ Startup args:
     version: str
     --dev if given build will be DEV.
     --manual if given update will be marked as `manual`.
+    --mark-as-latest if given this version will be saved in `last_build` file.
     --updater=<str> specify version of updater for this release.
 
 """
@@ -40,6 +41,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("version", type=str)
 parser.add_argument("--dev", action="store_true", default=False)
 parser.add_argument("--manual", action="store_true", default=False)
+parser.add_argument("--mark-as-latest", action="store_true", default=False)
 parser.add_argument("--updater", type=str, default="")
 args = parser.parse_args()
 
@@ -207,7 +209,7 @@ if save_update:
     updates.update(updates_)
     with open(updates_file_path, "w", encoding="utf-8") as file:
         json.dump(updates, file, indent=4)
-    if __version__.is_stable:
+    if __version__.is_stable and args.mark_as_latest:
         # save __version__ as latest if it`s stable version
         with open(last_build_file_path, "w", encoding="utf-8") as file:
             file.write(str(__version__))
