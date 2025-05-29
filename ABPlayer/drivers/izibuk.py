@@ -20,7 +20,7 @@ class Izibuk(Driver):
         page = page.text
 
         name = soup.select_one("span[itemprop='name']").text.strip()
-        author = find_in_soup(soup, "a[href^='/author']", _("unknown_author"))
+        author = find_in_soup(soup, "span a[href^='/author']", _("unknown_author"))
 
         series_name = find_in_soup(soup, "a[href^='/serie']")
         number_in_series = find_in_soup(
