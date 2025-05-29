@@ -18,7 +18,6 @@ def prepare_nsis(build: dict, arch: str) -> None:
             install += f'\n  File "{os.path.join(root, file_name)}"'
 
     _prepare_file("installer", arch, build["version"], install)
-    _prepare_file("updater", arch, build["version"], install)
 
 
 def _prepare_file(target: str, arch: str, version: str, install: str) -> None:
