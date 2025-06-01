@@ -84,7 +84,7 @@ class Bookmate(LicensedDriver):
         if not (book := self._parse_book_data(book_data, "", "")):
             raise ValueError
         resp = requests.get(
-            f"https://api.bookmate.yandex.net/api/v5/audiobooks/{book_uuid}/playlists.json",
+            f"{self.api_url}/audiobooks/{book_uuid}/playlists.json",
             headers=self.headers,
         ).json()
         if resp.get("error") == "not_authenticated":
@@ -108,10 +108,13 @@ class Bookmate(LicensedDriver):
 
     def get_book_series(self, url: str) -> list[Book]:
         book_uuid = url.split("/")[-1]
-        book_data = requests.get(f"{self.api_url}/audiobooks/{book_uuid}").json()
+        book_data = requests.get(f"{self.api_url}/audiobooks/{book_uuid}").json()[
+            "audiobook"
+        ]
         if not (series := book_data.get("series_list")):
             return []
 
+        series = series[0]
         series_name = series.get("title")
         books_data = requests.get(
             f"https://api.bookmate.yandex.net/api/v5/series/{series["uuid"]}/parts"
@@ -159,7 +162,7 @@ class Bookmate(LicensedDriver):
         self, book_data: dict, series_name: str, number_in_series: str
     ) -> Book | None:
         with suppress(KeyError, IndexError):
-            url = f"https://books.yandex.ru/audiobooks/{book_data["uuid"]}"
+            url = f"{self.site_url}/audiobooks/{book_data["uuid"]}"
             author = book_data["authors"][0]["name"] if "authors" in book_data else ""
             name = book_data["title"]
             series_name = (
