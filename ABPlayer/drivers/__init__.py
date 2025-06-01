@@ -7,6 +7,7 @@ from .bookmate import Bookmate
 from .izibuk import Izibuk
 from .knigavuhe import KnigaVUhe
 from .librivox import LibriVox
+from .yakniga import Yakniga
 
 
 if getattr(sys, "frozen", False):
