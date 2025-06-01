@@ -4,7 +4,7 @@
 
 **Audio Book Player** - an application for Windows that allows you to listen to and download audiobooks for free.
 
-The application has access to all the books available on the websites [_akniga.org_](https://akniga.org/), [_knigavuhe.org_](https://knigavuhe.org/), [_izib.uk_](https://izib.uk) and [_librivoxaudio_](https://archive.org/details/librivoxaudio).
+The application has access to all the books available on the websites [_akniga.org_](https://akniga.org/), [_knigavuhe.org_](https://knigavuhe.org/), [_izib.uk_](https://izib.uk), [_yakniga.org_](https://yakniga.org) and [_librivoxaudio_](https://archive.org/details/librivoxaudio).
 These websites have huge libraries of audiobooks of various genres and authors,
 but typically audiobook websites do not allow users to download their audiobooks..
 **Audio Book Player** however, provides this opportunity for free without SMS and registration.
