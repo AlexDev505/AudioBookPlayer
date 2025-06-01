@@ -7,8 +7,8 @@ from ctypes import windll, Structure, c_long, byref
 from loguru import logger
 
 import temp_file
+from tools import ttl_cache
 from .js_api import JSApi
-from .tools import ttl_cache
 
 
 if ty.TYPE_CHECKING:
