@@ -22,12 +22,10 @@ os.environ["AUTH_DIR"] = os.path.join(os.environ["APP_DIR"], "auth")
 # System architecture
 os.environ["ARCH"] = " x32" if platform.architecture()[0] == "32bit" else ""
 # App version
-os.environ["VERSION"] = "3.1.0"
+os.environ["VERSION"] = "3.1.1"
 
 # DEV
-os.environ["CONSOLE"] = "1"
-os.environ["DEBUG"] = "1"
-os.environ["LOGGING_LEVEL"] = "TRACE"
+
 
 
 from logger import logger  # noqa
