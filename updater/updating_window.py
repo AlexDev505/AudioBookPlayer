@@ -9,7 +9,6 @@ from pathlib import Path
 import requests
 import webview
 from loguru import logger
-
 from version import Version
 from web.app import app
 
@@ -67,7 +66,9 @@ def update_app(window) -> None:
     )
     # all updates
     updates: dict[str, dict[str, ...]] = json.loads(resp.read().decode("utf-8"))
-    versions = list(updates.keys())  # all versions. versions[0] - latest version
+    versions = list(
+        updates.keys()
+    )  # all versions. versions[0] - latest version
     all_new_versions = versions[: versions.index(os.environ["VERSION"])]
     new_versions = [
         version
@@ -97,7 +98,7 @@ def update_app(window) -> None:
         return
 
     logger.opt(colors=True).debug(
-        f"new versions: {", ".join(map(lambda x: f"<y>{x}</y>", new_versions))}"
+        f"new versions: {', '.join(map(lambda x: f'<y>{x}</y>', new_versions))}"
     )
     window.evaluate_js("setStatus('получение информации')")
     files_to_remove: list[str] = []
@@ -109,7 +110,9 @@ def update_app(window) -> None:
         )  # getting full info about release
         update = json.loads(resp.read().decode("utf-8"))
         files_to_remove.extend(update["update"]["remove"])
-        files_to_update.update({file: version for file in update["update"]["new"]})
+        files_to_update.update(
+            {file: version for file in update["update"]["new"]}
+        )
 
     update_path = Path(os.path.join(os.environ["APP_DIR"], "update"))
     update_path.mkdir(exist_ok=True)
@@ -118,7 +121,7 @@ def update_app(window) -> None:
     files_count = len(files_to_update)
     window.evaluate_js(f"initDownloading({files_count})")
     for file, version in files_to_update.items():  # downloading files
-        fp = f"{version}/{arch}/{file.replace("\\", "/")}"
+        fp = f"{version}/{arch}/{file.replace('\\', '/')}"
         url = f"https://sourceforge.net/projects/audiobookplayer/files/{fp}/download"
         logger.debug(f"downloading {fp}")
         file_name = hashlib.md5(file.encode("utf-8")).hexdigest()
@@ -146,13 +149,17 @@ def _download_file(
     url: str, file: ty.BinaryIO, window: webview.Window, offset: int = 0
 ) -> None:
     try:
-        resp = requests.get(url, headers={"Range": f"bytes={offset}-"}, stream=True)
+        resp = requests.get(
+            url, headers={"Range": f"bytes={offset}-"}, stream=True
+        )
         total_size = int(resp.headers["content-length"])
         chunk_size = 1024 if total_size > 1024 else total_size // 2
         for chunk in resp.iter_content(chunk_size=1024):
             offset += len(chunk)
             file.write(chunk)
-            window.evaluate_js(f"downloadingCallback({offset / (total_size / 100)})")
+            window.evaluate_js(
+                f"downloadingCallback({offset / (total_size / 100)})"
+            )
     except requests.exceptions.ConnectionError:
         return _download_file(url, file, window, offset)
 

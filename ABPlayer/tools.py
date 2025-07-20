@@ -5,15 +5,15 @@ import math
 import re
 import time
 import typing as ty
-from functools import wraps, lru_cache
+from functools import lru_cache, wraps
 
 import pygments.formatters
 import pygments.lexers
 from loguru import logger
 
-
 if ty.TYPE_CHECKING:
     from pathlib import Path
+
     from models.book import Book
 
 
@@ -118,7 +118,9 @@ def convert_from_bytes(bytes_value: int) -> str:
     return "%s %s" % (s, size_name[i])
 
 
-def get_file_hash(file_path: ty.Union[str, Path], hash_func=hashlib.sha256) -> str:
+def get_file_hash(
+    file_path: ty.Union[str, Path], hash_func=hashlib.sha256
+) -> str:
     """
     :param file_path: The Way to the File.
     :param hash_func: hash function.
@@ -170,13 +172,15 @@ def pretty_view(
                 "\n"
                 if multiline
                 and (
-                    len(obj) > 7 or any(isinstance(x, (dict, list, tuple)) for x in obj)
+                    len(obj) > 7
+                    or any(isinstance(x, (dict, list, tuple)) for x in obj)
                 )
                 else ""
             )
             brackets = ("[", "]")
             lines_iter = (
-                pretty_view(item, multiline=multiline, __finish=False) for item in obj
+                pretty_view(item, multiline=multiline, __finish=False)
+                for item in obj
             )
 
         result += f"{brackets[0]}{new_line}"

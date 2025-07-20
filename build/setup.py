@@ -30,12 +30,10 @@ import re
 import shutil
 from pathlib import Path
 
-import PyInstaller.__main__
 import orjson
-
+import PyInstaller.__main__
 from prepare_nsis import prepare_nsis
 from version import Version
-
 
 parser = argparse.ArgumentParser()
 parser.add_argument("version", type=str)
@@ -64,7 +62,8 @@ last_build_file_path = os.path.join("last_build")
 save_update = not DEV
 if not DEV and os.path.exists(update_dir_path):
     save_update = (
-        input("update with this version already exists, rewrite it? [y/N]: ") == "y"
+        input("update with this version already exists, rewrite it? [y/N]: ")
+        == "y"
     )
 
 # CHANGE VERSIONS IN BUILD
@@ -94,12 +93,12 @@ with open(r"sources/version_file", "w") as file:
     file.write(text)
 
 # BUILD
-shutil.rmtree(f"ABPlayer{arch}{".DEV" if DEV else ""}", ignore_errors=True)
+shutil.rmtree(f"ABPlayer{arch}{'.DEV' if DEV else ''}", ignore_errors=True)
 PyInstaller.__main__.run(
     [
         run_file_path,
         "-D",
-        f"-n=ABPlayer{arch}{".DEV" if DEV else ""}",
+        f"-n=ABPlayer{arch}{'.DEV' if DEV else ''}",
         f"--version-file=version_file",
         "--icon=icon.ico",
         "--distpath=.",
@@ -185,7 +184,8 @@ if save_update:
             [
                 os.path.join(root, file_name)
                 for file_name, file_hash in files.items()
-                if file_hash != last_update["files"].get(root, {}).get(file_name, "")
+                if file_hash
+                != last_update["files"].get(root, {}).get(file_name, "")
             ]
         )
 

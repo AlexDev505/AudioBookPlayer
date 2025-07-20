@@ -18,7 +18,6 @@ import re
 from functools import partial
 
 from loguru import logger
-
 from tools import pretty_view
 
 
@@ -27,7 +26,9 @@ def load() -> dict[str, str | int | float | bool]:
     Reads data from the file.
     :returns: Dictionary with data.
     """
-    logger.opt(colors=True).trace(f"loading data from <y>{os.environ['TEMP_PATH']}</y>")
+    logger.opt(colors=True).trace(
+        f"loading data from <y>{os.environ['TEMP_PATH']}</y>"
+    )
     # Создаём файл
     if not os.path.isfile(os.environ["TEMP_PATH"]):
         logger.opt(colors=True).debug(
@@ -41,16 +42,21 @@ def load() -> dict[str, str | int | float | bool]:
     result = {}
     for item in data:
         match = re.fullmatch(
-            r"(?P<key>\w+): (?P<type>str|int|float|bool) = (?P<value>.+)", item.strip()
+            r"(?P<key>\w+): (?P<type>str|int|float|bool) = (?P<value>.+)",
+            item.strip(),
         )  # Pattern matching
         if match:
             result[match.group("key")] = _adapt_value(
                 match.group("value"), match.group("type")
             )
         else:
-            logger.debug(f"failed to retrieve information from string <y>{item}</y>")
+            logger.debug(
+                f"failed to retrieve information from string <y>{item}</y>"
+            )
 
-    logger.opt(lazy=True).trace("temp data: {data}", data=partial(pretty_view, result))
+    logger.opt(lazy=True).trace(
+        "temp data: {data}", data=partial(pretty_view, result)
+    )
 
     return result
 
@@ -63,7 +69,9 @@ def dump(data: dict[str, str | int | float | bool]) -> None:
     logger.opt(lazy=True).trace(
         "new temp data: {data}", data=partial(pretty_view, data)
     )
-    logger.opt(colors=True).trace(f"saving a file <y>{os.environ['TEMP_PATH']}</y>")
+    logger.opt(colors=True).trace(
+        f"saving a file <y>{os.environ['TEMP_PATH']}</y>"
+    )
     result = ""
     for key, value in data.items():
         result += f"{key}: {type(value).__name__} = {_convert_value(value)}\n"

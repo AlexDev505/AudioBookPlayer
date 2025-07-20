@@ -4,12 +4,12 @@ from contextlib import suppress
 from copy import deepcopy
 
 import requests
-
-from models.book import Book, BookItems, BookItem
+from models.book import Book, BookItem, BookItems
 from tools import ttl_cache
+
 from .base import Driver
 from .downloaders import MP3Downloader
-from .tools import safe_name, duration_sec_to_str
+from .tools import duration_sec_to_str, safe_name
 
 
 class Yakniga(Driver):
@@ -60,7 +60,7 @@ class Yakniga(Driver):
                 books(query: $query, perPage: $perPage, page: $page) {
                     collection {
                         %s
-                    }    
+                    }
                 }
             }
         """
@@ -90,7 +90,7 @@ class Yakniga(Driver):
         for i, item in enumerate(data["chapters"]["collection"]):
             items.append(
                 BookItem(
-                    file_url=f"{self.site_url}{item["fileUrl"]}",
+                    file_url=f"{self.site_url}{item['fileUrl']}",
                     file_index=i,
                     title=safe_name(item["name"]),
                     start_time=0,
@@ -120,7 +120,9 @@ class Yakniga(Driver):
 
         return books
 
-    def search_books(self, query: str, limit: int = 10, offset: int = 0) -> list[Book]:
+    def search_books(
+        self, query: str, limit: int = 10, offset: int = 0
+    ) -> list[Book]:
         books = []
 
         if not (data := self._search(query)):
@@ -142,13 +144,17 @@ class Yakniga(Driver):
         data = requests.post(self.api_url, json=payload).json()
         return data["data"]["book"]
 
-    def _parse_book_data(self, data: dict, supress_exc: bool = True) -> Book | None:
+    def _parse_book_data(
+        self, data: dict, supress_exc: bool = True
+    ) -> Book | None:
         with suppress(
-            *(AttributeError, KeyError, TypeError, IndexError) if supress_exc else ()
+            *(AttributeError, KeyError, TypeError, IndexError)
+            if supress_exc
+            else ()
         ):
             if data["isBiblio"]:
                 raise KeyError("licensed book")
-            url = f"/{data["authorAlias"]}/{data["aliasName"]}"
+            url = f"/{data['authorAlias']}/{data['aliasName']}"
             name = data["title"]
             author = data.get("authorName", _("unknown_author"))
             series_name = data.get("seriesName", "")

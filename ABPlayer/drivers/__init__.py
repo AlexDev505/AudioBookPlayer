@@ -2,13 +2,12 @@ import os
 import sys
 
 from .akniga import AKniga
-from .base import Driver, DownloadProcessStatus, BaseDownloadProcessHandler
+from .base import BaseDownloadProcessHandler, DownloadProcessStatus, Driver
 from .bookmate import Bookmate
 from .izibuk import Izibuk
 from .knigavuhe import KnigaVUhe
 from .librivox import LibriVox
 from .yakniga import Yakniga
-
 
 if getattr(sys, "frozen", False):
     ROOT_DIR = getattr(sys, "_MEIPASS")

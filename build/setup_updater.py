@@ -10,9 +10,7 @@ import re
 import shutil
 
 import PyInstaller.__main__
-
 from version import Version
-
 
 __version__ = Version(1, 1, 1)
 

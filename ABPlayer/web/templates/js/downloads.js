@@ -92,4 +92,3 @@ function endLoading(bid) {
     if (document.querySelector(`.book-card[data-bid='${bid}']`)) applyFilters()
     if (opened_book && opened_book.bid == bid) loadBookData(bid)
 }
-

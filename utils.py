@@ -8,7 +8,6 @@ from pathlib import Path
 
 from loguru import logger
 
-
 logger.remove(0)
 logger.add(sys.stdout, format="<lvl><n>{message}</n></lvl>", level=0)
 
@@ -16,7 +15,15 @@ FOLDERS = []
 ADDITIONAL_FILE_EXTENSIONS = [".js", ".html", ".css"]
 ADDITIONAL_EXCLUDE = []
 
-EXCLUDE = ["build", "venv", "env", ".git", ".idea", "__pycache__", *ADDITIONAL_EXCLUDE]
+EXCLUDE = [
+    "build",
+    "venv",
+    "env",
+    ".git",
+    ".idea",
+    "__pycache__",
+    *ADDITIONAL_EXCLUDE,
+]
 EXTENSIONS = [".py", *ADDITIONAL_FILE_EXTENSIONS]
 
 
@@ -105,7 +112,9 @@ class DirData:
     @cached_property
     def file_without_docstrings_with_max_rows_count(self) -> Path:
         return self.files[
-            self.rows_without_docstrings.index(self.max_rows_without_docstrings_count)
+            self.rows_without_docstrings.index(
+                self.max_rows_without_docstrings_count
+            )
         ]
 
     @cached_property
@@ -195,7 +204,6 @@ def handle_file(path: Path) -> FileData:
         rows_without_docstrings = 0
 
         if path.suffix == ".py":
-
             start_i = -1
             while '"""' in f_data:
                 if start_i == -1:
@@ -234,7 +242,9 @@ def handle_dir(path: Path, log_files: bool = False) -> DirData:
 def rows_count(log_dirs: bool = False, log_files: bool = False):
     all_dirs: list[Path] = []
     for root, dirs, _ in os.walk("."):
-        all_dirs = [Path(f"{root}/{path}") for path in dirs if path_filter(Path(path))]
+        all_dirs = [
+            Path(f"{root}/{path}") for path in dirs if path_filter(Path(path))
+        ]
         break
 
     data = DirData("Total")

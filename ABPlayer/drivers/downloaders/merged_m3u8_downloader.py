@@ -14,11 +14,16 @@ from Crypto.Cipher import AES
 from loguru import logger
 
 from ..base import BaseDownloader, File
-from ..tools import get_audio_file_duration, merge_ts_files, split_ts, convert_ts_to_mp3
-
+from ..tools import (
+    convert_ts_to_mp3,
+    get_audio_file_duration,
+    merge_ts_files,
+    split_ts,
+)
 
 if ty.TYPE_CHECKING:
     from models.book import Book
+
     from ..base import BaseDownloadProcessHandler
 
 
@@ -28,13 +33,17 @@ class MergedM3U8Downloader(BaseDownloader):
     """
 
     def __init__(
-        self, book: Book, process_handler: BaseDownloadProcessHandler | None = None
+        self,
+        book: Book,
+        process_handler: BaseDownloadProcessHandler | None = None,
     ):
         super().__init__(book, process_handler)
 
         self._m3u8_data = None  # Object m3u8
         self._host_uri: str | None = None
-        self._encryption_key: str | None = None  # The encryption key of fragments
+        self._encryption_key: str | None = (
+            None  # The encryption key of fragments
+        )
 
         self._next_seq_index: int = 0
         self._ts_file_paths: list[Path] = []
@@ -120,7 +129,9 @@ class MergedM3U8Downloader(BaseDownloader):
         self.downloaded_files = dict(enumerate(self._real_item_paths))
         super()._finish()
 
-    def _merge_ts_files(self, item_index: int, ts_file_paths: list[Path]) -> None:
+    def _merge_ts_files(
+        self, item_index: int, ts_file_paths: list[Path]
+    ) -> None:
         item_file_path = os.path.join(
             self.book.dir_path,
             self._get_item_file_name(item_index, ""),
@@ -164,5 +175,5 @@ class MergedM3U8Downloader(BaseDownloader):
         host_uri = urlparse(self.book.items[0].file_url)
         self._host_uri = (
             f"{host_uri.scheme}://{host_uri.hostname}"
-            f"{host_uri.path[:host_uri.path.rfind('/')]}/"
+            f"{host_uri.path[: host_uri.path.rfind('/')]}/"
         )

@@ -15,17 +15,16 @@ import aiofiles
 import aiohttp
 import requests
 from loguru import logger
-
 from models.book import BookFiles
 from tools import convert_from_bytes, get_file_hash
+
 from .tools import (
+    IOTasksManager,
     NotImplementedVariable,
     create_instance_id,
     instance_id,
-    IOTasksManager,
     prepare_file_metadata,
 )
-
 
 if ty.TYPE_CHECKING:
     from models.book import Book
@@ -113,7 +112,9 @@ class BaseDownloader(ABC):
     """
 
     def __init__(
-        self, book: Book, process_handler: BaseDownloadProcessHandler | None = None
+        self,
+        book: Book,
+        process_handler: BaseDownloadProcessHandler | None = None,
     ):
         self.book = book
         self.downloaded_files: dict[int, Path] = {}
@@ -200,7 +201,9 @@ class BaseDownloader(ABC):
                     async with session.get(
                         file.url, headers=file.extra.get("headers")
                     ) as response:
-                        if not (file_size := response.headers.get("content-length")):
+                        if not (
+                            file_size := response.headers.get("content-length")
+                        ):
                             raise RuntimeError("No content-length found")
                         file.size = int(file_size)
             except Exception as err:
@@ -248,7 +251,9 @@ class BaseDownloader(ABC):
                         await file_io.write(chunk)
                         await file_io.flush()
                     if downloaded_size < file.size:
-                        raise RuntimeError("downloaded size lower than file size")
+                        raise RuntimeError(
+                            "downloaded size lower than file size"
+                        )
                     break
                 except Exception as err:
                     if isinstance(err, aiohttp.ClientPayloadError):
@@ -273,15 +278,19 @@ class BaseDownloader(ABC):
             timeout=aiohttp.ClientTimeout(sock_read=240),
             cookies=file.extra.get("cookies"),
         ) as session:
-
             async with session.get(
                 file.url,
-                headers={"Range": f"bytes={offset}-", **file.extra.get("headers", {})},
+                headers={
+                    "Range": f"bytes={offset}-",
+                    **file.extra.get("headers", {}),
+                },
             ) as response:
                 logger.opt(colors=True).trace(
                     "{}: <y>{}</y>".format(
                         file.url,
-                        convert_from_bytes(int(response.headers.get("content-length"))),
+                        convert_from_bytes(
+                            int(response.headers.get("content-length"))
+                        ),
                     )
                 )
                 async for chunk in response.content.iter_chunked(5120):
@@ -315,7 +324,9 @@ class BaseDownloader(ABC):
         if not self.book.preview:
             return
 
-        logger.opt(colors=True).debug(f"loading preview <y>{self.book.preview}</y>")
+        logger.opt(colors=True).debug(
+            f"loading preview <y>{self.book.preview}</y>"
+        )
         try:
             response = requests.get(self.book.preview)
             if response.status_code == 200:
@@ -347,7 +358,9 @@ class BaseDownloader(ABC):
         except OSError:
             pass
 
-    def _get_item_file_name(self, item_index: int, extension: str = ".mp3") -> str:
+    def _get_item_file_name(
+        self, item_index: int, extension: str = ".mp3"
+    ) -> str:
         item = self.book.items[item_index]
         # Removes series_number from capture name
         item_title = re.sub(r"^(\d+) (.+)", r"\g<2>", item.title)
@@ -405,7 +418,9 @@ class Driver(ABC):
         """
 
     @abstractmethod
-    def search_books(self, query: str, limit: int = 10, offset: int = 0) -> list[Book]:
+    def search_books(
+        self, query: str, limit: int = 10, offset: int = 0
+    ) -> list[Book]:
         """
         Method that performs a search for books by query.
         Must be implemented for each driver separately.
@@ -416,7 +431,9 @@ class Driver(ABC):
         """
 
     def download_book(
-        self, book: Book, process_handler: BaseDownloadProcessHandler | None = None
+        self,
+        book: Book,
+        process_handler: BaseDownloadProcessHandler | None = None,
     ) -> bool:
         """
         Method that downloads the book's audio files.
@@ -438,7 +455,9 @@ class LicensedDriver(Driver, ABC):
     is_authed: bool = False
 
     def __init_subclass__(cls, **kwargs):
-        cls.AUTH_FILE = os.path.join(os.environ["AUTH_DIR"], f"{cls.driver_name}.dat")
+        cls.AUTH_FILE = os.path.join(
+            os.environ["AUTH_DIR"], f"{cls.driver_name}.dat"
+        )
         super().__init_subclass__(**kwargs)
 
     @classmethod

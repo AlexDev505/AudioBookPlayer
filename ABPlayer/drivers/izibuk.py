@@ -2,12 +2,12 @@ import re
 from contextlib import suppress
 
 from bs4 import BeautifulSoup
+from models.book import Book, BookItem, BookItems
 from orjson import orjson
 
-from models.book import Book, BookItems, BookItem
 from .base import Driver
 from .downloaders import MP3Downloader
-from .tools import safe_name, find_in_soup
+from .tools import find_in_soup, safe_name
 
 
 class Izibuk(Driver):
@@ -20,7 +20,9 @@ class Izibuk(Driver):
         page = page.text
 
         name = soup.select_one("span[itemprop='name']").text.strip()
-        author = find_in_soup(soup, "span a[href^='/author']", _("unknown_author"))
+        author = find_in_soup(
+            soup, "span a[href^='/author']", _("unknown_author")
+        )
 
         series_name = find_in_soup(soup, "a[href^='/serie']")
         number_in_series = find_in_soup(
@@ -47,7 +49,7 @@ class Izibuk(Driver):
 
         match = re.search(r"var player = new XSPlayer\(((\s*.*?)+?)\);", page)
         player = orjson.loads(match.group(1))
-        files_host = f"https://{player["mp3_url_prefix"]}"
+        files_host = f"https://{player['mp3_url_prefix']}"
         items = BookItems()
         for i, item in enumerate(player["tracks"]):
             items.append(
@@ -79,7 +81,9 @@ class Izibuk(Driver):
         soup = BeautifulSoup(page.content, "html.parser")
         author = find_in_soup(soup, "a[href^='/author']", _("unknown_author"))
 
-        if not (element := soup.select_one("a[href^='/serie']")):  # book has no series
+        if not (
+            element := soup.select_one("a[href^='/serie']")
+        ):  # book has no series
             return []
         series_page_link = element.attrs["href"]
         series_name = element.text.strip()
@@ -88,13 +92,17 @@ class Izibuk(Driver):
         soup = BeautifulSoup(page.content, "html.parser")
 
         books = []
-        for card in soup.select("#books_list>div:not(:has(a[href^='/book']+span))"):
+        for card in soup.select(
+            "#books_list>div:not(:has(a[href^='/book']+span))"
+        ):
             if book := self._parse_book_card(card, author, series_name):
                 books.append(book)
 
         return books
 
-    def search_books(self, query: str, limit: int = 10, offset: int = 0) -> list[Book]:
+    def search_books(
+        self, query: str, limit: int = 10, offset: int = 0
+    ) -> list[Book]:
         books = []
         page_number = 1
 
@@ -144,7 +152,7 @@ class Izibuk(Driver):
                 ),
             )
             element = card.select_one("div>a[href^='/book']:not(:has(>img))")
-            url = f"{self.site_url}{element.attrs["href"]}"
+            url = f"{self.site_url}{element.attrs['href']}"
             name = element.text.strip()
             preview = card.select_one("img").attrs["src"]
             author = find_in_soup(card, "a[href^='/author']", author)

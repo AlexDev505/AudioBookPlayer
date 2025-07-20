@@ -10,9 +10,7 @@ import sys
 
 from paramiko import SSHClient
 from scp import SCPClient
-
 from version import Version
-
 
 parser = argparse.ArgumentParser()
 parser.add_argument("version", type=str)

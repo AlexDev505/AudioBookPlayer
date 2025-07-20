@@ -1,8 +1,7 @@
-import webview
-from loguru import logger
-
 import temp_file
+import webview
 from js_api import JSApi
+from loguru import logger
 from web.app import app
 
 

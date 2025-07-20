@@ -61,7 +61,9 @@ class IOTasksManager:
             return
         if coro := next(self._tasks_generator, None):
             self.tasks_count += 1
-            asyncio.create_task(coro).add_done_callback(self._task_done_callback)
+            asyncio.create_task(coro).add_done_callback(
+                self._task_done_callback
+            )
         elif self.tasks_count == 0:
             self.terminate()
 
@@ -147,7 +149,7 @@ def merge_ts_files(ts_file_paths: list[Path], output_file_path: Path) -> None:
     Merges ts files to one.
     """
     result = subprocess.check_output(
-        f'copy /b {"+".join(map(lambda x: x.name, ts_file_paths))} '
+        f"copy /b {'+'.join(map(lambda x: x.name, ts_file_paths))} "
         f'"{output_file_path}"',
         cwd=output_file_path.parent,
         shell=True,
@@ -178,12 +180,12 @@ def split_ts(ts_file_path: Path, on: int) -> tuple[Path, Path]:
     """
     first_part = Path(
         os.path.join(
-            ts_file_path.parent, f"{ts_file_path.name.removesuffix(".ts")}-1.ts"
+            ts_file_path.parent, f"{ts_file_path.name.removesuffix('.ts')}-1.ts"
         )
     )
     second_part = Path(
         os.path.join(
-            ts_file_path.parent, f"{ts_file_path.name.removesuffix(".ts")}-2.ts"
+            ts_file_path.parent, f"{ts_file_path.name.removesuffix('.ts')}-2.ts"
         )
     )
     subprocess.check_output(
@@ -289,7 +291,7 @@ def duration_sec_to_str(sec: int) -> str:
     """
     h, m, s = sec // 3600, sec % 3600 // 60, sec % 60
     return (
-        f"{f"{h}:" if h else ""}"
-        f"{f"{str(m).rjust(2, "0") if h else m}:" if m else ("00:" if h else "")}"
-        f"{(str(s).rjust(2, "0") if m or h else s) if s else ("00" if m or h else "")}"
+        f"{f'{h}:' if h else ''}"
+        f"{f'{str(m).rjust(2, "0") if h else m}:' if m else ('00:' if h else '')}"
+        f"{(str(s).rjust(2, '0') if m or h else s) if s else ('00' if m or h else '')}"
     )

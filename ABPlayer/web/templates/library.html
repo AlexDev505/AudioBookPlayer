@@ -1,40 +1,87 @@
-<link rel="stylesheet" href="{{url_for('static', filename='css/library.css')}}">
+<link
+    rel="stylesheet"
+    href="{{url_for('static', filename='css/library.css')}}"
+/>
 
 <div id="library-page-content">
+    <div
+        id="filter-menu"
+        class="{{ 'collapsed' if not is_filter_menu_opened else '' }}"
+    >
+        <div id="filter-menu-toggle-btn" onclick="toggleFilterMenu()"></div>
+        <div id="filters-container">
+            <div id="search-in-library-input-line" class="input-line">
+                <input
+                    placeholder="{{ gettext('filters.query') }}"
+                    oninput="searchBooksInLibrary()"
+                />
+                <button class="icon-btn search-btn"></button>
+            </div>
+            <div
+                id="reverse-checkbox"
+                class="checkbox"
+                onclick="toggleReverse()"
+            >
+                {{ gettext("filters.reverse_order") }}
+            </div>
+            <div id="filter-by-sections">
+                <div id="authors-section-btn" class="filter-by-section-btn">
+                    {{ gettext("filters.authors") }}
+                </div>
+                <div id="authors-section" class="filter-by-section"></div>
+                <div id="series-section-btn" class="filter-by-section-btn">
+                    {{ gettext("filters.series") }}
+                </div>
+                <div id="series-section" class="filter-by-section"></div>
+            </div>
+        </div>
+    </div>
 
-<div id="filter-menu" class="{{ 'collapsed' if not is_filter_menu_opened else '' }}">
-  <div id="filter-menu-toggle-btn" onclick="toggleFilterMenu()"></div>
-  <div id="filters-container">
-    <div id="search-in-library-input-line" class="input-line">
-      <input placeholder="{{ gettext('filters.query') }}" oninput="searchBooksInLibrary()">
-      <button class="icon-btn search-btn"></button>
+    <div id="library">
+        <div id="library-title">{{ gettext("library") }}</div>
+        <div id="library-sections">
+            <div id="library-sections-buttons">
+                <div
+                    id="all-books-section-btn"
+                    class="section-button"
+                    onclick="section('all-books-section').show()"
+                >
+                    {{ gettext("library.all") }}
+                </div>
+                <div
+                    id="new-books-section-btn"
+                    class="section-button"
+                    onclick="section('new-books-section').show()"
+                >
+                    {{ gettext("library.new") }}
+                </div>
+                <div
+                    id="in-progress-books-section-btn"
+                    class="section-button"
+                    onclick="section('in-progress-books-section').show()"
+                >
+                    {{ gettext("library.in_process") }}
+                </div>
+                <div
+                    id="listened-books-section-btn"
+                    class="section-button"
+                    onclick="section('listened-books-section').show()"
+                >
+                    {{ gettext("library.listened") }}
+                </div>
+            </div>
+            <div
+                id="library-sections-container"
+                onscrollend="onLibraryScrollEnd(this)"
+            >
+                <div id="all-books-section" class="books-section"></div>
+                <div id="new-books-section" class="books-section"></div>
+                <div id="in-progress-books-section" class="books-section"></div>
+                <div
+                    id="listened-books-section"
+                    class="books-section empty"
+                ></div>
+            </div>
+        </div>
     </div>
-    <div id="reverse-checkbox" class="checkbox" onclick="toggleReverse()">{{ gettext("filters.reverse_order") }}</div>
-    <div id="filter-by-sections">
-      <div id="authors-section-btn" class="filter-by-section-btn">{{ gettext("filters.authors") }}</div>
-      <div id="authors-section" class="filter-by-section"></div>
-      <div id="series-section-btn" class="filter-by-section-btn">{{ gettext("filters.series") }}</div>
-      <div id="series-section" class="filter-by-section"></div>
-    </div>
-  </div>
-</div>
-
-<div id="library">
-  <div id="library-title">{{ gettext("library") }}</div>
-  <div id="library-sections">
-    <div id="library-sections-buttons">
-      <div id="all-books-section-btn" class="section-button" onclick="section('all-books-section').show()">{{ gettext("library.all") }}</div>
-      <div id="new-books-section-btn" class="section-button" onclick="section('new-books-section').show()">{{ gettext("library.new") }}</div>
-      <div id="in-progress-books-section-btn" class="section-button" onclick="section('in-progress-books-section').show()">{{ gettext("library.in_process") }}</div>
-      <div id="listened-books-section-btn" class="section-button" onclick="section('listened-books-section').show()">{{ gettext("library.listened") }}</div>
-    </div>
-    <div id="library-sections-container" onscrollend="onLibraryScrollEnd(this)">
-      <div id="all-books-section" class="books-section"></div>
-      <div id="new-books-section" class="books-section"></div>
-      <div id="in-progress-books-section" class="books-section"></div>
-      <div id="listened-books-section" class="books-section empty"></div>
-    </div>
-  </div>
-</div>
-
 </div>

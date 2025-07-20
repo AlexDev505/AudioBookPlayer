@@ -7,11 +7,11 @@ import aiohttp
 from loguru import logger
 from m3u8 import M3U8
 
-from ..base import BaseDownloader, File, DownloadProcessStatus
-
+from ..base import BaseDownloader, DownloadProcessStatus, File
 
 if ty.TYPE_CHECKING:
     from models.book import Book, BookItem
+
     from ..base import BaseDownloadProcessHandler
 
 
@@ -21,7 +21,9 @@ class M3U8Downloader(BaseDownloader):
     """
 
     def __init__(
-        self, book: Book, process_handler: BaseDownloadProcessHandler | None = None
+        self,
+        book: Book,
+        process_handler: BaseDownloadProcessHandler | None = None,
     ):
         super().__init__(book, process_handler)
 
@@ -66,7 +68,10 @@ class M3U8Downloader(BaseDownloader):
             )
 
         self.tasks_manager.execute_tasks_factory(
-            (self._prepare_file_data(i, item) for i, item in enumerate(self.book.items))
+            (
+                self._prepare_file_data(i, item)
+                for i, item in enumerate(self.book.items)
+            )
         )
         self._files.sort(key=lambda x: x.index)
 
@@ -76,7 +81,7 @@ class M3U8Downloader(BaseDownloader):
         file.extra["headers"] = {
             "Range": f"bytes={max(offset, current_range[1])}-{sum(current_range) - 1}"
         }
-        logger.trace(f"{file.extra["headers"]}")
+        logger.trace(f"{file.extra['headers']}")
         async for chunk in super()._iter_chunks(file, 0):
             yield chunk
         if current_range_index + 1 == len(file.extra["ranges"]):

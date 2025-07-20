@@ -11,9 +11,7 @@ from inspect import isclass
 
 import orjson
 from loguru import logger
-
 from models.book import DATETIME_FORMAT
-
 
 SQL_TYPES = {
     "str": "TEXT",

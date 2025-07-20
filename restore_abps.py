@@ -13,7 +13,6 @@ from database import Database
 from models.book import BookFiles
 from tools import get_file_hash
 
-
 config.init()
 
 with Database() as db:

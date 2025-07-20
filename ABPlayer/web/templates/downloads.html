@@ -1,11 +1,12 @@
-<link rel="stylesheet" href="{{url_for('static', filename='css/downloads.css')}}">
+<link
+    rel="stylesheet"
+    href="{{url_for('static', filename='css/downloads.css')}}"
+/>
 
 <div id="downloads-page-content">
+    <div id="downloads-title">{{ gettext("downloads") }}</div>
 
-<div id="downloads-title">{{ gettext("downloads") }}</div>
-
-<div id="downloads-container">
-  <div id="no-downloads">{{ gettext("no_downloads") }}</div>
-</div>
-
+    <div id="downloads-container">
+        <div id="no-downloads">{{ gettext("no_downloads") }}</div>
+    </div>
 </div>

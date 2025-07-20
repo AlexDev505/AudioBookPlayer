@@ -13,10 +13,8 @@ import argparse
 import os.path
 import sys
 
-from loguru import logger
-
 import main
-
+from loguru import logger
 
 parser = argparse.ArgumentParser()
 parser._print_message = lambda message, _: logger.debug(message)
@@ -35,7 +33,9 @@ if args.manual_update:
     from ctypes import windll
 
     logger.info("Running manual updater")
-    windll.shell32.ShellExecuteW(None, "runas", args.manual_update, None, None, 1)
+    windll.shell32.ShellExecuteW(
+        None, "runas", args.manual_update, None, None, 1
+    )
     sys.exit()
 elif args.run_update:
     from ctypes import windll
@@ -44,9 +44,11 @@ elif args.run_update:
     windll.shell32.ShellExecuteW(
         None,
         "runas",
-        os.path.abspath(os.path.join(".", f"ABPlayerUpdater{os.environ["ARCH"]}.exe")),
+        os.path.abspath(
+            os.path.join(".", f"ABPlayerUpdater{os.environ['ARCH']}.exe")
+        ),
         (
-            f"--version={os.environ["VERSION"]}"
+            f"--version={os.environ['VERSION']}"
             + (" --only-stable" if args.only_stable else "")
         ),
         None,

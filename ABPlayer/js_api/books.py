@@ -11,16 +11,15 @@ from functools import partial
 from pathlib import Path
 
 import requests.exceptions
-from loguru import logger
-
 from database import Database
-from drivers import Driver, BaseDownloadProcessHandler, DownloadProcessStatus
-from drivers.base import LicensedDriver, DriverNotAuthenticated
-from drivers.tools import duration_str_to_sec, duration_sec_to_str
+from drivers import BaseDownloadProcessHandler, DownloadProcessStatus, Driver
+from drivers.base import DriverNotAuthenticated, LicensedDriver
+from drivers.tools import duration_sec_to_str, duration_str_to_sec
+from loguru import logger
 from models.book import DATETIME_FORMAT, Status
 from tools import convert_from_bytes, make_book_preview, pretty_view
-from .js_api import JSApi, JSApiError, ConnectionFailedError
 
+from .js_api import ConnectionFailedError, JSApi, JSApiError
 
 if ty.TYPE_CHECKING:
     from models.book import Book
@@ -39,7 +38,9 @@ class BooksApi(JSApi):
         # {<driver name>: [<search offset>, <can load next>]}
 
     def book_by_bid(self, bid: int, listening_data: bool = False):
-        logger.opt(colors=True).debug(f"request: <r>book by bid</r> | <y>{bid}</y>")
+        logger.opt(colors=True).debug(
+            f"request: <r>book by bid</r> | <y>{bid}</y>"
+        )
         with Database() as db:
             if book := db.get_book_by_bid(bid):
                 logger.opt(colors=True).debug(f"book found: {book:styled}")
@@ -62,7 +63,10 @@ class BooksApi(JSApi):
         logger.opt(colors=True).debug("request: <r>library</r>")
         sort = sort if sort else "adding_date"
         reverse = not reverse if reverse is not None else True
-        if search_query is not None and search_query != self.library_search_query:
+        if (
+            search_query is not None
+            and search_query != self.library_search_query
+        ):
             self.search_in_library(search_query)
         if search_query is None and self.library_search_query is not None:
             self.library_search_query = None
@@ -89,7 +93,15 @@ class BooksApi(JSApi):
 
         with Database() as db:
             books = db.get_libray(
-                limit, offset, sort, reverse, author, series, favorite, status, bids
+                limit,
+                offset,
+                sort,
+                reverse,
+                author,
+                series,
+                favorite,
+                status,
+                bids,
             )
 
         logger.opt(colors=True).debug(
@@ -173,7 +185,9 @@ class BooksApi(JSApi):
 
         logger.opt(lazy=True).trace(
             "search params: {data}",
-            data=partial(pretty_view, dict(query=query, states=self.search_state)),
+            data=partial(
+                pretty_view, dict(query=query, states=self.search_state)
+            ),
         )
 
         result: list[dict] = []
@@ -216,7 +230,10 @@ class BooksApi(JSApi):
         if not (driver := Driver.get_suitable_driver(url)):
             return NoSuitableDriver(book_url=url)
         try:
-            result = [make_book_preview(book) for book in driver().get_book_series(url)]
+            result = [
+                make_book_preview(book)
+                for book in driver().get_book_series(url)
+            ]
             logger.opt(colors=True).debug(
                 f"<y>{len(result)}</y> books found. "
                 f"urls: {pretty_view([book['url'] for book in result])}"
@@ -229,7 +246,9 @@ class BooksApi(JSApi):
             logger.exception(err)
             return self.make_answer([])
         except requests.exceptions.ConnectionError as err:
-            return self.error(ConnectionFailedError(err=f"{type(err).__name__}: {err}"))
+            return self.error(
+                ConnectionFailedError(err=f"{type(err).__name__}: {err}")
+            )
 
     def add_book_to_library(self, url: str):
         logger.opt(colors=True).debug(
@@ -264,7 +283,9 @@ class BooksApi(JSApi):
         return self.make_answer()
 
     def toggle_favorite(self, bid: int):
-        logger.opt(colors=True).debug(f"request: <r>toggle favorite</r> | <y>{bid}</y>")
+        logger.opt(colors=True).debug(
+            f"request: <r>toggle favorite</r> | <y>{bid}</y>"
+        )
         with Database(autocommit=True) as db:
             if not (book := db.get_book_by_bid(bid)):
                 return self.error(BookNotFound(bid=bid))
@@ -282,7 +303,9 @@ class BooksApi(JSApi):
         return self._set_book_status(bid, Status.FINISHED)
 
     def _set_book_status(self, bid: int, status: Status):
-        logger.opt(colors=True).debug(f"request: <r>set book status</r> | <y>{bid}</y>")
+        logger.opt(colors=True).debug(
+            f"request: <r>set book status</r> | <y>{bid}</y>"
+        )
         with Database(autocommit=True) as db:
             if not (book := db.get_book_by_bid(bid)):
                 return self.error(BookNotFound(bid=bid))
@@ -294,7 +317,9 @@ class BooksApi(JSApi):
             return self.make_answer()
 
     def set_stop_flag(self, bid: int, item: int, time: int):
-        logger.opt(colors=True).trace(f"request: <r>set stop flag</r> | <y>{bid}</y>")
+        logger.opt(colors=True).trace(
+            f"request: <r>set stop flag</r> | <y>{bid}</y>"
+        )
         with Database(autocommit=True) as db:
             if not (book := db.get_book_by_bid(bid)):
                 return self.error(BookNotFound(bid=bid))
@@ -358,7 +383,11 @@ class BooksApi(JSApi):
             f"request: <r>logout driver</r> | <y>{driver_name}</y>"
         )
         driver = next(
-            (driver for driver in Driver.drivers if driver.driver_name == driver_name),
+            (
+                driver
+                for driver in Driver.drivers
+                if driver.driver_name == driver_name
+            ),
             None,
         )
         if not driver or not issubclass(driver, LicensedDriver):
@@ -372,7 +401,11 @@ class BooksApi(JSApi):
             f"request: <r>login driver</r> | <y>{driver_name}</y>"
         )
         driver = next(
-            (driver for driver in Driver.drivers if driver.driver_name == driver_name),
+            (
+                driver
+                for driver in Driver.drivers
+                if driver.driver_name == driver_name
+            ),
             None,
         )
         if not driver or not issubclass(driver, LicensedDriver):
@@ -387,7 +420,10 @@ class BooksApi(JSApi):
         downloads: list[tuple[int, str, str | None, str | None]] = []
         # [(bid, book_name, status, total_size), ...]
         with Database() as db:
-            for bid in [*self._download_processes.keys(), *self._download_queue]:
+            for bid in [
+                *self._download_processes.keys(),
+                *self._download_queue,
+            ]:
                 book = db.get_book_by_bid(bid)
                 status = DownloadProcessStatus.WAITING.value
                 total_size = None
@@ -395,7 +431,9 @@ class BooksApi(JSApi):
                     downloader = self._download_processes[bid].downloader
                     status = downloader.process_handler.status.value
                     total_size = (
-                        convert_from_bytes(downloader.process_handler.total_size)
+                        convert_from_bytes(
+                            downloader.process_handler.total_size
+                        )
                         if downloader.process_handler.status
                         == DownloadProcessStatus.DOWNLOADING
                         else str(downloader.process_handler.total_size)
@@ -410,7 +448,9 @@ class BooksApi(JSApi):
         return self.make_answer(downloads)
 
     def download_book(self, bid: int):
-        logger.opt(colors=True).debug(f"request: <r>download book</r> | <y>{bid}</y>")
+        logger.opt(colors=True).debug(
+            f"request: <r>download book</r> | <y>{bid}</y>"
+        )
         if bid in self._download_processes:
             return self.error(BookAlreadyDownloaded(bid=bid))
 
@@ -425,7 +465,9 @@ class BooksApi(JSApi):
 
         if len(self._download_processes) >= 5:
             self._download_queue.append(bid)
-            logger.opt(colors=True).debug(f"added to download queue: {book:styled}")
+            logger.opt(colors=True).debug(
+                f"added to download queue: {book:styled}"
+            )
             return self.make_answer(dict(bid=bid))
 
         logger.opt(colors=True).debug(f"preparing download: {book:styled}")
@@ -453,7 +495,9 @@ class BooksApi(JSApi):
             self._download_queue.remove(bid)
         elif download_process := self._download_processes.get(bid):
             download_process.downloader.terminate()
-        logger.opt(colors=True).debug(f"downloading of book <y>{bid}</y> terminated")
+        logger.opt(colors=True).debug(
+            f"downloading of book <y>{bid}</y> terminated"
+        )
         return self.make_answer()
 
     @staticmethod
@@ -497,7 +541,9 @@ class BooksApi(JSApi):
                 logger.exception(f"moving file {file_path} failed: {err}")
 
     def delete_book(self, bid: int):
-        logger.opt(colors=True).debug(f"request: <r>delete book</r> | <y>{bid}</y>")
+        logger.opt(colors=True).debug(
+            f"request: <r>delete book</r> | <y>{bid}</y>"
+        )
         with Database() as db:
             if not (book := db.get_book_by_bid(bid)):
                 if bid in self.removed_books_files:
@@ -516,7 +562,9 @@ class BooksApi(JSApi):
             book.dir_path, [*book.files.keys(), "cover.jpg", ".abp"]
         )
 
-        logger.opt(colors=True).debug(f"clearing files data from db: {book:styled}")
+        logger.opt(colors=True).debug(
+            f"clearing files data from db: {book:styled}"
+        )
         book.files.clear()
         with Database(autocommit=True) as db:
             db.save(book)
@@ -525,7 +573,9 @@ class BooksApi(JSApi):
         return self.make_answer()
 
     def remove_book(self, bid: int):
-        logger.opt(colors=True).debug(f"request: <r>remove book</r> | <y>{bid}</y>")
+        logger.opt(colors=True).debug(
+            f"request: <r>remove book</r> | <y>{bid}</y>"
+        )
         with Database() as db:
             if not (book := db.get_book_by_bid(bid)):
                 return self.error(BookNotFound(bid=bid))
@@ -544,7 +594,9 @@ class BooksApi(JSApi):
 
     @staticmethod
     def fix_preview(bid: int):
-        logger.opt(colors=True).debug(f"request: <r>fix preview</r> | <y>{bid}</y>")
+        logger.opt(colors=True).debug(
+            f"request: <r>fix preview</r> | <y>{bid}</y>"
+        )
         with Database(autocommit=True) as db:
             if not (book := db.get_book_by_bid(bid)):
                 return
@@ -562,7 +614,9 @@ class BooksApi(JSApi):
                 book.save_to_storage()
 
     def open_book_dir(self, bid: int):
-        logger.opt(colors=True).debug(f"request: <r>open book dir</r> | <y>{bid}</y>")
+        logger.opt(colors=True).debug(
+            f"request: <r>open book dir</r> | <y>{bid}</y>"
+        )
         with Database() as db:
             if not (book := db.get_book_by_bid(bid)):
                 return self.error(BookNotFound(bid=bid))
@@ -583,7 +637,9 @@ class BooksApi(JSApi):
             reader=book.reader,
             duration=book.duration,
             preview=book.preview,
-            local_preview=os.path.join(book.book_path, "cover.jpg").replace("\\", "/"),
+            local_preview=os.path.join(book.book_path, "cover.jpg").replace(
+                "\\", "/"
+            ),
             driver=book.driver,
             status=book.status.value,
             listening_progress=book.listening_progress,
@@ -591,7 +647,8 @@ class BooksApi(JSApi):
             adding_date=book.adding_date.strftime(DATETIME_FORMAT),
             downloaded=bool(len(book.files)),
             downloading=(
-                book.id in self._download_queue or book.id in self._download_processes
+                book.id in self._download_queue
+                or book.id in self._download_processes
             ),
         )
         if listening_data:
@@ -601,7 +658,8 @@ class BooksApi(JSApi):
                     stop_flag=asdict(book.stop_flag),
                     items=book.items.to_dump(),
                     files=[
-                        os.path.join(book_path, file_name) for file_name in book.files
+                        os.path.join(book_path, file_name)
+                        for file_name in book.files
                     ],
                 )
             )
@@ -641,7 +699,9 @@ class DownloadingProcessHandler(BaseDownloadProcessHandler):
     @status.setter
     def status(self, v: DownloadProcessStatus):
         self._status = v
-        self.js_api.evaluate_js(f"setDownloadingStatus({self.bid}, '{v.value}')")
+        self.js_api.evaluate_js(
+            f"setDownloadingStatus({self.bid}, '{v.value}')"
+        )
 
 
 class NoSuitableDriver(JSApiError):
