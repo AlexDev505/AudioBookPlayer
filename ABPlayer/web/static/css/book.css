@@ -27,8 +27,30 @@
     justify-content: space-between;
     height: fit-content;
 }
-#book-header .book-listening-progress-btn {
+#book-header .book-listening-progress-btn::before {
     background-image: url(../images/angle_down.svg);
+    background-repeat: no-repeat;
+    height: 100%;
+    cursor: pointer;
+}
+.book-listening-progress-action {
+    z-index: 2;
+    position: absolute;
+    top: 100%;
+    background-color: var(--cards-bg);
+    padding: 5px;
+    border-radius: 5px;
+    display: none;
+    cursor: pointer;
+}
+.book-listening-progress-action.showen {
+    display: flex;
+}
+.book-listening-progress-action::before {
+    background-image: url(../images/check.svg);
+}
+.book-listening-progress-action.finished::before {
+    background-image: url(../images/book.svg);
 }
 #book-header .book-actions {
     align-items: center;

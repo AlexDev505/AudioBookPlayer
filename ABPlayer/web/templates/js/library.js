@@ -178,7 +178,7 @@ function onOpenLibrary(el) {
 }
 
 page("library-page").onHide = function () {
-  clearLibraryFilters();
+  // clearLibraryFilters();
   clearLibrary();
 };
 page("library-page").onShow = onOpenLibrary;
@@ -246,15 +246,17 @@ function showBooks(response, status) {
     return;
   }
 
+  let container_name = "";
   if (status == null) {
-    container = document.getElementById("all-books-section");
+    container_name = "all";
   } else if (status == "new") {
-    container = document.getElementById("new-books-section");
+    container_name = "new";
   } else if (status == "started") {
-    container = document.getElementById("in-progress-books-section");
+    container_name = "in-progress";
   } else if (status == "finished") {
-    container = document.getElementById("listened-books-section");
+    container_name = "listened";
   }
+  let container = document.getElementById(`${container_name}-books-section`);
   if (container.id != Section.current.el.id) return;
 
   html = "";
@@ -289,7 +291,7 @@ function showBooks(response, status) {
               </div>
             </div>
           </div>`;
-    loadPreview(book);
+    loadPreview(container_name, book);
   }
 
   fetching_books = false;
@@ -300,12 +302,12 @@ function showBooks(response, status) {
   container.classList.remove("loading");
 }
 
-function loadPreview(book) {
+function loadPreview(container, book) {
   var img = new Image();
   img.src = book.preview;
   img.onload = function () {
     var el = document.querySelector(
-      `.book-card[data-bid='${book.bid}'] .book-preview`,
+      `#${container}-books-section .book-card[data-bid='${book.bid}'] .book-preview`,
     );
     if (!el) return;
     el.appendChild(img);

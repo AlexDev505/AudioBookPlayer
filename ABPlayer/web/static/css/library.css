@@ -204,6 +204,7 @@
     line-height: 1;
 }
 .book-state {
+    position: relative;
     display: flex;
     font-size: small;
     text-wrap: nowrap;
@@ -211,6 +212,8 @@
 }
 .book-state > * {
     display: flex;
+    align-items: center;
+    margin-bottom: 2px;
 }
 .book-state > *::before {
     content: "";
@@ -219,9 +222,7 @@
     margin-right: 4px;
 }
 .book-listening-progress {
-    align-items: center;
     margin-right: 8px;
-    margin-bottom: 2px;
 }
 .book-listening-progress::before {
     background-image: url(../images/clock.svg);

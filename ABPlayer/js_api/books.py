@@ -16,7 +16,7 @@ from drivers import BaseDownloadProcessHandler, DownloadProcessStatus, Driver
 from drivers.base import DriverNotAuthenticated, LicensedDriver
 from drivers.tools import duration_sec_to_str, duration_str_to_sec
 from loguru import logger
-from models.book import DATETIME_FORMAT, Status
+from models.book import DATETIME_FORMAT, Status, StopFlag
 from tools import convert_from_bytes, make_book_preview, pretty_view
 
 from .js_api import ConnectionFailedError, JSApi, JSApiError
@@ -296,6 +296,9 @@ class BooksApi(JSApi):
             )
             return self.make_answer(book.favorite)
 
+    def mark_as_new(self, bid: int):
+        return self._set_book_status(bid, Status.NEW)
+
     def mark_as_started(self, bid: int):
         return self._set_book_status(bid, Status.STARTED)
 
@@ -310,6 +313,8 @@ class BooksApi(JSApi):
             if not (book := db.get_book_by_bid(bid)):
                 return self.error(BookNotFound(bid=bid))
             book.status = status
+            if status == Status.NEW:
+                book.stop_flag = StopFlag()
             db.save(book)
             logger.opt(colors=True).debug(
                 f"{book:styled} status: <y>{book.status.value}</y>"

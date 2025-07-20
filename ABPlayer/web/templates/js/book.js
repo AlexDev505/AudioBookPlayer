@@ -22,12 +22,9 @@ function loadBookData(bid) {
     opened_book = resp.data;
     document.querySelector("#book-page-content .book-title").innerHTML =
       resp.data.name;
-    document.querySelector(
-      "#book-page-content .book-listening-progress",
-    ).innerHTML =
-      `${resp.data.listening_progress} {{ gettext("book.listening_progress")}}`;
     document.querySelector("#book-page-content .book-adding-date").innerHTML =
       `{{ gettext("book.added") }} ${resp.data.adding_date}`;
+    initBookListeningProgress(resp.data);
     document.querySelector("#book-page-content .book-preview").style =
       `background-image: url('${resp.data.preview}'), url('/library/${resp.data.local_preview}');`;
     document.querySelector("#book-page-content .book-author").innerHTML =
@@ -183,6 +180,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       (player.previous_items_duration + player.currentTime) /
         (player.total_duration / 100),
     );
+    player.current_book.listening_progress = listening_progress;
     if (opened_book && player.current_book.bid == opened_book.bid) {
       let el = document.querySelector(".book-item.current");
       if (el.dataset.seeking) return;
@@ -215,6 +213,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         Math.floor(player.duration),
       );
       player.current_book.status = "finished";
+      initBookListeningProgress(player.current_book);
       return pywebview.api.mark_as_finished(player.current_book.bid);
     }
     _selectItem(next_item);
@@ -385,3 +384,38 @@ function clearPlayingBook() {
 function startPreviewFix(book) {
   pywebview.api.fix_preview(book.bid);
 }
+
+function initBookListeningProgress(book) {
+  document.querySelector(
+    "#book-page-content .book-listening-progress",
+  ).innerHTML =
+    `${book.listening_progress} {{ gettext("book.listening_progress")}}`;
+  let el = document.querySelector(
+    "#book-page-content .book-listening-progress-action",
+  );
+  if (book.status == "finished") {
+    el.classList.add("finished");
+    el.innerText = "{{ gettext('book.mark_as_new') }}";
+    el.onclick = () => {
+      pywebview.api.mark_as_new(book.bid);
+      book.listening_progress = "0%";
+      book.status = "new";
+      initBookListeningProgress(book);
+    };
+  } else {
+    el.classList.remove("finished");
+    el.innerText = "{{ gettext('book.mark_as_finished') }}";
+    el.onclick = () => {
+      pywebview.api.mark_as_finished(book.bid);
+      book.listening_progress = "100%";
+      book.status = "finished";
+      initBookListeningProgress(book);
+    };
+  }
+}
+function showListeningProgressAction() {
+  document
+    .querySelector(".book-listening-progress-action")
+    .classList.toggle("showen");
+}
+function mark(bid, status) {}

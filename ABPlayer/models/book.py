@@ -142,6 +142,8 @@ class Book:
         """
         :returns: Listening progress. (In percentage)
         """
+        if self.status == Status.FINISHED:
+            return "100%"
         total = sum([item.duration for item in self.items])
         if not total:
             return "0%"
