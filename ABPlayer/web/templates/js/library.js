@@ -6,6 +6,7 @@ function toggleFilterMenu() {
 }
 
 function clearLibraryFilters() {
+  urlParams.delete("reverse");
   urlParams.delete("sort");
   urlParams.delete("author");
   urlParams.delete("series");
@@ -25,7 +26,7 @@ function toggleReverse() {
   applyFilters();
 }
 function toggleReverseCheckbox(value) {
-  option = document.getElementById("reverse-checkbox");
+  let option = document.getElementById("reverse-checkbox");
   if (!value) option.classList.remove("checked");
   else option.classList.add("checked");
 }
@@ -159,9 +160,10 @@ function onOpenLibrary(el) {
   if (Section.current) Section.current.hide();
   section("all-books-section").show();
   fillFilterBySections();
-  var base_text = urlParams.get("favorite")
-    ? "{{ gettext('library.favorite') }}"
-    : "{{ gettext('library') }}";
+  var base_text =
+    urlParams.get("favorite") == "1"
+      ? "{{ gettext('library.favorite') }}"
+      : "{{ gettext('library') }}";
   if (urlParams.get("author")) base_text += ` - ${urlParams.get("author")}`;
   else if (urlParams.get("series")) {
     base_text += ` - ${urlParams.get("series")}`;

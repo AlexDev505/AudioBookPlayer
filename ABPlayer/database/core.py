@@ -242,6 +242,8 @@ class Database:
             if field_name != "id"
         }
         self.update(book.id, **fields)
+        if book.files:
+            book.save_to_storage()
 
     def update(self, bid: int, **fields) -> None:
         fields = {

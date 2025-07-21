@@ -116,7 +116,9 @@ function delay(time) {
 
 function openLibraryPage(favorite = null) {
   library_page = page("library-page");
-  if (favorite != null) addUrlParams({ favorite: Number(favorite) });
+  if (favorite == true) addUrlParams({ favorite: Number(favorite) });
+  else if (favorite == false && urlParams.get("favorite"))
+    urlParams.delete("favorite");
   if (!library_page.shown) {
     library_page.show();
   } else {

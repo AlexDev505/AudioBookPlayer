@@ -615,8 +615,6 @@ class BooksApi(JSApi):
                 f"new book <y>{bid}</y> preview: {book.preview}"
             )
             db.save(book)
-            if book.files:
-                book.save_to_storage()
 
     def open_book_dir(self, bid: int):
         logger.opt(colors=True).debug(
