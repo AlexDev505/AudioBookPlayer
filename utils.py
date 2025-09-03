@@ -13,7 +13,7 @@ logger.add(sys.stdout, format="<lvl><n>{message}</n></lvl>", level=0)
 
 FOLDERS = []
 ADDITIONAL_FILE_EXTENSIONS = [".js", ".html", ".css"]
-ADDITIONAL_EXCLUDE = []
+ADDITIONAL_EXCLUDE = ["plyr"]
 
 EXCLUDE = [
     "build",
