@@ -9,4 +9,6 @@ else:
 
 
 def set_language(lang: str) -> None:
-    gettext.translation("base", os.path.join(ROOT_DIR, "locales"), [lang]).install()
+    gettext.translation(
+        "base", os.path.join(ROOT_DIR, "locales"), [lang]
+    ).install()

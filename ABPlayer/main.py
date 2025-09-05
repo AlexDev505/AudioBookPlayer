@@ -3,16 +3,19 @@ import platform
 
 from tools import pretty_view
 
-
 # CONFIG SETUP
 # Path to the application directory
-os.environ["APP_DIR"] = os.path.join(os.environ["LOCALAPPDATA"], "AudioBookPlayer")
+os.environ["APP_DIR"] = os.path.join(
+    os.environ["LOCALAPPDATA"], "AudioBookPlayer"
+)
 if not os.path.exists(os.environ["APP_DIR"]):
     os.mkdir(os.environ["APP_DIR"])
 # Path to the configuration file
 os.environ["CONFIG_PATH"] = os.path.join(os.environ["APP_DIR"], "config.json")
 # Path to the library database file
-os.environ["DATABASE_PATH"] = os.path.join(os.environ["APP_DIR"], "library.sqlite")
+os.environ["DATABASE_PATH"] = os.path.join(
+    os.environ["APP_DIR"], "library.sqlite"
+)
 # Path to the debug file
 os.environ["DEBUG_PATH"] = os.path.join(os.environ["APP_DIR"], "debug.log")
 # Path to the temporary data file
