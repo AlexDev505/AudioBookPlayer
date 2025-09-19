@@ -265,7 +265,7 @@ class BaseDownloader(ABC):
                     logger.opt(colors=True).trace(
                         f"retrying download file <y>{file.index}</y>"
                     )
-
+        # TODO
         self.downloaded_files[file.index] = file_path
 
     async def _iter_chunks(
