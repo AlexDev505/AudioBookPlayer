@@ -8,11 +8,9 @@ import argparse
 import os
 import sys
 
-from paramiko import SSHClient
+from paramiko import AutoAddPolicy, SSHClient
 from scp import SCPClient
-
 from version import Version
-
 
 parser = argparse.ArgumentParser()
 parser.add_argument("version", type=str)
@@ -35,6 +33,7 @@ def progress(filename, size, sent):
 print("Uploading update")
 ssh = SSHClient()
 ssh.load_system_host_keys()
+ssh.set_missing_host_key_policy(AutoAddPolicy())
 ssh.connect(
     "frs.sourceforge.net",
     username="alexdev-py",

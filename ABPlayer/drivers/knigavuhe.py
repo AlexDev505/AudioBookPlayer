@@ -3,12 +3,12 @@ import typing as ty
 from contextlib import suppress
 
 from bs4 import BeautifulSoup
+from models.book import Book, BookItem, BookItems
 from orjson import orjson
 
-from models.book import Book, BookItems, BookItem
 from .base import Driver
 from .downloaders import MP3Downloader
-from .tools import safe_name, find_in_soup
+from .tools import find_in_soup, safe_name
 
 
 class KnigaVUhe(Driver):
@@ -23,7 +23,9 @@ class KnigaVUhe(Driver):
         match = re.search(r"cur\.book = (.+);", page)
         book = orjson.loads(match.group(1))
 
-        match = re.search(r"var player = new BookPlayer\(\d+, (\[.+?]).+\);", page)
+        match = re.search(
+            r"var player = new BookPlayer\(\d+, (\[.+?]).+\);", page
+        )
         playlist = orjson.loads(match.group(1))
 
         name = book["name"]
@@ -43,7 +45,9 @@ class KnigaVUhe(Driver):
         duration = ""
         with suppress(AttributeError, TypeError):
             duration = (
-                soup.find("span", string="Время звучания:").parent.contents[-1].strip()
+                soup.find("span", string="Время звучания:")
+                .parent.contents[-1]
+                .strip()
             )  # Do not translate
         preview = soup.select_one("div.book_cover > img").attrs["src"]
 
@@ -89,11 +93,15 @@ class KnigaVUhe(Driver):
         soup = BeautifulSoup(page.content, "html.parser")
 
         books = []
-        for card in soup.select("div.bookkitem:not(:has(.bookkitem_litres_icon))"):
+        for card in soup.select(
+            "div.bookkitem:not(:has(.bookkitem_litres_icon))"
+        ):
             if book := self._parse_book_card(card, author, series_name):
                 books.append(book)
                 url = name = reader = ""
-                for element in card.select("div.bookkitem_other_versions_list > a"):
+                for element in card.select(
+                    "div.bookkitem_other_versions_list > a"
+                ):
                     if url == "":
                         url = self.site_url + element.attrs["href"]
                         name = element.text
@@ -115,7 +123,9 @@ class KnigaVUhe(Driver):
 
         return books
 
-    def search_books(self, query: str, limit: int = 10, offset: int = 0) -> list[Book]:
+    def search_books(
+        self, query: str, limit: int = 10, offset: int = 0
+    ) -> list[Book]:
         books = []
         page_number = 1
 

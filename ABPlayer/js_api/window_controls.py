@@ -2,14 +2,13 @@ from __future__ import annotations
 
 import time
 import typing as ty
-from ctypes import windll, Structure, c_long, byref
-
-from loguru import logger
+from ctypes import Structure, byref, c_long, windll
 
 import temp_file
+from loguru import logger
 from tools import ttl_cache
-from .js_api import JSApi
 
+from .js_api import JSApi
 
 if ty.TYPE_CHECKING:
     import webview

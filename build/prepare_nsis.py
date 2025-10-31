@@ -26,7 +26,8 @@ def _prepare_file(target: str, arch: str, version: str, install: str) -> None:
 
     text = text.replace("{arch}", arch)
     text = text.replace(
-        "{installdir}", "$PROGRAMFILES32" if arch == " x32" else "$PROGRAMFILES64"
+        "{installdir}",
+        "$PROGRAMFILES32" if arch == " x32" else "$PROGRAMFILES64",
     )
     text = text.replace("{version}", version)
     text = text.replace("{install}", install)

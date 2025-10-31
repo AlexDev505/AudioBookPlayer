@@ -33,65 +33,75 @@ class NotImplementedVariable:
 
 class IOTasksManager:
     """
-    Asynchronous task manager.
-    Implements a queue and limits the number of simultaneously executing tasks.
-    Executes all tasks from `_tasks_generator`.
+    Asynchronous task manager
+    Implements a queue and limits the number of simultaneously executing tasks
+    Executes all tasks from `_tasks_generator`
     """
 
     def __init__(self, max_tasks: int = 1):
-        self.max_tasks: int = max_tasks
-        self.tasks_count: int = 0
+        self._max_tasks: int = max_tasks
+        self._tasks_count: int = 0
         self._tasks_generator: ty.Generator[ty.Coroutine] | None = None
         self._future: asyncio.Future | None = None
+        self._tasks: list[asyncio.Task] = []
 
     def execute_tasks_factory(
         self, tasks_generator: ty.Generator[ty.Coroutine]
     ) -> None:
         """
-        Setups `_tasks_generator` and waits for finishing.
+        Setups `_tasks_generator` and waits for finishing
         """
+        asyncio.run(self.wait_finishing(tasks_generator))
+
+    async def wait_finishing(
+        self, tasks_generator: ty.Generator[ty.Coroutine]
+    ) -> None:
+        """
+        Setups `_tasks_generator`, creates start tasks pool and waits `_future`
+        """
+        if self._tasks_generator:
+            raise RuntimeError("Tasks are already running")
         self._tasks_generator = tasks_generator
-        asyncio.run(self._wait_finishing())
-
-    def _run_next(self) -> None:
-        """
-        Starts the next task.
-        """
-        if not self._future:
-            return
-        if coro := next(self._tasks_generator, None):
-            self.tasks_count += 1
-            asyncio.create_task(coro).add_done_callback(self._task_done_callback)
-        elif self.tasks_count == 0:
-            self.terminate()
-
-    def _task_done_callback(self, _: asyncio.Task) -> None:
-        """
-        Calls when task is done.
-        Starts the next task.
-        """
-        self.tasks_count -= 1
-        self._run_next()
-
-    async def _wait_finishing(self) -> None:
-        """
-        Creates start tasks pool and waits `_future`
-        """
         self._future = asyncio.Future()
-        for _ in range(self.max_tasks):
+        for _ in range(self._max_tasks):
             self._run_next()
         with suppress(asyncio.CancelledError):
             await self._future
 
-    def terminate(self) -> None:
+    def _run_next(self) -> None:
+        """
+        Starts the next task
+        """
+        if not self._tasks_generator:
+            return
+        if coro := next(self._tasks_generator, None):
+            self._tasks_count += 1
+            self._tasks.append(t := asyncio.create_task(coro))
+            t.add_done_callback(self._task_done_callback)
+        elif self._tasks_count == 0:
+            asyncio.create_task(self.terminate())
+
+    def _task_done_callback(self, t: asyncio.Task) -> None:
+        """
+        Calls when task is done.
+        Starts the next task.
+        """
+        self._tasks.remove(t)
+        self._tasks_count -= 1
+        self._run_next()
+
+    async def terminate(self) -> None:
         """
         Stops running next tasks.
         """
         if self._future:
             self._future.cancel()
             self._future = None
-        while self.tasks_count:
-            time.sleep(0.01)
+            self._tasks_generator = None
+            for t in self._tasks:
+                t.cancel()
+        while self._tasks_count:
+            await asyncio.sleep(0.01)
 
 
 def prepare_file_metadata(
@@ -142,12 +152,40 @@ def get_audio_file_duration(file_path: Path) -> float:
     )
 
 
-def merge_ts_files(ts_file_paths: list[Path], output_file_path: Path) -> None:
+def fix_m4a_meta(file_path: Path) -> None:
+    """
+    Fixes m4a file metadata.
+    """
+    output_path = str(file_path)
+    file_path = file_path.rename(
+        Path(file_path.parent, file_path.name.removesuffix(".m4a") + "-old.m4a")
+    )
+    subprocess.check_output(
+        f"{os.environ['FFMPEG_PATH']} -v quiet "
+        f'-i "{file_path}" -acodec copy "{output_path}"',
+        shell=True,
+        stdin=subprocess.DEVNULL,
+        stderr=subprocess.STDOUT,
+    )
+    os.remove(file_path)
+
+
+def merge_ts_files(
+    ts_file_paths: list[Path],
+    output_dir: Path,
+    output_file_name: str,
+) -> None:
     """
     Merges ts files to one.
     """
+    input_fp = output_dir / (output_file_name + ".txt")
+    with open(input_fp, "w") as f:
+        f.write("\n".join(map(lambda x: f"file '{x.name}'", ts_file_paths)))
+    output_file_path = output_dir / (output_file_name + ".mp3")
+
     result = subprocess.check_output(
-        f'copy /b {"+".join(map(lambda x: x.name, ts_file_paths))} '
+        f"{os.environ['FFMPEG_PATH']} -v quiet -f concat -safe 0 "
+        f'-i "{output_file_name + ".txt"}" -map 0:a -c:a libmp3lame '
         f'"{output_file_path}"',
         cwd=output_file_path.parent,
         shell=True,
@@ -156,6 +194,7 @@ def merge_ts_files(ts_file_paths: list[Path], output_file_path: Path) -> None:
     ).decode("cp866")
     if result:
         logger.debug(result)
+    os.remove(input_fp)
 
 
 def convert_ts_to_mp3(ts_file_path: Path, mp3_file_path: Path) -> None:
@@ -178,12 +217,12 @@ def split_ts(ts_file_path: Path, on: int) -> tuple[Path, Path]:
     """
     first_part = Path(
         os.path.join(
-            ts_file_path.parent, f"{ts_file_path.name.removesuffix(".ts")}-1.ts"
+            ts_file_path.parent, f"{ts_file_path.name.removesuffix('.ts')}-1.ts"
         )
     )
     second_part = Path(
         os.path.join(
-            ts_file_path.parent, f"{ts_file_path.name.removesuffix(".ts")}-2.ts"
+            ts_file_path.parent, f"{ts_file_path.name.removesuffix('.ts')}-2.ts"
         )
     )
     subprocess.check_output(
@@ -289,7 +328,7 @@ def duration_sec_to_str(sec: int) -> str:
     """
     h, m, s = sec // 3600, sec % 3600 // 60, sec % 60
     return (
-        f"{f"{h}:" if h else ""}"
-        f"{f"{str(m).rjust(2, "0") if h else m}:" if m else ("00:" if h else "")}"
-        f"{(str(s).rjust(2, "0") if m or h else s) if s else ("00" if m or h else "")}"
+        f"{f'{h}:' if h else ''}"
+        f"{f'{str(m).rjust(2, "0") if h else m}:' if m else ('00:' if h else '')}"
+        f"{(str(s).rjust(2, '0') if m or h else s) if s else ('00' if m or h else '')}"
     )

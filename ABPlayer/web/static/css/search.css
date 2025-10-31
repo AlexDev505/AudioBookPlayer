@@ -1,185 +1,232 @@
-#search-page {width: 100%; height: 100%}
+#search-page {
+    width: 100%;
+    height: 100%;
+}
 
 #search-page-content {
-  display:flex;
-  width: 100%;
-  height: 100%;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
-#search-input-line-container {min-width: 40vw; margin: 10px;}
+#search-input-line-container {
+    min-width: 40vw;
+    margin: 10px;
+}
 #search-label-container {
-  position: relative;
-  display: flex;
-  margin-bottom: 2px;
-  justify-content: space-between;
+    position: relative;
+    display: flex;
+    margin-bottom: 2px;
+    justify-content: space-between;
 }
 #search-label {
-  font-size: large;
-  font-weight: bold;
+    font-size: large;
+    font-weight: bold;
 }
 .driver-btn {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 .driver-btn::after {
-  background-image: url(../images/hdd.svg);
-  margin-left: 5px;
+    background-image: url(../images/hdd.svg);
+    margin-left: 5px;
 }
 .open-browser-btn::after {
-  background-image: url(../images/box-arrow-up-right.svg);
+    background-image: url(../images/box-arrow-up-right.svg);
 }
 
-#search-input-line {width: 100%; font-size: medium}
-.search-btn::after {background-image: url(../images/search.svg)}
-.search-btn.loading::after {background-image: url(../images/loading.gif)}
+#search-input-line {
+    width: 100%;
+    font-size: medium;
+}
+.search-btn::after {
+    background-image: url(../images/search.svg);
+}
+.search-btn.loading::after {
+    background-image: url(../images/loading.gif);
+}
 
 #drivers-container {
-  position: absolute;
-  z-index: 1;
-  right: 0;
-  top: 85%;
-  margin-top: 5px;
-  background-color: var(--ui-element-bg);
-  padding: 5px;
-  border-radius: 4px;
-  transition: transform .05s linear;
-  transform: scaleY(0);
-  transform-origin: top;
+    position: absolute;
+    z-index: 1;
+    right: 0;
+    top: 85%;
+    margin-top: 5px;
+    background-color: var(--ui-element-bg);
+    padding: 5px;
+    border-radius: 4px;
+    transition: transform 0.05s linear;
+    transform: scaleY(0);
+    transform-origin: top;
 }
-#drivers-container.shown {transform: scaleY(1)}
-.driver-option.inactive {opacity: 0.5}
-.tools {position: relative}
+#drivers-container.shown {
+    transform: scaleY(1);
+}
+.driver-option.inactive {
+    opacity: 0.5;
+}
+.tools {
+    position: relative;
+}
 
-#no-search-result {margin: auto}
-#search-results-container {
-  width: 100%;
-  height: 0;
-  overflow-y: auto;
-  display: flex;
-  flex-wrap: wrap;
-  align-content: start;
-  margin-right: -4px;
-  margin-left: -4px;
-  container-type: inline-size;
-  container-name: results-container;
-  transition: all .2s ease-in-out;
+#no-search-result {
+    margin: auto;
 }
-#search-results-container.shown {flex: 1 1 auto}
+#search-results-container {
+    width: 100%;
+    height: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: start;
+    margin-right: -4px;
+    margin-left: -4px;
+    container-type: inline-size;
+    container-name: results-container;
+    transition: all 0.2s ease-in-out;
+}
+#search-results-container.shown {
+    flex: 1 1 auto;
+}
 .search-result-item {
-  position: relative;
-  width:100%;
-  height: fit-content;
-  flex: 0 0 100%;
-  max-width: 100%;
+    position: relative;
+    width: 100%;
+    height: fit-content;
+    flex: 0 0 100%;
+    max-width: 100%;
 }
 @container results-container (min-width: 740px) {
-  .search-result-item {
-    flex: 0 0 50%;
-    max-width: 50%;
-  }
+    .search-result-item {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
 }
 @container results-container (min-width: 1000px) {
-  .search-result-item {
-    flex: 0 0 33%;
-    max-width: 33%;
-  }
+    .search-result-item {
+        flex: 0 0 33%;
+        max-width: 33%;
+    }
 }
 @container results-container (min-width: 1260px) {
-  .search-result-item {
-    flex: 0 0 25%;
-    max-width: 25%;
-  }
+    .search-result-item {
+        flex: 0 0 25%;
+        max-width: 25%;
+    }
 }
 .search-result-item-card {
-  max-height: 100px;
-  cursor: pointer;
-  overflow: hidden;
-  position: relative;
-  display: flex;
-  margin: 0 4px 8px 8px;
-  padding: 8px;
-  height: calc(100% - 16px - 8px);
-  background-color: var(--cards-bg);
-  border-radius: 4px;
+    max-height: 100px;
+    cursor: pointer;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    margin: 0 4px 8px 8px;
+    padding: 8px;
+    height: calc(100% - 16px - 8px);
+    background-color: var(--cards-bg);
+    border-radius: 4px;
 }
 .search-result-item-card > :not(:first-child) {
-  margin-left: 8px;
+    margin-left: 8px;
 }
 .item-cover {
-  min-height: 100px;
-  min-width: 70px;
-  border-radius: 4px;
-  background-size: cover;
-  background-image: url(https://s4.knigavuhe.org/1/covers/10208/2-1@2x.jpg?2);
+    min-height: 100px;
+    min-width: 70px;
+    border-radius: 4px;
+    background-size: cover;
+    background-image: url(https://s4.knigavuhe.org/1/covers/10208/2-1@2x.jpg?2);
 }
 .item-title {
-  font-size: large;
-  font-weight: bold;
+    font-size: large;
+    font-weight: bold;
 }
 .item-info {
-  display: flex;
-  flex-flow: wrap;
-  margin-top: 4px;
+    display: flex;
+    flex-flow: wrap;
+    margin-top: 4px;
 }
 .item-info > * {
-  display: flex;
-  align-items: center;
-  margin-right: 8px;
-  font-size: small;
+    display: flex;
+    align-items: center;
+    margin-right: 8px;
+    font-size: small;
 }
 .item-info > *::before {
-  height: 1.2em;
-  width: 1.2em;
-  margin-right: 4px;
+    height: 1.2em;
+    width: 1.2em;
+    margin-right: 4px;
 }
-.item-author::before {content: url(../images/person.svg)}
-.item-reader:empty {display: none}
-.item-reader::before {content: url(../images/mic.svg)}
-.item-duration:empty {display: none}
-.item-duration::before {content: url(../images/clock.svg)}
-.item-series-name:empty {display: none}
-.item-series-name::before {content: url(../images/book.svg)}
-.item-driver::before {content: url(../images/hdd.svg)}
+.item-author::before {
+    content: url(../images/person.svg);
+}
+.item-reader:empty {
+    display: none;
+}
+.item-reader::before {
+    content: url(../images/mic.svg);
+}
+.item-duration:empty {
+    display: none;
+}
+.item-duration::before {
+    content: url(../images/clock.svg);
+}
+.item-series-name:empty {
+    display: none;
+}
+.item-series-name::before {
+    content: url(../images/book.svg);
+}
+.item-driver::before {
+    content: url(../images/hdd.svg);
+}
 
 .add-book-btn {
-  display: flex;
-  align-items: center;
-  justify-content: end;
-  position: absolute;
-  top: 0;
-  right: 4px;
-  max-width: 1.1em;
-  padding: 4px 4px 10px 10px;
-  background-color: var(--ui-element-bg);
-  color: transparent;
-  border-bottom-left-radius: 25px;
-  font-size: 1.2em;
-  overflow: hidden;
-  opacity: 0;
-  transition: all .2s ease-in-out, color .2s cubic-bezier(1, 0, 0, 1);
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    position: absolute;
+    top: 0;
+    right: 4px;
+    max-width: 1.1em;
+    padding: 4px 4px 10px 10px;
+    background-color: var(--ui-element-bg);
+    color: transparent;
+    border-bottom-left-radius: 25px;
+    font-size: 1.2em;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+        all 0.2s ease-in-out,
+        color 0.2s cubic-bezier(1, 0, 0, 1);
 }
 .search-result-item-card:hover ~ .add-book-btn,
-.add-book-btn.loading {opacity: 1}
+.add-book-btn.loading {
+    opacity: 1;
+}
 .add-book-btn:not(.added):not(.loading):hover {
-  opacity: 1;
-  border-bottom-left-radius: 15px;
-  max-width: 100%;
-  color: inherit;
+    opacity: 1;
+    border-bottom-left-radius: 15px;
+    max-width: 100%;
+    color: inherit;
 }
 .add-book-btn::after {
-  position: absolute;
-  right: 4px;
-  background-image: url(../images/plus.svg);
+    position: absolute;
+    right: 4px;
+    background-image: url(../images/plus.svg);
 }
-.add-book-btn.loading::after {background-image: url(../images/loading.gif)}
-.add-book-btn.added::after {background-image: url(../images/check.svg)}
+.add-book-btn.loading::after {
+    background-image: url(../images/loading.gif);
+}
+.add-book-btn.added::after {
+    background-image: url(../images/check.svg);
+}
 .add-book-btn span {
-  color: inherit;
-  font-weight: bold;
-  text-wrap: nowrap;
-  margin-right: 1.2em;
-  transition: color .1s cubic-bezier(0, 0.9, 0.0, 0);
+    color: inherit;
+    font-weight: bold;
+    text-wrap: nowrap;
+    margin-right: 1.2em;
+    transition: color 0.1s cubic-bezier(0, 0.9, 0, 0);
 }

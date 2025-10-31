@@ -11,10 +11,9 @@ import sqlite3
 import typing as ty
 
 from loguru import logger
-
 from models.book import Book
-from .field_types import get_signature, convert_value, adapt_value
 
+from .field_types import adapt_value, convert_value, get_signature
 
 DATABASE_PATH = os.environ.get("DATABASE_PATH")
 BOOK_SIGNATURE = get_signature(Book)
@@ -67,7 +66,8 @@ class Database:
         ]
         self._execute(
             "CREATE TABLE IF NOT EXISTS books "
-            "(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, %s)" % (", ".join(fields))
+            "(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, %s)"
+            % (", ".join(fields))
         )
 
     def validate_columns(self) -> None:
@@ -154,7 +154,7 @@ class Database:
 
     def get_books_by_bid(self, *bids: int) -> list[Book] | None:
         if books := self._fetchall(
-            f"SELECT {", ".join(BOOK_SIGNATURE.keys())} FROM books "
+            f"SELECT {', '.join(BOOK_SIGNATURE.keys())} FROM books "
             f"WHERE id IN [{','.join(['?'] * len(bids))}]",
             *bids,
         ):
@@ -166,7 +166,9 @@ class Database:
 
     def get_books_keywords(self) -> dict[int, list[ty.Any]]:
         result = {}
-        for book in self._fetchall("SELECT id, name, author, series_name FROM books"):
+        for book in self._fetchall(
+            "SELECT id, name, author, series_name FROM books"
+        ):
             result[book[0]] = []
             for field in book[1:]:
                 if field:
@@ -174,10 +176,15 @@ class Database:
         return result
 
     def get_all_authors(self) -> list[str]:
-        return [obj[0] for obj in set(self._fetchall("SELECT author FROM books"))]
+        return [
+            obj[0] for obj in set(self._fetchall("SELECT author FROM books"))
+        ]
 
     def get_all_series(self) -> list[str]:
-        return [obj[0] for obj in set(self._fetchall("SELECT series_name FROM books"))]
+        return [
+            obj[0]
+            for obj in set(self._fetchall("SELECT series_name FROM books"))
+        ]
 
     def get_series_durations(self, series_name: str) -> list[str]:
         return [
@@ -191,7 +198,8 @@ class Database:
         return [
             url[0]
             for url in self._fetchall(
-                f"SELECT url FROM books WHERE url IN ({','.join('?'*len(urls))})", *urls
+                f"SELECT url FROM books WHERE url IN ({','.join('?' * len(urls))})",
+                *urls,
             )
         ]
 
@@ -204,7 +212,9 @@ class Database:
             book.multi_readers = True
             bid = next((book[0] for book in books if not book[1]), None)
             if bid is not None:
-                self._execute(f"UPDATE books SET multi_readers=? WHERE id=?", True, bid)
+                self._execute(
+                    f"UPDATE books SET multi_readers=? WHERE id=?", True, bid
+                )
                 return self.get_book_by_bid(bid)
 
     def add_book(self, book: Book) -> None:
@@ -232,9 +242,13 @@ class Database:
             if field_name != "id"
         }
         self.update(book.id, **fields)
+        if book.files:
+            book.save_to_storage()
 
     def update(self, bid: int, **fields) -> None:
-        fields = {field_name: adapt_value(obj) for field_name, obj in fields.items()}
+        fields = {
+            field_name: adapt_value(obj) for field_name, obj in fields.items()
+        }
         self._execute(
             "UPDATE books SET %s WHERE id=?"
             % (", ".join(map(lambda x: f"{x}=?", fields.keys()))),

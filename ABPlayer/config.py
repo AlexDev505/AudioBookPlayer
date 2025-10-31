@@ -5,12 +5,12 @@ from pathlib import Path
 
 import orjson
 from loguru import logger
-
 from tools import pretty_view
 
-
 FIELDS = {
-    "books_folder": os.path.join(os.environ["USERPROFILE"], "documents", "Аудио книги"),
+    "books_folder": os.path.join(
+        os.environ["USERPROFILE"], "documents", "Аудио книги"
+    ),
     "dark_theme": "1",
     "language": "ru",
 }
@@ -25,7 +25,9 @@ def init() -> None:
     else:
         config = _load_config()
         config = _validate_config(config)
-        logger.opt(lazy=True).trace("config: {data}", data=partial(pretty_view, config))
+        logger.opt(lazy=True).trace(
+            "config: {data}", data=partial(pretty_view, config)
+        )
         _add_to_env(config)
 
 

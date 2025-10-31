@@ -7,7 +7,6 @@ from inspect import isfunction, ismethod
 
 import webview
 from loguru import logger
-
 from tools import pretty_view
 
 
@@ -23,7 +22,9 @@ class JSApi:
             for name in dir(section):
                 if not name.startswith("_"):
                     func = section.__getattribute__(name)
-                    if (ismethod(func) or isfunction(func)) and name not in dir(JSApi):
+                    if (ismethod(func) or isfunction(func)) and name not in dir(
+                        JSApi
+                    ):
                         window.expose(func)
 
     @property
@@ -39,7 +40,9 @@ class JSApi:
         logger.opt(lazy=True, depth=1).trace(
             "answer: {data}",
             data=partial(
-                pretty_view, answer, multiline=not os.getenv("NO_MULTILINE", False)
+                pretty_view,
+                answer,
+                multiline=not os.getenv("NO_MULTILINE", False),
             ),
         )
         return answer

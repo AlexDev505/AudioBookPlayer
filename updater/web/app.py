@@ -3,7 +3,6 @@ import sys
 
 from flask import Flask, render_template
 
-
 if getattr(sys, "frozen", False):
     ROOT_DIR = getattr(sys, "_MEIPASS")
 else:

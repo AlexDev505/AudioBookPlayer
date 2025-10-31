@@ -1,52 +1,91 @@
-<link rel="stylesheet" href="{{url_for('static', filename='css/settings.css')}}">
+<link
+    rel="stylesheet"
+    href="{{url_for('static', filename='css/settings.css')}}"
+/>
 
 <div id="settings-page-content">
+    <div id="settings-container">
+        <div class="settings-section">
+            <div class="settings-section-title">{{ gettext("interface") }}</div>
+            <div class="settings-section-container">
+                <div class="settings-section-item" id="color-scheme-setting">
+                    <div
+                        class="checkbox"
+                        onclick="toggleDarkTheme()"
+                        id="dark-theme-checkbox"
+                    >
+                        {{ gettext("dark_theme") }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="settings-section">
+            <div class="settings-section-title">{{ gettext("language") }}</div>
+            <div class="settings-section-container">
+                <div class="settings-section-item" id="language-setting">
+                    <div
+                        class="checkbox lang-checkbox"
+                        data-lang="ru"
+                        onclick="setLanguage(this)"
+                    >
+                        Русский
+                    </div>
+                    <div
+                        class="checkbox lang-checkbox"
+                        data-lang="en"
+                        onclick="setLanguage(this)"
+                    >
+                        English
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="settings-section">
+            <div class="settings-section-title">{{ gettext("storage") }}</div>
+            <div class="settings-section-container">
+                <div class="settings-section-item" id="library-dir-setting">
+                    <div class="settings-section-item-title">
+                        {{ gettext("books_folder") }}
+                    </div>
+                    <div class="button" onclick="openLibraryDir()">
+                        {{ gettext("open") }}
+                    </div>
+                    <div class="button" onclick="changeLibraryDir()">
+                        {{ gettext("change") }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<div id="settings-container">
-  <div class="settings-section">
-    <div class="settings-section-title">{{ gettext("interface") }}</div>
-    <div class="settings-section-container">
-      <div class="settings-section-item" id="color-scheme-setting">
-        <div class="checkbox" onclick="toggleDarkTheme()" id="dark-theme-checkbox">{{ gettext("dark_theme") }}</div>
-      </div>
+    <div id="about-app">
+        <hr />
+        <div id="app-main-info">
+            <div id="app-icon"></div>
+            <div>
+                <div id="app-title">Audio Book Player</div>
+                <div id="app-version">
+                    {{ gettext("version") }}: {{ app_version }}
+                </div>
+            </div>
+        </div>
+        <div id="developer-link">
+            {{ gettext("developer") }}:
+            <a href="https://github.com/AlexDev505" target="_blank"
+                >AlexDev505</a
+            >
+            {% if gettext("localization_by_name") != "localization_by_name" %}
+            Localization by:
+            <a href="{{ gettext('localization_by_url') }}" target="_blank"
+                >{{ gettext('localization_by_name') }}</a
+            >
+            {% endif %}
+        </div>
+        <a
+            id="project-link"
+            href="https://github.com/AlexDev505/AudioBookPlayer"
+            target="_blank"
+            >{{ gettext("project_page") }}</a
+        >
     </div>
-  </div>
-  <div class="settings-section">
-    <div class="settings-section-title">{{ gettext("language") }}</div>
-    <div class="settings-section-container">
-      <div class="settings-section-item" id="language-setting">
-        <div class="checkbox lang-checkbox" data-lang="ru" onclick="setLanguage(this)">Русский</div>
-        <div class="checkbox lang-checkbox" data-lang="en" onclick="setLanguage(this)">English</div>
-      </div>
-    </div>
-  </div>
-  <div class="settings-section">
-    <div class="settings-section-title">{{ gettext("storage") }}</div>
-    <div class="settings-section-container">
-      <div class="settings-section-item" id="library-dir-setting">
-        <div class="settings-section-item-title">{{ gettext("books_folder") }}</div>
-        <div class="button" onclick="openLibraryDir()">{{ gettext("open") }}</div>
-        <div class="button" onclick="changeLibraryDir()">{{ gettext("change") }}</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="about-app">
-  <hr>
-  <div id="app-main-info">
-    <div id="app-icon"></div>
-    <div>
-      <div id="app-title">Audio Book Player</div>
-      <div id="app-version">{{ gettext("version") }}: {{ app_version }}</div>
-    </div>
-  </div>
-  <div id="developer-link">{{ gettext("developer") }}: <a href="https://github.com/AlexDev505" target="_blank">AlexDev505</a>
-    {% if gettext("localization_by_name") != "localization_by_name" %}
-    Localization by: <a href="{{ gettext('localization_by_url') }}" target="_blank">{{ gettext('localization_by_name') }}</a>
-    {% endif %}
-  </div>
-  <a id="project-link" href="https://github.com/AlexDev505/AudioBookPlayer" target="_blank">{{ gettext("project_page") }}</a>
-</div>
-
 </div>

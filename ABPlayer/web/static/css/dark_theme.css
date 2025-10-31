@@ -1,10 +1,10 @@
 :root {
-  --root-bg: rgb(32,34,37);
-  --root-hover-bg: rgb(53,55,60);
-  --central-frame-bg: rgb(54,57,63);
-  --side-menu-bg: rgb(43,45,49);
-  --ui-element-bg: rgb(64,68,75);
-  --cards-bg: rgb(47,49,54);
-  --root-fg: rgb(215,214,217);
-  --dim-fg: rgb(148,155,164);
+    --root-bg: rgb(32, 34, 37);
+    --root-hover-bg: rgb(53, 55, 60);
+    --central-frame-bg: rgb(54, 57, 63);
+    --side-menu-bg: rgb(43, 45, 49);
+    --ui-element-bg: rgb(64, 68, 75);
+    --cards-bg: rgb(47, 49, 54);
+    --root-fg: rgb(215, 214, 217);
+    --dim-fg: rgb(148, 155, 164);
 }

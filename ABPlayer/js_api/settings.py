@@ -8,28 +8,29 @@ import typing as ty
 from pathlib import Path
 from subprocess import Popen
 
-import requests
-import webview
-from loguru import logger
-from orjson import orjson
-
 import config
 import locales
+import requests
 import temp_file
+import webview
 from database import Database
+from loguru import logger
 from models.book import Book
+from orjson import orjson
 from tools import Version
-from .js_api import JSApi, JSApiError, ConnectionFailedError
 
+from .js_api import ConnectionFailedError, JSApi, JSApiError
 
 if ty.TYPE_CHECKING:
     pass
 
 
-RELEASE_PAGE_URL = "https://github.com/AlexDev505/AudioBookPlayer/releases/tag/{tag}"
+RELEASE_PAGE_URL = (
+    "https://github.com/AlexDev505/AudioBookPlayer/releases/tag/{tag}"
+)
 UPDATER_FILE_URL = (
     f"https://sourceforge.net/projects/audiobookplayer/files/"
-    f"ABPlayerUpdater{os.environ["ARCH"]}.exe/download"
+    f"ABPlayerUpdater{os.environ['ARCH']}.exe/download"
 )
 
 
@@ -47,12 +48,16 @@ class SettingsApi(JSApi):
             os.startfile(os.environ["books_folder"])
 
     def set_dark_mode(self, value: bool):
-        logger.opt(colors=True).debug(f"request: <r>set dark mode</r> | <y>{value}</y>")
+        logger.opt(colors=True).debug(
+            f"request: <r>set dark mode</r> | <y>{value}</y>"
+        )
         config.update_config(dark_theme=str(int(value)))
         return self.make_answer()
 
     def set_language(self, lang: str):
-        logger.opt(colors=True).debug(f"request: <r>set language</r> | <y>{lang}</y>")
+        logger.opt(colors=True).debug(
+            f"request: <r>set language</r> | <y>{lang}</y>"
+        )
         config.update_config(language=lang)
         locales.set_language(lang)
         return self.make_answer()
@@ -86,7 +91,9 @@ class SettingsApi(JSApi):
             logger.debug("files data cleared from database")
             is_old_library_empty = db.is_library_empty()
 
-            exists_books_urls = db.check_is_books_exists([book.url for book in books])
+            exists_books_urls = db.check_is_books_exists(
+                [book.url for book in books]
+            )
             new_books_count = 0
             for book in books:
                 if book.url in exists_books_urls:
@@ -119,15 +126,23 @@ class SettingsApi(JSApi):
         with Database() as db:
             for book in Book.scan_dir(self.old_books_folder):
                 if os.path.exists(book.dir_path):
-                    logger.opt(colors=True).debug(f"{book:styled} already exists")
+                    logger.opt(colors=True).debug(
+                        f"{book:styled} already exists"
+                    )
                     continue
                 db_book = db.get_book_by_url(book.url)
                 if not db_book:
-                    logger.opt(colors=True).debug(f"{book:styled} not found in library")
+                    logger.opt(colors=True).debug(
+                        f"{book:styled} not found in library"
+                    )
                     continue
 
-                old_dir_path = os.path.join(self.old_books_folder, book.book_path)
-                Path(new_dir_path := book.dir_path).mkdir(parents=True, exist_ok=True)
+                old_dir_path = os.path.join(
+                    self.old_books_folder, book.book_path
+                )
+                Path(new_dir_path := book.dir_path).mkdir(
+                    parents=True, exist_ok=True
+                )
                 logger.opt(colors=True).debug(
                     f"moving {book:styled} "
                     f"<e>{old_dir_path}</e> <g>-></g> <y>{new_dir_path}</y>"
@@ -138,7 +153,9 @@ class SettingsApi(JSApi):
                             os.path.join(old_dir_path, file_name),
                             os.path.join(new_dir_path, file_name),
                         )
-                        logger.opt(colors=True).trace(f"file <y>{file_name}</y> moved")
+                        logger.opt(colors=True).trace(
+                            f"file <y>{file_name}</y> moved"
+                        )
                     except IOError as err:
                         logger.error(
                             f"failed on moving {file_name}. {type(err).__name__}: {err}"
@@ -157,7 +174,9 @@ class SettingsApi(JSApi):
             if moved_books_count:
                 db.commit()
 
-        logger.opt(colors=True).debug(f"books moved: <y>{moved_books_count}</y>")
+        logger.opt(colors=True).debug(
+            f"books moved: <y>{moved_books_count}</y>"
+        )
 
         return self.make_answer(dict(moved_books_count=moved_books_count))
 
@@ -184,7 +203,9 @@ class SettingsApi(JSApi):
             if removed_books_count:
                 db.commit()
 
-        logger.opt(colors=True).debug(f"books removed: <y>{removed_books_count}</y>")
+        logger.opt(colors=True).debug(
+            f"books removed: <y>{removed_books_count}</y>"
+        )
 
         return self.make_answer(dict(removed_books_count=removed_books_count))
 
@@ -203,7 +224,9 @@ class SettingsApi(JSApi):
 
         versions = list(updates.keys())
         last_stable_version = next(
-            version for version in versions if Version.from_str(version).is_stable
+            version
+            for version in versions
+            if Version.from_str(version).is_stable
         )
         if os.environ["VERSION"] not in versions:
             return self.make_answer(
@@ -257,13 +280,17 @@ class SettingsApi(JSApi):
         if isinstance(updates := self._get_updates(), JSApiError):
             return self.error(updates)
 
-        updater_file_name = f"ABPlayerUpdater{os.environ["ARCH"]}.exe"
+        updater_file_name = f"ABPlayerUpdater{os.environ['ARCH']}.exe"
         updater_path = os.path.abspath(os.path.join(".", updater_file_name))
 
         versions = list(updates.keys())
         new_versions = versions[: versions.index(os.environ["VERSION"])]
         if next(
-            (True for version in new_versions if updates[version].get("updater")),
+            (
+                True
+                for version in new_versions
+                if updates[version].get("updater")
+            ),
             False,
         ):
             logger.debug("needs new updater")
@@ -284,13 +311,15 @@ class SettingsApi(JSApi):
         Popen(cmd)
 
     def _manual_update(self, version: str):
-        logger.opt(colors=True).debug(f"request: <r>manual update app to {version}</r>")
+        logger.opt(colors=True).debug(
+            f"request: <r>manual update app to {version}</r>"
+        )
 
         if isinstance(release := self._get_release(version), JSApiError):
             return self.error(release)
 
         updater_file_name = (
-            f"ABPlayerSetup.{version}{os.environ["ARCH"].replace(" ", ".")}.exe"
+            f"ABPlayerSetup.{version}{os.environ['ARCH'].replace(' ', '.')}.exe"
         )
         for asset in release["assets"]:
             if updater_file_name == asset["name"]:
@@ -347,7 +376,11 @@ class SettingsApi(JSApi):
         )
 
     def _download_updater(
-        self, updater_url: str, file: ty.BinaryIO, offset: int = 0, _retries: int = 0
+        self,
+        updater_url: str,
+        file: ty.BinaryIO,
+        offset: int = 0,
+        _retries: int = 0,
     ) -> bool:
         try:
             response = requests.get(
@@ -357,7 +390,9 @@ class SettingsApi(JSApi):
             for chunk in response.iter_content(chunk_size=1024):
                 offset += len(chunk)
                 file.write(chunk)
-                self.evaluate_js(f"updaterDownloading({offset / (total_size / 100)})")
+                self.evaluate_js(
+                    f"updaterDownloading({offset / (total_size / 100)})"
+                )
             return True
         except IOError as err:
             logger.error(
@@ -367,7 +402,9 @@ class SettingsApi(JSApi):
             if _retries == 3:
                 return False
             time.sleep(2 * _retries)
-            return self._download_updater(updater_url, file, offset, _retries + 1)
+            return self._download_updater(
+                updater_url, file, offset, _retries + 1
+            )
 
 
 class RequestCanceled(JSApiError):

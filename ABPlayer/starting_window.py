@@ -2,14 +2,13 @@ import os
 import time
 from functools import partial
 
-import webview
-from loguru import logger
-
 import config
 import locales
+import webview
 from database import Database
 from drivers import Driver
 from drivers.base import LicensedDriver
+from loguru import logger
 from models.book import Book
 from tools import pretty_view
 from web.app import app
@@ -59,7 +58,7 @@ def start_app(window: webview.Window) -> None:
     updater_path = os.path.join(
         os.environ["APP_DIR"],
         f"ABPlayerSetup.{os.environ['VERSION']}"
-        f"{os.environ["ARCH"].replace(" ", ".")}.exe",
+        f"{os.environ['ARCH'].replace(' ', '.')}.exe",
     )
     if os.path.isfile(updater_path):
         os.remove(updater_path)
@@ -77,7 +76,9 @@ def start_app(window: webview.Window) -> None:
             continue
         if driver.auth_from_storage():
             success += 1
-    logger.opt(colors=True).debug(f"<y>{success}</y> drivers successfully authed")
+    logger.opt(colors=True).debug(
+        f"<y>{success}</y> drivers successfully authed"
+    )
 
     if (sub := time.time() - start_time) < 2:
         logger.trace(f"sleeping {round(2 - sub, 2)}s （*＾-＾*）")

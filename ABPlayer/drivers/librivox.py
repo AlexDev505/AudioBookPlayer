@@ -3,14 +3,13 @@ from math import floor
 from urllib.parse import quote as urlize
 
 from cachetools import TTLCache
+from models.book import Book, BookItem, BookItems
 from requests import Session
 from requests_ratelimiter import LimiterAdapter
 
-from models.book import Book, BookItems, BookItem
 from .base import Driver
 from .downloaders import MP3Downloader
-from .tools import safe_name, html_to_text
-
+from .tools import html_to_text, safe_name
 
 # moderate, non aggressive strategy
 RATE_LIMIT = 5  # Beyond this would be too much.
@@ -87,7 +86,7 @@ class LibriVox(Driver):
         for i, file in enumerate(
             filter(lambda item: item["format"] == SELECTED_FORMAT, files)
         ):
-            file_url = f"{self.site_url}/download/{identifier}/" f"{file['name']}"
+            file_url = f"{self.site_url}/download/{identifier}/{file['name']}"
             chapter_title = file.get("title")
             end_time = floor(float(file["length"]))
             chapters.append(
@@ -158,7 +157,9 @@ class LibriVox(Driver):
                 author = hit.get("creator", _("unknown_author"))
                 name = hit.get("title")
                 url = f"https://archive.org/details/{hit['identifier']}"
-                preview = f"https://archive.org/services/img/{hit['identifier']}"
+                preview = (
+                    f"https://archive.org/services/img/{hit['identifier']}"
+                )
                 books.append(
                     Book(
                         author=safe_name(author),

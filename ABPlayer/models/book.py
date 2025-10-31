@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 import typing as ty
-from dataclasses import dataclass, field, asdict
+from dataclasses import asdict, dataclass, field
 from datetime import datetime
 from enum import Enum
 from functools import partial
@@ -10,9 +10,7 @@ from pathlib import Path
 
 from loguru import logger
 from orjson import orjson
-
 from tools import pretty_view
-
 
 DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
@@ -45,7 +43,8 @@ class BookItems(list[BookItem]):
 
     def __init__(self, items: list[BookItem | dict[str, str | int]] = ()):
         super().__init__(
-            BookItem(**item) if isinstance(item, dict) else item for item in items
+            BookItem(**item) if isinstance(item, dict) else item
+            for item in items
         )
 
     def to_dump(self) -> list[dict]:
@@ -112,7 +111,9 @@ class Book:
         """
         path = path = os.path.join("./", self.author)
         if self.series_name:
-            book_name = f"{str(self.number_in_series).rjust(2, '0')}. {self.name}"
+            book_name = (
+                f"{str(self.number_in_series).rjust(2, '0')}. {self.name}"
+            )
             path = os.path.join(path, self.series_name, book_name)
         else:
             path = os.path.join(path, self.name)
@@ -125,7 +126,9 @@ class Book:
         """
         :returns: Absolute path to the directory where the book is stored.
         """
-        return os.path.abspath(os.path.join(os.environ["books_folder"], self.book_path))
+        return os.path.abspath(
+            os.path.join(os.environ["books_folder"], self.book_path)
+        )
 
     @property
     def preview_path(self) -> str:
@@ -139,6 +142,8 @@ class Book:
         """
         :returns: Listening progress. (In percentage)
         """
+        if self.status == Status.FINISHED:
+            return "100%"
         total = sum([item.duration for item in self.items])
         if not total:
             return "0%"
@@ -160,7 +165,9 @@ class Book:
         Scans the directory for `.abp` files.
         :returns: Generator of book instances loaded from found files.
         """
-        logger.opt(colors=True).debug(f"scanning <y>{dir_path}</y> for <r>.abp</r>")
+        logger.opt(colors=True).debug(
+            f"scanning <y>{dir_path}</y> for <r>.abp</r>"
+        )
         books_found = 0
         for root, _, file_names in os.walk(dir_path):
             if ".abp" in file_names:
@@ -226,7 +233,9 @@ class Book:
             return
 
         book = Book(**data)
-        if not str(Path(file_path).parent).endswith(book_path := book.book_path[2:]):
+        if not str(Path(file_path).parent).endswith(
+            book_path := book.book_path[2:]
+        ):
             logger.opt(colors=True).debug(
                 f"incorrect <r>.abp</r> file path <y>{file_path}</y> "
                 f"it's not ends on <y>{book_path}</y>"

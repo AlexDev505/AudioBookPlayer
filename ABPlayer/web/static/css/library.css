@@ -1,251 +1,320 @@
-#library-page {width: 100%; height: 100%}
+#library-page {
+    width: 100%;
+    height: 100%;
+}
 
 #library-page-content {
-  display: flex;
-  width: 100%;
-  height: 100%;
+    display: flex;
+    width: 100%;
+    height: 100%;
 }
 
 #filter-menu {
-  display: flex;
-  overflow: hidden;
-  flex: none;
-  flex-wrap: wrap;
-  align-content: start;
-  flex-direction: column;
-  height: 100%;
-  max-width: 100%;
-  background-color: var(--cards-bg);
-  text-wrap: nowrap;
-  transition: max-width .15s ease-in-out;
+    display: flex;
+    overflow: hidden;
+    flex: none;
+    flex-wrap: wrap;
+    align-content: start;
+    flex-direction: column;
+    height: 100%;
+    max-width: 100%;
+    background-color: var(--cards-bg);
+    text-wrap: nowrap;
+    transition: max-width 0.15s ease-in-out;
 }
-#filter-menu.collapsed {max-width: 15px}
+#filter-menu.collapsed {
+    max-width: 15px;
+}
 #filter-menu #filter-menu-toggle-btn {
-  height: 100%;
-  width: 15px;
-  background-color: var(--central-frame-bg);
-  background-image: url(../images/angle_right.svg);
-  background-repeat: no-repeat;
-  background-size: 0.6em;
-  background-position: center;
-  cursor: pointer;
+    height: 100%;
+    width: 15px;
+    background-color: var(--central-frame-bg);
+    background-image: url(../images/angle_right.svg);
+    background-repeat: no-repeat;
+    background-size: 0.6em;
+    background-position: center;
+    cursor: pointer;
 }
 #filter-menu.collapsed #filter-menu-toggle-btn {
-  background-image: url(../images/angle_left.svg);
+    background-image: url(../images/angle_left.svg);
 }
 #filters-container {
-  height: 100%;
-  padding: 10px;
-  max-width: 160px;
-  font-size: small;
-  max-height: calc(100% - 20px);
+    height: 100%;
+    padding: 10px;
+    max-width: 160px;
+    font-size: small;
+    max-height: calc(100% - 20px);
 }
-#search-in-library-input-line {}
+#search-in-library-input-line {
+}
 #search-in-library-input-line input {
-  max-width: calc(100% - 35px);
+    max-width: calc(100% - 35px);
 }
-#reverse-checkbox {margin-top: 6px; margin-bottom: 16px;}
+#reverse-checkbox {
+    margin-top: 6px;
+    margin-bottom: 16px;
+}
 
-#filter-by-sections {height: calc(100% - 2em - 26px)}
+#filter-by-sections {
+    height: calc(100% - 2em - 26px);
+}
 .filter-by-section-btn {
-  margin-bottom: 4px;
-  font-size: medium;
-  font-weight: bold;
+    margin-bottom: 4px;
+    font-size: medium;
+    font-weight: bold;
 }
-.filter-by-section-btn.disabled {}
+.filter-by-section-btn.disabled {
+}
 .filter-by-section {
-  overflow:auto;
-  margin-bottom: 16px;
-  text-wrap: pretty;
-  max-height: calc(50% - 2em - 13px);
+    overflow: auto;
+    margin-bottom: 16px;
+    text-wrap: pretty;
+    max-height: calc(50% - 2em - 13px);
 }
-.filter-by-section::-webkit-scrollbar-thumb {border-radius: 4px}
-.filter-by-section-item {margin-bottom: 2px}
+.filter-by-section::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+}
+.filter-by-section-item {
+    margin-bottom: 2px;
+}
 .filter-by-section-item.checked {
-  display: flex;
-  align-items: center;
-  padding-left: 4px;
-  font-weight: bold;
+    display: flex;
+    align-items: center;
+    padding-left: 4px;
+    font-weight: bold;
 }
 .filter-by-section-item.checked::before {
-  content: "";
-  background-image: url(../images/cross.svg);
-  background-repeat: no-repeat;
-  margin-right: 4px;
-  min-width: 1em;
-  max-width: 1em;
-  display: block;
-  height: 1em;
+    content: "";
+    background-image: url(../images/cross.svg);
+    background-repeat: no-repeat;
+    margin-right: 4px;
+    min-width: 1em;
+    max-width: 1em;
+    display: block;
+    height: 1em;
 }
 
 #library {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: calc(100% - 8px);
-  margin-top: 8px;
-  margin-left: 8px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: calc(100% - 8px);
+    margin-top: 8px;
+    margin-left: 8px;
 }
 
 #library-title {
-  font-size: large;
-  font-weight: bold;
+    font-size: large;
+    font-weight: bold;
 }
 
 #library-sections {
-  height: calc(100% - 1.1em - 10px);
-  margin-top: 4px;
-  padding-right: 2px;
-  border-top: solid 3px var(--cards-bg);
+    height: calc(100% - 1.1em - 10px);
+    margin-top: 4px;
+    padding-right: 2px;
+    border-top: solid 3px var(--cards-bg);
 }
-#library-sections-buttons {display: flex}
+#library-sections-buttons {
+    display: flex;
+}
 .section-button {
-  padding: 4px 8px;
-  margin-top: -2px;
-  border-top: solid 2px transparent;
-  cursor: pointer;
+    padding: 4px 8px;
+    margin-top: -2px;
+    border-top: solid 2px transparent;
+    cursor: pointer;
 }
 .section-button.active {
-  font-weight: bold;
-  border-top-color: var(--dim-fg);
+    font-weight: bold;
+    border-top-color: var(--dim-fg);
 }
 #library-sections-container {
-  height: calc(100% - 1em - 15px);
-  overflow-y: auto;
+    height: calc(100% - 1em - 15px);
+    overflow-y: auto;
 }
 .books-section::before {
-  content: "Ничего не найдено";
-  top: 50%;
-  left: 40%;
-  position: relative;
+    content: "Ничего не найдено";
+    top: 50%;
+    left: 40%;
+    position: relative;
 }
 .books-section {
-  height: 100%;
-  border-radius: 5px;
-  padding-right: 8px;
+    height: 100%;
+    border-radius: 5px;
+    padding-right: 8px;
 }
-.books-section:has(.book-card)::before {display: none}
+.books-section:has(.book-card)::before {
+    display: none;
+}
 .books-section.loading::after {
-  content: "";
-  display: block;
-  height: 3em;
-  background-image: url(../images/loading.gif);
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
+    content: "";
+    display: block;
+    height: 3em;
+    background-image: url(../images/loading.gif);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
 }
 .book-card {
-  display: flex;
-  max-height: 200px;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 4px;
-  background-color: var(--cards-bg);
-  transition: box-shadow .2s ease-in-out;
-  cursor: pointer;
+    display: flex;
+    max-height: 200px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    background-color: var(--cards-bg);
+    transition: box-shadow 0.2s ease-in-out;
+    cursor: pointer;
 }
-.book-card:hover {box-shadow: -1px 1px 5px 1px rgba(0, 0, 0, 0.1)}
+.book-card:hover {
+    box-shadow: -1px 1px 5px 1px rgba(0, 0, 0, 0.1);
+}
 .book-preview {
-  min-width: 130px;
-  min-height: 180px;
-  width: 130px;
-  height: 180px;
+    min-width: 130px;
+    min-height: 180px;
+    width: 130px;
+    height: 180px;
 }
 .book-preview:empty {
-  background-position: center;
-  background-size: 3em;
-  background-repeat: no-repeat;
-  background-image: url("../images/loading.gif");
+    background-position: center;
+    background-size: 3em;
+    background-repeat: no-repeat;
+    background-image: url("../images/loading.gif");
 }
 .book-preview img {
-  width: inherit;
-  height: inherit;
-  border-radius: 4px;
-  object-fit: cover;
+    width: inherit;
+    height: inherit;
+    border-radius: 4px;
+    object-fit: cover;
 }
 .book-content {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-  max-height: 180px;
-  width: 100%;
-  margin-left: 10px;
-  overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    max-height: 180px;
+    width: 100%;
+    margin-left: 10px;
+    overflow: hidden;
 }
 .book-main-info-container {
-  display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
 }
 .book-title {
-  font-size: larger;
-  font-weight: bold;
-  line-height: 1;
+    font-size: larger;
+    font-weight: bold;
+    line-height: 1;
 }
 .book-state {
-  display: flex;
-  font-size: small;
-  text-wrap: nowrap;
-  flex-wrap: wrap;
+    position: relative;
+    display: flex;
+    font-size: small;
+    text-wrap: nowrap;
+    flex-wrap: wrap;
 }
-.book-state > * {display: flex}
+.book-state > * {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2px;
+}
 .book-state > *::before {
-  content: "";
-  width: 1em;
-  height: 1em;
-  margin-right: 4px
+    content: "";
+    width: 1em;
+    height: 1em;
+    margin-right: 4px;
 }
 .book-listening-progress {
-  align-items: center;
-  margin-right: 8px;
-  margin-bottom: 2px;
+    margin-right: 8px;
 }
-.book-listening-progress::before {background-image: url(../images/clock.svg)}
-.book-adding-date::before {background-image: url(../images/calendar.svg)}
-.book-actions {display: flex}
-.book-actions > * {padding: 4px; border-radius: 4px;}
-.book-actions > *:not(:first-child):not(:last-child) {margin-left: 12px; margin-right: 12px;}
-.book-actions > *:hover:not(.disabled)::after {transform: scale(1.1)}
-.book-actions > *:active:not(.disabled) {margin-bottom: -4px}
+.book-listening-progress::before {
+    background-image: url(../images/clock.svg);
+}
+.book-adding-date::before {
+    background-image: url(../images/calendar.svg);
+}
+.book-actions {
+    display: flex;
+}
+.book-actions > * {
+    padding: 4px;
+    border-radius: 4px;
+}
+.book-actions > *:not(:first-child):not(:last-child) {
+    margin-left: 12px;
+    margin-right: 12px;
+}
+.book-actions > *:hover:not(.disabled)::after {
+    transform: scale(1.1);
+}
+.book-actions > *:active:not(.disabled) {
+    margin-bottom: -4px;
+}
 .book-actions .icon-btn::after {
-  width: 1.5em;
-  height: 1.5em;
-  transition: background-image .15s ease-in-out;
-  transform-origin: center;
+    width: 1.5em;
+    height: 1.5em;
+    transition: background-image 0.15s ease-in-out;
+    transform-origin: center;
 }
-.toggle-favorite-btn::after {background-image: url(../images/star.svg)}
-.toggle-favorite-btn.active::after {background-image: url(../images/star_fill.svg)}
-.download-btn::after {background-image: url(../images/download.svg)}
-.remove-btn::after {background-image: url(../images/cross.svg)}
-.delete-btn::after {background-image: url(../images/trash.svg)}
-.book-actions > .loading::after {background-image: url(../images/loading.gif)}
+.toggle-favorite-btn::after {
+    background-image: url(../images/star.svg);
+}
+.toggle-favorite-btn.active::after {
+    background-image: url(../images/star_fill.svg);
+}
+.download-btn::after {
+    background-image: url(../images/download.svg);
+}
+.remove-btn::after {
+    background-image: url(../images/cross.svg);
+}
+.delete-btn::after {
+    background-image: url(../images/trash.svg);
+}
+.book-actions > .loading::after {
+    background-image: url(../images/loading.gif);
+}
 .book-description {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 5;
-  -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
 }
 .book-additional-info {
-  display: flex;
-  text-wrap: nowrap;
-  flex-wrap: wrap;
-  font-size: small;
+    display: flex;
+    text-wrap: nowrap;
+    flex-wrap: wrap;
+    font-size: small;
 }
 .book-additional-info > div {
-  display: flex;
-  align-items: center;
-  margin-right: 8px;
+    display: flex;
+    align-items: center;
+    margin-right: 8px;
 }
 .book-additional-info > div::before {
-  width: 1em;
-  height: 1em;
-  margin-right: 4px
+    width: 1em;
+    height: 1em;
+    margin-right: 4px;
 }
-.book-author::before {content: url(../images/person.svg)}
-.book-reader:empty {display: none}
-.book-reader::before {content: url(../images/mic.svg)}
-.book-duration:empty {display: none}
-.book-duration::before {content: url(../images/clock.svg)}
-.book-series:empty {display: none}
-.book-series::before {content: url(../images/tag.svg)}
-.book-driver::before {content: url(../images/hdd.svg)}
+.book-author::before {
+    content: url(../images/person.svg);
+}
+.book-reader:empty {
+    display: none;
+}
+.book-reader::before {
+    content: url(../images/mic.svg);
+}
+.book-duration:empty {
+    display: none;
+}
+.book-duration::before {
+    content: url(../images/clock.svg);
+}
+.book-series:empty {
+    display: none;
+}
+.book-series::before {
+    content: url(../images/tag.svg);
+}
+.book-driver::before {
+    content: url(../images/hdd.svg);
+}

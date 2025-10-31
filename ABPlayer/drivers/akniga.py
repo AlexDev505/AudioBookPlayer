@@ -7,12 +7,11 @@ from contextlib import suppress
 import webview
 from bs4 import BeautifulSoup
 from loguru import logger
-
 from models.book import Book, BookItem, BookItems
+
 from .base import Driver
 from .downloaders import MergedM3U8Downloader
-from .tools import safe_name, find_in_soup
-
+from .tools import find_in_soup, safe_name
 
 """
 On the AKniga website, book information is loaded dynamically via JavaScript.
@@ -130,7 +129,10 @@ class AKniga(Driver):
             soup, "div.content__main__book--item--series-list > a.current > b"
         ).strip(".")
         duration = " ".join(
-            [obj.text for obj in soup.select("span[class*='book-duration-'] > span")]
+            [
+                obj.text
+                for obj in soup.select("span[class*='book-duration-'] > span")
+            ]
         ).strip()
         reader = find_in_soup(soup, "a.link__reader span")
         preview = soup.select_one("div.book--cover img").attrs["src"]
@@ -191,7 +193,9 @@ class AKniga(Driver):
 
         return books
 
-    def search_books(self, query: str, limit: int = 10, offset: int = 0) -> list[Book]:
+    def search_books(
+        self, query: str, limit: int = 10, offset: int = 0
+    ) -> list[Book]:
         books = []
         page_number = 1
 
@@ -232,14 +236,18 @@ class AKniga(Driver):
     def _parse_book_card(self, card: BeautifulSoup) -> Book | None:
         with suppress(AttributeError, KeyError, TypeError):
             url = card.select_one("div.article--cover > a").attrs["href"]
-            preview = card.select_one("div.article--cover > a > img").attrs["src"]
+            preview = card.select_one("div.article--cover > a > img").attrs[
+                "src"
+            ]
             author = find_in_soup(
                 card,
                 r'span.link__action--author> svg:has(use[xlink\:href="#author"]) ~ a',
                 _("unknown_author"),
             )
             try:
-                name = card.select_one("div.article--cover > a > img").attrs["alt"]
+                name = card.select_one("div.article--cover > a > img").attrs[
+                    "alt"
+                ]
             except AttributeError:
                 name = (
                     card.select_one(".caption__article-main")
@@ -257,7 +265,9 @@ class AKniga(Driver):
                 card,
                 r'span.link__action--author> svg:has(use[xlink\:href="#series"]) ~ a',
             ):
-                if match := re.fullmatch(r"(?P<name>.+?) \((?P<number>\d+)\)", series):
+                if match := re.fullmatch(
+                    r"(?P<name>.+?) \((?P<number>\d+)\)", series
+                ):
                     series_name = match.group("name")
                     number_in_series = match.group("number")
                 else:

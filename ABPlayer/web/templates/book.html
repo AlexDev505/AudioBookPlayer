@@ -1,54 +1,82 @@
-<link rel="stylesheet" href="{{url_for('static', filename='css/book.css')}}">
+<link rel="stylesheet" href="{{url_for('static', filename='css/book.css')}}" />
 
 <div id="book-page-content">
+    <div id="book-loading"></div>
 
-<div id="book-loading">
-
-</div>
-
-<div id="book-header">
-  <div>
-    <div class="book-title"></div>
-    <div class="book-state">
-      <div class="book-listening-progress"></div>
-      <div class="book-adding-date"></div>
+    <div id="book-header">
+        <div>
+            <div class="book-title"></div>
+            <div class="book-state">
+                <div class="book-listening-progress"></div>
+                <div
+                    class="book-listening-progress-btn"
+                    onclick="showListeningProgressAction()"
+                ></div>
+                <div class="book-listening-progress-action"></div>
+                <div class="book-adding-date"></div>
+            </div>
+        </div>
+        <div class="book-actions">
+            <div
+                class="icon-btn open-in-browser hidden-text-button"
+                onclick="window.open(this.dataset.url, '_blank')"
+            >
+                <span>открыть в браузере</span>
+            </div>
+            <div class="icon-btn search-series hidden-text-button">
+                <span>перейти к циклу</span>
+            </div>
+            <div class="icon-btn open-book-dir hidden-text-button">
+                <span>показать файлы</span>
+            </div>
+            <div class="icon-btn toggle-favorite-btn"></div>
+        </div>
     </div>
-  </div>
-  <div class="book-actions">
-    <div class="icon-btn open-in-browser hidden-text-button" onclick="window.open(this.dataset.url, '_blank')"><span>открыть в браузере</span></div>
-    <div class="icon-btn search-series hidden-text-button"><span>перейти к циклу</span></div>
-    <div class="icon-btn open-book-dir hidden-text-button"><span>показать файлы</span></div>
-    <div class="icon-btn toggle-favorite-btn"></div>
-  </div>
-</div>
-<div id="book-player">
-  <div class="book-preview"></div>
-  <div id="player">
-    <audio id="audio-player"></audio>
-    <div id="player-controls">
-      <div class="button-group">
-        <div class="iconned-btn button angle-left-button" onclick="rewind()"><span>15 {{ gettext("s") }}</span></div>
-        <div id="toggle-playback-btn" class="iconned-btn button play-button" onclick="togglePlayback()"></div>
-        <div class="iconned-btn right button angle-right-button" onclick="forward()"><span>15 {{ gettext("s") }}</span></div>
-      </div>
-      <div id="items-container"></div>
+    <div id="book-player">
+        <div class="book-preview"></div>
+        <div id="player">
+            <audio id="audio-player"></audio>
+            <div id="player-controls">
+                <div class="button-group">
+                    <div
+                        class="iconned-btn button angle-left-button"
+                        onclick="rewind()"
+                    >
+                        <span>15 {{ gettext("s") }}</span>
+                    </div>
+                    <div
+                        id="toggle-playback-btn"
+                        class="iconned-btn button play-button"
+                        onclick="togglePlayback()"
+                    ></div>
+                    <div
+                        class="iconned-btn right button angle-right-button"
+                        onclick="forward()"
+                    >
+                        <span>15 {{ gettext("s") }}</span>
+                    </div>
+                </div>
+                <div id="items-container"></div>
+            </div>
+            <div id="player-downloading">
+                {{ gettext("wait_for_downloading_end") }}
+            </div>
+            <div id="player-downloading-required">
+                {{ gettext("online_listening_not_provided") }}
+                <div id="download-book-btn" class="button">
+                    {{ gettext("book.download") }}
+                </div>
+            </div>
+        </div>
     </div>
-    <div id="player-downloading">{{ gettext("wait_for_downloading_end") }}</div>
-    <div id="player-downloading-required">
-      {{ gettext("online_listening_not_provided") }}
-      <div id="download-book-btn" class="button">{{ gettext("book.download") }}</div>
+    <div id="book-info">
+        <div class="book-additional-info">
+            <div class="book-author"></div>
+            <div class="book-reader"></div>
+            <div class="book-duration"></div>
+            <div class="book-series"></div>
+            <div class="book-driver"></div>
+        </div>
     </div>
-  </div>
-</div>
-<div id="book-info">
-  <div class="book-additional-info">
-    <div class="book-author"></div>
-    <div class="book-reader"></div>
-    <div class="book-duration"></div>
-    <div class="book-series"></div>
-    <div class="book-driver"></div>
-  </div>
-</div>
-<div class="book-description"></div>
-
+    <div class="book-description"></div>
 </div>

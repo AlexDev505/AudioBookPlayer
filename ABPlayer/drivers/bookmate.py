@@ -6,9 +6,9 @@ from pathlib import Path
 
 import requests
 import webview
+from models.book import Book, BookItem, BookItems
 
-from models.book import Book, BookItems, BookItem
-from .base import LicensedDriver, DriverNotAuthenticated
+from .base import DriverNotAuthenticated, LicensedDriver
 from .downloaders.m3u8_downloader import M3U8Downloader
 from .tools import duration_sec_to_str, safe_name
 
@@ -48,7 +48,9 @@ class Bookmate(LicensedDriver):
 
         def _extract_token():
             url = urllib.parse.urlparse(window.get_current_url())
-            window.token = urllib.parse.parse_qs(url.fragment)["access_token"][0]
+            window.token = urllib.parse.parse_qs(url.fragment)["access_token"][
+                0
+            ]
             window.destroy()
 
         window = webview.create_window(
@@ -77,9 +79,9 @@ class Bookmate(LicensedDriver):
 
     def get_book(self, url: str) -> Book:
         book_uuid = url.split("/")[-1]
-        book_data = requests.get(f"{self.api_url}/audiobooks/{book_uuid}").json()[
-            "audiobook"
-        ]
+        book_data = requests.get(
+            f"{self.api_url}/audiobooks/{book_uuid}"
+        ).json()["audiobook"]
 
         if not (book := self._parse_book_data(book_data, "", "")):
             raise ValueError
@@ -108,16 +110,16 @@ class Bookmate(LicensedDriver):
 
     def get_book_series(self, url: str) -> list[Book]:
         book_uuid = url.split("/")[-1]
-        book_data = requests.get(f"{self.api_url}/audiobooks/{book_uuid}").json()[
-            "audiobook"
-        ]
+        book_data = requests.get(
+            f"{self.api_url}/audiobooks/{book_uuid}"
+        ).json()["audiobook"]
         if not (series := book_data.get("series_list")):
             return []
 
         series = series[0]
         series_name = series.get("title")
         books_data = requests.get(
-            f"https://api.bookmate.yandex.net/api/v5/series/{series["uuid"]}/parts"
+            f"https://api.bookmate.yandex.net/api/v5/series/{series['uuid']}/parts"
         ).json()["parts"]
 
         books = []
@@ -129,7 +131,9 @@ class Bookmate(LicensedDriver):
 
         return books
 
-    def search_books(self, query: str, limit: int = 10, offset: int = 0) -> list[Book]:
+    def search_books(
+        self, query: str, limit: int = 10, offset: int = 0
+    ) -> list[Book]:
         books = []
         page_number = 1
         while True:
@@ -162,8 +166,12 @@ class Bookmate(LicensedDriver):
         self, book_data: dict, series_name: str, number_in_series: str
     ) -> Book | None:
         with suppress(KeyError, IndexError):
-            url = f"{self.site_url}/audiobooks/{book_data["uuid"]}"
-            author = book_data["authors"][0]["name"] if "authors" in book_data else ""
+            url = f"{self.site_url}/audiobooks/{book_data['uuid']}"
+            author = (
+                book_data["authors"][0]["name"]
+                if "authors" in book_data
+                else ""
+            )
             name = book_data["title"]
             series_name = (
                 book_data["series_list"][0]["title"]
@@ -176,11 +184,15 @@ class Bookmate(LicensedDriver):
                 else number_in_series
             )
             reader = (
-                book_data["narrators"][0]["name"] if "narrators" in book_data else ""
+                book_data["narrators"][0]["name"]
+                if "narrators" in book_data
+                else ""
             )
             duration = duration_sec_to_str(book_data.get("duration", 0))
             preview = (
-                book_data["cover"].get("large", book_data["cover"].get("small", ""))
+                book_data["cover"].get(
+                    "large", book_data["cover"].get("small", "")
+                )
                 if "cover" in book_data
                 else ""
             )

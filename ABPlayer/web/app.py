@@ -2,10 +2,8 @@ import os
 import re
 import sys
 
-from flask import Flask, render_template, send_from_directory
-
 import temp_file
-
+from flask import Flask, render_template, send_from_directory
 
 if getattr(sys, "frozen", False):
     ROOT_DIR = getattr(sys, "_MEIPASS")

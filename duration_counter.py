@@ -13,7 +13,6 @@ import sys
 import threading
 import time
 
-
 FILE_FORMATS = [".mp3", ".m4a", ".wav"]
 
 
