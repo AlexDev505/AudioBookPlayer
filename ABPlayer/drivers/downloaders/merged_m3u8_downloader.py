@@ -69,8 +69,7 @@ class MergedM3U8Downloader(BaseDownloader):
         self._parse_host_uri()
         await super()._prepare()
 
-    async def _download_file(self, file) -> None:
-        await super()._download_file(file)
+    async def _file_downloaded(self, file, file_path) -> None:
         await self._decrypt_seq(file)
         await self._seq_downloaded(file)
 
@@ -98,12 +97,12 @@ class MergedM3U8Downloader(BaseDownloader):
         self._current_duration += ts_duration
         if item.duration - self._current_duration < 0.5:
             second = second_time = 0
-            if item.duration - self._current_duration < 0:
-                split_time = round(
-                    item.duration - (self._current_duration - ts_duration)
-                )
+            split_time = round(
+                item.duration - (self._current_duration - ts_duration)
+            )
+            second_time = ts_duration - split_time
+            if item.duration - self._current_duration < 0 and second_time > 1:
                 first, second = split_ts(ts_path, split_time)
-                second_time = ts_duration - split_time
                 self._ts_file_paths.remove(ts_path)
                 self._ts_file_paths.append(first)
                 os.remove(ts_path)
@@ -133,27 +132,20 @@ class MergedM3U8Downloader(BaseDownloader):
     def _merge_ts_files(
         self, item_index: int, ts_file_paths: list[Path]
     ) -> None:
-        item_file_path = os.path.join(
-            self.book.dir_path,
-            self._get_item_file_name(item_index, ""),
-        )
-        ts_item_fp = Path(f"{item_file_path}.ts")
-        mp3_item_fp = Path(f"{item_file_path}.mp3")
+        item_file_name = self._get_item_file_name(item_index, "")
         logger.opt(colors=True).debug(
-            f"merging <y>{len(ts_file_paths)}</y> files to <y>{ts_item_fp}</y>"
+            f"merging <y>{len(ts_file_paths)}</y> files to <y>{item_file_name}.mp3</y>"
         )
-        merge_ts_files(ts_file_paths, ts_item_fp)
+        merge_ts_files(ts_file_paths, Path(self.book.dir_path), item_file_name)
         logger.trace(f"deleting {len(ts_file_paths)} ts files")
         for ts_path in ts_file_paths:
             os.remove(ts_path)
-        logger.opt(colors=True).trace(
-            f"converting <y>{ts_item_fp}</y> to <y>{mp3_item_fp}</y>"
+        logger.opt(colors=True).debug(
+            f"file <y>{item_file_name}.mp3</y> created"
         )
-        convert_ts_to_mp3(ts_item_fp, mp3_item_fp)
-        logger.trace(f"deleting {ts_item_fp}")
-        os.remove(ts_item_fp)
-        logger.opt(colors=True).debug(f"file <y>{mp3_item_fp}</y> created")
-        self._real_item_paths.append(mp3_item_fp)
+        self._real_item_paths.append(
+            Path(self.book.dir_path, item_file_name + ".mp3")
+        )
 
     def _get_decryption_func(
         self, segment_index: int, segment

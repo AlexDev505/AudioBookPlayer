@@ -152,12 +152,40 @@ def get_audio_file_duration(file_path: Path) -> float:
     )
 
 
-def merge_ts_files(ts_file_paths: list[Path], output_file_path: Path) -> None:
+def fix_m4a_meta(file_path: Path) -> None:
+    """
+    Fixes m4a file metadata.
+    """
+    output_path = str(file_path)
+    file_path = file_path.rename(
+        Path(file_path.parent, file_path.name.removesuffix(".m4a") + "-old.m4a")
+    )
+    subprocess.check_output(
+        f"{os.environ['FFMPEG_PATH']} -v quiet "
+        f'-i "{file_path}" -acodec copy "{output_path}"',
+        shell=True,
+        stdin=subprocess.DEVNULL,
+        stderr=subprocess.STDOUT,
+    )
+    os.remove(file_path)
+
+
+def merge_ts_files(
+    ts_file_paths: list[Path],
+    output_dir: Path,
+    output_file_name: str,
+) -> None:
     """
     Merges ts files to one.
     """
+    input_fp = output_dir / (output_file_name + ".txt")
+    with open(input_fp, "w") as f:
+        f.write("\n".join(map(lambda x: f"file '{x.name}'", ts_file_paths)))
+    output_file_path = output_dir / (output_file_name + ".mp3")
+
     result = subprocess.check_output(
-        f"copy /b {'+'.join(map(lambda x: x.name, ts_file_paths))} "
+        f"{os.environ['FFMPEG_PATH']} -v quiet -f concat -safe 0 "
+        f'-i "{output_file_name + ".txt"}" -map 0:a -c:a libmp3lame '
         f'"{output_file_path}"',
         cwd=output_file_path.parent,
         shell=True,
@@ -166,6 +194,7 @@ def merge_ts_files(ts_file_paths: list[Path], output_file_path: Path) -> None:
     ).decode("cp866")
     if result:
         logger.debug(result)
+    os.remove(input_fp)
 
 
 def convert_ts_to_mp3(ts_file_path: Path, mp3_file_path: Path) -> None:

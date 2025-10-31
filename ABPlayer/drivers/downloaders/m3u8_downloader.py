@@ -1,13 +1,15 @@
 from __future__ import annotations
 
+import asyncio
 import typing as ty
+from functools import partial
 from urllib.parse import urljoin
 
-import aiohttp
 from loguru import logger
 from m3u8 import M3U8
 
 from ..base import BaseDownloader, DownloadProcessStatus, File
+from ..tools import fix_m4a_meta
 
 if ty.TYPE_CHECKING:
     from models.book import Book, BookItem
@@ -75,6 +77,13 @@ class M3U8Downloader(BaseDownloader):
             )
         )
         self._files.sort(key=lambda x: x.index)
+
+    async def _file_downloaded(self, file, file_path) -> None:
+        if file.index + 1 == len(self.book.items):
+            fix_m4a_meta(file_path)
+        else:
+            loop = asyncio.get_event_loop()
+            loop.run_in_executor(None, partial(fix_m4a_meta, file_path))
 
     async def _iter_chunks(self, file, offset=0):
         current_range_index = file.extra.get("current_range_index", 0)
