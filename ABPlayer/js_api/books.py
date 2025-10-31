@@ -3,6 +3,7 @@ from __future__ import annotations
 import difflib
 import os
 import shutil
+import time
 import typing as ty
 from contextlib import suppress
 from dataclasses import asdict
@@ -13,6 +14,8 @@ from pathlib import Path
 import requests.exceptions
 from database import Database
 from drivers import BaseDownloadProcessHandler, DownloadProcessStatus, Driver
+from drivers import download as download_book
+from drivers import terminate as terminate_downloading
 from drivers.base import DriverNotAuthenticated, LicensedDriver
 from drivers.tools import duration_sec_to_str, duration_str_to_sec
 from loguru import logger
@@ -27,7 +30,7 @@ if ty.TYPE_CHECKING:
 
 class BooksApi(JSApi):
     SEARCH_LIMIT = 10
-    _download_processes: dict[int, Driver] = {}
+    _download_processes: dict[int, DownloadingProcessHandler | None] = {}
     _download_queue: list[int] = []
 
     def __init__(self):
@@ -432,16 +435,12 @@ class BooksApi(JSApi):
                 book = db.get_book_by_bid(bid)
                 status = DownloadProcessStatus.WAITING.value
                 total_size = None
-                if bid in self._download_processes:
-                    downloader = self._download_processes[bid].downloader
-                    status = downloader.process_handler.status.value
+                if dph := self._download_processes.get(bid):
+                    status = dph.status.value
                     total_size = (
-                        convert_from_bytes(
-                            downloader.process_handler.total_size
-                        )
-                        if downloader.process_handler.status
-                        == DownloadProcessStatus.DOWNLOADING
-                        else str(downloader.process_handler.total_size)
+                        convert_from_bytes(dph.total_size)
+                        if dph.status == DownloadProcessStatus.DOWNLOADING
+                        else str(dph.total_size)
                     )
                 downloads.append((bid, book.name, status, total_size))
 
@@ -456,8 +455,9 @@ class BooksApi(JSApi):
         logger.opt(colors=True).debug(
             f"request: <r>download book</r> | <y>{bid}</y>"
         )
-        if bid in self._download_processes:
+        if self._download_processes.get(bid):
             return self.error(BookAlreadyDownloaded(bid=bid))
+        self._download_processes[bid] = None
 
         with Database() as db:
             if not (book := db.get_book_by_bid(bid)):
@@ -468,7 +468,7 @@ class BooksApi(JSApi):
         except requests.exceptions.ConnectionError:
             return self.error(ConnectionFailedError())
 
-        if len(self._download_processes) >= 5:
+        if len([1 for x in self._download_processes.values() if x]) >= 5:
             self._download_queue.append(bid)
             logger.opt(colors=True).debug(
                 f"added to download queue: {book:styled}"
@@ -476,21 +476,24 @@ class BooksApi(JSApi):
             return self.make_answer(dict(bid=bid))
 
         logger.opt(colors=True).debug(f"preparing download: {book:styled}")
-        driver = Driver.get_suitable_driver(book.url)()
-        self._download_processes[bid] = driver
-        if driver.download_book(book, DownloadingProcessHandler(self, bid)):
-            logger.opt(colors=True).debug(f"saving into db: {book:styled}")
-            with Database(autocommit=True) as db:
-                db.save(driver.downloader.book)
-            self.evaluate_js(f"endLoading({bid})")
-            logger.opt(colors=True).info(f"downloading finished: {book:styled}")
+        dph = DownloadingProcessHandler(self, bid)
+        self._download_processes[bid] = dph
+        download_book(bid, dph)
 
-        del self._download_processes[bid]
+        return self.make_answer()
+
+    def _finish_download(self, bid: int):
+        dph = self._download_processes.pop(bid)
+        if dph.status is DownloadProcessStatus.FINISHED:
+            self.evaluate_js(f"endLoading({bid})")
+            logger.opt(colors=True).info(f"downloading finished: <y>{bid}</y>")
+        elif dph.status is DownloadProcessStatus.TERMINATED:
+            logger.opt(colors=True).debug(
+                f"downloading of book <y>{bid}</y> terminated"
+            )
 
         if self._download_queue:
             self.download_book(self._download_queue.pop(0))
-
-        return self.make_answer()
 
     def terminate_downloading(self, bid: int):
         logger.opt(colors=True).debug(
@@ -498,11 +501,13 @@ class BooksApi(JSApi):
         )
         if bid in self._download_queue:
             self._download_queue.remove(bid)
-        elif download_process := self._download_processes.get(bid):
-            download_process.downloader.terminate()
-        logger.opt(colors=True).debug(
-            f"downloading of book <y>{bid}</y> terminated"
-        )
+            if bid in self._download_processes:
+                self._download_processes.pop(bid)
+        elif bid in self._download_processes:
+            dph = self._download_processes[bid]
+            while dph is None:
+                dph = self._download_processes.get(bid)
+            terminate_downloading(bid)
         return self.make_answer()
 
     @staticmethod
@@ -690,10 +695,11 @@ class DownloadingProcessHandler(BaseDownloadProcessHandler):
             if self.status == DownloadProcessStatus.DOWNLOADING
             else self.done_size
         )
-        self.js_api.evaluate_js(
-            f"downloadingCallback({self.bid}, "
-            f"{round(self.done_size / (self.total_size / 100), 2)}, '{done_size}')"
-        )
+        with suppress(Exception):
+            self.js_api.evaluate_js(
+                f"downloadingCallback({self.bid}, "
+                f"{round(self.done_size / (self.total_size / 100), 2)}, '{done_size}')"
+            )
 
     @property
     def status(self) -> DownloadProcessStatus:
@@ -702,9 +708,15 @@ class DownloadingProcessHandler(BaseDownloadProcessHandler):
     @status.setter
     def status(self, v: DownloadProcessStatus):
         self._status = v
-        self.js_api.evaluate_js(
-            f"setDownloadingStatus({self.bid}, '{v.value}')"
-        )
+        with suppress(Exception):
+            self.js_api.evaluate_js(
+                f"setDownloadingStatus({self.bid}, '{v.value}')"
+            )
+        if v in {
+            DownloadProcessStatus.FINISHED,
+            DownloadProcessStatus.TERMINATED,
+        }:
+            self.js_api._finish_download(self.bid)
 
 
 class NoSuitableDriver(JSApiError):

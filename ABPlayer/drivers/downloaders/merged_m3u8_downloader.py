@@ -9,6 +9,7 @@ from pathlib import Path
 from urllib.parse import urljoin, urlparse
 from urllib.request import urlopen
 
+import aiofiles
 import m3u8
 from Crypto.Cipher import AES
 from loguru import logger
@@ -62,28 +63,28 @@ class MergedM3U8Downloader(BaseDownloader):
             for i, segment in enumerate(self._m3u8_data.segments)
         ]
 
-    def _prepare(self):
+    async def _prepare(self):
         # loads m3u8 file
         self._m3u8_data = m3u8.load(self.book.items[0].file_url)
         self._parse_host_uri()
-        super()._prepare()
+        await super()._prepare()
 
     async def _download_file(self, file) -> None:
         await super()._download_file(file)
-        self._decrypt_seq(file)
-        self._seq_downloaded(file)
+        await self._decrypt_seq(file)
+        await self._seq_downloaded(file)
 
-    def _decrypt_seq(self, file: File) -> None:
+    async def _decrypt_seq(self, file: File) -> None:
         segment = self._m3u8_data.segments[file.index]
         if decrypt_func := self._get_decryption_func(file.index, segment):
             file_path = os.path.join(self.book.dir_path, file.name)
-            with open(file_path, "rb") as f:
-                data = f.read()
+            async with aiofiles.open(file_path, "rb") as f:
+                data = await f.read()
             data = decrypt_func(data)
-            with open(file_path, "wb") as f:
-                f.write(data)
+            async with aiofiles.open(file_path, "wb") as f:
+                await f.write(data)
 
-    def _seq_downloaded(self, file: File) -> None:
+    async def _seq_downloaded(self, file: File) -> None:
         if file.index != self._next_seq_index or not (
             ts_path := self.downloaded_files.get(file.index)
         ):
@@ -91,7 +92,7 @@ class MergedM3U8Downloader(BaseDownloader):
         self._ts_file_paths.append(ts_path)
         if self._item_index + 1 == len(self.book.items):
             self._next_seq_index += 1
-            return self._seq_downloaded(self._files[self._next_seq_index])
+            return await self._seq_downloaded(self._files[self._next_seq_index])
         item = self.book.items[self._item_index]
         ts_duration = file.duration or get_audio_file_duration(ts_path)
         self._current_duration += ts_duration
@@ -121,13 +122,13 @@ class MergedM3U8Downloader(BaseDownloader):
                 self._ts_file_paths.append(second)
             self._item_index += 1
         self._next_seq_index += 1
-        self._seq_downloaded(self._files[self._next_seq_index])
+        await self._seq_downloaded(self._files[self._next_seq_index])
 
-    def _finish(self) -> None:
+    async def _finish(self) -> None:
         if self._ts_file_paths:
             self._merge_ts_files(self._item_index, self._ts_file_paths)
         self.downloaded_files = dict(enumerate(self._real_item_paths))
-        super()._finish()
+        await super()._finish()
 
     def _merge_ts_files(
         self, item_index: int, ts_file_paths: list[Path]

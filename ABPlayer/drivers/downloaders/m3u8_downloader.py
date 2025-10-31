@@ -31,9 +31,9 @@ class M3U8Downloader(BaseDownloader):
         pass
 
     async def _prepare_file_data(self, item_index: int, item: BookItem) -> None:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(item.file_url) as response:
-                m3u8_text = await response.text()
+        assert self._session is not None
+        async with self._session.get(item.file_url) as response:
+            m3u8_text = await response.text()
         m3u8_data = M3U8(m3u8_text, item.file_url.removesuffix("/play.m3u8"))
         url = urljoin(m3u8_data.base_uri, m3u8_data.segments[0].uri)
         duration = sum(segment.duration for segment in m3u8_data.segments)
@@ -45,7 +45,8 @@ class M3U8Downloader(BaseDownloader):
             for segment in m3u8_data.segments
         ]
         ranges.insert(0, (ranges[0][1], 0))
-        self.total_size += size
+        if self.process_handler:
+            self.total_size += size
         self._files.append(
             File(
                 index=item_index,
@@ -59,7 +60,7 @@ class M3U8Downloader(BaseDownloader):
         if self.process_handler:
             self.process_handler.progress(1)
 
-    def _prepare(self):
+    async def _prepare(self):
         if self.process_handler:
             self.total_size = 0
             # Инициализируем прогресс подготовки
@@ -67,7 +68,7 @@ class M3U8Downloader(BaseDownloader):
                 len(self.book.items), status=DownloadProcessStatus.PREPARING
             )
 
-        self.tasks_manager.execute_tasks_factory(
+        await self.tasks_manager.wait_finishing(
             (
                 self._prepare_file_data(i, item)
                 for i, item in enumerate(self.book.items)

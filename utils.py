@@ -32,6 +32,7 @@ class DirData:
         self.dir_name = dir_name
         self.files: list[Path] = []
         self.rows: list[int] = []
+        self.symbols: list[int] = []
         self.rows_without_docstrings: list[int] = []
         self.sizes: list[int] = []
         self.additional_files_data = {}
@@ -40,6 +41,7 @@ class DirData:
     def add_file_data(self, file: FileData) -> None:
         self.files.append(file.path)
         self.rows.append(file.rows)
+        self.symbols.append(file.symbols)
         self.rows_without_docstrings.append(file.rows_without_docstrings)
         self.sizes.append(file.size)
 
@@ -48,16 +50,19 @@ class DirData:
             self.additional_files_data[ext] = {
                 "count": 0,
                 "rows": 0,
+                "symbols": 0,
                 "size": 0,
             }
         self.additional_files_data[ext]["count"] += 1
         self.additional_files_data[ext]["rows"] += file.rows
+        self.additional_files_data[ext]["symbols"] += file.symbols
         self.additional_files_data[ext]["size"] += file.size
 
     def include_dir_data(self, dir_data: DirData) -> None:
         self.included_dirs.append(dir_data)
         self.files.extend(dir_data.files)
         self.rows.extend(dir_data.rows)
+        self.symbols.extend(dir_data.symbols)
         self.rows_without_docstrings.extend(dir_data.rows_without_docstrings)
         self.sizes.extend(dir_data.sizes)
         for ext in dir_data.additional_files_data:
@@ -65,12 +70,14 @@ class DirData:
                 self.additional_files_data[ext] = {
                     "count": 0,
                     "rows": 0,
+                    "symbols": 0,
                     "size": 0,
                 }
             self_ext_data = self.additional_files_data[ext]
             other_ext_data = dir_data.additional_files_data[ext]
             self_ext_data["count"] += other_ext_data["count"]
             self_ext_data["rows"] += other_ext_data["rows"]
+            self_ext_data["symbols"] += other_ext_data["symbols"]
             self_ext_data["size"] += other_ext_data["size"]
 
     @cached_property
@@ -80,6 +87,10 @@ class DirData:
     @cached_property
     def rows_count(self) -> int:
         return sum(self.rows)
+
+    @cached_property
+    def symbols_count(self) -> int:
+        return sum(self.symbols)
 
     @cached_property
     def rows_without_docstrings_count(self) -> int:
@@ -128,6 +139,7 @@ class DirData:
             f"Всего строк: <e>{self.rows_count}</e>\n"
             f"Всего строк (без комментариев): "
             f"<e>{self.rows_without_docstrings_count}</e>\n"
+            f"Всего символов: <e>{self.symbols_count}</e>\n"
             f"Всего строк комментариев: <e>{self.docstrings_rows_count}</e>\n"
             f"Общий размер: <e>{convert(self.size)}</e>\n"
             f"Среднее кол-во строк: <e>{self.average_rows_count}</e>\n"
@@ -161,6 +173,7 @@ class DirData:
 class FileData(ty.NamedTuple):
     path: Path
     rows: int
+    symbols: int
     rows_without_docstrings: int
     size: int
 
@@ -169,6 +182,7 @@ class FileData(ty.NamedTuple):
             f"\t<g>{self.path}</g>\n"
             f"Кол-во строк: <e>{self.rows}</e>\n"
             f"Кол-во строк (без комментариев): <e>{self.rows_without_docstrings}</e>\n"
+            f"Кол-во символов: <e>{self.symbols}</e>\n"
             f"Размер: <e>{convert(self.size)}</e>\n"
         )
 
@@ -199,7 +213,9 @@ def path_filter(path: Path) -> bool:
 def handle_file(path: Path) -> FileData:
     size = os.path.getsize(path)
     with open(path, encoding="utf-8") as f:
-        f_data = list(map(str.strip, f.readlines()))
+        data = f.read()
+        symbols = len(data)
+        f_data = list(map(str.strip, data.splitlines()))
         rows = len(f_data) + 1
         rows_without_docstrings = 0
 
@@ -217,7 +233,7 @@ def handle_file(path: Path) -> FileData:
                     start_i = -1
             rows_without_docstrings = len(f_data) + 1
 
-    return FileData(path, rows, rows_without_docstrings, size)
+    return FileData(path, rows, symbols, rows_without_docstrings, size)
 
 
 def handle_dir(path: Path, log_files: bool = False) -> DirData:
