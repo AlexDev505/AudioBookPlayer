@@ -28,9 +28,7 @@ os.environ["ARCH"] = " x32" if platform.architecture()[0] == "32bit" else ""
 os.environ["VERSION"] = "3.2.0"
 
 # DEV
-os.environ["CONSOLE"] = "1"
-os.environ["DEBUG"] = "1"
-os.environ["LOGGING_LEVEL"] = "TRACE"
+
 
 
 from logger import logger  # noqa

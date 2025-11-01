@@ -12,7 +12,7 @@ if not os.path.exists(os.environ["APP_DIR"]):
 os.environ["DEBUG_PATH"] = os.path.join(os.environ["APP_DIR"], "debug.log")
 # System architecture
 os.environ["ARCH"] = " x32" if platform.architecture()[0] == "32bit" else ""
-os.environ["UPDATER_VERSION"] = "1.1.1"
+os.environ["UPDATER_VERSION"] = "1.3.0"
 
 # DEV
 os.environ["CONSOLE"] = "1"
