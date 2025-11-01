@@ -1,13 +1,18 @@
+import asyncio
 import hashlib
 import json
 import os
 import shutil
+import sys
+import time
 import typing as ty
 import urllib.request
 from pathlib import Path
 
+import aiohttp
 import requests
 import webview
+from io_tasks import IOTasksManager
 from loguru import logger
 from version import Version
 from web.app import app
@@ -57,7 +62,7 @@ def create_updating_window() -> webview.Window:
 def update_app(window) -> None:
     logger.debug("updating app...")
 
-    window.evaluate_js("setStatus('проверка наличия обновлений...')")
+    window.evaluate_js("setStatus('поиск обновлений...')")
 
     current_updater_version = Version.from_str(os.environ["UPDATER_VERSION"])
     arch = "x64" if not os.environ["ARCH"] else "x32"
@@ -120,14 +125,13 @@ def update_app(window) -> None:
     logger.info("downloading updates")
     files_count = len(files_to_update)
     window.evaluate_js(f"initDownloading({files_count})")
-    for file, version in files_to_update.items():  # downloading files
-        fp = f"{version}/{arch}/{file.replace('\\', '/')}"
-        url = f"https://sourceforge.net/projects/audiobookplayer/files/{fp}/download"
-        logger.debug(f"downloading {fp}")
-        file_name = hashlib.md5(file.encode("utf-8")).hexdigest()
-        hashes[file] = file_name
-        with open(os.path.join(update_path, file_name), "wb") as f:
-            _download_file(url, f, window)
+    tasks_manager = IOTasksManager(3)
+    tasks_manager.execute_tasks_factory(
+        (
+            _download_file(file, version, arch, update_path, hashes, window)
+            for file, version in files_to_update.items()
+        )
+    )
 
     logger.info("installing updates")
     window.evaluate_js("setStatus('установка')")
@@ -145,22 +149,63 @@ def update_app(window) -> None:
         shutil.move(os.path.join(update_path, file_hash), dst_path)
 
 
-def _download_file(
-    url: str, file: ty.BinaryIO, window: webview.Window, offset: int = 0
+async def _download_file(
+    file: str,
+    version: Version,
+    arch: str,
+    update_path: Path,
+    hashes: dict[str, str],
+    window: webview.Window,
 ) -> None:
+    fp = f"{version}/{arch}/{file.replace('\\', '/')}"
+    url = (
+        f"https://sourceforge.net/projects/audiobookplayer/files/{fp}/download"
+    )
+    logger.debug(f"downloading {fp}")
+    file_name = hashlib.md5(file.encode("utf-8")).hexdigest()
+    hashes[file] = file_name
+    with open(os.path.join(update_path, file_name), "wb") as f:
+        await __download_file(url, f, window)
+
+
+async def __download_file(
+    url: str,
+    file: ty.BinaryIO,
+    window: webview.Window,
+    offset: int = 0,
+    _retry: int = 0,
+) -> None:
+    if not (session := getattr(__download_file, "session", None)):
+        session = aiohttp.ClientSession()
+        setattr(__download_file, "session", session)
     try:
-        resp = requests.get(
-            url, headers={"Range": f"bytes={offset}-"}, stream=True
-        )
-        total_size = int(resp.headers["content-length"])
-        chunk_size = 1024 if total_size > 1024 else total_size // 2
-        for chunk in resp.iter_content(chunk_size=1024):
-            offset += len(chunk)
-            file.write(chunk)
-            window.evaluate_js(
-                f"downloadingCallback({offset / (total_size / 100)})"
+        async with session.get(
+            url, headers={"Range": f"bytes={offset}-"}
+        ) as resp:
+            if resp.headers.get("content-type") != "application/octet-stream":
+                await asyncio.sleep(5)
+                raise RuntimeError("Invalid content type")
+            total_size = int(resp.headers.get("content-length", 1))
+            async for chunk in resp.content.iter_chunked(5120):
+                offset += len(chunk)
+                file.write(chunk)
+                window.evaluate_js(
+                    f"downloadingCallback({offset / (total_size / 100)})"
+                )
+    except (requests.exceptions.ConnectionError, RuntimeError):
+        if _retry == 3:
+            logger.error(f"Failed to download file: {url}")
+            window.evaluate_js("setStatus('ошибка. повторите позже')")
+            window.evaluate_js("finishDownloading()")
+            time.sleep(5)
+
+            from ctypes import windll
+
+            windll.shell32.ShellExecuteW(
+                None, "open", os.path.abspath("./abplayer.exe"), None, None, 1
             )
-    except requests.exceptions.ConnectionError:
-        return _download_file(url, file, window, offset)
+            window.destroy()
+            sys.exit()
+        return await __download_file(url, file, window, offset, _retry + 1)
 
     window.evaluate_js("fileDownloaded()")

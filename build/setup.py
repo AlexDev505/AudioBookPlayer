@@ -143,7 +143,7 @@ def get_file_hash(fp: str, hash_func=hashlib.md5) -> str:
 if save_update:
     print("\nSaving update")
     with open(last_build_file_path, encoding="utf-8") as file:
-        last_build_version = file.read()
+        last_build_version = file.read().strip()
     with open(
         os.path.join(
             "updates",
@@ -164,7 +164,11 @@ if save_update:
         if "__pycache__" in root:
             continue
         for file_name in file_names:
+            if ".dist-info" in root and "license" not in file_name.lower():
+                continue
             file_path = os.path.join(root, file_name)
+            if not os.path.getsize(file_path):
+                continue
             if root not in current_update["files"]:
                 current_update["files"][root] = {}
             current_update["files"][root][file_name] = get_file_hash(file_path)

@@ -2,10 +2,10 @@
 
 
 a = Analysis(
-    ['E:\\PycharmProjects\\AudioBookPlayer\\build\\..\\updater\\run.py'],
+    ['E:\\projects\\AudioBookPlayer\\build\\..\\updater\\run.py'],
     pathex=[],
     binaries=[],
-    datas=[('E:\\PycharmProjects\\AudioBookPlayer\\build\\..\\updater\\web\\static', 'static'), ('E:\\PycharmProjects\\AudioBookPlayer\\build\\..\\updater\\web\\templates', 'templates')],
+    datas=[('E:\\projects\\AudioBookPlayer\\build\\..\\updater\\web\\static', 'static'), ('E:\\projects\\AudioBookPlayer\\build\\..\\updater\\web\\templates', 'templates')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

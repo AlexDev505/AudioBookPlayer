@@ -12,6 +12,7 @@
             body {
                 height: -webkit-fill-available;
                 margin: 0;
+                overflow: hidden;
                 background-color: rgb(32, 34, 37);
             }
             body {
@@ -26,10 +27,10 @@
                 background-position: center;
                 background-repeat: no-repeat;
                 background-size: contain;
-                min-width: 115px;
-                min-height: 115px;
-                max-width: 115px;
-                max-height: 115px;
+                min-width: 100px;
+                min-height: 100px;
+                max-width: 100px;
+                max-height: 100px;
             }
             #status {
                 text-align: center;
@@ -44,11 +45,24 @@
                 width: 150px;
                 text-align: center;
             }
+            .pb-stack {
+                position: relative;
+                height: 8px;
+            }
             .progress-bar {
+                position: absolute;
+                bottom: 0;
                 height: 4px;
                 width: 0;
                 border-radius: 2px;
                 background-color: rgb(148, 155, 164);
+            }
+            #totalPB {
+                height: 8px;
+                border-radius: 4px;
+            }
+            #filePB {
+                background-color: rgb(98, 105, 114);
             }
         </style>
     </head>
@@ -57,7 +71,10 @@
         <div id="status"></div>
         <div id="progressBar" style="display: none">
             <div class="files-count"></div>
-            <div class="progress-bar"></div>
+            <div class="pb-stack">
+                <div id="totalPB" class="progress-bar"></div>
+                <div id="filePB" class="progress-bar"></div>
+            </div>
         </div>
         <div id="made-by">by AlexDev505</div>
         <script>
@@ -81,14 +98,14 @@
                 files_count_el.dataset["downloading"] =
                     Number(files_count_el.dataset["downloading"]) + 1;
                 files_count_el.innerHTML = `${files_count_el.dataset["downloading"]} / ${files_count_el.dataset["files_count"]}`;
-                document.querySelector(
-                    `#progressBar .progress-bar`,
-                ).style.width = `0%`;
+                document.querySelector(`#progressBar #totalPB`).style.width =
+                    `${(files_count_el.dataset["downloading"] / files_count_el.dataset["files_count"]) * 100}%`;
+                document.querySelector(`#progressBar #filePB`).style.width =
+                    `0%`;
             }
             function downloadingCallback(percents) {
-                document.querySelector(
-                    `#progressBar .progress-bar`,
-                ).style.width = `${percents}%`;
+                document.querySelector(`#progressBar #filePB`).style.width =
+                    `${percents}%`;
             }
             function finishDownloading() {
                 document.querySelector("#progressBar").style = "display: none";
