@@ -464,7 +464,9 @@ class BooksApi(JSApi):
                 return self.error(BookNotFound(bid=bid))
 
         try:
-            requests.get(book.url)
+            resp = requests.get(book.items[0].file_url)
+            if resp.status_code == 410:
+                self.fix_items(bid)
         except requests.exceptions.ConnectionError:
             return self.error(ConnectionFailedError())
 
@@ -619,6 +621,20 @@ class BooksApi(JSApi):
             logger.opt(colors=True).info(
                 f"new book <y>{bid}</y> preview: {book.preview}"
             )
+            db.save(book)
+
+    @staticmethod
+    def fix_items(bid: int):
+        logger.opt(colors=True).debug(
+            f"request: <r>fix items</r> | <y>{bid}</y>"
+        )
+        with Database(autocommit=True) as db:
+            if not (book := db.get_book_by_bid(bid)):
+                return
+            driver = Driver.get_suitable_driver(book.url)()
+            new_data = driver.get_book(book.url)
+            book.items = new_data.items
+            logger.opt(colors=True).info(f"book <y>{bid}</y> items are fixed")
             db.save(book)
 
     def open_book_dir(self, bid: int):
