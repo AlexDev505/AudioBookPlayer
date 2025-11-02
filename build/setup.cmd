@@ -6,4 +6,4 @@ call ..\venv\scripts\activate
 FOR /F "tokens=*" %%i in ('type .env') do SET "%%i"
 call python upload_update.py %1
 call python setup.py %1 --dev
-call tar -c -a -C ABPlayer.DEV -f "installers\ABPlayer.DEV %1.zip" ABPlayer.DEV.exe _internal
+call tar -c -a -C ABPlayer.DEV -f "installers\ABPlayer.DEV.%1.zip" ABPlayer.DEV.exe _internal
