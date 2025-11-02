@@ -91,6 +91,8 @@ class MergedM3U8Downloader(BaseDownloader):
         self._ts_file_paths.append(ts_path)
         if self._item_index + 1 == len(self.book.items):
             self._next_seq_index += 1
+            if self._next_seq_index == len(self._files):
+                return
             return await self._seq_downloaded(self._files[self._next_seq_index])
         item = self.book.items[self._item_index]
         ts_duration = file.duration or get_audio_file_duration(ts_path)
