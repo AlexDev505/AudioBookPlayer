@@ -37,6 +37,7 @@ if args.run_downloader:
     from drivers import run_server
 
     asyncio.run(run_server())
+    sys.exit()
 elif args.manual_update:
     from ctypes import windll
 

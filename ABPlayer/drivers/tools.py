@@ -161,7 +161,7 @@ def fix_m4a_meta(file_path: Path) -> None:
         Path(file_path.parent, file_path.name.removesuffix(".m4a") + "-old.m4a")
     )
     subprocess.check_output(
-        f"{os.environ['FFMPEG_PATH']} -v quiet "
+        f"{os.environ['FFMPEG_PATH']} -y -v quiet "
         f'-i "{file_path}" -acodec copy "{output_path}"',
         shell=True,
         stdin=subprocess.DEVNULL,
@@ -184,7 +184,7 @@ def merge_ts_files(
     output_file_path = output_dir / (output_file_name + ".mp3")
 
     result = subprocess.check_output(
-        f"{os.environ['FFMPEG_PATH']} -v quiet -f concat -safe 0 "
+        f"{os.environ['FFMPEG_PATH']} -y -v quiet -f concat -safe 0 "
         f'-i "{output_file_name + ".txt"}" -map 0:a -c:a libmp3lame '
         f'"{output_file_path}"',
         cwd=output_file_path.parent,

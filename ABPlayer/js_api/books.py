@@ -464,7 +464,7 @@ class BooksApi(JSApi):
                 return self.error(BookNotFound(bid=bid))
 
         try:
-            resp = requests.get(book.items[0].file_url)
+            resp = requests.head(book.items[0].file_url)
             if resp.status_code == 410:
                 self.fix_items(bid)
         except requests.exceptions.ConnectionError:
