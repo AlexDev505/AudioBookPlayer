@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import asyncio
-import sys
 import threading
 import typing as ty
 from contextlib import suppress
@@ -24,6 +23,7 @@ if ty.TYPE_CHECKING:
 __all__ = ["run_server"]
 
 downloading_tasks: dict[int, BaseDownloader] = {}
+server: asyncio.Future | None = None
 
 
 async def send(ws: ServerConnection, event: str, **data: ty.Any) -> None:
@@ -98,7 +98,6 @@ async def terminate(bid: int) -> None:
     if not (downloader := downloading_tasks.get(bid)):
         return
     await downloader.terminate()
-    del downloading_tasks[bid]
     logger.info(f"terminating finished: {bid}")
 
 
@@ -115,12 +114,16 @@ async def handler(websocket: ServerConnection):
                     assert isinstance(bid := data.get("bid"), int)
                     asyncio.create_task(terminate(bid))
     finally:
-        logger.info("shuttingdown")
+        logger.info("shutdowning")
         await asyncio.gather(*(terminate(bid) for bid in downloading_tasks))
-        sys.exit()
+        server.cancel()  # type: ignore
+        logger.info("Downloader server stopped\n\n")
 
 
 async def run_server():
+    global server
+    server = asyncio.Future()
     threading.current_thread().name = "DownloaderServer"
-    async with serve(handler, "localhost", 8765) as server:
-        await server.serve_forever()
+    async with serve(handler, "localhost", 8765):
+        logger.info("Downloader server started")
+        await server
