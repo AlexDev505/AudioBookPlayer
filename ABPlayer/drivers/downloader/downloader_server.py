@@ -124,6 +124,7 @@ async def run_server():
     global server
     server = asyncio.Future()
     threading.current_thread().name = "DownloaderServer"
-    async with serve(handler, "localhost", 8765):
-        logger.info("Downloader server started")
-        await server
+    with suppress(asyncio.CancelledError):
+        async with serve(handler, "localhost", 8765):
+            logger.info("Downloader server started")
+            await server
