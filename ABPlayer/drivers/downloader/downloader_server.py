@@ -90,6 +90,7 @@ async def download(ws: ServerConnection, bid: int) -> None:
         with Database(autocommit=True) as db:
             db.save(downloader.book)
         logger.info(f"downloading finished: {bid}")
+    del downloading_tasks[bid]
 
 
 async def terminate(bid: int) -> None:
