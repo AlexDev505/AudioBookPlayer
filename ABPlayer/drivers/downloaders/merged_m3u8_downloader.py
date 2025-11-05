@@ -16,7 +16,6 @@ from loguru import logger
 
 from ..base import BaseDownloader, File
 from ..tools import (
-    convert_ts_to_mp3,
     get_audio_file_duration,
     merge_ts_files,
     split_ts,
@@ -51,6 +50,7 @@ class MergedM3U8Downloader(BaseDownloader):
         self._current_duration: float = 0
         self._item_index: int = 0
         self._real_item_paths: list[Path] = []
+        self._merging_tasks: list[asyncio.Future] = []
 
     def _prepare_files_data(self):
         return [
@@ -108,14 +108,15 @@ class MergedM3U8Downloader(BaseDownloader):
                 self._ts_file_paths.remove(ts_path)
                 self._ts_file_paths.append(first)
                 os.remove(ts_path)
-            loop = asyncio.get_event_loop()
-            loop.run_in_executor(
-                None,
-                partial(
-                    self._merge_ts_files,
-                    int(self._item_index),
-                    self._ts_file_paths.copy(),
-                ),
+            self._merging_tasks.append(
+                asyncio.get_event_loop().run_in_executor(
+                    None,
+                    partial(
+                        self._merge_ts_files,
+                        int(self._item_index),
+                        self._ts_file_paths.copy(),
+                    ),
+                )
             )
             self._current_duration = second_time
             self._ts_file_paths.clear()
@@ -127,7 +128,17 @@ class MergedM3U8Downloader(BaseDownloader):
 
     async def _finish(self) -> None:
         if self._ts_file_paths:
-            self._merge_ts_files(self._item_index, self._ts_file_paths)
+            self._merging_tasks.append(
+                asyncio.get_event_loop().run_in_executor(
+                    None,
+                    partial(
+                        self._merge_ts_files,
+                        int(self._item_index),
+                        self._ts_file_paths.copy(),
+                    ),
+                )
+            )
+        await asyncio.gather(*self._merging_tasks)
         self.downloaded_files = dict(enumerate(self._real_item_paths))
         await super()._finish()
 

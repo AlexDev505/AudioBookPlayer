@@ -29,6 +29,8 @@ class M3U8Downloader(BaseDownloader):
     ):
         super().__init__(book, process_handler)
 
+        self._fixes_tasks: list[asyncio.Future] = []
+
     def _prepare_files_data(self):
         pass
 
@@ -79,11 +81,15 @@ class M3U8Downloader(BaseDownloader):
         self._files.sort(key=lambda x: x.index)
 
     async def _file_downloaded(self, file, file_path) -> None:
-        if file.index + 1 == len(self.book.items):
-            fix_m4a_meta(file_path)
-        else:
-            loop = asyncio.get_event_loop()
-            loop.run_in_executor(None, partial(fix_m4a_meta, file_path))
+        self._fixes_tasks.append(
+            asyncio.get_event_loop().run_in_executor(
+                None, partial(fix_m4a_meta, file_path)
+            )
+        )
+
+    async def _finish(self) -> None:
+        await asyncio.gather(*self._fixes_tasks)
+        await super()._finish()
 
     async def _iter_chunks(self, file, offset=0):
         current_range_index = file.extra.get("current_range_index", 0)

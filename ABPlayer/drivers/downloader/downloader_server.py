@@ -9,6 +9,7 @@ import orjson
 from database import Database
 from loguru import logger
 from websockets.asyncio.server import serve
+from websockets.exceptions import ConnectionClosedError
 
 from ..base import (
     BaseDownloader,
@@ -70,9 +71,10 @@ class ServerDPH(BaseDownloadProcessHandler):
         asyncio.create_task(self._send_status())
 
     async def _send_status(self):
-        await send(
-            self.ws, "set_status", bid=self.bid, status=self._status.value
-        )
+        with suppress(ConnectionClosedError):
+            await send(
+                self.ws, "set_status", bid=self.bid, status=self._status.value
+            )
 
 
 async def download(ws: ServerConnection, bid: int) -> None:
@@ -113,6 +115,8 @@ async def handler(websocket: ServerConnection):
                 elif command == "terminate":
                     assert isinstance(bid := data.get("bid"), int)
                     asyncio.create_task(terminate(bid))
+    except ConnectionClosedError:
+        pass
     finally:
         logger.info("shutdowning")
         await asyncio.gather(*(terminate(bid) for bid in downloading_tasks))
