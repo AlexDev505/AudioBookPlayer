@@ -226,13 +226,14 @@ class BaseDownloader(ABC):
         if not (book_dir_path := Path(self.book.dir_path)).exists():
             book_dir_path.mkdir(parents=True, exist_ok=True)
             logger.opt(colors=True).debug(
-                f"book dir <y>{self.book.dir_path}</y> crated"
+                f"book dir <y>{self.book.dir_path}</y> created"
             )
 
         await self.tasks_manager.wait_finishing(
             (self._download_file(file) for file in self._files)
         )
 
+    @logger.catch
     async def _download_file(self, file: File) -> None:
         """
         Downloads one file.
@@ -294,7 +295,7 @@ class BaseDownloader(ABC):
                     ),
                 )
             )
-            async for chunk in response.content.iter_chunked(5120):
+            async for chunk in response.content.iter_chunked(64 * 1024):
                 yield chunk
 
     async def _file_downloaded(self, file: File, file_path: Path) -> None:
@@ -307,21 +308,29 @@ class BaseDownloader(ABC):
         Finalizes downloading.
         Prepare files metadata and hashes, downloads preview, saves `.abp` file.
         """
-        files = BookFiles()
-        for i, item in enumerate(self.book.items):
-            if self._terminated:
-                return
-            file_path = self.downloaded_files[i]
-            logger.trace(f"preparing file metadata {file_path}")
-            prepare_file_metadata(file_path, self.book.author, item.title, i)
-            logger.trace(f"hashing file {file_path}")
-            files[file_path.name] = get_file_hash(file_path)
+        files = await asyncio.get_event_loop().run_in_executor(
+            None, self._final_files
+        )
+        if self._terminated:
+            return
         self.book.files = files
         await self.save_preview()
         self.book.save_to_storage()
         if self.process_handler:
             self.process_handler.finish()
         logger.debug("finished")
+
+    def _final_files(self) -> BookFiles:
+        files = BookFiles()
+        for i, item in enumerate(self.book.items):
+            if self._terminated:
+                return files
+            file_path = self.downloaded_files[i]
+            logger.trace(f"preparing file metadata {file_path}")
+            prepare_file_metadata(file_path, self.book.author, item.title, i)
+            logger.trace(f"hashing file {file_path}")
+            files[file_path.name] = get_file_hash(file_path)
+        return files
 
     async def save_preview(self) -> None:
         """
@@ -359,6 +368,7 @@ class BaseDownloader(ABC):
         self.process_handler.status = DownloadProcessStatus.TERMINATING
         self._terminated = True
         await self.tasks_manager.terminate()
+        await self._terminate()
 
         logger.opt(colors=True).debug(
             f"<y>{self}</y> clearing tree <y>{self.book.dir_path}</y>"
@@ -368,6 +378,9 @@ class BaseDownloader(ABC):
             os.removedirs(Path(self.book.dir_path).parent)
         except OSError:
             pass
+
+    async def _terminate(self) -> None:
+        pass
 
     def _get_item_file_name(
         self, item_index: int, extension: str = ".mp3"

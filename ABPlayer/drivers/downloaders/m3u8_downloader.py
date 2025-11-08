@@ -105,3 +105,6 @@ class M3U8Downloader(BaseDownloader):
         file.extra["current_range_index"] = current_range_index + 1
         async for chunk in self._iter_chunks(file, offset):
             yield chunk
+
+    async def _terminate(self) -> None:
+        await asyncio.gather(*self._fixes_tasks)

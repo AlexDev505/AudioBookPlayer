@@ -225,20 +225,24 @@ def split_ts(ts_file_path: Path, on: int) -> tuple[Path, Path]:
             ts_file_path.parent, f"{ts_file_path.name.removesuffix('.ts')}-2.ts"
         )
     )
-    subprocess.check_output(
-        f'{os.environ["FFMPEG_PATH"]} -i "{ts_file_path}" -to {on} -c copy '
+    result = subprocess.check_output(
+        f'{os.environ["FFMPEG_PATH"]} -y -v quiet -i "{ts_file_path}" -to {on} -c copy '
         f'"{first_part}"',
         shell=True,
         stdin=subprocess.DEVNULL,
         stderr=subprocess.STDOUT,
-    )
-    subprocess.check_output(
-        f'{os.environ["FFMPEG_PATH"]} -i "{ts_file_path}" -ss {on} -c copy '
+    ).decode("cp866")
+    if result:
+        logger.debug(result)
+    result = subprocess.check_output(
+        f'{os.environ["FFMPEG_PATH"]} -y -v quiet -i "{ts_file_path}" -ss {on} -c copy '
         f'"{second_part}"',
         shell=True,
         stdin=subprocess.DEVNULL,
         stderr=subprocess.STDOUT,
-    )
+    ).decode("cp866")
+    if result:
+        logger.debug(result)
     return first_part, second_part
 
 

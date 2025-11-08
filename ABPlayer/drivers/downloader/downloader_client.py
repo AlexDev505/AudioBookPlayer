@@ -6,6 +6,7 @@ from contextlib import suppress
 
 import orjson
 from loguru import logger
+from websockets.exceptions import ConnectionClosedError, ConnectionClosedOK
 from websockets.sync.client import connect
 
 from ..base import BaseDownloadProcessHandler, DownloadProcessStatus
@@ -21,7 +22,12 @@ class Client:
         self._t: threading.Thread | None = None
 
     def connect(self):
-        self.websocket = connect("ws://localhost:8765")
+        logger.debug("Connecting")
+        try:
+            self.websocket = connect("ws://localhost:8765", open_timeout=60)
+        except Exception as e:
+            logger.error(f"Failed to connect to WebSocket server: {e}")
+            self.connect()
 
     @property
     def is_connected(self) -> bool:
@@ -35,22 +41,31 @@ class Client:
         threading.current_thread().name = "DownloaderClient"
         if not self.websocket:
             raise RuntimeError("WebSocket connection not established")
-        for message in self.websocket:
-            with suppress(orjson.JSONDecodeError):
-                data = orjson.loads(message)
-                event = data["event"]
-                process_handler = self.process_handlers[data["bid"]]
-                if event == "init":
-                    process_handler.init(
-                        data["total_size"],
-                        DownloadProcessStatus(data["status"]),
-                    )
-                elif event == "set_status":
-                    process_handler.status = DownloadProcessStatus(
-                        data["status"]
-                    )
-                elif event == "progress":
-                    process_handler.progress(data["size"])
+        try:
+            for message in self.websocket:
+                with suppress(orjson.JSONDecodeError, KeyError):
+                    data = orjson.loads(message)
+                    event = data["event"]
+                    process_handler = self.process_handlers[data["bid"]]
+                    if event == "init":
+                        process_handler.init(
+                            data["total_size"],
+                            DownloadProcessStatus(data["status"]),
+                        )
+                        process_handler.done_size = data["done_size"]
+                    elif event == "set_status":
+                        process_handler.status = DownloadProcessStatus(
+                            data["status"]
+                        )
+                    elif event == "progress":
+                        with suppress(TypeError):
+                            process_handler.progress(data["size"])
+        except ConnectionClosedOK:
+            logger.debug("Connection closed OK")
+        except Exception as e:
+            logger.exception(e)
+            self.connect()
+            self.run()
 
     def _send(self, command: str, **data: ty.Any):
         logger.debug(f"sending {command} command")
@@ -65,3 +80,8 @@ class Client:
 
     def terminate(self, bid: int) -> None:
         self._send("terminate", bid=bid)
+
+    def shutdown(self) -> None:
+        if self.websocket:
+            logger.debug("shutdowning")
+            self.websocket.close()

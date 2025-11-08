@@ -723,6 +723,9 @@ class DownloadingProcessHandler(BaseDownloadProcessHandler):
 
     @status.setter
     def status(self, v: DownloadProcessStatus):
+        if v is DownloadProcessStatus.FINISHING:
+            self.done_size = self.total_size
+            self.show_progress()
         self._status = v
         with suppress(Exception):
             self.js_api.evaluate_js(

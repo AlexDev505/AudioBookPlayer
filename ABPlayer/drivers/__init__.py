@@ -1,3 +1,4 @@
+import atexit
 import os
 import subprocess
 import sys
@@ -39,6 +40,10 @@ def terminate(bid: int):
     client.terminate(bid)
 
 
+def shutdown():
+    client.shutdown()
+
+
 def run_client_server():
     global _starting, _first
     if _starting:
@@ -50,12 +55,7 @@ def run_client_server():
         _run_server()
         _first = False
     while not client.is_connected:
-        try:
-            client.connect()
-        except Exception as e:
-            print(f"Error connecting to downloader server: {e}")
-            time.sleep(2)
-            _run_server()
+        client.connect()
     client.run()
     _starting = False
 
@@ -65,3 +65,6 @@ def _run_server():
     if not FROZEN:
         cmd.insert(1, "run.py")
     subprocess.Popen(cmd)
+
+
+atexit.register(shutdown)

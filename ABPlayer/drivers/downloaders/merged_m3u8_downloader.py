@@ -69,21 +69,26 @@ class MergedM3U8Downloader(BaseDownloader):
         self._parse_host_uri()
         await super()._prepare()
 
-    async def _file_downloaded(self, file, file_path) -> None:
-        await self._decrypt_seq(file)
+    async def _download_file(self, file) -> None:
+        await super()._download_file(file)
+        self._decrypt_seq(file)
         await self._seq_downloaded(file)
 
-    async def _decrypt_seq(self, file: File) -> None:
+    def _decrypt_seq(self, file: File) -> None:
         segment = self._m3u8_data.segments[file.index]
         if decrypt_func := self._get_decryption_func(file.index, segment):
             file_path = os.path.join(self.book.dir_path, file.name)
-            async with aiofiles.open(file_path, "rb") as f:
-                data = await f.read()
+            with open(file_path, "rb") as f:
+                data = f.read()
             data = decrypt_func(data)
-            async with aiofiles.open(file_path, "wb") as f:
-                await f.write(data)
+            with open(file_path, "wb") as f:
+                f.write(data)
 
     async def _seq_downloaded(self, file: File) -> None:
+        logger.trace(
+            f"need {self._next_seq_index} seq - got {file.index} "
+            f"{bool(self.downloaded_files.get(file.index))}"
+        )
         if file.index != self._next_seq_index or not (
             ts_path := self.downloaded_files.get(file.index)
         ):
@@ -103,7 +108,7 @@ class MergedM3U8Downloader(BaseDownloader):
                 item.duration - (self._current_duration - ts_duration)
             )
             second_time = ts_duration - split_time
-            if item.duration - self._current_duration < 0 and second_time > 1:
+            if second_time > 1 and split_time > 1:
                 first, second = split_ts(ts_path, split_time)
                 self._ts_file_paths.remove(ts_path)
                 self._ts_file_paths.append(first)
@@ -147,18 +152,26 @@ class MergedM3U8Downloader(BaseDownloader):
     ) -> None:
         item_file_name = self._get_item_file_name(item_index, "")
         logger.opt(colors=True).debug(
-            f"merging <y>{len(ts_file_paths)}</y> files to <y>{item_file_name}.mp3</y>"
+            f"merging <y>{len(ts_file_paths)}</y> files "
+            f"(<y>{ts_file_paths[0].name}-{ts_file_paths[-1].name}</y>) "
+            f"to <y>{item_file_name}.mp3</y>"
         )
         merge_ts_files(ts_file_paths, Path(self.book.dir_path), item_file_name)
-        logger.trace(f"deleting {len(ts_file_paths)} ts files")
-        for ts_path in ts_file_paths:
-            os.remove(ts_path)
         logger.opt(colors=True).debug(
             f"file <y>{item_file_name}.mp3</y> created"
         )
+        logger.trace(
+            f"deleting {len(ts_file_paths)} ts files "
+            f"({ts_file_paths[0].name}-{ts_file_paths[-1].name})"
+        )
+        for ts_path in ts_file_paths:
+            os.remove(ts_path)
         self._real_item_paths.append(
             Path(self.book.dir_path, item_file_name + ".mp3")
         )
+
+    async def _terminate(self) -> None:
+        await asyncio.gather(*self._merging_tasks)
 
     def _get_decryption_func(
         self, segment_index: int, segment

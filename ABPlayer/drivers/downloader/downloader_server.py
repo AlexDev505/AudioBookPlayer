@@ -9,7 +9,11 @@ import orjson
 from database import Database
 from loguru import logger
 from websockets.asyncio.server import serve
-from websockets.exceptions import ConnectionClosedError
+from websockets.exceptions import (
+    ConnectionClosed,
+    ConnectionClosedError,
+    ConnectionClosedOK,
+)
 
 from ..base import (
     BaseDownloader,
@@ -25,11 +29,13 @@ __all__ = ["run_server"]
 
 downloading_tasks: dict[int, BaseDownloader] = {}
 server: asyncio.Future | None = None
+client_connected: bool = False
 
 
 async def send(ws: ServerConnection, event: str, **data: ty.Any) -> None:
     data.update({"event": event})
-    await ws.send(orjson.dumps(data))
+    with suppress(ConnectionClosed):
+        await ws.send(orjson.dumps(data))
 
 
 class ServerDPH(BaseDownloadProcessHandler):
@@ -49,6 +55,7 @@ class ServerDPH(BaseDownloadProcessHandler):
             bid=self.bid,
             status=self._status.value,
             total_size=self.total_size,
+            done_size=self.done_size,
         )
 
     def progress(self, size: int) -> None:
@@ -71,14 +78,15 @@ class ServerDPH(BaseDownloadProcessHandler):
         asyncio.create_task(self._send_status())
 
     async def _send_status(self):
-        with suppress(ConnectionClosedError):
-            await send(
-                self.ws, "set_status", bid=self.bid, status=self._status.value
-            )
+        await send(
+            self.ws, "set_status", bid=self.bid, status=self._status.value
+        )
 
 
 async def download(ws: ServerConnection, bid: int) -> None:
     logger.info(f"downloading request: {bid}")
+    if bid in downloading_tasks:
+        return await downloading_tasks[bid].process_handler._init()
     try:
         with Database() as db:
             assert (book := db.get_book_by_bid(bid))
@@ -104,9 +112,16 @@ async def terminate(bid: int) -> None:
 
 
 async def handler(websocket: ServerConnection):
+    logger.debug("Client connected")
+    global client_connected
+    client_connected = True
+    for bid in downloading_tasks:
+        downloading_tasks[bid].process_handler.ws = websocket  # type: ignore
+        asyncio.create_task(downloading_tasks[bid].process_handler._init())
+
     try:
         async for message in websocket:
-            with suppress(orjson.JSONDecodeError, AssertionError):
+            try:
                 data = orjson.loads(message)
                 assert (command := data.get("command")) is not None
                 if command == "download":
@@ -115,13 +130,31 @@ async def handler(websocket: ServerConnection):
                 elif command == "terminate":
                     assert isinstance(bid := data.get("bid"), int)
                     asyncio.create_task(terminate(bid))
-    except ConnectionClosedError:
+            except (orjson.JSONDecodeError, AssertionError):
+                pass
+            except Exception as e:
+                logger.trace(e)
+    except ConnectionClosedOK:
         pass
-    finally:
-        logger.info("shutdowning")
-        await asyncio.gather(*(terminate(bid) for bid in downloading_tasks))
-        server.cancel()  # type: ignore
-        logger.info("Downloader server stopped\n\n")
+    except ConnectionClosedError:
+        logger.error("Client closed with error. waiting for client")
+        client_connected = False
+        await asyncio.sleep(60)
+        if client_connected:
+            return
+        logger.error("Client not connected. shutdowning")
+    except Exception as e:
+        logger.exception(e)
+
+    client_connected = False
+    await shutdown()
+
+
+async def shutdown():
+    logger.info("shutdowning")
+    await asyncio.gather(*(terminate(bid) for bid in downloading_tasks))
+    server.cancel()  # type: ignore
+    logger.info("Downloader server stopped\n\n")
 
 
 async def run_server():
