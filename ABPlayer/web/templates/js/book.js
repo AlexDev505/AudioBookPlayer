@@ -55,7 +55,13 @@ function loadBookData(bid) {
       };
     document.querySelector("#book-page-content .open-in-browser").dataset.url =
       resp.data.url;
-    if (resp.data.series_name) {
+    if (!resp.data.driver)
+      document.querySelector("#book-page-content .open-in-browser").style =
+        "display: none";
+    else
+      document.querySelector("#book-page-content .open-in-browser").style = "";
+
+    if (resp.data.series_name && resp.data.driver) {
       document.querySelector("#book-page-content .search-series").style = "";
       document.querySelector("#book-page-content .search-series").onclick =
         function () {

@@ -17,10 +17,14 @@ from drivers import BaseDownloadProcessHandler, DownloadProcessStatus, Driver
 from drivers import download as download_book
 from drivers import terminate as terminate_downloading
 from drivers.base import DriverNotAuthenticated, LicensedDriver
-from drivers.tools import duration_sec_to_str, duration_str_to_sec
 from loguru import logger
 from models.book import DATETIME_FORMAT, Status, StopFlag
-from tools import convert_from_bytes, make_book_preview, pretty_view
+from tools import (
+    convert_from_bytes,
+    duration_sec_to_str,
+    make_book_preview,
+    pretty_view,
+)
 
 from .js_api import ConnectionFailedError, JSApi, JSApiError
 
@@ -231,7 +235,7 @@ class BooksApi(JSApi):
             f"request: <r>search book series</r> | <y>{url}</y>"
         )
         if not (driver := Driver.get_suitable_driver(url)):
-            return NoSuitableDriver(book_url=url)
+            return self.error(NoSuitableDriver(book_url=url))
         try:
             result = [
                 make_book_preview(book)
@@ -612,9 +616,10 @@ class BooksApi(JSApi):
         with Database(autocommit=True) as db:
             if not (book := db.get_book_by_bid(bid)):
                 return
-            driver = Driver.get_suitable_driver(book.url)()
+            if not (driver := Driver.get_suitable_driver(book.url)):
+                return
             try:
-                new_data = driver.get_book(book.url)
+                new_data = driver().get_book(book.url)
             except requests.exceptions.ConnectionError as err:
                 return
             book.preview = new_data.preview
@@ -631,8 +636,9 @@ class BooksApi(JSApi):
         with Database(autocommit=True) as db:
             if not (book := db.get_book_by_bid(bid)):
                 return
-            driver = Driver.get_suitable_driver(book.url)()
-            new_data = driver.get_book(book.url)
+            if not (driver := Driver.get_suitable_driver(book.url)):
+                return
+            new_data = driver().get_book(book.url)
             book.items = new_data.items
             logger.opt(colors=True).info(f"book <y>{bid}</y> items are fixed")
             db.save(book)

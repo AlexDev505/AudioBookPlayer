@@ -9,17 +9,13 @@ from pathlib import Path
 from urllib.parse import urljoin, urlparse
 from urllib.request import urlopen
 
-import aiofiles
 import m3u8
 from Crypto.Cipher import AES
 from loguru import logger
+from tools import get_audio_file_duration
 
 from ..base import BaseDownloader, File
-from ..tools import (
-    get_audio_file_duration,
-    merge_ts_files,
-    split_ts,
-)
+from ..tools import merge_ts_files, split_ts
 
 if ty.TYPE_CHECKING:
     from models.book import Book

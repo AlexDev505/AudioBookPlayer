@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import hashlib
 import math
+import os
 import re
+import subprocess
 import time
 import typing as ty
 from functools import lru_cache, wraps
@@ -137,6 +139,65 @@ def get_file_hash(
         f"{hash_func.name} of {str(file_path)}: <y>{file_hash}</y>"
     )
     return file_hash
+
+
+def get_audio_file_duration(file_path: Path) -> float:
+    """
+    :param file_path: Path to the audio file.
+    :returns: Duration of the audio file in seconds.
+    """
+    result = subprocess.check_output(
+        rf'{os.environ["FFMPEG_PATH"]} -v quiet -stats -i "{file_path}" -f null -',
+        shell=True,
+        stderr=subprocess.STDOUT,
+        stdin=subprocess.DEVNULL,
+    ).decode()
+    if not (match := re.findall(r"time=(\d+):(\d{2}):(\d{2}).(\d{2})", result)):
+        return 0
+    match = match[-1]
+    return (
+        int(match[0]) * 3600
+        + int(match[1]) * 60
+        + int(match[2])
+        + int(match[3]) / 100
+    )
+
+
+def duration_sec_to_str(sec: int) -> str:
+    """
+    Converts a duration in seconds to a duration string
+    in format <h>:<mm>:<ss> or <m>:<ss> or <s>.
+    """
+    h, m, s = sec // 3600, sec % 3600 // 60, sec % 60
+    return (
+        f"{f'{h}:' if h else ''}"
+        f"{f'{str(m).rjust(2, "0") if h else m}:' if m else ('00:' if h else '')}"
+        f"{(str(s).rjust(2, '0') if m or h else s) if s else ('00' if m or h else '')}"
+    )
+
+
+def duration_str_to_sec(duration: str) -> int:
+    """
+    Converts a duration string to a duration in seconds.
+    Available formats:
+        - <h>:<m><s>
+        - <h> час(а|ов) <m> минут(а|ы)
+        - <h> ч. <m> мин.
+        or parts of this formats.
+    """
+    for pattern in [
+        r"(((?P<h>\d+):)?(?P<m>\d{1,2}):)?(?P<s>\d{1,2})?",
+        r"((?P<h>\d+) час(а|ов)?)?\s?((?P<m>\d{1,2}) минут[аы]?)?(?P<s>)",
+        r"((?P<h>\d+) ч\.)?\s?((?P<m>\d{1,2}) мин\.)?(?P<s>)",
+    ]:
+        if match := re.fullmatch(pattern, duration):
+            if sec := (
+                int(match.group("h") or 0) * 3600
+                + int(match.group("m") or 0) * 60
+                + int(match.group("s") or 0)
+            ):
+                return sec
+    raise ValueError(f"Invalid duration: {duration}")
 
 
 def pretty_view(

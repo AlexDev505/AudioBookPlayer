@@ -269,6 +269,12 @@ class Database:
                 f"WHERE id IN ({','.join('?' * len(bids))})",
                 *bids,
             )
+            self._execute(
+                "DELETE FROM books "
+                f"WHERE id IN ({','.join('?' * len(bids))}) AND driver = ?",
+                *bids,
+                "",
+            )
         else:
             self._execute("UPDATE books SET files='{}'")
 

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import re
 import typing as ty
 from dataclasses import asdict, dataclass, field
 from datetime import datetime
@@ -8,9 +9,14 @@ from enum import Enum
 from functools import partial
 from pathlib import Path
 
+import orjson
 from loguru import logger
-from orjson import orjson
-from tools import pretty_view
+from tools import (
+    duration_sec_to_str,
+    get_audio_file_duration,
+    get_file_hash,
+    pretty_view,
+)
 
 DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
@@ -169,7 +175,7 @@ class Book:
             f"scanning <y>{dir_path}</y> for <r>.abp</r>"
         )
         books_found = 0
-        for root, _, file_names in os.walk(dir_path):
+        for root, __, file_names in os.walk(dir_path):
             if ".abp" in file_names:
                 abp_path = os.path.join(root, ".abp")
                 if not (book := Book.load_from_storage(abp_path)):
@@ -179,6 +185,68 @@ class Book:
                     except IOError:
                         pass
                     continue
+                books_found += 1
+                yield book
+            elif any(file_name.endswith(".mp3") for file_name in file_names):
+                id_parts = root.removeprefix(f"{dir_path}\\").split("\\")
+                author = series_name = number_in_series = ""
+                if len(id_parts) == 1:
+                    title = id_parts[0]
+                elif len(id_parts) == 2:
+                    author = id_parts[0]
+                    title = id_parts[1]
+                elif len(id_parts) == 3:
+                    author = id_parts[0]
+                    series_name = id_parts[1]
+                    if match := re.fullmatch(r"([0-9.]+)\. (.+)", id_parts[2]):
+                        number_in_series = match.group(1)
+                        title = match.group(2)
+                    else:
+                        title = id_parts[2]
+                else:
+                    continue
+
+                files = BookFiles()
+                items = BookItems()
+
+                total_duration = 0
+                next_index = 1
+                for file_name in sorted(file_names):
+                    if not file_name.endswith(".mp3"):
+                        continue
+                    if match := re.fullmatch(r"([0-9]+)\. (.+)", file_name):
+                        i = int(match.group(1))
+                        item_title = match.group(2)
+                    else:
+                        item_title = file_name
+                        i = next_index
+                    next_index += 1
+
+                    file_path = Path(root, file_name)
+                    duration = get_audio_file_duration(file_path)
+                    total_duration += duration
+                    files[file_name] = get_file_hash(file_path)
+                    items.append(
+                        BookItem(
+                            file_url="",
+                            file_index=i,
+                            title=item_title,
+                            start_time=0,
+                            end_time=int(duration),
+                        )
+                    )
+
+                book = Book(
+                    author=author,
+                    name=title,
+                    series_name=series_name,
+                    number_in_series=number_in_series,
+                    duration=duration_sec_to_str(int(total_duration)),
+                    adding_date=datetime.now(),
+                    items=items,
+                    files=files,
+                )
+                book.save_to_storage()
                 books_found += 1
                 yield book
 

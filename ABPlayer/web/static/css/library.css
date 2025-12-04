@@ -294,6 +294,9 @@
     height: 1em;
     margin-right: 4px;
 }
+.book-author:empty {
+    display: none;
+}
 .book-author::before {
     content: url(../images/person.svg);
 }
@@ -314,6 +317,9 @@
 }
 .book-series::before {
     content: url(../images/tag.svg);
+}
+.book-driver:empty {
+    display: none;
 }
 .book-driver::before {
     content: url(../images/hdd.svg);

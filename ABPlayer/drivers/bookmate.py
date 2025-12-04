@@ -7,10 +7,11 @@ from pathlib import Path
 import requests
 import webview
 from models.book import Book, BookItem, BookItems
+from tools import duration_sec_to_str
 
 from .base import DriverNotAuthenticated, LicensedDriver
 from .downloaders.m3u8_downloader import M3U8Downloader
-from .tools import duration_sec_to_str, safe_name
+from .tools import safe_name
 
 
 class Bookmate(LicensedDriver):
