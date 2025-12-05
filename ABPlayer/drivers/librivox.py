@@ -136,10 +136,11 @@ class LibriVox(Driver):
             url = (
                 "https://archive.org/advancedsearch.php?q=title:"
                 f"({urlize(query.lower())})"
-                f'AND+collection:"librivoxaudio"&fl[]=creator&fl[]=identifier'
+                f'+AND+collection:"librivoxaudio"&fl[]=creator&fl[]=identifier'
                 f"&fl[]=title&rows={limit}&page={page_number}&output=json"
             )  # The query is case insensitive because of the parnthesis.
             # normalizing the case makes cacheing more efficient
+            print(url)
 
             response = self._get(url).json()
             if not (hits := response["response"]["docs"]):
