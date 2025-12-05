@@ -2,6 +2,7 @@ import re
 from contextlib import suppress
 
 from bs4 import BeautifulSoup
+from loguru import logger
 from models.book import Book, BookItem, BookItems
 from orjson import orjson
 
@@ -114,10 +115,10 @@ class Izibuk(Driver):
 
             page = self.get_page(url)
             soup = BeautifulSoup(page.content, "html.parser")
-            if not soup.select_one("#books_list > div a[href^='/book']"):
+            if not soup.select_one("#books_list > div a[href^='/art']"):
                 break
             elements = soup.select(
-                "#books_list>div>div:not(:has(a[href^='/book']+span))"
+                "#books_list>div>div:not(:has(a[href^='/art']+span))"
             )
 
             if offset:
@@ -151,7 +152,7 @@ class Izibuk(Driver):
                     else x.strip().removeprefix("#")
                 ),
             )
-            element = card.select_one("div>a[href^='/book']:not(:has(>img))")
+            element = card.select_one("div>a[href^='/art']:not(:has(>img))")
             url = f"{self.site_url}{element.attrs['href']}"
             name = element.text.strip()
             preview = card.select_one("img").attrs["src"]
