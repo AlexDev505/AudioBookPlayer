@@ -1,10 +1,2 @@
 venv/
-.idea/
 __pycache__/
-.env
-/build/installers/
-/build/updaters/
-/build/updates/
-/build/ABPlayer*/
-/build/ABPlayerUpdater*
-AudioBookPlayerAppData.lnk

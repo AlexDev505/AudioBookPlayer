@@ -32,9 +32,14 @@ if not (LOGGING_LEVEL := os.environ.get("LOGGING_LEVEL")):
     LOGGING_LEVEL = os.environ["LOGGING_LEVEL"] = "DEBUG"
 
 if os.environ.get("CONSOLE"):
-    console_logger_handler = logger.add(
-        sys.stdout, colorize=True, format=formatter, level=LOGGING_LEVEL
-    )
+    if os.name == "nt":
+        console_logger_handler = logger.add(
+            sys.stdout, colorize=True, format=formatter, level=LOGGING_LEVEL
+        )
+    else:
+        console_logger_handler = logger.add(
+            sys.stdout, colorize=False, format=uncolored_formatter, level=LOGGING_LEVEL
+        )
 
 if DEBUG_PATH := os.environ.get("DEBUG_PATH"):
     file_logger_handler = logger.add(

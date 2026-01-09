@@ -3,10 +3,9 @@ from __future__ import annotations
 import time
 import typing as ty
 from ctypes import Structure, byref, c_long, windll
+from functools import cache
 
-import temp_file
 from loguru import logger
-from tools import ttl_cache
 
 from .js_api import JSApi
 
@@ -46,30 +45,30 @@ class WindowControlsApi(JSApi):
         scale_k = query_scale_k()
         width = int(self._window.width / scale_k)
         height = int(self._window.height / scale_k)
-        is_main_menu_opened = self._window.evaluate_js("menu_opened")
-        is_filter_menu_opened = self._window.evaluate_js("filter_menu_opened")
-        required_drivers = self._window.evaluate_js("required_drivers")
-        volume = self._window.evaluate_js("player.volume") * 100
-        speed = self._window.evaluate_js("player.speed")
-        last_listened_book_bid = self._window.evaluate_js(
-            "(player.current_book)?player.current_book.bid:null"
-        )
-        temp_file.update(
-            width=width,
-            height=height,
-            is_main_menu_opened=is_main_menu_opened,
-            is_filter_menu_opened=is_filter_menu_opened,
-            required_drivers=",".join(required_drivers),
-            volume=volume,
-            speed=speed,
-            **(
-                dict(last_listened_book_bid=last_listened_book_bid)
-                if last_listened_book_bid is not None
-                else {}
-            ),
-        )
-        if last_listened_book_bid is None:
-            temp_file.delete_items("last_listened_book_bid")
+        # is_main_menu_opened = self._window.evaluate_js("menu_opened")
+        # is_filter_menu_opened = self._window.evaluate_js("filter_menu_opened")
+        # required_drivers = self._window.evaluate_js("required_drivers")
+        # volume = self._window.evaluate_js("player.volume") * 100
+        # speed = self._window.evaluate_js("player.speed")
+        # last_listened_book_bid = self._window.evaluate_js(
+        #     "(player.current_book)?player.current_book.bid:null"
+        # )
+        # temp_file.update(
+        #     width=width,
+        #     height=height,
+        #     is_main_menu_opened=is_main_menu_opened,
+        #     is_filter_menu_opened=is_filter_menu_opened,
+        #     required_drivers=",".join(required_drivers),
+        #     volume=volume,
+        #     speed=speed,
+        #     **(
+        #         dict(last_listened_book_bid=last_listened_book_bid)
+        #         if last_listened_book_bid is not None
+        #         else {}
+        #     ),
+        # )
+        # if last_listened_book_bid is None:
+        #     temp_file.delete_items("last_listened_book_bid")
         logger.trace("session data saved")
 
 
@@ -87,7 +86,7 @@ def query_key_state(key_code) -> bool:
     return bool(windll.user32.GetKeyState(key_code) >> 15)
 
 
-@ttl_cache(5)
+@cache
 def query_scale_k() -> float:
     """
     Screen scale (usually set to 125% on laptops)

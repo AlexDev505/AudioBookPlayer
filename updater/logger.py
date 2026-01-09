@@ -4,6 +4,7 @@ import sys
 
 from loguru import logger
 
+
 try:  # Removing default logger
     logger.remove(0)
 except ValueError:

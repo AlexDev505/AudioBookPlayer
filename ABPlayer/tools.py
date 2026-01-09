@@ -2,12 +2,8 @@ from __future__ import annotations
 
 import hashlib
 import math
-import os
 import re
-import subprocess
-import time
 import typing as ty
-from functools import lru_cache, wraps
 
 import pygments.formatters
 import pygments.lexers
@@ -16,19 +12,17 @@ from loguru import logger
 if ty.TYPE_CHECKING:
     from pathlib import Path
 
-    from models.book import Book
-
 
 class Version:
-    revisions = [None, "rc", "betta", "alpha"]
+    revisions = [None, "rc", "betta", "alpha", "dev"]
 
     def __init__(
         self,
         major: int,
         minor: int,
         patch: int,
-        revision: str = None,
-        revision_number: int = None,
+        revision: str | None = None,
+        revision_number: int | None = None,
     ):
         self.major = major
         self.minor = minor
@@ -38,6 +32,10 @@ class Version:
         if revision not in self.revisions:
             raise ValueError(
                 f"Unknown revision `{revision}`. it can be {self.revisions}"
+            )
+        if revision and revision_number is None:
+            raise ValueError(
+                f"Revision number is required for revision `{revision}`"
             )
 
     @classmethod
@@ -85,27 +83,6 @@ class Version:
     __str__ = __repr__
 
 
-def ttl_cache(max_age: int, maxsize: int = 128, typed: bool = False):
-    """
-    A decorator that caches the result of a function call
-    for a specified period of time.
-    max_age: Duration to keep the cache (in seconds).
-    """
-
-    def _decorator(fn):
-        @lru_cache(maxsize, typed)
-        def _new(*args, __time, **kwargs):
-            return fn(*args, **kwargs)
-
-        @wraps(fn)
-        def _wrapper(*args, **kwargs):
-            return _new(*args, **kwargs, __time=int(time.time() / max_age))
-
-        return _wrapper
-
-    return _decorator
-
-
 def convert_from_bytes(bytes_value: int) -> str:
     """
     :param bytes_value: The number of bytes.
@@ -120,9 +97,7 @@ def convert_from_bytes(bytes_value: int) -> str:
     return "%s %s" % (s, size_name[i])
 
 
-def get_file_hash(
-    file_path: ty.Union[str, Path], hash_func=hashlib.sha256
-) -> str:
+def get_file_hash(file_path: ty.Union[str, Path], hash_func=hashlib.sha256) -> str:
     """
     :param file_path: The Way to the File.
     :param hash_func: hash function.
@@ -139,65 +114,6 @@ def get_file_hash(
         f"{hash_func.name} of {str(file_path)}: <y>{file_hash}</y>"
     )
     return file_hash
-
-
-def get_audio_file_duration(file_path: Path) -> float:
-    """
-    :param file_path: Path to the audio file.
-    :returns: Duration of the audio file in seconds.
-    """
-    result = subprocess.check_output(
-        rf'{os.environ["FFMPEG_PATH"]} -v quiet -stats -i "{file_path}" -f null -',
-        shell=True,
-        stderr=subprocess.STDOUT,
-        stdin=subprocess.DEVNULL,
-    ).decode()
-    if not (match := re.findall(r"time=(\d+):(\d{2}):(\d{2}).(\d{2})", result)):
-        return 0
-    match = match[-1]
-    return (
-        int(match[0]) * 3600
-        + int(match[1]) * 60
-        + int(match[2])
-        + int(match[3]) / 100
-    )
-
-
-def duration_sec_to_str(sec: int) -> str:
-    """
-    Converts a duration in seconds to a duration string
-    in format <h>:<mm>:<ss> or <m>:<ss> or <s>.
-    """
-    h, m, s = sec // 3600, sec % 3600 // 60, sec % 60
-    return (
-        f"{f'{h}:' if h else ''}"
-        f"{f'{str(m).rjust(2, "0") if h else m}:' if m else ('00:' if h else '')}"
-        f"{(str(s).rjust(2, '0') if m or h else s) if s else ('00' if m or h else '')}"
-    )
-
-
-def duration_str_to_sec(duration: str) -> int:
-    """
-    Converts a duration string to a duration in seconds.
-    Available formats:
-        - <h>:<m><s>
-        - <h> час(а|ов) <m> минут(а|ы)
-        - <h> ч. <m> мин.
-        or parts of this formats.
-    """
-    for pattern in [
-        r"(((?P<h>\d+):)?(?P<m>\d{1,2}):)?(?P<s>\d{1,2})?",
-        r"((?P<h>\d+) час(а|ов)?)?\s?((?P<m>\d{1,2}) минут[аы]?)?(?P<s>)",
-        r"((?P<h>\d+) ч\.)?\s?((?P<m>\d{1,2}) мин\.)?(?P<s>)",
-    ]:
-        if match := re.fullmatch(pattern, duration):
-            if sec := (
-                int(match.group("h") or 0) * 3600
-                + int(match.group("m") or 0) * 60
-                + int(match.group("s") or 0)
-            ):
-                return sec
-    raise ValueError(f"Invalid duration: {duration}")
 
 
 def pretty_view(
@@ -233,15 +149,13 @@ def pretty_view(
                 "\n"
                 if multiline
                 and (
-                    len(obj) > 7
-                    or any(isinstance(x, (dict, list, tuple)) for x in obj)
+                    len(obj) > 7 or any(isinstance(x, (dict, list, tuple)) for x in obj)
                 )
                 else ""
             )
             brackets = ("[", "]")
             lines_iter = (
-                pretty_view(item, multiline=multiline, __finish=False)
-                for item in obj
+                pretty_view(item, multiline=multiline, __finish=False) for item in obj
             )
 
         result += f"{brackets[0]}{new_line}"
@@ -268,21 +182,3 @@ def pretty_view(
             pygments.formatters.TerminalFormatter(),  # noqa
         ).strip()
     return result
-
-
-def make_book_preview(book: Book) -> dict:
-    """
-    :param book: Instance of the book.
-    :returns: Dictionary with the main fields of the book.
-    """
-    return dict(
-        author=book.author,
-        name=book.name,
-        series_name=book.series_name,
-        number_in_series=book.number_in_series,
-        reader=book.reader,
-        duration=book.duration,
-        url=book.url,
-        preview=book.preview,
-        driver=book.driver,
-    )

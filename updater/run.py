@@ -11,8 +11,10 @@ Startup parameters:
 import argparse
 import sys
 
-import main
 from loguru import logger
+
+import main
+
 
 parser = argparse.ArgumentParser()
 parser._print_message = lambda message, _: logger.debug(message)

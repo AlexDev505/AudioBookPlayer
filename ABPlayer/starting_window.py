@@ -1,17 +1,17 @@
 import os
 import time
-from functools import partial
 
-import config
-import locales
 import webview
-from database import Database
-from drivers import Driver
-from drivers.base import LicensedDriver
 from loguru import logger
-from models.book import Book
-from tools import pretty_view
 from web.app import app
+
+
+def _on_shown(window: webview.Window):
+    logger.debug("starting window launched")
+    window.load_url("/starting_window")
+
+def _on_loaded(window: webview.Window):
+    start_app(window)
 
 
 def create_starting_window() -> webview.Window:
@@ -20,12 +20,7 @@ def create_starting_window() -> webview.Window:
     :returns: An instance of the window.
     """
 
-    def _on_shown():
-        logger.debug("starting window launched")
-        window.load_url("/starting_window")
 
-    def _on_loaded():
-        start_app(window)
 
     logger.info("launching starting window...")
 
@@ -55,30 +50,7 @@ def start_app(window: webview.Window) -> None:
     logger.debug("starting app...")
     start_time = time.time()
 
-    updater_path = os.path.join(
-        os.environ["APP_DIR"],
-        f"ABPlayerSetup.{os.environ['VERSION']}"
-        f"{os.environ['ARCH'].replace(' ', '.')}.exe",
-    )
-    if os.path.isfile(updater_path):
-        os.remove(updater_path)
-
-    config.init()
-    locales.set_language(os.environ["language"])
-    Database.init()
-    init_library(window)
-
-    window.evaluate_js("setStatus('запуск...')")
-
-    success = 0
-    for driver in Driver.drivers:
-        if not issubclass(driver, LicensedDriver):
-            continue
-        if driver.auth_from_storage():
-            success += 1
-    logger.opt(colors=True).debug(
-        f"<y>{success}</y> drivers successfully authed"
-    )
+    window.run_js("setStatus('запуск...')")
 
     if (sub := time.time() - start_time) < 2:
         logger.trace(f"sleeping {round(2 - sub, 2)}s （*＾-＾*）")
@@ -86,61 +58,8 @@ def start_app(window: webview.Window) -> None:
 
     import main_window as main
 
-    main.main_window()
-    window.destroy()
-
-
-def init_library(window: webview.Window) -> None:
-    """
-    Analyzes the library.
-    Adds books from storage.
-    Fixes incorrect entries in the database.
-    """
-    logger.debug("loading library...")
-    window.evaluate_js("setStatus('загрузка библиотеки...')")
-
-    updates = False
-    correct_books_urls: list[str] = []
-    incorrect_books_ids: list[int] = []
-    with Database() as db:
-        # Checking existing books in the database
-        logger.trace("validating exists books")
-        offset = 0
-        books = db.get_libray(20, offset)
-        while books:
-            for book in books:
-                if book.files:
-                    if not os.path.exists(book.abp_file_path):
-                        incorrect_books_ids.append(book.id)
-                    else:
-                        correct_books_urls.append(book.url)
-            offset += 20
-            books = db.get_libray(20, offset)
-
-        if incorrect_books_ids:
-            logger.opt(lazy=True).debug(
-                "some books have incorrect files data. bids: {data}",
-                data=partial(pretty_view, incorrect_books_ids),
-            )
-            db.clear_files(*incorrect_books_ids)
-            updates = True
-
-        # Scanning storage
-        logger.trace("scanning books folder")
-        for book in Book.scan_dir(os.environ["books_folder"]):
-            if book.url in correct_books_urls:
-                continue
-            if db_book := db.get_book_by_url(book.url):
-                if not db_book.files:
-                    try:
-                        os.remove(book.abp_file_path)
-                    except IOError:
-                        pass
-                continue
-            db.add_book(book)
-            logger.opt(colors=True).debug(f"{book:styled} added to library")
-            updates = True
-
-        if updates:
-            logger.trace("saving library")
-            db.commit()
+    if os.name == "nt":
+        main.main_window()
+        window.destroy()
+    else:
+        main.main_window_on_place(window)

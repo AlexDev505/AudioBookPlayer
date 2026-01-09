@@ -1,8 +1,6 @@
 import os
-import re
 import sys
 
-import temp_file
 from flask import Flask, render_template, send_from_directory
 
 if getattr(sys, "frozen", False):
@@ -20,27 +18,10 @@ app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 1  # disable caching
 
 @app.route("/")
 def index():
-    temp_data = temp_file.load()
+    temp_data = {}
     return render_template(
         "base.html",
         app_version=os.environ["VERSION"],
-        dark_theme=bool(int(os.environ["dark_theme"])),
-        lang=os.environ["language"],
-        is_main_menu_opened=temp_data.get("is_main_menu_opened", True),
-        is_filter_menu_opened=temp_data.get("is_filter_menu_opened", True),
-        volume=temp_data.get("volume", 50),
-        speed=temp_data.get("speed", 1),
-        last_listened_book_bid=temp_data.get("last_listened_book_bid", None),
-        only_stable=temp_data.get("only_stable", False),
-        stable_version=(
-            re.fullmatch(r"\d+\.\d+\.\d+", os.environ["VERSION"]) is not None
-        ),
-        required_drivers=(
-            required_drivers.split(",")
-            if (required_drivers := temp_data.get("required_drivers", ""))
-            else None
-        ),
-        gettext=_,
     )
 
 

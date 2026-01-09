@@ -1,8 +1,10 @@
-from . import books, settings, window_controls
+import os
+
 from .js_api import JSApi
 
-JSApi.sections.append(books.BooksApi)
-JSApi.sections.append(window_controls.WindowControlsApi)
-JSApi.sections.append(settings.SettingsApi)
+if os.name == "nt":
+    from . import window_controls
+
+    JSApi.sections.append(window_controls.WindowControlsApi)
 
 __all__ = ["JSApi"]

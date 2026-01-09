@@ -70,4 +70,4 @@ class JSApiError(Exception):
 
 class ConnectionFailedError(JSApiError):
     code = 1
-    message = _("connection_issues")
+    message = "connection_issues"
