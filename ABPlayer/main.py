@@ -6,7 +6,9 @@ from tools import pretty_view
 
 # CONFIG SETUP
 # Path to the application directory
-os.environ["APP_DIR"] = platformdirs.user_data_dir("AudioBookPlayer", "")
+os.environ["APP_DIR"] = os.path.join(
+    platformdirs.user_data_dir(), "AudioBookPlayer"
+)
 if not os.path.exists(os.environ["APP_DIR"]):
     os.mkdir(os.environ["APP_DIR"])
 # Path to the configuration file
@@ -21,8 +23,10 @@ os.environ["DEBUG_PATH"] = os.path.join(os.environ["APP_DIR"], "debug.log")
 os.environ["TEMP_PATH"] = os.path.join(os.environ["APP_DIR"], "temp.txt")
 # Path to the dir with licensed drivers auth
 os.environ["AUTH_DIR"] = os.path.join(os.environ["APP_DIR"], "auth")
-# System architecture
-os.environ["ARCH"] = " x32" if platform.architecture()[0] == "32bit" else ""
+# Platform params
+os.environ["PLATFORM"] = platform.system()
+os.environ["ARCH"] = platform.architecture()[0]
+print(os.environ["PLATFORM"], os.environ["ARCH"], os.environ["APP_DIR"])
 # App version
 os.environ["VERSION"] = "4.0.0-dev.0"
 

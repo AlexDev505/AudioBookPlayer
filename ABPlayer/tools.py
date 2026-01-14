@@ -75,7 +75,9 @@ class Version:
             return self_revision_index < other_revision_index
         if self_revision_index == other_revision_index == 0:
             return False
-        return self.revision_number > other.revision_number
+        return ty.cast(int, self.revision_number) > ty.cast(
+            int, other.revision_number
+        )
 
     def __repr__(self):
         return self.to_str()
@@ -85,7 +87,7 @@ class Version:
 
 def convert_from_bytes(bytes_value: int) -> str:
     """
-    :param bytes_value: The number of bytes.
+    :param bytes_value: The number of bytes
     :returns: line of view <number> <unit of measurement>
     """
     if bytes_value == 0:
@@ -94,14 +96,14 @@ def convert_from_bytes(bytes_value: int) -> str:
     i = int(math.floor(math.log(bytes_value, 1024)))
     p = math.pow(1024, i)
     s = round(bytes_value / p, 2)
-    return "%s %s" % (s, size_name[i])
+    return f"{s} {size_name[i]}"
 
 
-def get_file_hash(file_path: ty.Union[str, Path], hash_func=hashlib.sha256) -> str:
+def get_file_hash(file_path: str | Path, hash_func=hashlib.sha256) -> str:
     """
-    :param file_path: The Way to the File.
-    :param hash_func: hash function.
-    :returns: hash file.
+    :param file_path: The Way to the File
+    :param hash_func: hash function
+    :returns: hash file
     """
     hash_func = hash_func()  # Initialize the hash function
     with open(file_path, "rb") as file:
@@ -120,8 +122,8 @@ def pretty_view(
     obj: ty.Any, *, multiline: bool = False, indent: int = 4, __finish=True
 ) -> str:
     """
-    Creates a readable representation of a list/dictionary.
-    :returns: String.
+    Creates a readable representation of a list/dictionary
+    :returns: String
     """
     result = ""
 
@@ -149,13 +151,15 @@ def pretty_view(
                 "\n"
                 if multiline
                 and (
-                    len(obj) > 7 or any(isinstance(x, (dict, list, tuple)) for x in obj)
+                    len(obj) > 7
+                    or any(isinstance(x, (dict, list, tuple)) for x in obj)
                 )
                 else ""
             )
             brackets = ("[", "]")
             lines_iter = (
-                pretty_view(item, multiline=multiline, __finish=False) for item in obj
+                pretty_view(item, multiline=multiline, __finish=False)
+                for item in obj
             )
 
         result += f"{brackets[0]}{new_line}"
@@ -166,7 +170,7 @@ def pretty_view(
         result += lines
         result += f"{new_line}{brackets[1]}"
     elif obj is None:
-        result = f"null"
+        result = "null"
     elif isinstance(obj, bool):
         result = f"{obj}".lower()
     elif isinstance(obj, (int, float)):
