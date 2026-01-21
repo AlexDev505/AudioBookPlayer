@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 import typing as ty
 from abc import ABC, abstractmethod
@@ -5,6 +7,10 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
+
+from aiodbcore.models import Field
+
+type BookFiles = dict[str, str]
 
 
 class BookStatus(Enum):
@@ -34,11 +40,14 @@ class Chapter:
 
 @dataclass(kw_only=True)
 class BookSource(ABC):
-    id: int = -1
-    source_url: str
-    cover: str
+    id: Field[int] = Field(-1)
+    related_book: Field[int] = Field(-1)
+    url: Field[str]
+    cover: Field[str]
 
-    status: BookStatus = BookStatus.NEW
+    status: Field[BookStatus] = Field(BookStatus.NEW)
+    files: Field[BookFiles] = Field(field(default_factory=dict))
+    """ Dict like {file_name: hash} """
 
     @property
     @abstractmethod
@@ -50,13 +59,33 @@ class BookSource(ABC):
     def dir_path(self) -> Path:
         pass
 
+    @property
+    def cover_path(self) -> Path:
+        return Path("cover.jpg")
+
+    @property
+    def is_downloaded(self) -> bool:
+        return bool(self.files)
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}(id={self.id}, url={self.url})"
+
+    def __format__(self, format_spec):
+        if format_spec == "colored":
+            return (
+                f"<g>{self.__class__.__name__}</g><w>("
+                f"<le>id</le>=<y>{self.id}</y>, "
+                f"<le>url</le>=<y>{self.url}</y>)</w>"
+            )
+        return repr(self)
+
 
 @dataclass(kw_only=True)
 class TextBook(BookSource):
-    publication: str
-    file_url: str
-    total_pages: int
-    read_pages: int = 0
+    publication: Field[str]
+    file_url: Field[str]
+    total_pages: Field[int]
+    read_pages: Field[int] = Field(0)
 
     @property
     def progress_percent(self) -> int:
@@ -69,10 +98,12 @@ class TextBook(BookSource):
 
 @dataclass(kw_only=True)
 class AudioBook(BookSource):
-    narrator: str
-    duration: str
-    chapters: list[Chapter]
-    progress: ListeningProgress = field(default_factory=ListeningProgress)
+    narrator: Field[str]
+    duration: Field[str]
+    chapters: Field[list[Chapter]]
+    progress: Field[ListeningProgress] = Field(
+        field(default_factory=ListeningProgress)
+    )
 
     @property
     def progress_percent(self) -> int:
@@ -98,56 +129,18 @@ class AudioBook(BookSource):
         return Path(".", self.narrator)
 
 
-@dataclass(kw_only=True)
-class BookPreview:
-    url: str
-    title: str
-    author: str
-    series_name: str
-    number_in_series: int
-    cover: str
-    narrators: str
-    publications: str
-    duration: str
+class SourceType(Enum):
+    AudioBook = AudioBook
+    TextBook = TextBook
 
 
 @dataclass(kw_only=True)
-class RawBook[SourceT: BookSource]:
-    url: str
-    title: str
-    author: str
-    series_name: str
-    number_in_series: int
-    description: str
-    cover: str
-    source: SourceT
-
-
-@dataclass(kw_only=True)
-class Book:
-    id: int = -1
-    url: str
-    title: str
-    author: str
-    series_name: str
-    number_in_series: int
-    description: str
-    cover: str
-    adding_date: datetime = field(default_factory=datetime.now)
-    favorite: bool = False
-
-    _text_sources: list[TextBook] = field(default_factory=list)
-    _audio_sources: list[AudioBook] = field(default_factory=list)
-
-    def iter_sources(self) -> ty.Generator[BookSource]:
-        yield from self._text_sources
-        yield from self._audio_sources
-
-    def add_text_source(self, source: TextBook) -> None:
-        self._text_sources.append(source)
-
-    def add_audio_source(self, source: AudioBook) -> None:
-        self._audio_sources.append(source)
+class BookData:
+    title: Field[str]
+    author: Field[str]
+    series_name: Field[str]
+    number_in_series: Field[str]
+    description: Field[str]
 
     @property
     def book_path(self) -> Path:
@@ -178,6 +171,55 @@ class Book:
         :returns: Absolute path to the book cover file
         """
         return self.dir_path / "cover.jpg"
+
+
+@dataclass(kw_only=True)
+class BookPreview(BookData):
+    url: str
+    cover: str
+    narrator: str
+    publication: str
+    duration: str
+
+
+@dataclass(kw_only=True)
+class RawBook[SourceT: BookSource](BookData):
+    source: SourceT
+
+    @property
+    def dir_path(self) -> Path:
+        return super().dir_path / self.source.dir_path
+
+
+@dataclass(kw_only=True)
+class Book(BookData):
+    id: Field[int] = Field(-1)
+    cover: Field[str]
+    adding_date: Field[datetime] = Field(field(default_factory=datetime.now))
+    favorite: Field[bool] = Field(False)
+
+    _text_sources: list[TextBook] = field(default_factory=list)
+    _audio_sources: list[AudioBook] = field(default_factory=list)
+
+    def iter_sources(self) -> ty.Generator[BookSource]:
+        yield from self._text_sources
+        yield from self._audio_sources
+
+    def add_text_source(self, source: TextBook) -> None:
+        self._text_sources.append(source)
+
+    def add_audio_source(self, source: AudioBook) -> None:
+        self._audio_sources.append(source)
+
+    def to_raw_book[T: BookSource](self, source: T) -> RawBook[T]:
+        return RawBook(
+            title=self.title,
+            author=self.author,
+            series_name=self.series_name,
+            number_in_series=self.number_in_series,
+            description=self.description,
+            source=source,
+        )
 
     def __repr__(self):
         return f"Book(id={self.id}, title={self.title})"

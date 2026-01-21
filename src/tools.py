@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import hashlib
 import math
+import os
 import re
+import subprocess
 import typing as ty
 
 import pygments.formatters
@@ -116,6 +118,28 @@ def get_file_hash(file_path: str | Path, hash_func=hashlib.sha256) -> str:
         f"{hash_func.name} of {str(file_path)}: <y>{file_hash}</y>"
     )
     return file_hash
+
+
+def get_audio_file_duration(file_path: Path) -> float:
+    """
+    :param file_path: Path to the audio file.
+    :returns: Duration of the audio file in seconds.
+    """
+    result = subprocess.check_output(
+        rf'{os.environ["FFMPEG_PATH"]} -v quiet -stats -i "{file_path}" -f null -',
+        shell=True,
+        stderr=subprocess.STDOUT,
+        stdin=subprocess.DEVNULL,
+    ).decode()
+    if not (match := re.findall(r"time=(\d+):(\d{2}):(\d{2}).(\d{2})", result)):
+        return 0
+    match = match[-1]
+    return (
+        int(match[0]) * 3600
+        + int(match[1]) * 60
+        + int(match[2])
+        + int(match[3]) / 100
+    )
 
 
 def pretty_view(

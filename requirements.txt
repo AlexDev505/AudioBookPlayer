@@ -4,3 +4,5 @@ flask==2.2.4
 cryptography
 platformdirs
 pygments
+aiodbcore==0.6.0
+websockets

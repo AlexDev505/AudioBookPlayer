@@ -1,23 +1,23 @@
 from __future__ import annotations
 
 import os
-import types as tys
 import typing as ty
 from abc import ABC, abstractmethod
 
 import requests
+
 from models.book import BookSource
 
-from .tools import NotImplementedVariable
+from .tools import NotImplementedVariable, get_source_type
 
 if ty.TYPE_CHECKING:
     from models.book import BookPreview, RawBook
 
-    from .downloaders import BaseDownloader
+    from .base_downloader import BaseDownloader
 
 
-class Driver[SourceT: BookSource](ABC):
-    drivers: list[ty.Type[Driver]] = []
+class BaseDriver[SourceT: BookSource](ABC):
+    drivers: list[ty.Type[BaseDriver]] = []
     """ All available drivers """
 
     site_url: str = NotImplementedVariable()  # type: ignore
@@ -27,24 +27,37 @@ class Driver[SourceT: BookSource](ABC):
         NotImplementedVariable()
     )  # type: ignore
 
+    session_factory: ty.Callable[[], requests.Session] = requests.Session
+    __session: requests.Session | None = None
+
     def __init_subclass__(cls, **__):
         if ABC not in cls.__bases__:
-            Driver.drivers.append(cls)
+            if get_source_type(cls) != get_source_type(cls.downloader_factory):
+                raise TypeError(
+                    f"Driver `{cls.__name__}` must have the same source type "
+                    "as its downloader factory"
+                )
+            BaseDriver.drivers.append(cls)
 
     @classmethod
-    def get_suitable_driver(cls, url: str) -> ty.Type[Driver] | None:
+    def get_suitable_driver(cls, url: str) -> ty.Type[BaseDriver] | None:
         return next(
             filter(lambda driver: url.startswith(driver.site_url), cls.drivers),
             None,
         )
 
-    @staticmethod
-    def get_page(url: str) -> requests.Response:
+    def get_page(self, url: str) -> requests.Response:
         """
         :param url: URL of the book
         :returns: Result of the GET request
         """
-        return requests.get(url)
+        return self._session.get(url)
+
+    @property
+    def _session(self) -> requests.Session:
+        if self.__class__.__session is None:
+            self.__class__.__session = self.session_factory()
+        return self.__class__.__session
 
     @abstractmethod
     def get_book(self, url: str) -> RawBook[SourceT]:
@@ -82,18 +95,8 @@ class Driver[SourceT: BookSource](ABC):
     def driver_name(cls) -> str:
         return cls.__name__
 
-    @classmethod
-    @property
-    def source_type(cls) -> ty.Type[BookSource]:
-        generic_types = ty.get_args(tys.get_original_bases(cls)[0])[0]
-        if type(generic_types) is ty.TypeVar:
-            raise NotImplementedError("book source type not specified")
-        if (source_type := generic_types[0]) is not BookSource:
-            raise TypeError(f"expected BookSource, got {source_type}")
-        return source_type
 
-
-class LicensedDriver(Driver, ABC):
+class LicensedDriver(BaseDriver, ABC):
     AUTH_FILE: str
     is_authed: bool = False
 

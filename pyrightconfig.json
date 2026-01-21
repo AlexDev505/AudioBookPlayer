@@ -1,3 +1,8 @@
 {
-    "pythonPath": "venv/bin/python"
+  "pythonPath": "venv/bin/python",
+  "executionEnvironments": [
+    {
+      "root": "src",
+    },
+  ],
 }

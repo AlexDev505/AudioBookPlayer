@@ -1,0 +1,104 @@
+from __future__ import annotations
+
+import asyncio
+import typing as ty
+from functools import partial
+from urllib.parse import urljoin
+
+from loguru import logger
+from m3u8 import M3U8
+
+from ..base_downloader import BaseAudioDownloader, DownloadProcessStatus, File
+from ..tools import fix_m4a_meta
+
+if ty.TYPE_CHECKING:
+    from models.book import Chapter
+
+
+class M3U8Downloader(BaseAudioDownloader):
+    """
+    A loader designed for books in which files are presented M3U8 file.
+    """
+
+    def __init__(self, book, process_handler=None):
+        super().__init__(book, process_handler)
+
+        self._fixes_tasks: list[asyncio.Future] = []
+
+    def _prepare_files_data(self):
+        pass
+
+    async def _prepare_file_data(
+        self, chapter_index: int, chapter: Chapter
+    ) -> None:
+        assert self._session is not None
+        async with self._session.get(chapter.url) as response:
+            m3u8_text = await response.text()
+        m3u8_data = M3U8(m3u8_text, chapter.url.removesuffix("/play.m3u8"))
+        url = urljoin(m3u8_data.base_uri, m3u8_data.segments[0].uri)
+        duration = sum(segment.duration for segment in m3u8_data.segments)
+        size = sum(map(int, m3u8_data.segments[-1].byterange.split("@"))) - int(
+            m3u8_data.segments[0].byterange.split("@")[1]
+        )
+        ranges = [
+            tuple(map(int, segment.byterange.split("@")))
+            for segment in m3u8_data.segments
+        ]
+        ranges.insert(0, (ranges[0][1], 0))
+        if self.process_handler:
+            self.total_size += size
+        self._files.append(
+            File(
+                index=chapter_index,
+                name=self._get_chapter_file_name(chapter_index, ".m4a"),
+                url=url,
+                size=size,
+                extra=dict(ranges=ranges, duration=duration),
+            )
+        )
+        if self.process_handler:
+            self.process_handler.progress(1)
+
+    async def _prepare(self):
+        if self.process_handler:
+            self.total_size = 0
+            self.process_handler.init_status(
+                DownloadProcessStatus.PREPARING, len(self._book.source.chapters)
+            )
+
+        await self._tasks_manager.wait_finishing(
+            (
+                self._prepare_file_data(i, chapter)
+                for i, chapter in enumerate(self._book.source.chapters)
+            )
+        )
+        self._files.sort(key=lambda x: x.index)
+
+    async def _file_downloaded(self, file, file_path) -> None:
+        self._fixes_tasks.append(
+            asyncio.get_event_loop().run_in_executor(
+                None, partial(fix_m4a_meta, file_path)
+            )
+        )
+
+    async def _finish(self) -> None:
+        await asyncio.gather(*self._fixes_tasks)
+        await super()._finish()
+
+    async def _iter_chunks(self, file, offset=0):
+        current_range_index = file.extra.get("current_range_index", 0)
+        current_range = file.extra["ranges"][current_range_index]
+        file.extra["headers"] = {
+            "Range": f"bytes={max(offset, current_range[1])}-{sum(current_range) - 1}"
+        }
+        logger.trace(f"{file.extra['headers']}")
+        async for chunk in super()._iter_chunks(file, 0):
+            yield chunk
+        if current_range_index + 1 == len(file.extra["ranges"]):
+            return
+        file.extra["current_range_index"] = current_range_index + 1
+        async for chunk in self._iter_chunks(file, offset):
+            yield chunk
+
+    async def _terminate(self) -> None:
+        await asyncio.gather(*self._fixes_tasks)
