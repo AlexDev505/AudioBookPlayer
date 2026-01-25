@@ -2,7 +2,7 @@
 loguru==0.7.2
 requests==2.32.0
 flask==3.0.1
-pywebview==5.3.2
+pywebview==6.1
 orjson==3.9.15
 beautifulsoup4==4.12.3
 m3u8==4.0.0

@@ -182,7 +182,11 @@ async def __download_file(
         async with session.get(
             url, headers={"Range": f"bytes={offset}-"}
         ) as resp:
-            if resp.headers.get("content-type") != "application/octet-stream":
+            if (ct := resp.headers.get("content-type")) not in {
+                "application/octet-stream",
+                "application/java-archive",
+            }:
+                logger.error(f"Invalid content type for file: {url} - {ct}")
                 await asyncio.sleep(5)
                 raise RuntimeError("Invalid content type")
             total_size = int(resp.headers.get("content-length", 1))
@@ -192,9 +196,10 @@ async def __download_file(
                 window.evaluate_js(
                     f"downloadingCallback({offset / (total_size / 100)})"
                 )
-    except (requests.exceptions.ConnectionError, RuntimeError):
+    except (requests.exceptions.ConnectionError, RuntimeError) as err:
         if _retry == 3:
             logger.error(f"Failed to download file: {url}")
+            logger.exception(err)
             window.evaluate_js("setStatus('ошибка. повторите позже')")
             window.evaluate_js("finishDownloading()")
             time.sleep(5)
