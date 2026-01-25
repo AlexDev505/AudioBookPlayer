@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "ABPlayer"
-!define PRODUCT_VERSION "3.3.1"
+!define PRODUCT_VERSION "3.4.0"
 !define PRODUCT_PUBLISHER "AlexDev505"
 !define PRODUCT_WEB_SITE "https://github.com/AlexDev505/AudioBookPlayer"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\ABPlayer.exe"
@@ -199,8 +199,6 @@ Section "ABPlayer" SEC01
   File "ABPlayer\_internal\cryptography-45.0.6.dist-info\licenses\LICENSE"
   File "ABPlayer\_internal\cryptography-45.0.6.dist-info\licenses\LICENSE.APACHE"
   File "ABPlayer\_internal\cryptography-45.0.6.dist-info\licenses\LICENSE.BSD"
-  SetOutPath "$INSTDIR\_internal\flask-3.0.1.dist-info"
-  File "ABPlayer\_internal\flask-3.0.1.dist-info\LICENSE.rst"
   SetOutPath "$INSTDIR\_internal\frozenlist"
   File "ABPlayer\_internal\frozenlist\_frozenlist.cp312-win_amd64.pyd"
   SetOutPath "$INSTDIR\_internal\itsdangerous-2.2.0.dist-info"
@@ -350,6 +348,7 @@ Section "ABPlayer" SEC01
   File "ABPlayer\_internal\webview\js\api.js"
   File "ABPlayer\_internal\webview\js\customize.js"
   File "ABPlayer\_internal\webview\js\finish.js"
+  File "ABPlayer\_internal\webview\js\state.js"
   SetOutPath "$INSTDIR\_internal\webview\js\lib"
   File "ABPlayer\_internal\webview\js\lib\dom_json.js"
   File "ABPlayer\_internal\webview\js\lib\polyfill.js"
