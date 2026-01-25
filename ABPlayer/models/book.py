@@ -118,7 +118,9 @@ class Book:
         path = path = os.path.join("./", self.author)
         if self.series_name:
             book_name = (
-                f"{str(self.number_in_series).rjust(2, '0')}. {self.name}"
+                (f"{str(self.number_in_series).rjust(2, '0')}. {self.name}")
+                if self.number_in_series
+                else self.name
             )
             path = os.path.join(path, self.series_name, book_name)
         else:
@@ -188,7 +190,12 @@ class Book:
                 books_found += 1
                 yield book
             elif any(file_name.endswith(".mp3") for file_name in file_names):
-                id_parts = root.removeprefix(f"{dir_path}\\").split("\\")
+                id_parts = (
+                    book_dir := root.removeprefix(f"{dir_path}\\")
+                ).split("\\")
+                logger.opt(colors=True).debug(
+                    f"trying to load book from <y>{book_dir}</y>"
+                )
                 author = series_name = number_in_series = ""
                 if len(id_parts) == 1:
                     title = id_parts[0]
@@ -198,7 +205,9 @@ class Book:
                 elif len(id_parts) == 3:
                     author = id_parts[0]
                     series_name = id_parts[1]
-                    if match := re.fullmatch(r"([0-9.]+)\. (.+)", id_parts[2]):
+                    if match := re.fullmatch(
+                        r"([0-9.\-]+)\. (.+)", id_parts[2]
+                    ):
                         number_in_series = match.group(1)
                         title = match.group(2)
                     else:

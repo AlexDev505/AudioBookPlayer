@@ -264,6 +264,11 @@ function initBook(book) {
 }
 function togglePlayback() {
   if (opened_book && player.current_book.bid != opened_book.bid) {
+    pywebview.api.save_volume_and_speed(
+      player.current_book.bid,
+      player.volume * 100,
+      player.speed,
+    );
     initBook(opened_book);
     player.once("pause", (event) => {
       togglePlayback();

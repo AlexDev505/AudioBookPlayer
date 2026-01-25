@@ -22,6 +22,7 @@ from models.book import DATETIME_FORMAT, Status, StopFlag
 from tools import (
     convert_from_bytes,
     duration_sec_to_str,
+    duration_str_to_sec,
     make_book_preview,
     pretty_view,
 )

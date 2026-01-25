@@ -348,6 +348,9 @@ class SettingsApi(JSApi):
         logger.debug("unsubscribed from not stable releases")
         return self.make_answer()
 
+    def save_volume_and_speed(self, bid: int, volume: float, speed: float):
+        temp_file.update(**{f"volume_{bid}": volume, f"speed_{bid}": speed})
+
     @staticmethod
     def _request(url: str) -> dict | JSApiError:
         try:
