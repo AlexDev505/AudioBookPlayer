@@ -197,6 +197,7 @@ class Book(BookData):
     cover: Field[str]
     adding_date: Field[datetime] = Field(field(default_factory=datetime.now))
     favorite: Field[bool] = Field(False)
+    status: Field[BookStatus] = Field(BookStatus.NEW)
 
     _text_sources: list[TextBook] = field(default_factory=list)
     _audio_sources: list[AudioBook] = field(default_factory=list)
