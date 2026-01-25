@@ -3,7 +3,6 @@ from __future__ import annotations
 import difflib
 import os
 import shutil
-import time
 import typing as ty
 from contextlib import suppress
 from dataclasses import asdict
@@ -12,6 +11,7 @@ from functools import partial
 from pathlib import Path
 
 import requests.exceptions
+import temp_file
 from database import Database
 from drivers import BaseDownloadProcessHandler, DownloadProcessStatus, Driver
 from drivers import download as download_book
@@ -656,7 +656,7 @@ class BooksApi(JSApi):
         return self.make_answer()
 
     def _answer_book(self, book: Book, listening_data: bool = False) -> dict:
-        data = dict(
+        data: dict[str, ty.Any] = dict(
             bid=book.id,
             author=book.author,
             name=book.name,
@@ -683,6 +683,7 @@ class BooksApi(JSApi):
         )
         if listening_data:
             book_path = book.book_path
+            temp_data = temp_file.load()
             data.update(
                 dict(
                     stop_flag=asdict(book.stop_flag),
@@ -691,6 +692,8 @@ class BooksApi(JSApi):
                         os.path.join(book_path, file_name)
                         for file_name in book.files
                     ],
+                    volume=temp_data.get(f"volume_{book.id}"),
+                    speed=temp_data.get(f"speed_{book.id}"),
                 )
             )
         return data

@@ -63,7 +63,11 @@ class WindowControlsApi(JSApi):
             volume=volume,
             speed=speed,
             **(
-                dict(last_listened_book_bid=last_listened_book_bid)
+                {
+                    "last_listened_book_bid": last_listened_book_bid,
+                    f"volume_{last_listened_book_bid}": volume,
+                    f"speed_{last_listened_book_bid}": speed,
+                }
                 if last_listened_book_bid is not None
                 else {}
             ),

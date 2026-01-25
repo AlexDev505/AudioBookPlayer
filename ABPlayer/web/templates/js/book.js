@@ -228,6 +228,16 @@ document.addEventListener("DOMContentLoaded", (event) => {
 });
 
 function initBook(book) {
+  if (book.volume !== null) {
+    var scale = document.getElementById("volume-input");
+    scale.value = book.volume;
+    scale.oninput();
+  }
+  if (book.speed !== null) {
+    var scale = document.getElementById("speed-input");
+    scale.value = book.speed;
+    scale.oninput();
+  }
   smallPlayer.classList.add("visible");
   smallPlayer.querySelector(".small-playback-control").style =
     `background-image: url('${book.preview}'), url('/library/${book.local_preview}');`;
