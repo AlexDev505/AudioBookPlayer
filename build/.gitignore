@@ -1,3 +1,9 @@
+installers/
+updates/
+ABplayer*/
+ABPlayerUpdater*.exe
+.env
+
 .buildozer/
 bin/
 adb

@@ -2,6 +2,7 @@ import os
 import platform
 
 import platformdirs
+
 from tools import pretty_view
 
 # CONFIG SETUP
@@ -9,6 +10,7 @@ from tools import pretty_view
 os.environ["APP_DIR"] = os.path.join(
     platformdirs.user_data_dir(), "AudioBookPlayer"
 )
+
 if not os.path.exists(os.environ["APP_DIR"]):
     os.mkdir(os.environ["APP_DIR"])
 # Path to the configuration file
@@ -26,7 +28,6 @@ os.environ["AUTH_DIR"] = os.path.join(os.environ["APP_DIR"], "auth")
 # Platform params
 os.environ["PLATFORM"] = platform.system()
 os.environ["ARCH"] = platform.architecture()[0]
-print(os.environ["PLATFORM"], os.environ["ARCH"], os.environ["APP_DIR"])
 # App version
 os.environ["VERSION"] = "4.0.0-dev.0"
 
@@ -40,12 +41,15 @@ from logger import logger  # noqa
 
 def main() -> None:
     import webview
+
     from starting_window import create_starting_window
 
     logger.opt(colors=True).debug(
         "starting params: "
         + pretty_view(
             dict(
+                platform=os.environ["PLATFORM"],
+                arch=os.environ["ARCH"],
                 app_dir=os.environ["APP_DIR"],
                 debug=bool(os.environ.get("DEBUG")),
                 logging_level=os.environ["LOGGING_LEVEL"],

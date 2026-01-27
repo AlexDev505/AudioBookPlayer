@@ -3,6 +3,8 @@ import sys
 
 from flask import Flask, render_template, send_from_directory
 
+import temp_file
+
 if getattr(sys, "frozen", False):
     ROOT_DIR = getattr(sys, "_MEIPASS")
 else:
@@ -18,10 +20,15 @@ app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 1  # disable caching
 
 @app.route("/")
 def index():
-    temp_data = {}
+    temp_data = temp_file.load()
     return render_template(
         "base.html",
+        platform=os.environ["PLATFORM"],
         app_version=os.environ["VERSION"],
+        dark_theme=bool(int(os.environ["dark_theme"])),
+        lang=os.environ["language"],
+        is_main_menu_opened=temp_data.get("is_main_menu_opened", True),
+        gettext=_,
     )
 
 

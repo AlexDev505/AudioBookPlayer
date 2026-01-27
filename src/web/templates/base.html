@@ -2,23 +2,37 @@
 <html lang="ru">
     <head>
         <meta charset="UTF-8" />
+        {% if dark_theme %}
         <link
             class="theme"
             rel="stylesheet"
-            href="{{url_for('static', filename='css/dark_theme.css')}}"
+            href="{{ url_for('static', filename='css/dark_theme.css') }}"
         />
+        {% else %}
+        <link
+            class="theme"
+            rel="stylesheet"
+            href="{{ url_for('static', filename='css/light_theme.css') }}"
+        />
+        {% endif %}
         <link
             rel="stylesheet"
-            href="{{url_for('static', filename='css/base.css')}}"
+            href="{{ url_for('static', filename='css/base.css') }}"
         />
-        <script></script>
+        <script>
+            var menu_opened = {{ is_main_menu_opened|tojson }}
+            var lang = {{ lang|tojson }}
+            var dark_theme = {{ (true if dark_theme else false)|tojson }}
+            var platform = {{ platform|tojson }}
+        </script>
+        <script type="module" src="/static/js/plyr/plyr.js"></script>
         <script
             defer
-            src="{{url_for('static', filename='js/base.js')}}"
+            src="{{ url_for('static', filename='js/base.js') }}"
         ></script>
-        <!--<script type="module" src="/static/js/plyr/plyr.js"></script>-->
     </head>
     <body>
+        {% if platform == "Windows" %}
         <div id="top-bar">
             <div id="logo">AB PLayer</div>
             <div id="window-controls">
@@ -37,9 +51,98 @@
                 ></button>
             </div>
         </div>
+        {% endif %}
 
-        ABOBA
+        <div id="central-frame">
+            <div
+                id="side-menu"
+                class="{{ 'collapsed' if not is_main_menu_opened else '' }}"
+            >
+                <div>
+                    <div
+                        id="menu-btn"
+                        class="iconned-btn"
+                        onclick="toggleMenu()"
+                    >
+                        <span>{{ gettext('base.hide_menu') }}</span>
+                    </div>
+                    <hr />
+                    <div
+                        id="library-btn"
+                        class="iconned-btn"
+                        onclick="openLibraryPage(false)"
+                    >
+                        <span>{{ gettext("base.library") }}</span>
+                    </div>
+                    <div
+                        id="favorite-btn"
+                        class="iconned-btn"
+                        onclick="openLibraryPage(true)"
+                    >
+                        <span>{{ gettext("base.favorite") }}</span>
+                    </div>
+                    <div
+                        id="add-book-btn"
+                        class="iconned-btn"
+                        onclick="page('search-page').show()"
+                    >
+                        <span>{{ gettext("base.search_book") }}</span>
+                    </div>
+                    <div
+                        id="downloads-btn"
+                        class="iconned-btn"
+                        onclick="page('downloads-page').show()"
+                    >
+                        <span>{{ gettext("base.downloads") }}</span>
+                    </div>
+                </div>
+                <div>
+                    <div
+                        id="licensed-btn"
+                        class="iconned-btn"
+                        onclick="page('licensed-page').show()"
+                    >
+                        <span>{{ gettext("base.licensed") }}</span>
+                    </div>
+                    <div
+                        id="library-dir-btn"
+                        class="iconned-btn"
+                        onclick="openLibraryDir()"
+                    >
+                        <span>{{ gettext("base.books_folder") }}</span>
+                    </div>
+                    <div
+                        id="settings-btn"
+                        class="iconned-btn"
+                        onclick="page('settings-page').show()"
+                    >
+                        <span>{{ gettext("base.settings") }}</span>
+                    </div>
+                </div>
+            </div>
+            <div id="content-frame">
+                <div class="page" id="library-page">
+                    {% include "library.html" %}
+                </div>
+                <div class="page" id="search-page">
+                    {% include "search.html" %}
+                </div>
+                <div class="page" id="downloads-page">
+                    {% include "downloads.html" %}
+                </div>
+                <div class="page" id="book-page">{% include "book.html" %}</div>
+                <div class="page" id="settings-page">
+                    {% include "settings.html" %}
+                </div>
+                <div class="page" id="licensed-page">
+                    {% include "licensed.html" %}
+                </div>
+            </div>
+        </div>
 
+        <div id="notifications"></div>
+
+        {% if platform == "Windows" %}
         <div class="size-grip corner-grip" data-place="top-left"></div>
         <div class="size-grip corner-grip" data-place="top-right"></div>
         <div class="size-grip corner-grip" data-place="bottom-right"></div>
@@ -48,5 +151,6 @@
         <div class="size-grip side-grip" data-place="top"></div>
         <div class="size-grip side-grip" data-place="right"></div>
         <div class="size-grip side-grip" data-place="bottom"></div>
+        {% endif %}
     </body>
 </html>

@@ -69,9 +69,3 @@ class Database(SyncDBCore[Book | TextBook | AudioBook]):
         self, sid: int, source_type: type[SourceT]
     ) -> SourceT | None:
         return self.fetchone(source_type, where=source_type.id == sid)
-
-
-Database.init(
-    f"sqlite://{os.environ['DATABASE_PATH']}",
-    check_same_thread=False,
-)

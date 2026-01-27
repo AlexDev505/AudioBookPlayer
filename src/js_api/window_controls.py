@@ -19,7 +19,6 @@ class WindowControlsApi(JSApi):
 
     def close_app(self) -> None:
         logger.debug("closing app")
-        self._save_session_at_exit()
         self._window.destroy()
 
     def minimize_app(self) -> None:
@@ -39,37 +38,6 @@ class WindowControlsApi(JSApi):
 
     def resize_drag(self, size_grip: str) -> None:
         resize_handler(self._window, size_grip)
-
-    def _save_session_at_exit(self) -> None:
-        logger.debug("saving session data")
-        scale_k = query_scale_k()
-        width = int(self._window.width / scale_k)
-        height = int(self._window.height / scale_k)
-        # is_main_menu_opened = self._window.evaluate_js("menu_opened")
-        # is_filter_menu_opened = self._window.evaluate_js("filter_menu_opened")
-        # required_drivers = self._window.evaluate_js("required_drivers")
-        # volume = self._window.evaluate_js("player.volume") * 100
-        # speed = self._window.evaluate_js("player.speed")
-        # last_listened_book_bid = self._window.evaluate_js(
-        #     "(player.current_book)?player.current_book.bid:null"
-        # )
-        # temp_file.update(
-        #     width=width,
-        #     height=height,
-        #     is_main_menu_opened=is_main_menu_opened,
-        #     is_filter_menu_opened=is_filter_menu_opened,
-        #     required_drivers=",".join(required_drivers),
-        #     volume=volume,
-        #     speed=speed,
-        #     **(
-        #         dict(last_listened_book_bid=last_listened_book_bid)
-        #         if last_listened_book_bid is not None
-        #         else {}
-        #     ),
-        # )
-        # if last_listened_book_bid is None:
-        #     temp_file.delete_items("last_listened_book_bid")
-        logger.trace("session data saved")
 
 
 class POINT(Structure):
