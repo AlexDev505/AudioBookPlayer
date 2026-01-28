@@ -4,5 +4,7 @@ loguru
 flask==2.2.4
 platformdirs
 pygments
+orjson
+cryptography
 aiodbcore==0.6.1
 websockets

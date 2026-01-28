@@ -4,14 +4,15 @@ title = ABPlayer
 package.name = abp
 package.domain = com.abplayer
 source.dir = ../src
-source.include_exts = py,png,jpg,svg,gif,atlas,html,jar,css,js
+source.include_exts = py,png,jpg,svg,gif,atlas,html,jar,css,js,mo
 source.include_patterns = assets/*
 
 # version.regex = os.environ\["VERSION"] = "(.*)"
 # version.filename = %(source.dir)s/main.py
 version = 4.0.0
 
-requirements = python3==3.14.2,hostpython3==3.14.2,kivy,pywebview,bottle,proxy-tools,typing_extensions,platformdirs,flask==2.2.4,loguru,pygments
+requirements = python3==3.14.2,hostpython3==3.14.2,git+https://github.com/pythonnet/pythonnet@python3.14,kivy,pywebview,cryptography,bottle,proxy-tools,typing_extensions,platformdirs,flask==2.2.4,loguru,pygments,orjson,aiodbcore==0.6.1,websockets
+p4a.local_recipes = ./recipes
 
 presplash.filename = ./sources/icon.png
 icon.filename = ./sources/icon.png
@@ -61,7 +62,8 @@ android.add_jars = /home/alexdev505/projects/AudioBookPlayer/venv/lib/python3.14
 
 # (list) The Android archs to build for, choices: armeabi-v7a, arm64-v8a, x86, x86_64
 # In past, was `android.arch` as we weren't supporting builds for multiple archs at the same time.
-android.archs = arm64-v8a, armeabi-v7a
+# android.archs = arm64-v8a, armeabi-v7
+android.archs = arm64-v8a
 
 # (bool) enables Android auto backup feature (Android API >=23)
 android.allow_backup = True

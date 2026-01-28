@@ -59,7 +59,7 @@ def main() -> None:
 
     create_starting_window()
     webview.start(
-        # ssl=True,
+        ssl=True,
         debug=bool(os.environ.get("DEBUG")),
         storage_path=os.path.join(os.environ["APP_DIR"], "WebViewCache"),
     )
