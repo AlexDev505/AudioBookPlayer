@@ -1,8 +1,8 @@
+git+https://github.com/pythonnet/pythonnet@python3.14
 pywebview~=6.0
 loguru
 flask==2.2.4
-cryptography
 platformdirs
 pygments
-aiodbcore==0.6.0
+aiodbcore==0.6.1
 websockets
