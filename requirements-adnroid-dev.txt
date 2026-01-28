@@ -1,3 +1,0 @@
-buildozer
-setuptools
-cython==0.29.34

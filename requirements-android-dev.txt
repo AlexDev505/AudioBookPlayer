@@ -1,0 +1,4 @@
+git+https://github.com/kivy/buildozer
+legacy-cgi
+setuptools
+cython==0.29.34
