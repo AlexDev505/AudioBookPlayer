@@ -2,6 +2,7 @@
 <html lang="ru">
     <head>
         <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         {% if dark_theme %}
         <link
             class="theme"
@@ -31,7 +32,7 @@
             src="{{ url_for('static', filename='js/base.js') }}"
         ></script>
     </head>
-    <body>
+    <body data-platform="{{ platform }}"></body>
         {% if platform == "Windows" %}
         <div id="top-bar">
             <div id="logo">AB PLayer</div>
