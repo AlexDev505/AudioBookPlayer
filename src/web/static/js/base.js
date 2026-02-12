@@ -40,9 +40,7 @@ if (platform == "Windows") {
 
 var sideMenu = document.getElementById("side-menu");
 function toggleMenu() {
-  if (menu_opened) sideMenu.classList.add("collapsed");
-  else sideMenu.classList.remove("collapsed");
-  menu_opened = !menu_opened;
+  pywebview.state.menu_opened = !sideMenu.classList.toggle("collapsed");
 }
 
 class Page {
@@ -99,13 +97,14 @@ function openPageFromUrlParams() {
 }
 
 window.addEventListener("pywebviewready", function () {
-  parseUrlParams();
-  pywebview.api.check_for_updates().then(checkForUpdates);
-  pywebview.api.get_downloads().then(showDownloads);
-  pywebview.api.get_available_drivers().then(loadAvailableDrivers);
-  toggleDarkThemeCheckBox(dark_theme);
-  toggleLanguageButton(lang);
-  loadLastListenedBook();
+  openPageFromUrlParams();
+  pywebview.state.menu_opened = !sideMenu.classList.contains("collapsed");
+  // pywebview.api.check_for_updates().then(checkForUpdates);
+  // pywebview.api.get_downloads().then(showDownloads);
+  // pywebview.api.get_available_drivers().then(loadAvailableDrivers);
+  // toggleDarkThemeCheckBox(dark_theme);
+  // toggleLanguageButton(lang);
+  // loadLastListenedBook();
 });
 
 function openLibraryPage(favorite = null) {

@@ -51,13 +51,14 @@ def load() -> dict[str, str | int | float | bool]:
             item.strip(),
         )  # Pattern matching
         if match:
-            if value := _adapt_value(match.group("value"), match.group("type")):
+            if (
+                value := _adapt_value(match.group("value"), match.group("type"))
+            ) is not None:
                 result[match.group("key")] = value
         else:
             logger.debug(
                 f"failed to retrieve information from string <y>{item}</y>"
             )
-
     logger.opt(lazy=True).trace(
         "temp data: {data}", data=partial(pretty_view, result)
     )

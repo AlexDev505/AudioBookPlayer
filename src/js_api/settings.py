@@ -19,7 +19,7 @@ class WindowControlsApi(JSApi):
             scale_k = window_controls.query_scale_k()
             data["width"] = int(self._window.width / scale_k)
             data["height"] = int(self._window.height / scale_k)
-        # is_main_menu_opened = self._window.evaluate_js("menu_opened")
+        data["is_main_menu_opened"] = self._window.state.menu_opened
         # is_filter_menu_opened = self._window.evaluate_js("filter_menu_opened")
         # required_drivers = self._window.evaluate_js("required_drivers")
         # volume = self._window.evaluate_js("player.volume") * 100

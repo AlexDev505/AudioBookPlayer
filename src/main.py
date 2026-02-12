@@ -8,7 +8,7 @@ from tools import pretty_view
 # CONFIG SETUP
 # Path to the application directory
 os.environ["APP_DIR"] = os.path.join(
-    platformdirs.user_data_dir(), "AudioBookPlayer"
+    platformdirs.user_data_dir(), "AudioBookPlayer-DEV"
 )
 
 if not os.path.exists(os.environ["APP_DIR"]):

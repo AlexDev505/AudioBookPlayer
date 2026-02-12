@@ -32,7 +32,7 @@
             src="{{ url_for('static', filename='js/base.js') }}"
         ></script>
     </head>
-    <body data-platform="{{ platform }}"></body>
+    <body data-platform="{{ platform }}">
         {% if platform == "Windows" %}
         <div id="top-bar">
             <div id="logo">AB PLayer</div>
@@ -98,13 +98,13 @@
                     </div>
                 </div>
                 <div>
-                    <div
+                    <!--<div
                         id="licensed-btn"
                         class="iconned-btn"
                         onclick="page('licensed-page').show()"
                     >
                         <span>{{ gettext("base.licensed") }}</span>
-                    </div>
+                    </div>-->
                     <div
                         id="library-dir-btn"
                         class="iconned-btn"
