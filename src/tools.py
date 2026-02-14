@@ -210,3 +210,11 @@ def pretty_view(
             pygments.formatters.TerminalFormatter(),  # noqa
         ).strip()
     return result
+
+
+def normalize_string(string: str) -> str:
+    return re.sub(r"[^\w\s]", "", string.lower())
+
+
+def normalize_author(author: str) -> str:
+    return " ".join(sorted(normalize_string(author).split()))

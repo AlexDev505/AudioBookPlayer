@@ -97,6 +97,8 @@ class AKniga(BaseDriver[AudioBook]):
     site_url = "https://akniga.org"
     downloader_factory = MergedM3U8Downloader
 
+    PER_PAGE = 12
+
     def __init__(self, js_api: ty.Type[BaseJsApi] = PyWebViewJsApi):
         super().__init__()
         self.js_api = js_api
@@ -195,18 +197,17 @@ class AKniga(BaseDriver[AudioBook]):
 
         return books
 
-    def search_books(self, query, limit=10, offset=0):
+    async def search_books(self, query, limit=10, offset=0):
         books: list[BookPreview] = []
-        page_number = 1
+        page_number = offset // self.PER_PAGE + 1
+        offset %= self.PER_PAGE
 
-        while True:
-            if len(books) == limit:
-                break
-
+        while len(books) < limit:
             url = self.site_url + f"/search/books/page{page_number}/?q={query}"
 
-            page = self.get_page(url)
-            soup = BeautifulSoup(page.text, "html.parser")
+            async with self._async_session.get(url) as response:
+                page = await response.text()
+            soup = BeautifulSoup(page, "html.parser")
 
             if not (
                 elements := soup.select(
@@ -216,12 +217,8 @@ class AKniga(BaseDriver[AudioBook]):
                 break
 
             if offset:
-                if offset > len(elements):
-                    offset -= len(elements)
-                    elements.clear()
-                else:
-                    elements = elements[offset:]
-                    offset = 0
+                elements = elements[offset:]
+                offset = 0
 
             for card in elements:
                 if book := self._parse_book_card(card):
@@ -276,9 +273,9 @@ class AKniga(BaseDriver[AudioBook]):
                 series_name=safe_name(series_name),
                 number_in_series=number_in_series,
                 description="",
-                url=url,
+                urls={url},
                 cover=cover,
-                narrator=safe_name(narrator),
-                publication="",
-                duration=duration,
+                narrators={safe_name(narrator)},
+                publications=set(),
+                durations=[duration],
             )

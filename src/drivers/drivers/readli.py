@@ -2,6 +2,7 @@ import re
 from contextlib import suppress
 from copy import copy
 
+import orjson
 from bs4 import BeautifulSoup, Tag
 
 from models.book import BookPreview, RawBook, TextBook
@@ -87,18 +88,18 @@ class Readli(BaseDriver[TextBook]):
 
         return books
 
-    def search_books(self, query, limit=10, offset=0):
+    async def search_books(self, query, limit=10, offset=0):
         books: list[BookPreview] = []
 
-        while True:
-            if len(books) == limit:
-                break
-
+        while len(books) < limit:
             payload = copy(self.SEARCH_PAYLOAD)
             payload["offset"] = offset
             payload["q"] = query
 
-            data = self._session.post(self.SEARCH_URL, data=payload).json()
+            async with self._async_session.post(
+                self.SEARCH_URL, data=payload
+            ) as resp:
+                data = await resp.json(loads=orjson.loads)
             offset = data["offset"]
             soup = BeautifulSoup(data["html"], "html.parser")
 
@@ -136,9 +137,9 @@ class Readli(BaseDriver[TextBook]):
                 series_name=safe_name(series_name),
                 number_in_series=number_in_series,
                 description="",
-                url=self.site_url + url,
+                urls={self.site_url + url},
                 cover=cover,
-                narrator="",
-                publication="",
-                duration=total_pages,
+                narrators=set(),
+                publications=set(),
+                durations=[total_pages],
             )

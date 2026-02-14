@@ -1,1 +1,49 @@
-search
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/search.css') }}"
+/>
+<script defer src="{{ url_for('static', filename='js/search.js') }}"></script>
+
+<div id="search-page-content">
+    <div id="search-input-line-container">
+        <span id="search-label">{{ gettext("search_for_book") }}</span>
+        <div id="search-input-line" class="input-line">
+            <input
+                placeholder="{{ gettext("begin_typing") }}"
+                oninput="searchBooks()"
+            />
+            <div class="tools">
+                <button class="icon-btn search-btn"></button>
+            </div>
+        </div>
+    </div>
+
+    <div
+        id="search-results-container"
+        onscrollend="onSearchResultContainerScroll()"
+    ></div>
+    <div id="no-search-result">{{ gettext("search.empty") }}</div>
+</div>
+
+<template id="search-result-item-template">
+    <div class="search-result-item" data-urls="">
+        <div class="search-result-item-card">
+            <div
+                class="item-cover"
+                style="background-image: url()"
+            ></div>
+            <div>
+                <div class="item-title"></div>
+                <div class="item-info">
+                    <div class="item-author"></div>
+                    <div class="item-series-name"></div>
+                    <div class="item-narrator"></div>
+                    <div class="item-duration"></div>
+                </div>
+            </div>
+        </div>
+        <div class="icon-btn add-book-btn" onclick="addBook(this)">
+            <span>{{ gettext("book.add_to_library") }}</span>
+        </div>
+    </div>
+</template>

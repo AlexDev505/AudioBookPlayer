@@ -4,6 +4,7 @@ import os
 import typing as ty
 from abc import ABC, abstractmethod
 
+import aiohttp
 import requests
 
 from models.book import BookSource
@@ -28,7 +29,11 @@ class BaseDriver[SourceT: BookSource](ABC):
     )  # type: ignore
 
     session_factory: ty.Callable[[], requests.Session] = requests.Session
+    async_session_factory: ty.Callable[[], aiohttp.ClientSession] = (
+        aiohttp.ClientSession
+    )
     __session: requests.Session | None = None
+    __async_session: aiohttp.ClientSession | None = None
 
     def __init_subclass__(cls, **__):
         if ABC not in cls.__bases__:
@@ -59,6 +64,12 @@ class BaseDriver[SourceT: BookSource](ABC):
             self.__class__.__session = self.session_factory()
         return self.__class__.__session
 
+    @property
+    def _async_session(self) -> aiohttp.ClientSession:
+        if self.__class__.__async_session is None:
+            self.__class__.__async_session = self.async_session_factory()
+        return self.__class__.__async_session
+
     @abstractmethod
     def get_book(self, url: str) -> RawBook[SourceT]:
         """
@@ -78,7 +89,7 @@ class BaseDriver[SourceT: BookSource](ABC):
         """
 
     @abstractmethod
-    def search_books(
+    async def search_books(
         self, query: str, limit: int = 10, offset: int = 0
     ) -> list[BookPreview]:
         """
@@ -94,6 +105,9 @@ class BaseDriver[SourceT: BookSource](ABC):
     @property
     def driver_name(cls) -> str:
         return cls.__name__
+
+    def __hash__(self) -> int:
+        return hash(self.driver_name)
 
 
 class LicensedDriver(BaseDriver, ABC):

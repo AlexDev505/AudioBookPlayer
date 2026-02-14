@@ -56,7 +56,7 @@ class Page {
   }
   show() {
     if (this.constructor.current == this) return;
-    if (this.constructor.last) {
+    if (this.constructor.last && this.constructor.last != this) {
       if (this.constructor.last.unLoad)
         this.constructor.last.unLoad(this.constructor.last.el);
     }

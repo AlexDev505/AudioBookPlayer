@@ -6,9 +6,12 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
+from functools import cached_property
 from pathlib import Path
 
 from aiodbcore.models import Field
+
+from tools import normalize_author, normalize_string
 
 type BookFiles = dict[str, str]
 
@@ -175,11 +178,26 @@ class BookData:
 
 @dataclass(kw_only=True)
 class BookPreview(BookData):
-    url: str
+    urls: set[str]
     cover: str
-    narrator: str
-    publication: str
-    duration: str
+    narrators: set[str]
+    publications: set[str]
+    durations: set[str]
+
+    @cached_property
+    def __hash(self):
+        return hash(
+            (normalize_string(self.title), normalize_author(self.author))
+        )
+
+    def __hash__(self):
+        return self.__hash
+
+    def extend(self, other: BookPreview) -> None:
+        self.urls.update(other.urls)
+        self.narrators.update(other.narrators)
+        self.publications.update(other.publications)
+        self.durations.update(other.durations)
 
 
 @dataclass(kw_only=True)
@@ -189,6 +207,43 @@ class RawBook[SourceT: BookSource](BookData):
     @property
     def dir_path(self) -> Path:
         return super().dir_path / self.source.dir_path
+
+    def to_preview(self) -> BookPreview:
+        narrators, publications, durations = [], [], []
+        if isinstance(self.source, AudioBook):
+            if self.source.narrator:
+                narrators.append(self.source.narrator)
+            if self.source.duration:
+                durations.append(self.source.duration)
+        elif isinstance(self.source, TextBook):
+            if self.source.publication:
+                publications.append(self.source.publication)
+            if self.source.total_pages:
+                durations.append(self.source.total_pages)
+        return BookPreview(
+            title=self.title,
+            author=self.author,
+            series_name=self.series_name,
+            number_in_series=self.number_in_series,
+            description=self.description,
+            urls=[self.source.url],
+            cover=self.source.cover,
+            narrators=narrators,
+            publications=publications,
+            durations=durations,
+        )
+
+    def __repr__(self):
+        return f"RawBook(title={self.title}, source={self.source})"
+
+    def __format__(self, format_spec):
+        if format_spec == "colored":
+            return (
+                f"<g>RawBook</g><w>("
+                f"<le>title</le>=<y>{self.title}</y>, "
+                f"<le>source</le>={self.source:colored})</w>"
+            )
+        return repr(self)
 
 
 @dataclass(kw_only=True)

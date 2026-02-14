@@ -15,6 +15,8 @@ class KnigaVUhe(BaseDriver[AudioBook]):
     site_url = "https://knigavuhe.org"
     downloader_factory = MP3Downloader
 
+    PER_PAGE = 10
+
     def get_book(self, url: str):
         page = self.get_page(url)
         soup = BeautifulSoup(page.content, "html.parser")
@@ -99,45 +101,31 @@ class KnigaVUhe(BaseDriver[AudioBook]):
         ):
             if book := self._parse_book_card(card, author, series_name):
                 books.append(book)
-                url = title = narrator = ""
+                url = narrator = ""
                 for element in card.select(
                     "div.bookkitem_other_versions_list > a"
                 ):
                     if url == "":
                         url = self.site_url + element.attrs["href"]
-                        title = element.text
                     elif narrator == "":
                         narrator = element.text
-                        books.append(
-                            BookPreview(
-                                title=safe_name(title),
-                                author=safe_name(author),
-                                series_name=safe_name(series_name),
-                                number_in_series=book.number_in_series,
-                                description="",
-                                url=url,
-                                cover=book.cover,
-                                narrator=safe_name(narrator),
-                                publication="",
-                                duration="",
-                            )
-                        )
-                        url = title = narrator = ""
+                        book.urls.add(url)
+                        book.narrators.add(safe_name(narrator))
+                        url = narrator = ""
 
         return books
 
-    def search_books(self, query, limit=10, offset=0):
+    async def search_books(self, query, limit=10, offset=0):
         books: list[BookPreview] = []
-        page_number = 1
+        page_number = offset // self.PER_PAGE + 1
+        offset %= self.PER_PAGE
 
-        while True:
-            if len(books) == limit:
-                break
-
+        while len(books) < limit:
             url = self.site_url + f"/search/?q={query}&page={page_number}"
 
-            page = self.get_page(url)
-            soup = BeautifulSoup(page.text, "html.parser")
+            async with self._async_session.get(url) as resp:
+                page = await resp.text()
+            soup = BeautifulSoup(page, "html.parser")
 
             if not (
                 elements := soup.select(
@@ -147,12 +135,8 @@ class KnigaVUhe(BaseDriver[AudioBook]):
                 break
 
             if offset:
-                if offset > len(elements):
-                    offset -= len(elements)
-                    elements.clear()
-                else:
-                    elements = elements[offset:]
-                    offset = 0
+                elements = elements[offset:]
+                offset = 0
 
             for card in elements:
                 if book := self._parse_book_card(card, _("unknown_author"), ""):
@@ -188,9 +172,9 @@ class KnigaVUhe(BaseDriver[AudioBook]):
                 series_name=safe_name(series_name),
                 number_in_series=number_in_series,
                 description="",
-                url=self.site_url + url,
+                urls={self.site_url + url},
                 cover=cover,
-                narrator=safe_name(narrator),
-                publication="",
-                duration=duration,
+                narrators={safe_name(narrator)},
+                publications=set(),
+                durations=[duration],
             )
