@@ -11,7 +11,7 @@ source.include_patterns = assets/*
 # version.filename = %(source.dir)s/main.py
 version = 4.0.0
 
-requirements = python3==3.14.2,hostpython3==3.14.2,git+https://github.com/pythonnet/pythonnet@python3.14,kivy,pywebview,cryptography,bottle,proxy-tools,typing_extensions,platformdirs,flask==2.2.4,loguru,pygments,orjson,aiodbcore==0.6.1,websockets
+requirements = python3==3.14.2,hostpython3==3.14.2,git+https://github.com/pythonnet/pythonnet@python3.14,kivy,pywebview,cryptography,bottle,proxy-tools,typing_extensions,platformdirs,flask==2.2.4,loguru,pygments,orjson,aiodbcore==0.6.1,websockets,beautifulsoup4
 p4a.local_recipes = ./recipes
 
 presplash.filename = ./sources/icon.png

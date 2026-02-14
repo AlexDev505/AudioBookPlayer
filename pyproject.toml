@@ -1,0 +1,53 @@
+[project]
+name = "abplayer"
+version = "4.0.0-dev.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "AlexDev505", email = "aleks.filiov@yandex.ru" }
+]
+license = "MIT"
+license-files = ["LICENSE.txt"]
+requires-python = ">=3.14"
+dependencies = [
+    "aiodbcore==0.6.1",
+    "beautifulsoup4>=4.14.3",
+    "cryptography>=46.0.5",
+    "flask==2.2.4",
+    "loguru>=0.7.3",
+    "orjson>=3.11.7",
+    "platformdirs>=4.8.0",
+    "pygments>=2.19.2",
+    "pythonnet",
+    "pywebview>=6.1",
+    "websockets>=16.0",
+]
+
+[project.optional-dependencies]
+android-dev = [
+    "buildozer",
+    "legacy-cgi>=2.6.4",
+    "setuptools>=82.0.0",
+    "cython==0.29.34",
+]
+dev = [
+    "pyinstaller>=6.18.0",
+    "Babel>=2.18.0",
+    "scp==0.15.0",
+]
+
+[project.urls]
+Repository = "https://github.com/AlexDev505/AudioBookPlayer"
+
+
+[tool.pyright]
+root = "src"
+venvPath = "."
+venv = ".venv"
+
+[tool.ruff]
+builtins = ["_"]
+
+[tool.uv.sources]
+pythonnet = { git = "https://github.com/pythonnet/pythonnet", rev = "python3.14" }
+buildozer = { git = "git+https://github.com/kivy/buildozer" }
