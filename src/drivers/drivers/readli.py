@@ -97,7 +97,7 @@ class Readli(BaseDriver[TextBook]):
                 payload["offset"] = offset
                 payload["q"] = query
 
-                async with session.post(self.SEARCH_URL, data=payload) as resp:
+                async with session.post(self.SEARCH_URL, data=payload, ssl=False) as resp:
                     data = await resp.json(loads=orjson.loads)
                 offset = data["offset"]
                 soup = BeautifulSoup(data["html"], "html.parser")

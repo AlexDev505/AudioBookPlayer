@@ -209,7 +209,7 @@ class AKniga(BaseDriver[AudioBook]):
                     + f"/search/books/page{page_number}/?q={query}"
                 )
 
-                async with session.get(url) as response:
+                async with session.get(url, ssl=False) as response:
                     page = await response.text()
                 soup = BeautifulSoup(page, "html.parser")
 

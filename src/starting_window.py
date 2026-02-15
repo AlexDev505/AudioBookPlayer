@@ -29,8 +29,7 @@ def create_starting_window() -> webview.Window:
 
     logger.info("launching starting window...")
 
-    assert (
-        window := webview.create_window(
+    window = webview.create_window(
             "ABPLayer",
             app,
             width=210,
@@ -39,7 +38,6 @@ def create_starting_window() -> webview.Window:
             easy_drag=True,
             background_color="#202225",
         )
-    )
 
     # Adding event handlers
     window.events.loaded += _on_loaded

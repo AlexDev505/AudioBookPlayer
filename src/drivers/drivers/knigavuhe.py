@@ -124,7 +124,7 @@ class KnigaVUhe(BaseDriver[AudioBook]):
             while len(books) < limit:
                 url = self.site_url + f"/search/?q={query}&page={page_number}"
 
-                async with session.get(url) as resp:
+                async with session.get(url, ssl=False) as resp:
                     page = await resp.text()
                 soup = BeautifulSoup(page, "html.parser")
 

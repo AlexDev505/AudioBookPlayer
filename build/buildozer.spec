@@ -11,7 +11,7 @@ source.include_patterns = assets/*
 # version.filename = %(source.dir)s/main.py
 version = 4.0.0
 
-requirements = python3==3.14.2,hostpython3==3.14.2,git+https://github.com/pythonnet/pythonnet@python3.14,kivy,pywebview,cryptography,bottle,proxy-tools,typing_extensions,platformdirs,flask==2.2.4,loguru,pygments,orjson,aiodbcore==0.6.1,websockets,beautifulsoup4,requests,aiohttp,aiofiles,m3u8,pycryptodome
+requirements = python3==3.14.2,hostpython3==3.14.2,git+https://github.com/pythonnet/pythonnet@python3.14,kivy,pywebview,cryptography,bottle,proxy-tools,typing_extensions,platformdirs,flask==2.2.4,loguru,pygments,orjson,aiodbcore==0.6.2,websockets,beautifulsoup4,requests,aiohttp==3.13.3,aiofiles,m3u8,pycryptodome
 p4a.local_recipes = ./recipes
 
 presplash.filename = ./sources/icon.png
@@ -40,7 +40,7 @@ android.api = 36
 android.ndk = 29
 # (str) Android app theme, default is ok for Kivy-based app
 android.apptheme = @android:style/Theme.Material.NoActionBar
-android.add_jars = /home/alexdev505/projects/AudioBookPlayer/venv/lib/python3.14/site-packages/webview/lib/pywebview-android.jar
+android.add_jars = /home/alexdev505/projects/AudioBookPlayer/.venv/lib/python3.14/site-packages/webview/lib/pywebview-android.jar
 
 # (list) Put these files or directories in the apk assets directory.
 # Either form may be used, and assets need not be in 'source.include_exts'.
