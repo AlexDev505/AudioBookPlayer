@@ -6,10 +6,10 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from functools import cached_property
+from hashlib import md5
 from pathlib import Path
 
-from aiodbcore.models import Field
+from aiodbcore.models import Field, Index
 
 from tools import normalize_author, normalize_string
 
@@ -44,8 +44,8 @@ class Chapter:
 @dataclass(kw_only=True)
 class BookSource(ABC):
     id: Field[int] = Field(-1)
-    related_book: Field[int] = Field(-1)
-    url: Field[str]
+    related_book: ty.Annotated[Field[int], Index("related_book_id")] = Field(-1)
+    url: ty.Annotated[Field[str], Index("source_url", unique=True)]
     cover: Field[str]
 
     status: Field[BookStatus] = Field(BookStatus.NEW)
@@ -144,6 +144,22 @@ class BookData:
     series_name: Field[str]
     number_in_series: Field[str]
     description: Field[str]
+    hash: ty.Annotated[Field[str], Index("book_hash", unique=True)] = Field("")
+
+    def __post_init__(self):
+        self.hash = md5(
+            f"{normalize_string(self.title)} {normalize_author(self.author)}".encode()
+        ).hexdigest()
+
+    def asdict(self) -> dict[str, ty.Any]:
+        return dict(
+            title=self.title,
+            author=self.author,
+            series_name=self.series_name,
+            number_in_series=self.number_in_series,
+            description=self.description,
+            hash=self.hash,
+        )
 
     @property
     def book_path(self) -> Path:
@@ -184,20 +200,33 @@ class BookPreview(BookData):
     publications: set[str]
     durations: set[str]
 
-    @cached_property
-    def __hash(self):
-        return hash(
-            (normalize_string(self.title), normalize_author(self.author))
-        )
+    _updated: bool = False
 
-    def __hash__(self):
-        return self.__hash
+    def asdict(self):
+        res = super().asdict()
+        res.update(
+            cover=self.cover,
+            urls=list(self.urls),
+            narrators=list(self.narrators),
+            publications=list(self.publications),
+            durations=list(self.durations),
+            updated=self.updated,
+        )
+        return res
+
+    @property
+    def updated(self) -> bool:
+        if self._updated:
+            self._updated = False
+            return True
+        return False
 
     def extend(self, other: BookPreview) -> None:
         self.urls.update(other.urls)
         self.narrators.update(other.narrators)
         self.publications.update(other.publications)
         self.durations.update(other.durations)
+        self._updated = True
 
 
 @dataclass(kw_only=True)
@@ -209,24 +238,24 @@ class RawBook[SourceT: BookSource](BookData):
         return super().dir_path / self.source.dir_path
 
     def to_preview(self) -> BookPreview:
-        narrators, publications, durations = [], [], []
+        narrators, publications, durations = set(), set(), set()
         if isinstance(self.source, AudioBook):
             if self.source.narrator:
-                narrators.append(self.source.narrator)
+                narrators.add(self.source.narrator)
             if self.source.duration:
-                durations.append(self.source.duration)
+                durations.add(self.source.duration)
         elif isinstance(self.source, TextBook):
             if self.source.publication:
-                publications.append(self.source.publication)
+                publications.add(self.source.publication)
             if self.source.total_pages:
-                durations.append(self.source.total_pages)
+                durations.add(self.source.total_pages)
         return BookPreview(
             title=self.title,
             author=self.author,
             series_name=self.series_name,
             number_in_series=self.number_in_series,
             description=self.description,
-            urls=[self.source.url],
+            urls={self.source.url},
             cover=self.source.cover,
             narrators=narrators,
             publications=publications,

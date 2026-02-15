@@ -91,25 +91,26 @@ class Readli(BaseDriver[TextBook]):
     async def search_books(self, query, limit=10, offset=0):
         books: list[BookPreview] = []
 
-        while len(books) < limit:
-            payload = copy(self.SEARCH_PAYLOAD)
-            payload["offset"] = offset
-            payload["q"] = query
+        async with self.async_session_factory() as session:
+            while len(books) < limit:
+                payload = copy(self.SEARCH_PAYLOAD)
+                payload["offset"] = offset
+                payload["q"] = query
 
-            async with self._async_session.post(
-                self.SEARCH_URL, data=payload
-            ) as resp:
-                data = await resp.json(loads=orjson.loads)
-            offset = data["offset"]
-            soup = BeautifulSoup(data["html"], "html.parser")
+                async with session.post(self.SEARCH_URL, data=payload) as resp:
+                    data = await resp.json(loads=orjson.loads)
+                offset = data["offset"]
+                soup = BeautifulSoup(data["html"], "html.parser")
 
-            if not (elements := soup.select(".book")):
-                break
-            for card in elements:
-                if book := self._parse_book_card(card, _("unknown_author"), ""):
-                    books.append(book)
-                if len(books) == limit:
+                if not (elements := soup.select(".book")):
                     break
+                for card in elements:
+                    if book := self._parse_book_card(
+                        card, _("unknown_author"), ""
+                    ):
+                        books.append(book)
+                    if len(books) == limit:
+                        break
 
         return books
 
@@ -140,6 +141,6 @@ class Readli(BaseDriver[TextBook]):
                 urls={self.site_url + url},
                 cover=cover,
                 narrators=set(),
-                publications=set(),
-                durations=[total_pages],
+                publications=set("Readli"),
+                durations={total_pages},
             )

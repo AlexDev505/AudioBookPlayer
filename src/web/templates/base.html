@@ -122,20 +122,22 @@
                 </div>
             </div>
             <div id="content-frame">
-                <div class="page" id="library-page">
+                <div class="page" id="library-page" style="display: none">
                     {% include "library.html" %}
                 </div>
-                <div class="page" id="search-page">
+                <div class="page" id="search-page" style="display: none">
                     {% include "search.html" %}
                 </div>
-                <div class="page" id="downloads-page">
+                <div class="page" id="downloads-page" style="display: none">
                     {% include "downloads.html" %}
                 </div>
-                <div class="page" id="book-page">{% include "book.html" %}</div>
-                <div class="page" id="settings-page">
+                <div class="page" id="book-page" style="display: none">
+                    {% include "book.html" %}
+                </div>
+                <div class="page" id="settings-page" style="display: none">
                     {% include "settings.html" %}
                 </div>
-                <div class="page" id="licensed-page">
+                <div class="page" id="licensed-page" style="display: none">
                     {% include "licensed.html" %}
                 </div>
             </div>

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import types as tys
 import typing as ty
 from abc import ABC, abstractmethod
 
@@ -9,12 +10,11 @@ import requests
 
 from models.book import BookSource
 
-from .tools import NotImplementedVariable, get_source_type
+from .base_downloader import BaseDownloader
+from .tools import NotImplementedVariable, get_base_generics
 
 if ty.TYPE_CHECKING:
     from models.book import BookPreview, RawBook
-
-    from .base_downloader import BaseDownloader
 
 
 class BaseDriver[SourceT: BookSource](ABC):
@@ -33,11 +33,18 @@ class BaseDriver[SourceT: BookSource](ABC):
         aiohttp.ClientSession
     )
     __session: requests.Session | None = None
-    __async_session: aiohttp.ClientSession | None = None
 
     def __init_subclass__(cls, **__):
         if ABC not in cls.__bases__:
-            if get_source_type(cls) != get_source_type(cls.downloader_factory):
+            base_downloader_source_t = ty.get_args(
+                tys.get_original_bases(BaseDownloader)[1]
+            )[0]
+            if (
+                get_base_generics(cls, BaseDriver)[SourceT]
+                != get_base_generics(cls.downloader_factory, BaseDownloader)[
+                    base_downloader_source_t
+                ]
+            ):
                 raise TypeError(
                     f"Driver `{cls.__name__}` must have the same source type "
                     "as its downloader factory"
@@ -64,11 +71,11 @@ class BaseDriver[SourceT: BookSource](ABC):
             self.__class__.__session = self.session_factory()
         return self.__class__.__session
 
-    @property
-    def _async_session(self) -> aiohttp.ClientSession:
-        if self.__class__.__async_session is None:
-            self.__class__.__async_session = self.async_session_factory()
-        return self.__class__.__async_session
+    @classmethod
+    def close_session(cls):
+        if cls.__session is not None:
+            cls.__session.close()
+            cls.__session = None
 
     @abstractmethod
     def get_book(self, url: str) -> RawBook[SourceT]:

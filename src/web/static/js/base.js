@@ -85,7 +85,6 @@ var pages = {};
 for (let page_el of document.getElementsByClassName("page")) {
   var page_ = new Page(page_el);
   pages[page_el.id] = page_;
-  page_.hide();
 }
 function page(el_id) {
   return pages[el_id];

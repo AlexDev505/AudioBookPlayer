@@ -202,31 +202,35 @@ class AKniga(BaseDriver[AudioBook]):
         page_number = offset // self.PER_PAGE + 1
         offset %= self.PER_PAGE
 
-        while len(books) < limit:
-            url = self.site_url + f"/search/books/page{page_number}/?q={query}"
-
-            async with self._async_session.get(url) as response:
-                page = await response.text()
-            soup = BeautifulSoup(page, "html.parser")
-
-            if not (
-                elements := soup.select(
-                    "div.content__main__articles--item:not(:has(.caption__article-preview))"
+        async with self.async_session_factory() as session:
+            while len(books) < limit:
+                url = (
+                    self.site_url
+                    + f"/search/books/page{page_number}/?q={query}"
                 )
-            ):
-                break
 
-            if offset:
-                elements = elements[offset:]
-                offset = 0
+                async with session.get(url) as response:
+                    page = await response.text()
+                soup = BeautifulSoup(page, "html.parser")
 
-            for card in elements:
-                if book := self._parse_book_card(card):
-                    books.append(book)
-                if len(books) == limit:
+                if not (
+                    elements := soup.select(
+                        "div.content__main__articles--item:not(:has(.caption__article-preview))"
+                    )
+                ):
                     break
 
-            page_number += 1
+                if offset:
+                    elements = elements[offset:]
+                    offset = 0
+
+                for card in elements:
+                    if book := self._parse_book_card(card):
+                        books.append(book)
+                    if len(books) == limit:
+                        break
+
+                page_number += 1
 
         return books
 
@@ -277,5 +281,5 @@ class AKniga(BaseDriver[AudioBook]):
                 cover=cover,
                 narrators={safe_name(narrator)},
                 publications=set(),
-                durations=[duration],
+                durations={duration},
             )

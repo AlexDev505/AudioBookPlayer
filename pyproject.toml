@@ -10,7 +10,7 @@ license = "MIT"
 license-files = ["LICENSE.txt"]
 requires-python = ">=3.14"
 dependencies = [
-    "aiodbcore==0.6.1",
+    "aiodbcore>=0.6.2",
     "aiofiles>=25.1.0",
     "aiohttp>=3.13.3",
     "beautifulsoup4>=4.14.3",

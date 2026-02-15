@@ -1,9 +1,10 @@
 import os
 
+from . import search as search
 from . import settings as settings
 from .js_api import JSApi
 
-if os.name == "nt":
+if os.environ["PLATFORM"] == "Windows":
     from . import window_controls as window_controls
 
 __all__ = ["JSApi"]

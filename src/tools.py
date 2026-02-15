@@ -6,6 +6,7 @@ import os
 import re
 import subprocess
 import typing as ty
+from dataclasses import asdict, is_dataclass
 
 import pygments.formatters
 import pygments.lexers
@@ -151,6 +152,8 @@ def pretty_view(
     """
     result = ""
 
+    if is_dataclass(obj):
+        obj = asdict(obj)
     if isinstance(obj, (dict, list, tuple)):
         if isinstance(obj, dict):
             new_line = (

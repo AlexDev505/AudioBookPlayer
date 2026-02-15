@@ -68,3 +68,9 @@ class Database(SyncDBCore[Book | TextBook | AudioBook]):
         self, sid: int, source_type: type[SourceT]
     ) -> SourceT | None:
         return self.fetchone(source_type, where=source_type.id == sid)
+
+    def check_is_books_exists(self, hashes: list[str]) -> list[str]:
+        return [
+            book.hash
+            for book in self.fetchall(Book, where=Book.hash.contained(hashes))
+        ]

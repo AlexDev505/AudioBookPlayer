@@ -89,7 +89,6 @@
     display: flex;
     margin: 0 4px 8px 8px;
     padding: 8px;
-    height: calc(100% - 16px - 8px);
     background-color: var(--cards-bg);
     border-radius: 4px;
 }
@@ -101,7 +100,7 @@
     min-width: 70px;
     border-radius: 4px;
     background-size: cover;
-    background-image: url(https://s4.knigavuhe.org/1/covers/10208/2-1@2x.jpg?2);
+    background-image: none;
 }
 .item-title {
     font-size: large;
@@ -119,33 +118,38 @@
     font-size: small;
 }
 .item-info > *::before {
-    height: 1.2em;
-    width: 1.2em;
+    min-height: 1.2em;
+    min-width: 1.2em;
+    max-height: 1.2em;
+    max-width: 1.2em;
     margin-right: 4px;
 }
 .item-author::before {
     content: url(../images/person.svg);
 }
-.item-reader:empty {
+.item-narrators:empty {
     display: none;
 }
-.item-reader::before {
+.item-narrators::before {
     content: url(../images/mic.svg);
 }
-.item-duration:empty {
+.item-publications:empty {
     display: none;
 }
-.item-duration::before {
+.item-publications::before {
+    content: url(../images/book.svg);
+}
+.item-durations:empty {
+    display: none;
+}
+.item-durations::before {
     content: url(../images/clock.svg);
 }
 .item-series-name:empty {
     display: none;
 }
 .item-series-name::before {
-    content: url(../images/book.svg);
-}
-.item-driver::before {
-    content: url(../images/hdd.svg);
+    content: url(../images/tag.svg);
 }
 
 .add-book-btn {

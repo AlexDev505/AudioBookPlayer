@@ -16,7 +16,9 @@ def _on_shown(window: webview.Window):
 
 
 def _on_loaded(window: webview.Window):
-    start_app(window)
+    if not hasattr(window, "loaded"):
+        setattr(window, "loaded", True)
+        start_app(window)
 
 
 def create_starting_window() -> webview.Window:
@@ -69,6 +71,7 @@ def start_app(window: webview.Window) -> None:
         f"sqlite://{os.environ['DATABASE_PATH']}",
         check_same_thread=False,
     )
+    Database().create_tables()
 
     window.run_js("setStatus('запуск...')")
 

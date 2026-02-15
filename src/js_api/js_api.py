@@ -42,7 +42,7 @@ class JSApi:
         return self._window.evaluate_js(command)
 
     @staticmethod
-    def make_answer(data: ty.Any = ()) -> dict:
+    def make_answer(data: ty.Any = None) -> dict:
         answer = dict(status="ok", data=data)
         logger.opt(lazy=True, depth=1).trace(
             "answer: {data}",
@@ -63,12 +63,12 @@ class JSApi:
         def _wrapper(*args, **kwargs):
             try:
                 logger.opt(colors=True, lazy=True).debug(
-                    "request: <r>{func}</r>{args}",
+                    "request: <r>{func}</r><y>{args}</y>",
                     func=lambda: func.__name__,
                     args=lambda: (
                         " | "
                         + " | ".join(
-                            f"<y>{arg}</y>" for arg in (*args, *kwargs.values())
+                            str(arg) for arg in (*args, *kwargs.values())
                         )
                         if args or kwargs
                         else ""

@@ -34,7 +34,7 @@ os.environ["VERSION"] = "4.0.0-dev.0"
 # DEV
 os.environ["DEBUG"] = "1"
 os.environ["CONSOLE"] = "1"
-os.environ["LOGGING_LEVEL"] = "TRACE"
+os.environ["LOGGING_LEVEL"] = "DEBUG"
 
 from logger import logger  # noqa
 

@@ -287,25 +287,51 @@ def safe_name(text: str) -> str:
     return re.sub(r'[\\/:*?"<>|+]', "", text).rstrip(". ")
 
 
-def get_source_type(cls):
+def get_base_generics(cls: type, base_class: type) -> dict[ty.TypeVar, ty.Any]:
     """
-    Gets and validates the source type from the class generic args
-    :returns: instance of `BookSource` or tuple of `BookSource` instances
+    Returns the generic types of base class.
+    Supports multiple and deep inheritance.
     """
-    source_types = ty.get_args(tys.get_original_bases(cls)[0])
-    if not source_types:
-        raise NotImplementedError(
-            f"book source type not specified in class `{cls.__name__}`"
+    if not issubclass(cls, base_class):
+        raise ValueError(
+            f"{cls.__name__} is not a subclass of {base_class.__name__}"
         )
-    if isinstance(source_types[0], (ty.Union, tys.UnionType)):
-        source_types = ty.get_args(source_types)
-    for source_type in source_types:
-        if issubclass(source_type, BookSource):
-            raise TypeError(
-                f"expected BookSource, got {source_type} "
-                f"in class `{cls.__name__}`"
+    t_vars = {}
+    while True:
+        parent_class = [x for x in cls.__bases__ if issubclass(x, base_class)]
+        if len(parent_class) > 1:
+            raise ValueError("Multiple inheritance not supported")
+        parent_class = parent_class[0]
+        parent_generic = next(
+            filter(
+                lambda x: ty.get_origin(x) is ty.Generic,
+                tys.get_original_bases(parent_class),
+            ),
+            None,
+        )
+        passes_generic = next(
+            filter(
+                lambda x: ty.get_origin(x) is parent_class,
+                tys.get_original_bases(cls),
+            ),
+            None,
+        )
+        if parent_generic and not passes_generic:
+            raise ValueError(
+                f"Generic type for class {parent_class.__name__} "
+                f"not passed in {cls.__name__} class"
             )
-    return source_types[0] if len(source_types) == 1 else source_types
+        passes_generic = ty.get_args(passes_generic)
+        parent_generic = ty.get_args(parent_generic)
+        t_vars = {
+            pg: t_vars.get(pt, pt)
+            for pg, pt in zip(parent_generic, passes_generic)
+        }
+        cls = parent_class
+        if cls is base_class:
+            break
+
+    return t_vars
 
 
 def create_instance_id(obj: ty.Any) -> int:
