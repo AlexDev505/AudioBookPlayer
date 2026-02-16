@@ -97,8 +97,10 @@ class Readli(BaseDriver[TextBook]):
                 payload["offset"] = offset
                 payload["q"] = query
 
-                async with session.post(self.SEARCH_URL, data=payload, ssl=False) as resp:
-                    data = await resp.json(loads=orjson.loads)
+                async with session.post(
+                    self.SEARCH_URL, data=payload, ssl=False
+                ) as resp:
+                    data = orjson.loads(await resp.read())
                 offset = data["offset"]
                 soup = BeautifulSoup(data["html"], "html.parser")
 
@@ -124,13 +126,11 @@ class Readli(BaseDriver[TextBook]):
                 find_in_soup(card, "a.book-info__link[href^='/serie']")
             )
             title = card.select_one(".book__title a").attrs["title"]
-            author = find_in_soup(
-                card, "a.main-info__link[href^='/avtor']", author
-            )
+            author = find_in_soup(card, "a[href^='/avtor']", author)
             total_pages = find_in_soup(
                 card,
                 "a[href^='/chitat-online']",
-                modification=lambda x: x.split(" — ")[1],
+                modification=lambda x: x.split(" — ")[1],
             )
             return BookPreview(
                 title=safe_name(title),
@@ -141,6 +141,6 @@ class Readli(BaseDriver[TextBook]):
                 urls={self.site_url + url},
                 cover=cover,
                 narrators=set(),
-                publications=set("Readli"),
+                publications={"Readli"},
                 durations={total_pages},
             )
