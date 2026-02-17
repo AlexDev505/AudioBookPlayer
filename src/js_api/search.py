@@ -118,7 +118,9 @@ class SearchApi(JSApi):
         except asyncio.CancelledError:
             logger.debug("search cancelled")
             raise CanceledError()
-        if all(isinstance(result, ConnectionFailedError) for result in results):
+        if results and all(
+            isinstance(result, ConnectionFailedError) for result in results
+        ):
             raise ty.cast(ConnectionFailedError, results[0])
 
         logger.opt(colors=True).debug(f"<y>{self._books_found}</y> books found")
