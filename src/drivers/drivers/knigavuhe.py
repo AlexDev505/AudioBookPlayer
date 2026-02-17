@@ -17,10 +17,10 @@ class KnigaVUhe(BaseDriver[AudioBook]):
 
     PER_PAGE = 10
 
-    def get_book(self, url: str):
-        page = self.get_page(url)
-        soup = BeautifulSoup(page.content, "html.parser")
-        page = page.text
+    async def get_book(self, url: str):
+        async with self.get_page(url) as resp:
+            page = await resp.text()
+        soup = BeautifulSoup(page, "html.parser")
 
         match = re.search(r"cur\.book = (.+);", page)
         book = orjson.loads(match.group(1))
@@ -80,9 +80,10 @@ class KnigaVUhe(BaseDriver[AudioBook]):
             ),
         )
 
-    def get_book_series(self, url):
-        page = self.get_page(url)
-        soup = BeautifulSoup(page.content, "html.parser")
+    async def get_book_series(self, url):
+        async with self.get_page(url) as resp:
+            page = await resp.text()
+        soup = BeautifulSoup(page, "html.parser")
         author = find_in_soup(
             soup, "span.book_title_elem > span > a", _("unknown_author")
         )
@@ -92,8 +93,9 @@ class KnigaVUhe(BaseDriver[AudioBook]):
         series_page_link = self.site_url + el.attrs["href"]
         series_name = el.text
 
-        page = self.get_page(series_page_link)
-        soup = BeautifulSoup(page.content, "html.parser")
+        async with self.get_page(series_page_link) as resp:
+            page = await resp.text()
+        soup = BeautifulSoup(page, "html.parser")
 
         books: list[BookPreview] = []
         for card in soup.select(
@@ -120,34 +122,31 @@ class KnigaVUhe(BaseDriver[AudioBook]):
         page_number = offset // self.PER_PAGE + 1
         offset %= self.PER_PAGE
 
-        async with self.async_session_factory() as session:
-            while len(books) < limit:
-                url = self.site_url + f"/search/?q={query}&page={page_number}"
+        while len(books) < limit:
+            url = self.site_url + f"/search/?q={query}&page={page_number}"
 
-                async with session.get(url, ssl=False) as resp:
-                    page = await resp.text()
-                soup = BeautifulSoup(page, "html.parser")
+            async with self.get_page(url) as resp:
+                page = await resp.text()
+            soup = BeautifulSoup(page, "html.parser")
 
-                if not (
-                    elements := soup.select(
-                        "div.bookkitem:not(:has(span.bookkitem_litres_icon))"
-                    )
-                ):
+            if not (
+                elements := soup.select(
+                    "div.bookkitem:not(:has(span.bookkitem_litres_icon))"
+                )
+            ):
+                break
+
+            if offset:
+                elements = elements[offset:]
+                offset = 0
+
+            for card in elements:
+                if book := self._parse_book_card(card, _("unknown_author"), ""):
+                    books.append(book)
+                if len(books) == limit:
                     break
 
-                if offset:
-                    elements = elements[offset:]
-                    offset = 0
-
-                for card in elements:
-                    if book := self._parse_book_card(
-                        card, _("unknown_author"), ""
-                    ):
-                        books.append(book)
-                    if len(books) == limit:
-                        break
-
-                page_number += 1
+            page_number += 1
 
         return books
 

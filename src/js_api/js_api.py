@@ -68,6 +68,21 @@ class JSApi:
                     args=lambda: (
                         " | "
                         + " | ".join(
+                            f"<{type(arg).__name__} {len(arg)} values>"
+                            if isinstance(arg, (list, dict))
+                            else str(arg)
+                            for arg in (*args, *kwargs.values())
+                        )
+                        if args or kwargs
+                        else ""
+                    ),
+                )
+                logger.opt(colors=True, lazy=True).trace(
+                    "request: <r>{func}</r><y>{args}</y>",
+                    func=lambda: func.__name__,
+                    args=lambda: (
+                        " | "
+                        + " | ".join(
                             str(arg) for arg in (*args, *kwargs.values())
                         )
                         if args or kwargs

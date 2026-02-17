@@ -1,9 +1,13 @@
+import asyncio
+import os
 import re
+import sys
 import time
 import typing as ty
 from abc import ABC, abstractmethod
 from contextlib import suppress
 
+import orjson
 import webview
 from bs4 import BeautifulSoup, Tag
 from loguru import logger
@@ -13,6 +17,13 @@ from models.book import AudioBook, BookPreview, Chapter, RawBook
 from ..base_driver import BaseDriver
 from ..downloaders import MergedM3U8Downloader
 from ..tools import find_in_soup, safe_name
+
+if getattr(sys, "frozen", False):
+    DRIVERS_DIR = os.path.join(getattr(sys, "_MEIPASS"), "drivers")
+else:
+    DRIVERS_DIR = os.path.dirname(__file__)
+
+DECRYPT_SCRIPT = os.path.join(DRIVERS_DIR, "aboba.js")
 
 """
 On the AKniga website, book information is loaded dynamically via JavaScript.
@@ -37,6 +48,10 @@ class BaseJsApi(ABC):
             "m3u8": <str>,  # link to m3u8 file
         }
         """
+
+    @abstractmethod
+    def decrypt_hres(self, hres: str) -> str:
+        """ """
 
 
 class PyWebViewJsApi(BaseJsApi):
@@ -92,22 +107,64 @@ class PyWebViewJsApi(BaseJsApi):
         self._window.destroy()
         self._active = False
 
+    def decrypt_hres(self, hres: str) -> str:
+        self._window = webview.windows[0]
+        with open(DECRYPT_SCRIPT, encoding="utf-8") as f:
+            script = f.read()
+        script += f"\n\nplh.getHres('{hres}')"
+        return self._window.evaluate_js(script)
+
 
 class AKniga(BaseDriver[AudioBook]):
     site_url = "https://akniga.org"
     downloader_factory = MergedM3U8Downloader
 
     PER_PAGE = 12
+    HEADERS = {
+        "origin": site_url,
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+    }
+    TOKEN_URL = "https://akniga.org/ajax/player/token"
+    BOOK_URL = "https://akniga.org/ajax/b/{bid}"
+
+    request_kwargs = {
+        "headers": HEADERS,
+    }
 
     def __init__(self, js_api: ty.Type[BaseJsApi] = PyWebViewJsApi):
         super().__init__()
         self.js_api = js_api
 
-    def get_book(self, url):
-        page = self.get_page(url)
-        soup = BeautifulSoup(page.content, "html.parser")
+    async def get_book(self, url):
+        async with self.get_page(url) as resp:
+            page = await resp.text()
 
-        book_data = self.js_api().get_book_data(url)
+        sk = re.search(r"LIVESTREET_SECURITY_KEY = '(.+?)'", page).group(1)
+        bid = re.search(r'data-bid="(.+?)"', page).group(1)
+        async with self.post(
+            self.TOKEN_URL,
+            data={
+                "security_ls_key": sk,
+                "bid": bid,
+                "ts": int(time.time() * 1000),
+            },
+        ) as resp:
+            token = (await resp.json())["token"]
+
+        async with self.post(
+            self.BOOK_URL.format(bid=bid),
+            data={
+                "security_ls_key": sk,
+                "bid": bid,
+                "token": token,
+                "hls": True,
+            },
+        ) as resp:
+            book_data = await resp.json()
+
+        m3u8 = self.js_api().decrypt_hres(book_data["hres"])
+
+        soup = BeautifulSoup(page, "html.parser")
 
         author = book_data.get("author") or _("unknown_author")
         title = book_data["titleonly"]
@@ -140,12 +197,12 @@ class AKniga(BaseDriver[AudioBook]):
         narrator = find_in_soup(soup, "a.link__reader span")
         cover = soup.select_one("div.book--cover img").attrs["src"]
         chapters: list[Chapter] = []
-        for item in book_data["items"]:
+        for item in orjson.loads(book_data["items"]):
             chapters.append(
                 Chapter(
                     title=safe_name(item["title"]),
-                    url=book_data["m3u8"],
-                    file_index=item["file"] - 1,
+                    url=m3u8,
+                    file_index=0,
                     start_time=item["time_from_start"],
                     end_time=item["time_finish"],
                 )
@@ -166,9 +223,10 @@ class AKniga(BaseDriver[AudioBook]):
             ),
         )
 
-    def get_book_series(self, url):
-        page = self.get_page(url)
-        soup = BeautifulSoup(page.content, "html.parser")
+    async def get_book_series(self, url):
+        async with self.get_page(url) as resp:
+            page = await resp.text()
+        soup = BeautifulSoup(page, "html.parser")
 
         if not (
             element := soup.select_one(
@@ -179,12 +237,18 @@ class AKniga(BaseDriver[AudioBook]):
             return list[BookPreview]()
         series_page_link = element.attrs["href"]
 
-        page = self.get_page(series_page_link)
-        soup = BeautifulSoup(page.content, "html.parser")
-        pages_soups = [soup]
-        for el in soup.select("a.page__nav--standart"):
-            page = self.get_page(el.attrs["href"])
-            pages_soups.append(BeautifulSoup(page.content, "html.parser"))
+        async with self.get_page(series_page_link) as resp:
+            page = await resp.text()
+        soup = BeautifulSoup(page, "html.parser")
+        pages_soups = [
+            soup,
+            *await asyncio.gather(
+                *[
+                    self.get_page(el.attrs["href"])
+                    for el in soup.select("a.page__nav--standart")
+                ]
+            ),
+        ]
 
         books: list[BookPreview] = []
         for page in pages_soups:
@@ -202,35 +266,31 @@ class AKniga(BaseDriver[AudioBook]):
         page_number = offset // self.PER_PAGE + 1
         offset %= self.PER_PAGE
 
-        async with self.async_session_factory() as session:
-            while len(books) < limit:
-                url = (
-                    self.site_url
-                    + f"/search/books/page{page_number}/?q={query}"
+        while len(books) < limit:
+            url = self.site_url + f"/search/books/page{page_number}/?q={query}"
+
+            async with self.get_page(url) as response:
+                page = await response.text()
+            soup = BeautifulSoup(page, "html.parser")
+
+            if not (
+                elements := soup.select(
+                    "div.content__main__articles--item:not(:has(.caption__article-preview))"
                 )
+            ):
+                break
 
-                async with session.get(url, ssl=False) as response:
-                    page = await response.text()
-                soup = BeautifulSoup(page, "html.parser")
+            if offset:
+                elements = elements[offset:]
+                offset = 0
 
-                if not (
-                    elements := soup.select(
-                        "div.content__main__articles--item:not(:has(.caption__article-preview))"
-                    )
-                ):
+            for card in elements:
+                if book := self._parse_book_card(card):
+                    books.append(book)
+                if len(books) == limit:
                     break
 
-                if offset:
-                    elements = elements[offset:]
-                    offset = 0
-
-                for card in elements:
-                    if book := self._parse_book_card(card):
-                        books.append(book)
-                    if len(books) == limit:
-                        break
-
-                page_number += 1
+            page_number += 1
 
         return books
 

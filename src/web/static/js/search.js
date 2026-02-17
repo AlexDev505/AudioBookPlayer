@@ -48,20 +48,19 @@ async function searchBooks() {
 }
 
 function onSearchCompleted(resp, clear = true) {
-  console.log(resp);
   if (document.querySelector("#search-input-line input").value == "") return;
   searching = false;
   if (resp.status != "ok") return showError(resp.message);
   resp = resp.data;
-  hashes = [];
-  items = [];
+  var books = {};
+  var items = [];
   container = document.getElementById("search-results-container");
-  for (book of resp) {
+  for (let book of resp) {
     var el = document.querySelector(
       `.search-result-item[data-hash="${book.hash}"]`,
     );
-    if (!el) {
-      hashes.push(book.hash);
+    var exists = el !== null;
+    if (!exists) {
       el = document.importNode(searchResultItemTemplate.content, true);
       el.querySelector(".search-result-item").dataset.hash = book.hash;
       el.querySelector(".item-cover").style.backgroundImage =
@@ -70,10 +69,13 @@ function onSearchCompleted(resp, clear = true) {
       el.querySelector(".item-author").textContent = book.author;
       el.querySelector(".item-series-name").textContent =
         `${book.series_name}${book.number_in_series ? ` (${book.number_in_series})` : ""}`;
-    } else if (book.updated) {
+    }
+    if (exists && book.updated) {
+      el.querySelector(".add-book-btn").classList.remove("added");
       container.removeChild(el);
     }
-    if (book.updated || clear) {
+    if (!exists || book.updated) {
+      books[book.hash] = book.urls;
       el.querySelector(".item-narrators").textContent =
         book.narrators.join(" | ");
       el.querySelector(".item-publications").textContent =
@@ -99,7 +101,7 @@ function onSearchCompleted(resp, clear = true) {
     return;
   }
   pywebview.api
-    .check_is_books_exists(hashes)
+    .check_is_sources_exists(books)
     .then(onCheckIsBooksExistsCompleted);
   container = document.getElementById("search-results-container");
   if (
@@ -110,8 +112,10 @@ function onSearchCompleted(resp, clear = true) {
 }
 
 function onCheckIsBooksExistsCompleted(resp) {
-  for (hash of resp.data) {
-    item = document.querySelector(`.search-result-item[data-hash="${hash}"]`);
+  for (let hash of resp.data) {
+    let item = document.querySelector(
+      `.search-result-item[data-hash="${hash}"]`,
+    );
     if (item) item.querySelector(".add-book-btn").classList.add("added");
   }
 }
@@ -120,7 +124,7 @@ searching = false;
 can_search_next = true;
 function onSearchResultContainerScroll() {
   if (!can_search_next || searching) return;
-  container = document.getElementById("search-results-container");
+  let container = document.getElementById("search-results-container");
   if (
     container.scrollHeight - container.offsetHeight - container.scrollTop <
     100

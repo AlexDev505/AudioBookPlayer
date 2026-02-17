@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 import typing as ty
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from datetime import datetime
 from enum import Enum
 from hashlib import md5
@@ -70,6 +70,14 @@ class BookSource(ABC):
     def is_downloaded(self) -> bool:
         return bool(self.files)
 
+    def asdict(self) -> dict[str, ty.Any]:
+        return dict(
+            url=self.url,
+            cover=self.cover,
+            status=self.status,
+            files=self.files,
+        )
+
     def __repr__(self):
         return f"{self.__class__.__name__}(id={self.id}, url={self.url})"
 
@@ -97,6 +105,18 @@ class TextBook(BookSource):
     @property
     def dir_path(self) -> Path:
         return Path(".")
+
+    def asdict(self):
+        res = super().asdict()
+        res.update(
+            dict(
+                publication=self.publication,
+                file_url=self.file_url,
+                total_pages=self.total_pages,
+                read_pages=self.read_pages,
+            )
+        )
+        return res
 
 
 @dataclass(kw_only=True)
@@ -130,6 +150,18 @@ class AudioBook(BookSource):
     @property
     def dir_path(self) -> Path:
         return Path(".", self.narrator)
+
+    def asdict(self):
+        res = super().asdict()
+        res.update(
+            dict(
+                narrator=self.narrator,
+                duration=self.duration,
+                progress=asdict(self.progress),
+                chapters=[asdict(chapter) for chapter in self.chapters],
+            )
+        )
+        return res
 
 
 class SourceType(Enum):
@@ -305,6 +337,27 @@ class Book(BookData):
             description=self.description,
             source=source,
         )
+
+    @classmethod
+    def from_book_preview(cls, preview: BookPreview) -> Book:
+        return cls(
+            title=preview.title,
+            author=preview.author,
+            series_name=preview.series_name,
+            number_in_series=preview.number_in_series,
+            description=preview.description,
+            cover=preview.cover,
+        )
+
+    def asdict(self) -> dict[str, ty.Any]:
+        res = super().asdict()
+        res.update(
+            cover=self.cover,
+            adding_date=self.adding_date.isoformat(),
+            favorite=self.favorite,
+            status=self.status.value,
+        )
+        return res
 
     def __repr__(self):
         return f"Book(id={self.id}, title={self.title})"

@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import asyncio
+import os
 import typing as ty
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from functools import partial
 
 import aiohttp
@@ -15,9 +16,11 @@ from drivers.base_driver import (
     DriverNotAuthenticated,
     LicensedDriver,
 )
+from models.book import Book
 from tools import pretty_view
 
 from .exceptions import (
+    BookNotFound,
     ConnectionFailedError,
     NoSuitableDriver,
     NotAuthenticated,
@@ -157,9 +160,87 @@ class SearchApi(JSApi):
                 self._search_results[book.hash] = book
                 self._books_added += 1
 
-    def check_is_books_exists(self, hashes: list[str]) -> list[str]:
-        exists_book_hashes = Database().check_is_books_exists(hashes)
+    def check_is_sources_exists(self, books: dict[str, list[str]]) -> list[str]:
+        """
+        :param books: {hash: [source_url, ...]}
+        :returns: list of hashes of books that
+         all sources already added to library.
+        """
+        exists_book_hashes = Database().check_is_sources_exists(books)
         logger.opt(colors=True).debug(
-            f"<y>{len(exists_book_hashes)}/{len(hashes)}</y> books exists"
+            f"<y>{len(exists_book_hashes)}/{len(books)}</y> books exists"
         )
         return exists_book_hashes
+
+    def add_to_library(self, hash: str):
+        if not (book_preview := self._search_results.get(hash)):
+            raise BookNotFound()
+
+        book_created = False
+        db = Database()
+        if not (book := db.get_book_by_hash(hash)):
+            book = Book.from_book_preview(book_preview)
+            db.save(book)
+            logger.opt(colors=True).debug(
+                f"book added to library: {book:colored}"
+            )
+            logger.opt(lazy=True).trace(
+                "book: {data}",
+                data=partial(
+                    pretty_view,
+                    book.asdict(),
+                    multiline=not os.getenv("NO_MULTILINE", False),
+                ),
+            )
+            book_created = True
+
+        sources_added = asyncio.run(
+            self._add_to_library(
+                db.check_not_exists_sources(book_preview.urls),
+                related_bid=book.id,
+            )
+        )
+
+        return dict(book_created=book_created, sources_added=sources_added)
+
+    async def _add_to_library(self, urls: set[str], related_bid: int) -> int:
+        tasks = []
+        for source_url in urls:
+            if not (driver := BaseDriver.get_suitable_driver(source_url)):
+                raise NoSuitableDriver(source_url)
+            tasks.append(
+                task := asyncio.create_task(driver().get_book(source_url))
+            )
+            task.add_done_callback(
+                partial(self._add_source_to_library, related_bid=related_bid)
+            )
+
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+        return len(
+            list(filter(lambda x: not isinstance(x, Exception), results))
+        )
+
+    @staticmethod
+    def _add_source_to_library(
+        task: asyncio.Task[RawBook], related_bid: int
+    ) -> None:
+        if book := task.result():
+            source = book.source
+            source.related_book = related_bid
+            Database().save(source)
+            logger.opt(colors=True).debug(
+                f"source added to library: {source:colored}"
+            )
+            logger.opt(lazy=True).trace(
+                "source: {data}",
+                data=partial(
+                    pretty_view,
+                    source.asdict(),
+                    multiline=not os.getenv("NO_MULTILINE", False),
+                ),
+            )
+
+    def add(self, url: str):
+        driver = BaseDriver.get_suitable_driver(url)()
+        book = asyncio.run(driver.get_book(url))
+        print(asdict(book))

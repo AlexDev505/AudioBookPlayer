@@ -28,9 +28,11 @@ class Readli(BaseDriver[TextBook]):
             return match.group(1), match.group(2)
         return series, ""
 
-    def get_book(self, url: str):
-        page = self.get_page(url)
-        soup = BeautifulSoup(page.content, "html.parser")
+    async def get_book(self, url: str):
+        async with self.get_page(url) as resp:
+            page = await resp.text()
+
+        soup = BeautifulSoup(page, "html.parser")
 
         title = find_in_soup(soup, "main-info__title")
         author = find_in_soup(
@@ -71,15 +73,17 @@ class Readli(BaseDriver[TextBook]):
             ),
         )
 
-    def get_book_series(self, url):
-        page = self.get_page(url)
-        soup = BeautifulSoup(page.content, "html.parser")
+    async def get_book_series(self, url):
+        async with self.get_page(url) as resp:
+            page = await resp.text()
+        soup = BeautifulSoup(page, "html.parser")
         if not (el := soup.select_one("a.book-info__link[href^='/serie']")):
             return []  # book has no series
         series_page_link = self.site_url + el.attrs["href"]
 
-        page = self.get_page(series_page_link)
-        soup = BeautifulSoup(page.content, "html.parser")
+        async with self.get_page(series_page_link) as resp:
+            page = await resp.text()
+        soup = BeautifulSoup(page, "html.parser")
 
         books: list[BookPreview] = []
         for card in soup.select(".author"):
@@ -91,28 +95,23 @@ class Readli(BaseDriver[TextBook]):
     async def search_books(self, query, limit=10, offset=0):
         books: list[BookPreview] = []
 
-        async with self.async_session_factory() as session:
-            while len(books) < limit:
-                payload = copy(self.SEARCH_PAYLOAD)
-                payload["offset"] = offset
-                payload["q"] = query
+        while len(books) < limit:
+            payload = copy(self.SEARCH_PAYLOAD)
+            payload["offset"] = offset
+            payload["q"] = query
 
-                async with session.post(
-                    self.SEARCH_URL, data=payload, ssl=False
-                ) as resp:
-                    data = orjson.loads(await resp.read())
-                offset = data["offset"]
-                soup = BeautifulSoup(data["html"], "html.parser")
+            async with self.post(self.SEARCH_URL, data=payload) as resp:
+                data = orjson.loads(await resp.read())
+            offset = data["offset"]
+            soup = BeautifulSoup(data["html"], "html.parser")
 
-                if not (elements := soup.select(".book")):
+            if not (elements := soup.select(".book")):
+                break
+            for card in elements:
+                if book := self._parse_book_card(card, _("unknown_author"), ""):
+                    books.append(book)
+                if len(books) == limit:
                     break
-                for card in elements:
-                    if book := self._parse_book_card(
-                        card, _("unknown_author"), ""
-                    ):
-                        books.append(book)
-                    if len(books) == limit:
-                        break
 
         return books
 

@@ -4,9 +4,9 @@ import os
 import types as tys
 import typing as ty
 from abc import ABC, abstractmethod
+from functools import wraps
 
 import aiohttp
-import requests
 
 from models.book import BookSource
 
@@ -28,11 +28,11 @@ class BaseDriver[SourceT: BookSource](ABC):
         NotImplementedVariable()
     )  # type: ignore
 
-    session_factory: ty.Callable[[], requests.Session] = requests.Session
-    async_session_factory: ty.Callable[[], aiohttp.ClientSession] = (
+    session_factory: ty.Callable[[], aiohttp.ClientSession] = (
         aiohttp.ClientSession
     )
-    __session: requests.Session | None = None
+    request_kwargs: ty.Dict[str, ty.Any] = dict(ssl=False)
+    __session: aiohttp.ClientSession | None = None
 
     def __init_subclass__(cls, **__):
         if ABC not in cls.__bases__:
@@ -49,6 +49,9 @@ class BaseDriver[SourceT: BookSource](ABC):
                     f"Driver `{cls.__name__}` must have the same source type "
                     "as its downloader factory"
                 )
+            cls.get_book = cls._ensure_session(cls.get_book)
+            cls.get_book_series = cls._ensure_session(cls.get_book_series)
+            cls.search_books = cls._ensure_session(cls.search_books)
             BaseDriver.drivers.append(cls)
 
     @classmethod
@@ -58,27 +61,8 @@ class BaseDriver[SourceT: BookSource](ABC):
             None,
         )
 
-    def get_page(self, url: str) -> requests.Response:
-        """
-        :param url: URL of the book
-        :returns: Result of the GET request
-        """
-        return self._session.get(url)
-
-    @property
-    def _session(self) -> requests.Session:
-        if self.__class__.__session is None:
-            self.__class__.__session = self.session_factory()
-        return self.__class__.__session
-
-    @classmethod
-    def close_session(cls):
-        if cls.__session is not None:
-            cls.__session.close()
-            cls.__session = None
-
     @abstractmethod
-    def get_book(self, url: str) -> RawBook[SourceT]:
+    async def get_book(self, url: str) -> RawBook[SourceT]:
         """
         Method that retrieves full information about a book
         Must be implemented for each driver separately
@@ -87,7 +71,7 @@ class BaseDriver[SourceT: BookSource](ABC):
         """
 
     @abstractmethod
-    def get_book_series(self, url: str) -> list[BookPreview]:
+    async def get_book_series(self, url: str) -> list[BookPreview]:
         """
         Method that retrieves preview information about books in a series
         Must be implemented for each driver separately
@@ -107,6 +91,35 @@ class BaseDriver[SourceT: BookSource](ABC):
         :param offset: Number of books to skip from the start
         :returns: List of book previews
         """
+
+    @property
+    def _session(self) -> aiohttp.ClientSession:
+        if self.__session is None:
+            self.__session = self.session_factory()
+        return self.__session
+
+    @staticmethod
+    def _ensure_session(func):
+        @wraps(func)
+        async def _wrapper(self, *args, **kwargs):
+            await self._session.__aenter__()
+            try:
+                return await func(self, *args, **kwargs)
+            finally:
+                await self._session.__aexit__(None, None, None)
+                self.__session = None
+
+        return _wrapper
+
+    def _request(self, method: str, url: str, **kwargs):
+        kwargs = {**self.request_kwargs, **kwargs}
+        return self._session.request(method, url, **kwargs)
+
+    def get_page(self, url: str, **kwargs):
+        return self._request("GET", url, **kwargs)
+
+    def post(self, url: str, **kwargs):
+        return self._request("POST", url, **kwargs)
 
     @classmethod
     @property

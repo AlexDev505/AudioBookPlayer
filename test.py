@@ -1,99 +1,50 @@
 import re
-from dataclasses import dataclass
-from hashlib import md5
+import time
 
+import requests
 
-def normalize_string(string: str) -> str:
-    return re.sub(r"[^\w\s]", "", string.lower())
+H = {
+    "origin": "https://akniga.org",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+}
+url = "https://akniga.org/domagoj-kurmaic-aka-nobody103-mat-uchenya"
+TOKEN_URL = "https://akniga.org/ajax/player/token"
+BOOK_URL = "https://akniga.org/ajax/b/{bid}"
 
+s = requests.Session()
 
-def normalize_author(author: str) -> str:
-    return " ".join(sorted(normalize_string(author).split()))
+resp = s.get(url)
+PHPSID = re.search(r"PHPSESSID=(.+?);", resp.headers["Set-Cookie"]).group(1)
+SK = re.search(r"LIVESTREET_SECURITY_KEY = '(.+?)'", resp.text).group(1)
+BID = re.search(r'data-bid="(.+?)"', resp.text).group(1)
 
-
-@dataclass(kw_only=True)
-class BookData:
-    title: str
-    author: str
-    series_name: str
-    number_in_series: str
-    description: str
-    hash: str = ""
-
-    def __post_init__(self):
-        self.hash = md5(
-            f"{normalize_string(self.title)} {normalize_author(self.author)}".encode()
-        ).hexdigest()
-
-    def __hash__(self):
-        return hash(self.hash)
-
-    def __eq__(self, other):
-        if not isinstance(other, BookData):
-            return False
-        return self.hash == other.hash
-
-
-@dataclass(kw_only=True)
-class BookPreview(BookData):
-    urls: set[str]
-    cover: str
-    narrators: set[str]
-    publications: set[str]
-    durations: set[str]
-
-    _updated: bool = False
-
-    def __hash__(self):
-        print(self.hash)
-        return super().__hash__()
-
-    def __eq__(self, other):
-        if not isinstance(other, BookData):
-            return False
-        return self.hash == other.hash
-
-    @property
-    def updated(self) -> bool:
-        if self._updated:
-            self._updated = False
-            return True
-        return False
-
-    def extend(self, other: BookPreview) -> None:
-        self.urls.update(other.urls)
-        self.narrators.update(other.narrators)
-        self.publications.update(other.publications)
-        self.durations.update(other.durations)
-        self._updated = True
-
-
-a = {}
-c = BookPreview(
-    title="Мать ученья",
-    author="Domagoj Kurmaic aka nobody103",
-    series_name="Series Name",
-    number_in_series="Number in Series",
-    description="Description",
-    urls={"url2"},
-    cover="cover.jpg",
-    narrators={"Narrator 2"},
-    publications={"Publication 2"},
-    durations={"Duration 2"},
-)
-d = BookPreview(
-    title="Title",
-    author="Author",
-    series_name="Series Name",
-    number_in_series="Number in Series",
-    description="Description",
-    urls={"url1"},
-    cover="cover.jpg",
-    narrators={"Narrator 1"},
-    publications={"Publication 1"},
-    durations={"Duration 1"},
+resp = s.post(
+    TOKEN_URL,
+    data={
+        "security_ls_key": SK,
+        "bid": BID,
+        "ts": int(time.time() * 1000),
+    },
+    headers=H,
 )
 
-a[c] = c
-print(a[c])
-print(a[d])
+token = resp.json()["token"]
+print(token)
+
+resp = s.post(
+    BOOK_URL.format(bid=BID),
+    data={"token": token, "security_ls_key": SK, "bid": BID, "hls": False},
+    headers=H,
+)
+
+import json
+
+data = resp.json()
+data["items"] = json.loads(data["items"])
+print(json.dumps(data, indent=4, ensure_ascii=False))
+
+msg = "ymXEKzvUkuo5G03.1C159BD535E9793"
+import base64
+import hashlib
+
+from Crypto.Cipher import AES

@@ -5,6 +5,7 @@ import typing as ty
 from functools import reduce
 
 from aiodbcore import SyncDBCore
+from aiodbcore.operators import ContainedCmpOperator
 
 from models.book import (
     AudioBook,
@@ -60,6 +61,9 @@ class Database(SyncDBCore[Book | TextBook | AudioBook]):
     def get_books_by_bid(self, *bids: int) -> list[Book]:
         return self.fetchall(Book, where=Book.id.contained(bids))
 
+    def get_book_by_hash(self, hash: str) -> Book | None:
+        return self.fetchone(Book, where=Book.hash == hash)
+
     def get_book_sources(
         self, bid: int
     ) -> dict[SourceType, list[BookSource]]: ...
@@ -69,8 +73,43 @@ class Database(SyncDBCore[Book | TextBook | AudioBook]):
     ) -> SourceT | None:
         return self.fetchone(source_type, where=source_type.id == sid)
 
-    def check_is_books_exists(self, hashes: list[str]) -> list[str]:
+    def check_is_sources_exists(self, books: dict[str, list[str]]) -> list[str]:
         return [
-            book.hash
-            for book in self.fetchall(Book, where=Book.hash.contained(hashes))
+            hash
+            for hash, urls in books.items()
+            if (
+                len(urls)
+                == ty.cast(
+                    tuple,
+                    self.provider.fetchone(
+                        f"""
+                        SELECT Count(*) FROM ({
+                            " UNION ALL ".join(
+                                f"SELECT url FROM {source_type.value.__name__}"
+                                for source_type in SourceType
+                            )
+                        }) WHERE url IN ({", ".join(["?"] * len(urls))})
+                        """,
+                        urls,
+                    ),
+                )[0]
+            )
         ]
+
+    def check_not_exists_sources(self, urls: set[str]) -> set[str]:
+        return urls.difference(
+            {
+                url[0]
+                for url in self.provider.fetchall(
+                    f"""
+                    SELECT url FROM ({
+                        " UNION ALL ".join(
+                            f"SELECT url FROM {source_type.value.__name__}"
+                            for source_type in SourceType
+                        )
+                    }) WHERE url IN ({", ".join(["?"] * len(urls))})
+                    """,
+                    tuple(urls),
+                )
+            }
+        )
