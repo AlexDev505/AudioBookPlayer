@@ -55,7 +55,7 @@ class SearchApi(JSApi):
         if not (driver := BaseDriver.get_suitable_driver(url)):
             raise NoSuitableDriver(url)
         try:
-            book = driver().get_book(url)
+            book = asyncio.run(driver().get_book(url))
             logger.opt(colors=True).debug(f"book found: {book:colored}")
             return book
         except DriverNotAuthenticated:
