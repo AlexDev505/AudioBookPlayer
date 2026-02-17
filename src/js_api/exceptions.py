@@ -29,7 +29,7 @@ class JSApiError(Exception):
         return self.msg
 
     def as_dict(self) -> dict:
-        return dict(code=self.code, msg=self.msg, extra=self.extra)
+        return dict(code=self.code, message=self.msg, extra=self.extra)
 
 
 class ConnectionFailedError(JSApiError):
@@ -80,3 +80,9 @@ class NoSuitableDriver(JSApiError):
 
     def __init__(self, book_url: str):
         super().__init__(book_url=book_url)
+
+
+class CanceledError(JSApiError):
+    code = 12
+    message = ""
+    explain = "Operation cancelled"

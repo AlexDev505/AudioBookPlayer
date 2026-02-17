@@ -38,6 +38,44 @@ if (platform == "Windows") {
   });
 }
 
+var notifications_count = 0;
+const notificationTemplate = document.getElementById("notification-template");
+function createNotification(content, timeout = 0, closable = true) {
+  notifications_count += 1;
+  if (notifications_count == 6) {
+    notifications_count -= 1;
+    document.querySelector(".notification").remove();
+  }
+  var notifications = document.getElementById("notifications");
+  var notification = document.importNode(notificationTemplate.content, true);
+  notification.querySelector(".notification-content").appendChild(content);
+  notification.querySelector(".cross-btn").onclick = function () {
+    this.parentElement.remove();
+    notifications_count -= 1;
+  };
+  notifications.appendChild(notification);
+  if (timeout)
+    setTimeout(
+      function (notification) {
+        if (!notification.isConnected) return;
+        notification.remove();
+        notifications_count -= 1;
+      },
+      timeout * 1000,
+      notification,
+    );
+  if (!closable)
+    notification.querySelector(".cross-btn").style.display = "none";
+  return notification;
+}
+function showError(text) {
+  var errorNotification = document
+    .getElementById("error-notification-template")
+    .content.cloneNode(true);
+  errorNotification.querySelector(".content").innerText = text;
+  createNotification(errorNotification, 30, true);
+}
+
 var sideMenu = document.getElementById("side-menu");
 function toggleMenu() {
   pywebview.state.menu_opened = !sideMenu.classList.toggle("collapsed");

@@ -172,6 +172,7 @@
         color 0.2s cubic-bezier(1, 0, 0, 1);
 }
 .search-result-item-card:hover ~ .add-book-btn,
+.add-book-btn.added:hover,
 .add-book-btn.loading {
     opacity: 1;
 }

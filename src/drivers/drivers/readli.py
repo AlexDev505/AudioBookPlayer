@@ -137,7 +137,7 @@ class Readli(BaseDriver[TextBook]):
                 series_name=safe_name(series_name),
                 number_in_series=number_in_series,
                 description="",
-                urls={self.site_url + url},
+                urls={url},
                 cover=cover,
                 narrators=set(),
                 publications={"Readli"},

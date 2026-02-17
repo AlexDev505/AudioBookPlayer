@@ -143,7 +143,20 @@
             </div>
         </div>
 
-        <div id="notifications"></div>
+        <div id="notifications">
+            <template id="notification-template">
+                <div class="notification">
+                    <div class="notification-content"></div>
+                    <div class="icon-btn cross-btn"></div>
+                </div>
+            </template>
+            <template id="error-notification-template">
+                <div style="font-weight: bold">
+                    {{ gettext("notifications.error") }}
+                </div>
+                <div class="content"></div>
+            </template>
+        </div>
 
         {% if platform == "Windows" %}
         <div class="size-grip corner-grip" data-place="top-left"></div>

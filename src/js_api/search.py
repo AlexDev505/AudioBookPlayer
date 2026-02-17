@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 import os
 import typing as ty
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from functools import partial
 
 import aiohttp
@@ -16,11 +16,12 @@ from drivers.base_driver import (
     DriverNotAuthenticated,
     LicensedDriver,
 )
-from models.book import Book
+from models.book import Book, RawBook
 from tools import pretty_view
 
 from .exceptions import (
     BookNotFound,
+    CanceledError,
     ConnectionFailedError,
     NoSuitableDriver,
     NotAuthenticated,
@@ -28,7 +29,7 @@ from .exceptions import (
 from .js_api import JSApi
 
 if ty.TYPE_CHECKING:
-    from models.book import BookPreview, RawBook
+    from models.book import BookPreview
 
 
 @dataclass
@@ -116,7 +117,7 @@ class SearchApi(JSApi):
             results = await self._searching_task
         except asyncio.CancelledError:
             logger.debug("search cancelled")
-            return []
+            raise CanceledError()
         if all(isinstance(result, ConnectionFailedError) for result in results):
             raise ty.cast(ConnectionFailedError, results[0])
 
@@ -143,6 +144,7 @@ class SearchApi(JSApi):
                 f"raises {type(e).__name__}: {e}"
             )
             logger.exception(e)
+            return
         books = task.result()
         self._search_states[driver].offset += len(books)
         if len(books) < self.SEARCH_LIMIT:
@@ -172,15 +174,27 @@ class SearchApi(JSApi):
         )
         return exists_book_hashes
 
-    def add_to_library(self, hash: str):
+    def add_book_to_library(self, hash: str):
         if not (book_preview := self._search_results.get(hash)):
             raise BookNotFound()
 
-        book_created = False
+        book_create = False
         db = Database()
         if not (book := db.get_book_by_hash(hash)):
             book = Book.from_book_preview(book_preview)
-            db.save(book)
+            book_create = True
+
+        raw_books = asyncio.run(
+            self._add_sources_to_library(
+                db.check_not_exists_sources(book_preview.urls)
+            )
+        )
+        added_sources = [
+            raw_book for raw_book in raw_books if isinstance(raw_book, RawBook)
+        ]
+        if book_create and added_sources:
+            book.description = added_sources[0].description
+            db.insert(book)
             logger.opt(colors=True).debug(
                 f"book added to library: {book:colored}"
             )
@@ -192,55 +206,43 @@ class SearchApi(JSApi):
                     multiline=not os.getenv("NO_MULTILINE", False),
                 ),
             )
-            book_created = True
-
-        sources_added = asyncio.run(
-            self._add_to_library(
-                db.check_not_exists_sources(book_preview.urls),
-                related_bid=book.id,
-            )
-        )
-
-        return dict(book_created=book_created, sources_added=sources_added)
-
-    async def _add_to_library(self, urls: set[str], related_bid: int) -> int:
-        tasks = []
-        for source_url in urls:
-            if not (driver := BaseDriver.get_suitable_driver(source_url)):
-                raise NoSuitableDriver(source_url)
-            tasks.append(
-                task := asyncio.create_task(driver().get_book(source_url))
-            )
-            task.add_done_callback(
-                partial(self._add_source_to_library, related_bid=related_bid)
+        elif not added_sources:
+            raise ty.cast(
+                BaseException,
+                next(
+                    filter(lambda x: isinstance(x, BaseException), raw_books),
+                    Exception,
+                ),
             )
 
-        results = await asyncio.gather(*tasks, return_exceptions=True)
-        return len(
-            list(filter(lambda x: not isinstance(x, Exception), results))
-        )
-
-    @staticmethod
-    def _add_source_to_library(
-        task: asyncio.Task[RawBook], related_bid: int
-    ) -> None:
-        if book := task.result():
-            source = book.source
-            source.related_book = related_bid
-            Database().save(source)
+        for raw_book in added_sources:
+            raw_book.source.related_book = book.id
+            db.insert(raw_book.source)
             logger.opt(colors=True).debug(
-                f"source added to library: {source:colored}"
+                f"source added to library: {raw_book.source:colored}"
             )
             logger.opt(lazy=True).trace(
                 "source: {data}",
                 data=partial(
                     pretty_view,
-                    source.asdict(),
+                    raw_book.source.asdict(),
                     multiline=not os.getenv("NO_MULTILINE", False),
                 ),
             )
 
-    def add(self, url: str):
-        driver = BaseDriver.get_suitable_driver(url)()
-        book = asyncio.run(driver.get_book(url))
-        print(asdict(book))
+        return dict(
+            book_created=book_create,
+            title=book.title,
+            sources_added=len(added_sources),
+        )
+
+    async def _add_sources_to_library(
+        self, urls: set[str]
+    ) -> list[RawBook | BaseException]:
+        tasks: list[asyncio.Task[RawBook]] = []
+        for source_url in urls:
+            if not (driver := BaseDriver.get_suitable_driver(source_url)):
+                raise NoSuitableDriver(source_url)
+            tasks.append(asyncio.create_task(driver().get_book(source_url)))
+
+        return await asyncio.gather(*tasks, return_exceptions=True)

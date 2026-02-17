@@ -50,7 +50,10 @@ async function searchBooks() {
 function onSearchCompleted(resp, clear = true) {
   if (document.querySelector("#search-input-line input").value == "") return;
   searching = false;
-  if (resp.status != "ok") return showError(resp.message);
+  if (resp.status != "ok") {
+    if (resp.code == 12) return; // CanceledError
+    return showError(resp.message);
+  }
   resp = resp.data;
   var books = {};
   var items = [];
@@ -139,4 +142,30 @@ function onSearchResultContainerScroll() {
         onSearchCompleted(resp, false);
       });
   }
+}
+
+function addBook(el) {
+  if (el.classList.contains("added") || el.classList.contains("loading"))
+    return;
+  el.classList.add("loading");
+  pywebview.api
+    .add_book_to_library(el.parentElement.dataset.hash)
+    .then((response) => {
+      el.classList.remove("loading");
+      if (response.status != "ok") {
+        showError(response.message);
+      } else {
+        el.classList.add("added");
+        var sourcesAdded = document
+          .getElementById("sources-added-notification")
+          .content.cloneNode(true);
+        sourcesAdded.querySelector("#book-title").innerText =
+          response.data.title;
+        sourcesAdded.querySelector("#sources-count").innerText =
+          response.data.sources_added;
+        if (!response.data.book_created)
+          sourcesAdded.querySelector("#book-added").style.display = "none";
+        createNotification(sourcesAdded, 30, true);
+      }
+    });
 }

@@ -1,12 +1,16 @@
 from __future__ import annotations
 
 import os
+import ssl
 import types as tys
 import typing as ty
 from abc import ABC, abstractmethod
+from asyncio.exceptions import CancelledError
+from contextlib import suppress
 from functools import wraps
 
 import aiohttp
+import certifi
 
 from models.book import BookSource
 
@@ -31,7 +35,9 @@ class BaseDriver[SourceT: BookSource](ABC):
     session_factory: ty.Callable[[], aiohttp.ClientSession] = (
         aiohttp.ClientSession
     )
-    request_kwargs: ty.Dict[str, ty.Any] = dict(ssl=False)
+    request_kwargs: ty.Dict[str, ty.Any] = dict(
+        ssl=ssl.create_default_context(cafile=certifi.where())
+    )
     __session: aiohttp.ClientSession | None = None
 
     def __init_subclass__(cls, **__):
@@ -104,7 +110,8 @@ class BaseDriver[SourceT: BookSource](ABC):
         async def _wrapper(self, *args, **kwargs):
             await self._session.__aenter__()
             try:
-                return await func(self, *args, **kwargs)
+                with suppress(CancelledError):
+                    return await func(self, *args, **kwargs)
             finally:
                 await self._session.__aexit__(None, None, None)
                 self.__session = None
