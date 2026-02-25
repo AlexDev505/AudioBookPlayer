@@ -54,9 +54,16 @@ class Readli(BaseDriver[TextBook]):
             )
         )
         cover = soup.select_one(".book-image img").attrs["src"]
-        file_url = soup.select_one(".download__item:not(.disabled) a").attrs[
-            "href"
-        ]
+        for pattern in [
+            r'<a class="download__link" href="(.+?)">fb2</a>'
+            r'<a class="download__link" href="(.+?)">epub</a>'
+        ]:
+            if match := re.search(pattern, page):
+                if (url := match.group(1)) != "#":
+                    file_url = self.site_url + url
+                    break
+        else:
+            raise ValueError("No download link found")
 
         return RawBook(
             title=safe_name(title),

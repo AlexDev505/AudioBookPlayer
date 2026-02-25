@@ -2,5 +2,56 @@
     rel="stylesheet"
     href="{{url_for('static', filename='css/library.css')}}"
 />
+<script defer src="{{ url_for('static', filename='js/library.js') }}"></script>
 
-<div id="library-page-content">Library</div>
+<div id="library-page-content">
+    <div id="library">
+        <div id="library-title"></div>
+        <div id="library-container"></div>
+    </div>
+</div>
+
+<template id="library-title-template"> {{ gettext("library") }} </template>
+<template id="library-favorites-title-template">
+    {{ gettext("library.favorite") }}
+</template>
+<template id="book-card-template">
+    <div class="book-card" data-bid="" onclick="openBookPage(this)">
+        <div class="book-cover"></div>
+        <div class="book-content">
+            <div class="book-main-info-container">
+                <div class="book-main-info">
+                    <div class="book-title"></div>
+                    <div class="book-state">
+                        <div class="book-adding-date">
+                            {{ gettext("book.added") }} ${book.adding_date}
+                        </div>
+                    </div>
+                </div>
+                <div class="book-actions">
+                    <div
+                        class="icon-btn toggle-favorite-btn"
+                        onclick="toggleFavorite(this)"
+                    ></div>
+                    <div
+                        class="icon-btn delete-btn"
+                        onclick="deleteBook(this)"
+                    ></div>
+                    <div
+                        class="icon-btn download-btn"
+                        onclick="startDownloading(this)"
+                    ></div>
+                    <div
+                        class="icon-btn remove-btn"
+                        onclick="removeBook(this)"
+                    ></div>
+                </div>
+            </div>
+            <div class="book-description"></div>
+            <div class="book-additional-info">
+                <div class="book-author"></div>
+                <div class="book-series"></div>
+            </div>
+        </div>
+    </div>
+</template>

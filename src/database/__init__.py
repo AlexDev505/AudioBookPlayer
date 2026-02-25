@@ -49,7 +49,7 @@ class Database(SyncDBCore[Book | TextBook | AudioBook]):
             where.append(Book.id.contained(bids))
         return self.fetchall(
             Book,
-            where=reduce(operator.and_, where),
+            where=reduce(operator.and_, where) if where else None,
             order_by=(~getattr(Book, sort)) if reverse else getattr(Book, sort),
             limit=limit,
             offset=offset,

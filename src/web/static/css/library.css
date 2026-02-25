@@ -1,0 +1,207 @@
+#library-page {
+    width: 100%;
+    height: 100%;
+}
+
+#library-page-content {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+#library {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: calc(100% - 8px);
+    margin: 8px 0 0 8px;
+}
+
+#library-title {
+    font-size: large;
+    font-weight: bold;
+    margin-bottom: 8px;
+    margin-right: 15px;
+    border-bottom: 3px solid var(--cards-bg);
+}
+
+#library-container:not(.loading)::before {
+    content: "Ничего не найдено";
+    top: 50%;
+    left: 40%;
+    position: relative;
+}
+#library-container {
+    flex: 1 1 auto;
+    height: 0;
+    overflow-y: auto;
+    padding-right: 8px;
+    margin-right: 3px;
+    border-radius: 4px;
+}
+#library-container:has(.book-card)::before {
+    display: none;
+}
+#library-container.loading::after {
+    content: "";
+    display: block;
+    height: 3em;
+    background-image: url(../images/loading.gif);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+.book-card {
+    display: flex;
+    max-height: 200px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    background-color: var(--cards-bg);
+    transition: box-shadow 0.2s ease-in-out;
+    cursor: pointer;
+}
+.book-card:hover {
+    box-shadow: -1px 1px 5px 1px rgba(0, 0, 0, 0.1);
+}
+.book-cover {
+    min-width: 130px;
+    min-height: 180px;
+    width: 130px;
+    height: 180px;
+}
+.book-cover:empty {
+    background-position: center;
+    background-size: 3em;
+    background-repeat: no-repeat;
+    background-image: url("../images/loading.gif");
+}
+.book-cover img {
+    width: inherit;
+    height: inherit;
+    border-radius: 4px;
+    object-fit: cover;
+}
+.book-content {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    max-height: 180px;
+    width: 100%;
+    margin-left: 10px;
+    overflow: hidden;
+}
+.book-main-info-container {
+    display: flex;
+    justify-content: space-between;
+}
+.book-title {
+    font-size: larger;
+    font-weight: bold;
+    line-height: 1;
+}
+.book-state {
+    position: relative;
+    display: flex;
+    font-size: small;
+    text-wrap: nowrap;
+    flex-wrap: wrap;
+}
+.book-state > * {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2px;
+}
+.book-state > *::before {
+    content: "";
+    width: 1em;
+    height: 1em;
+    margin-right: 4px;
+}
+.book-listening-progress {
+    margin-right: 8px;
+}
+.book-listening-progress::before {
+    background-image: url(../images/clock.svg);
+}
+.book-adding-date::before {
+    background-image: url(../images/calendar.svg);
+}
+.book-actions {
+    display: flex;
+}
+.book-actions > * {
+    padding: 4px;
+    border-radius: 4px;
+}
+.book-actions > *:not(:first-child):not(:last-child) {
+    margin-left: 12px;
+    margin-right: 12px;
+}
+.book-actions > *:hover:not(.disabled)::after {
+    transform: scale(1.1);
+}
+.book-actions > *:active:not(.disabled) {
+    margin-bottom: -4px;
+}
+.book-actions .icon-btn::after {
+    width: 1.5em;
+    height: 1.5em;
+    transition: background-image 0.15s ease-in-out;
+    transform-origin: center;
+}
+.toggle-favorite-btn::after {
+    background-image: url(../images/star.svg);
+}
+.toggle-favorite-btn.active::after {
+    background-image: url(../images/star_fill.svg);
+}
+.download-btn::after {
+    background-image: url(../images/download.svg);
+}
+.remove-btn::after {
+    background-image: url(../images/cross.svg);
+}
+.delete-btn::after {
+    background-image: url(../images/trash.svg);
+}
+.book-actions > .loading::after {
+    background-image: url(../images/loading.gif);
+}
+.book-description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -line-clamp: 5;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+}
+.book-additional-info {
+    display: flex;
+    text-wrap: nowrap;
+    flex-wrap: wrap;
+    font-size: small;
+}
+.book-additional-info > div {
+    display: flex;
+    align-items: center;
+    margin-right: 8px;
+}
+.book-additional-info > div::before {
+    width: 1em;
+    height: 1em;
+    margin-right: 4px;
+}
+.book-author:empty {
+    display: none;
+}
+.book-author::before {
+    content: url(../images/person.svg);
+}
+.book-series:empty {
+    display: none;
+}
+.book-series::before {
+    content: url(../images/tag.svg);
+}

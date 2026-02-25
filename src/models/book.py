@@ -15,6 +15,8 @@ from tools import normalize_author, normalize_string
 
 type BookFiles = dict[str, str]
 
+DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
+
 
 class BookStatus(Enum):
     NEW = "new"
@@ -72,6 +74,7 @@ class BookSource(ABC):
 
     def asdict(self) -> dict[str, ty.Any]:
         return dict(
+            sid=self.id,
             url=self.url,
             cover=self.cover,
             status=self.status,
@@ -352,8 +355,9 @@ class Book(BookData):
     def asdict(self) -> dict[str, ty.Any]:
         res = super().asdict()
         res.update(
+            bid=self.id,
             cover=self.cover,
-            adding_date=self.adding_date.isoformat(),
+            adding_date=self.adding_date.strftime(DATETIME_FORMAT),
             favorite=self.favorite,
             status=self.status.value,
         )

@@ -88,16 +88,17 @@ class Page {
   constructor(el) {
     this.el = el;
     this.shown = false;
-    this.onShow = null;
+    this.onOpen = null;
     this.onHide = null;
     this.unLoad = null;
   }
-  show() {
+  open() {
     if (this.constructor.current == this) return;
     if (this.constructor.last && this.constructor.last != this) {
       if (this.constructor.last.unLoad)
         this.constructor.last.unLoad(this.constructor.last.el);
     }
+    var restore = this == this.constructor.last;
     if (
       this.constructor.current &&
       this.constructor.current.constructor == this.constructor
@@ -107,7 +108,7 @@ class Page {
     }
     this.constructor.current = this;
     addUrlParams({ page: this.el.id });
-    if (this.onShow) this.onShow(this.el);
+    if (this.onOpen && !restore) this.onOpen(this.el);
     this.el.style = "display: block";
     this.shown = true;
   }
@@ -130,7 +131,7 @@ function page(el_id) {
 function openPageFromUrlParams() {
   var page_name = urlParams.get("page") || "library-page";
   var page_obj = page(page_name);
-  if (page_obj) page_obj.show();
+  if (page_obj) page_obj.open();
 }
 
 window.addEventListener("pywebviewready", function () {
@@ -144,16 +145,19 @@ window.addEventListener("pywebviewready", function () {
   // loadLastListenedBook();
 });
 
-function openLibraryPage(favorite = null) {
+function openLibraryPage(favorite = false) {
   library_page = page("library-page");
   if (favorite == true) addUrlParams({ favorite: 1 });
   else if (favorite == false && urlParams.get("favorite"))
     removeUrlParams(["favorite"]);
-  if (!library_page.shown) {
-    library_page.show();
+  if (
+    library_page.shown ||
+    (Page.last == library_page && favorite != library_filters.favorite)
+  ) {
+    library_page.unLoad(library_page.el);
+    library_page.onOpen(library_page.el);
   } else {
-    library_page.onHide(library_page.el);
-    library_page.onShow(library_page.el);
+    library_page.open();
   }
 }
 

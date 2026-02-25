@@ -1,5 +1,6 @@
 import os
 
+from . import library as library
 from . import search as search
 from . import settings as settings
 from .js_api import JSApi

@@ -2,7 +2,7 @@ const searchResultItemTemplate = document.getElementById(
   "search-result-item-template",
 );
 
-page("search-page").onShow = function (el) {
+page("search-page").onOpen = function () {
   q = urlParams.get("search");
   if (q) {
     document.querySelector("#search-input-line input").value = q;
