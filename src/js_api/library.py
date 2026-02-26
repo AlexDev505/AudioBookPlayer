@@ -19,6 +19,7 @@ from models.book import BookStatus
 from tools import pretty_view
 
 from .exceptions import (
+    BookNotFound,
     ConnectionFailedError,
     NoSuitableDriver,
     NotAuthenticated,
@@ -35,6 +36,12 @@ class LibraryApi(JSApi):
 
         self._library_search_query: str | None = None
         self._matched_books_bids: list[int] | None = None
+
+    def book_by_bid(self, bid: int, listening_data: bool = False):
+        if book := Database().get_book_by_bid(bid):
+            logger.opt(colors=True).debug(f"book found: {book:styled}")
+            return book.asdict()
+        raise BookNotFound(bid=bid)
 
     def get_library(
         self,

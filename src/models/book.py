@@ -357,6 +357,7 @@ class Book(BookData):
         res.update(
             bid=self.id,
             cover=self.cover,
+            local_cover=str(self.cover_path),
             adding_date=self.adding_date.strftime(DATETIME_FORMAT),
             favorite=self.favorite,
             status=self.status.value,

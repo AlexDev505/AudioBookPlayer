@@ -102,3 +102,10 @@ function loadPreview(book) {
     };
   };
 }
+
+function openBookPage(card) {
+  if (window.event.srcElement.classList.contains("icon-btn")) return;
+  addUrlParams({ bid: card.dataset.bid });
+  if (Page.last == page("book-page")) Page.last = null;
+  page("book-page").open();
+}
