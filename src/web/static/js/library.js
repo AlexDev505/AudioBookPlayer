@@ -3,7 +3,7 @@ const libraryFavoritesTitleTemplate = document.getElementById(
   "library-favorites-title-template",
 );
 const bookCardTemplate = document.getElementById("book-card-template");
-const LIBRARY_FETCH_LIMIT = 3;
+const LIBRARY_FETCH_LIMIT = 10;
 
 var library_filters = {};
 
@@ -49,10 +49,10 @@ function onLibraryScrollEnd(el) {
 }
 function showBooks(response) {
   fetching_books = false;
+  let container = document.getElementById("library-container");
   container.classList.remove("loading");
 
   if (response.status != "ok") return showError(response.message);
-  let container = document.getElementById("library-container");
 
   console.log(response.data);
   for (let book of response.data) {
@@ -78,6 +78,7 @@ function showBooks(response) {
     container.appendChild(el);
   }
 
+  books_count += response.data.length;
   if (response.data.length < LIBRARY_FETCH_LIMIT) can_load_more = false;
 }
 
