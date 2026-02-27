@@ -60,7 +60,8 @@ function showBooks(response) {
     el.querySelector(".book-card").setAttribute("data-bid", book.bid);
     el.querySelector(".book-cover").src = book.cover;
     el.querySelector(".book-title").textContent = book.title;
-    el.querySelector(".book-adding-date").textContent = book.adding_date;
+    el.querySelector(".book-adding-date .content").textContent =
+      book.adding_date;
     el.querySelector(".book-description").textContent = book.description;
     el.querySelector(".book-author").textContent = book.author;
     el.querySelector(".book-series").textContent =

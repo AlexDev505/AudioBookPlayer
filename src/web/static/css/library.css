@@ -36,7 +36,7 @@
     height: 0;
     overflow-y: auto;
     padding-right: 8px;
-    margin-right: 3px;
+    margin-right: 2px;
     border-radius: 4px;
 }
 #library-container:has(.book-card)::before {
@@ -124,6 +124,9 @@
 }
 .book-listening-progress::before {
     background-image: url(../images/clock.svg);
+}
+.book-adding-date .content {
+    margin-left: 4px;
 }
 .book-adding-date::before {
     background-image: url(../images/calendar.svg);
