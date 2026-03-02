@@ -37,10 +37,10 @@ class LibraryApi(JSApi):
         self._library_search_query: str | None = None
         self._matched_books_bids: list[int] | None = None
 
-    def book_by_bid(self, bid: int, listening_data: bool = False):
+    def book_by_bid(self, bid: int, listening_data: bool = True):
         if book := Database().get_book_by_bid(bid):
             logger.opt(colors=True).debug(f"book found: {book:styled}")
-            return book.asdict()
+            return book.asdict(with_sources=listening_data)
         raise BookNotFound(bid=bid)
 
     def get_library(

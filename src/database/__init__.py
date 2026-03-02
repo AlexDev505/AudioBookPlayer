@@ -47,13 +47,18 @@ class Database(SyncDBCore[Book | TextBook | AudioBook]):
             where.append(Book.status == status)
         if bids is not None:
             where.append(Book.id.contained(bids))
-        return self.fetchall(
+        books = self.fetchall(
             Book,
             where=reduce(operator.and_, where) if where else None,
             order_by=(~getattr(Book, sort)) if reverse else getattr(Book, sort),
             limit=limit,
             offset=offset,
         )
+        for book in books:
+            sources = self.get_book_sources(book.id)
+            book.add_audio_sources(*sources[SourceType.AudioBook])
+            book.add_text_sources(*sources[SourceType.TextBook])
+        return books
 
     def get_book_by_bid(self, bid: int) -> Book | None:
         return self.fetchone(Book, where=Book.id == bid)
@@ -66,7 +71,14 @@ class Database(SyncDBCore[Book | TextBook | AudioBook]):
 
     def get_book_sources(
         self, bid: int
-    ) -> dict[SourceType, list[BookSource]]: ...
+    ) -> dict[SourceType, ty.Sequence[BookSource]]:
+        results: dict[SourceType, ty.Sequence[BookSource]] = {}
+        for source_type in SourceType:
+            sources = self.fetchall(
+                source_type.value, where=source_type.value.related_book == bid
+            )
+            results[source_type] = sources
+        return results
 
     def get_source_by_sid[SourceT: BookSource](
         self, sid: int, source_type: type[SourceT]

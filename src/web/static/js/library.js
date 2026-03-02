@@ -63,6 +63,10 @@ function showBooks(response) {
     el.querySelector(".book-adding-date .content").textContent =
       book.adding_date;
     el.querySelector(".book-description").textContent = book.description;
+    el.querySelector(".book-text-sources-count").textContent =
+      book.text_sources_count ? book.text_sources_count : "";
+    el.querySelector(".book-audio-sources-count").textContent =
+      book.audio_sources_count ? book.audio_sources_count : "";
     el.querySelector(".book-author").textContent = book.author;
     el.querySelector(".book-series").textContent =
       `${book.series_name}${book.number_in_series ? ` (${book.number_in_series})` : ""}`;

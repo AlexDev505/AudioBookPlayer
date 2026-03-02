@@ -40,7 +40,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "aiodbcore", specifier = ">=0.6.2" },
+    { name = "aiodbcore", extras = ["dev"], specifier = "==0.6.3" },
     { name = "aiofiles", specifier = ">=25.1.0" },
     { name = "aiohttp", specifier = ">=3.13.3" },
     { name = "babel", marker = "extra == 'dev'", specifier = ">=2.18.0" },
@@ -68,14 +68,14 @@ provides-extras = ["android-dev", "dev"]
 
 [[package]]
 name = "aiodbcore"
-version = "0.6.2"
+version = "0.6.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "orjson" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/cd/c9/3f45a9df3a5bdecb7a4bb73f22a835244680c0cf325732131bcd2aa88bcf/aiodbcore-0.6.2.tar.gz", hash = "sha256:08e49029f1a8cba4bbffb40eab078604d58e1ce3cfed2830faa906f5a8bc7032", size = 18521, upload-time = "2026-02-15T11:15:37.644Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/4d/f4/652c0867ba8459036a3ca811da2d67a7fad5f94d282803604cee9c9191e3/aiodbcore-0.6.3.tar.gz", hash = "sha256:cf7ad05ea163bf85b8b57b18ecd0f4ec49ca0ac2eefa05fd0fc2a518503180d6", size = 18495, upload-time = "2026-03-02T16:42:42.979Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/0c/d2/3088cdcec74367f49790c5f7d5633e98c3b692bd0aa96d19008dadd19ba6/aiodbcore-0.6.2-py3-none-any.whl", hash = "sha256:c2ba1f3d0d993cd061eccedcb1e8360ccc8037f9f7577cade73f3bad579e4f52", size = 30008, upload-time = "2026-02-15T11:15:38.882Z" },
+    { url = "https://files.pythonhosted.org/packages/d9/58/9cf61f5ce07d3c2d4074cbfc61c9b91db001612555669a89a6b8b502b998/aiodbcore-0.6.3-py3-none-any.whl", hash = "sha256:135910b2a971bc41ab238503c187bcc1882be47ca19970d7e35e3568b81848fa", size = 29980, upload-time = "2026-03-02T16:42:42.177Z" },
 ]
 
 [[package]]

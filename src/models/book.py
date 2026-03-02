@@ -325,11 +325,11 @@ class Book(BookData):
         yield from self._text_sources
         yield from self._audio_sources
 
-    def add_text_source(self, source: TextBook) -> None:
-        self._text_sources.append(source)
+    def add_text_sources(self, *sources: TextBook) -> None:
+        self._text_sources.extend(sources)
 
-    def add_audio_source(self, source: AudioBook) -> None:
-        self._audio_sources.append(source)
+    def add_audio_sources(self, *sources: AudioBook) -> None:
+        self._audio_sources.extend(sources)
 
     def to_raw_book[T: BookSource](self, source: T) -> RawBook[T]:
         return RawBook(
@@ -352,7 +352,7 @@ class Book(BookData):
             cover=preview.cover,
         )
 
-    def asdict(self) -> dict[str, ty.Any]:
+    def asdict(self, with_sources: bool = False) -> dict[str, ty.Any]:
         res = super().asdict()
         res.update(
             bid=self.id,
@@ -361,7 +361,16 @@ class Book(BookData):
             adding_date=self.adding_date.strftime(DATETIME_FORMAT),
             favorite=self.favorite,
             status=self.status.value,
+            audio_sources_count=len(self._audio_sources),
+            text_sources_count=len(self._text_sources),
         )
+        if with_sources:
+            res.update(
+                audio_sources=[
+                    source.asdict() for source in self._audio_sources
+                ],
+                text_sources=[source.asdict() for source in self._text_sources],
+            )
         return res
 
     def __repr__(self):

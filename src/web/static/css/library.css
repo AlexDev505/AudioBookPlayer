@@ -196,6 +196,18 @@
     height: 1em;
     margin-right: 4px;
 }
+.book-text-sources-count:empty {
+    display: none;
+}
+.book-text-sources-count::before {
+    content: url(../images/book.svg);
+}
+.book-audio-sources-count:empty {
+    display: none;
+}
+.book-audio-sources-count::before {
+    content: url(../images/mic.svg);
+}
 .book-author:empty {
     display: none;
 }
