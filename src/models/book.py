@@ -42,6 +42,14 @@ class Chapter:
     def duration(self) -> int:
         return self.end_time - self.start_time
 
+    def __repr__(self) -> str:
+        return f"<Chapter {self.title}>"
+
+
+class Chapters(list[Chapter]):
+    def __init__(self, iterable: ty.Iterable[dict]):
+        super().__init__(Chapter(**kwargs) for kwargs in iterable)
+
 
 @dataclass(kw_only=True)
 class BookSource(ABC):
@@ -77,7 +85,7 @@ class BookSource(ABC):
             sid=self.id,
             url=self.url,
             cover=self.cover,
-            status=self.status,
+            status=self.status.value,
             files=self.files,
         )
 
@@ -126,7 +134,7 @@ class TextBook(BookSource):
 class AudioBook(BookSource):
     narrator: Field[str]
     duration: Field[str]
-    chapters: Field[list[Chapter]]
+    chapters: Field[Chapters]
     progress: Field[ListeningProgress] = Field(
         field(default_factory=ListeningProgress)
     )

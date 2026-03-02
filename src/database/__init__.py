@@ -60,8 +60,15 @@ class Database(SyncDBCore[Book | TextBook | AudioBook]):
             book.add_text_sources(*sources[SourceType.TextBook])
         return books
 
-    def get_book_by_bid(self, bid: int) -> Book | None:
-        return self.fetchone(Book, where=Book.id == bid)
+    def get_book_by_bid(
+        self, bid: int, with_sources: bool = False
+    ) -> Book | None:
+        book = self.fetchone(Book, where=Book.id == bid)
+        if with_sources and book:
+            sources = self.get_book_sources(book.id)
+            book.add_audio_sources(*sources[SourceType.AudioBook])
+            book.add_text_sources(*sources[SourceType.TextBook])
+        return book
 
     def get_books_by_bid(self, *bids: int) -> list[Book]:
         return self.fetchall(Book, where=Book.id.contained(bids))
