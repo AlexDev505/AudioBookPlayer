@@ -1,1 +1,1 @@
-pybabel compile --directory ..\..\abplayer\locales --domain base
+pybabel compile --directory ..\..\src\locales --domain base

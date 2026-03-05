@@ -1,1 +1,1 @@
-pybabel extract -F babel.config -o ..\..\abplayer\locales\messages.pot ..\..\abplayer\
+pybabel extract -F babel.config -o ..\..\src\locales\messages.pot ..\..\src\
