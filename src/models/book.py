@@ -8,6 +8,7 @@ from datetime import datetime
 from enum import Enum
 from hashlib import md5
 from pathlib import Path
+from urllib.parse import urlparse
 
 from aiodbcore.models import Field, Index
 
@@ -80,12 +81,18 @@ class BookSource(ABC):
     def is_downloaded(self) -> bool:
         return bool(self.files)
 
+    @property
+    def domain(self) -> str:
+        return urlparse(self.url).netloc.split(".")[0]
+
     def asdict(self) -> dict[str, ty.Any]:
         return dict(
             sid=self.id,
             url=self.url,
+            domain=self.domain,
             cover=self.cover,
             status=self.status.value,
+            progress_percent=self.progress_percent,
             files=self.files,
         )
 

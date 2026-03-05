@@ -1,3 +1,4 @@
+const sourceCardTemplate = document.querySelector("#source-card-template");
 var opened_book = null;
 
 page("book-page").onOpen = function () {
@@ -30,8 +31,6 @@ function loadBookData(bid) {
     } else page.querySelector(".book-series").style = "display: none";
     page.querySelector(".book-description").innerHTML = resp.data.description;
     page.querySelector("#player-controls").style = "display: none";
-    page.querySelector("#player-downloading-required").style = "display: none";
-    page.querySelector("#player-downloading").style = "display: none";
     page.querySelector(".toggle-favorite-btn").onclick = function () {
       toggleFavorite(this, resp.data.bid);
     };
@@ -39,6 +38,45 @@ function loadBookData(bid) {
     page.querySelector(".open-book-dir").style = "display: none";
     page.querySelector(".open-in-browser").style = "display: none";
     page.querySelector("#player").classList.add("not-available");
+
+    showSources(resp.data);
+
     page.querySelector("#book-loading").style = "display: none;";
   });
+}
+
+function showSources(book) {
+  let audioSources = document.querySelector(
+    "#audio-sources .sources-container",
+  );
+  let textSources = document.querySelector("#text-sources .sources-container");
+  audioSources.innerHTML = "";
+  textSources.innerHTML = "";
+  for (let source of book.audio_sources) {
+    let card = createSourceCard(source);
+    audioSources.appendChild(card);
+  }
+  for (let source of book.text_sources) {
+    let card = createSourceCard(source);
+    textSources.appendChild(card);
+  }
+}
+function createSourceCard(source) {
+  let status = document.querySelector(
+    `template.book-status[data-status="${source.status}"]`,
+  ).innerHTML;
+  let card = sourceCardTemplate.content.cloneNode(true);
+  card.querySelector(".source-card").setAttribute("data-sid", source.sid);
+  card.querySelector(".source-title").innerHTML = source.narrator
+    ? source.narrator
+    : source.publication;
+  card.querySelector(".source-domain").innerHTML = source.domain;
+  card.querySelector(".source-duration").innerHTML = source.duration
+    ? source.duration
+    : source.total_pages;
+  card.querySelector(".source-status").innerHTML = status;
+  card.querySelector(".open-in-browser").onclick = () => {
+    window.open(source.url, "_blank");
+  };
+  return card;
 }

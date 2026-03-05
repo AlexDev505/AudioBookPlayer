@@ -61,19 +61,24 @@
                 </div>
                 <div id="items-container"></div>
             </div>
-            <div id="player-downloading">
-                {{ gettext("wait_for_downloading_end") }}
-            </div>
-            <div id="player-downloading-required">
-                {{ gettext("online_listening_not_provided") }}
-                <div id="download-book-btn" class="button">
-                    {{ gettext("book.download") }}
+            <div id="sources">
+                <div id="audio-sources">
+                    <div class="sources-container-title">
+                        {{ gettext("book.audio_sources") }}
+                    </div>
+                    <div class="sources-container"></div>
+                </div>
+                <div id="text-sources">
+                    <div class="sources-container-title">
+                        {{ gettext("book.text_sources") }}
+                    </div>
+                    <div class="sources-container"></div>
                 </div>
             </div>
         </div>
     </div>
     <div id="book-info">
-        <div class="book-additional-info">
+        <div class="tags-container">
             <div class="book-author"></div>
             <div class="book-reader"></div>
             <div class="book-duration"></div>
@@ -83,3 +88,26 @@
     </div>
     <div class="book-description"></div>
 </div>
+
+<template id="source-card-template">
+    <div class="source-card">
+        <div>
+            <div class="source-title"></div>
+            <div class="source-info tags-container">
+                <div class="source-domain driver"></div>
+                <div class="source-duration book-duration"></div>
+                <div class="source-status book-status"></div>
+            </div>
+        </div>
+        <div class="icon-btn open-in-browser"></div>
+    </div>
+</template>
+<template class="book-status" data-status="new"
+    >{{ gettext("book.status.new") }}
+</template>
+<template class="book-status" data-status="in-progress"
+    >{{ gettext("book.status.in_progress") }}
+</template>
+<template class="book-status" data-status="completed"
+    >{{ gettext("book.status.completed") }}
+</template>

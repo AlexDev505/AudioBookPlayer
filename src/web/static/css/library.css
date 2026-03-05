@@ -180,18 +180,18 @@
     -webkit-line-clamp: 5;
     -webkit-box-orient: vertical;
 }
-.book-additional-info {
+.tags-container {
     display: flex;
     text-wrap: nowrap;
     flex-wrap: wrap;
     font-size: small;
 }
-.book-additional-info > div {
+.tags-container > div {
     display: flex;
     align-items: center;
     margin-right: 8px;
 }
-.book-additional-info > div::before {
+.tags-container > div::before {
     width: 1em;
     height: 1em;
     margin-right: 4px;
@@ -219,4 +219,34 @@
 }
 .book-series::before {
     content: url(../images/tag.svg);
+}
+.book-narrator:empty {
+    display: none;
+}
+.book-narrator::before {
+    content: url(../images/mic.svg);
+}
+.book-publication:empty {
+    display: none;
+}
+.book-publication::before {
+    content: url(../images/book.svg);
+}
+.book-duration:empty {
+    display: none;
+}
+.book-duration::before {
+    content: url(../images/clock.svg);
+}
+.book-status:empty {
+    display: none;
+}
+.book-status::before {
+    content: url(../images/tag.svg);
+}
+.driver:empty {
+    display: none;
+}
+.driver::before {
+    content: url(../images/hdd.svg);
 }

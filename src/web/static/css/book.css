@@ -220,6 +220,52 @@
     -webkit-line-clamp: unset;
     -webkit-box-orient: unset;
 }
-#book-page-content .book-description::-webkit-scrollbar-thumb {
+#book-page-content ::-webkit-scrollbar-thumb {
     border-radius: 4px;
+}
+
+#book-page-content #sources {
+    display: flex;
+    height: 100%;
+}
+#book-page-content #sources > div {
+    padding: 0 16px;
+    display: flex;
+    flex-direction: column;
+    margin: 8px 0;
+}
+#book-page-content
+    #sources:not(:has(.sources-container:empty))
+    > div:first-child {
+    border-right: 2px solid var(--ui-element-bg);
+}
+#book-page-content #sources > div:has(.sources-container:empty) {
+    display: none;
+}
+#book-page-content #sources .sources-container-title {
+    font-size: large;
+    font-weight: bold;
+}
+#book-page-content .sources-container {
+    margin-top: 8px;
+    gap: 4px;
+    display: flex;
+    flex-direction: column;
+    height: 0;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+#book-page-content .source-card {
+    display: flex;
+    text-align: left;
+    gap: 8px;
+    align-items: center;
+    cursor: pointer;
+}
+#book-page-content .source-card .source-info {
+    display: flex;
+}
+#book-page-content .source-card .source-title {
+    font-weight: bold;
 }
