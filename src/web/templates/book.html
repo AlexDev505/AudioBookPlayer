@@ -8,12 +8,12 @@
         <div>
             <div class="book-title"></div>
             <div class="book-state">
-                <div class="book-listening-progress"></div>
+                <div class="book-status"></div>
                 <div
-                    class="book-listening-progress-btn"
-                    onclick="showListeningProgressAction()"
+                    class="book-state-btn"
+                    onclick="showBookStateAction()"
                 ></div>
-                <div class="book-listening-progress-action"></div>
+                <div class="book-state-action"></div>
                 <div class="book-adding-date">
                     {{ gettext("book.added") }} <span class="content"></span>
                 </div>
@@ -110,4 +110,10 @@
 </template>
 <template class="book-status" data-status="completed"
     >{{ gettext("book.status.completed") }}
+</template>
+<template class="book-mark-as-new"
+    >{{ gettext("book.status.mark_as_new") }}
+</template>
+<template class="book-mark-as-completed"
+    >{{ gettext("book.status.mark_as_completed") }}
 </template>

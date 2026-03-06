@@ -21,6 +21,7 @@ function loadBookData(bid) {
     page.querySelector(".book-title").innerHTML = resp.data.title;
     page.querySelector(".book-adding-date .content").innerHTML =
       resp.data.adding_date;
+    showBookState(resp.data);
     page.querySelector(".book-preview").style =
       `background-image: url('${resp.data.cover}'), url('/library/${resp.data.local_cover}');`;
     page.querySelector(".book-author").innerHTML = resp.data.author;
@@ -44,7 +45,35 @@ function loadBookData(bid) {
     page.querySelector("#book-loading").style = "display: none;";
   });
 }
-
+function showBookState(book) {
+  let status = document.querySelector(
+    `template.book-status[data-status="${book.status}"]`,
+  ).innerHTML;
+  document.querySelector("#book-page-content .book-status").innerHTML = status;
+  let el = document.querySelector("#book-page-content .book-state-action");
+  if (book.status == "completed") {
+    el.classList.add("completed");
+    var actionText = document.querySelector(
+      "template.book-mark-as-new",
+    ).innerHTML;
+    el.onclick = () => {
+      pywebview.api.mark_book_as_new(book.bid);
+      book.status = "new";
+      showBookState(book);
+    };
+  } else {
+    el.classList.remove("completed");
+    var actionText = document.querySelector(
+      "template.book-mark-as-completed",
+    ).innerHTML;
+    el.onclick = () => {
+      pywebview.api.mark_book_as_completed(book.bid);
+      book.status = "completed";
+      showBookState(book);
+    };
+  }
+  el.innerHTML = actionText;
+}
 function showSources(book) {
   let audioSources = document.querySelector(
     "#audio-sources .sources-container",
@@ -79,4 +108,8 @@ function createSourceCard(source) {
     window.open(source.url, "_blank");
   };
   return card;
+}
+
+function showBookStateAction() {
+  document.querySelector(".book-state-action").classList.toggle("showen");
 }
