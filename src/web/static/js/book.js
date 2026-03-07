@@ -1,5 +1,7 @@
 const sourceCardTemplate = document.querySelector("#source-card-template");
+const chapterTemplate = document.querySelector("#chapter-template");
 var opened_book = null;
+var selected_source = null;
 
 page("book-page").onOpen = function () {
   let bid = urlParams.get("bid");
@@ -31,14 +33,14 @@ function loadBookData(bid) {
       page.querySelector(".book-series").style = "display: flex";
     } else page.querySelector(".book-series").style = "display: none";
     page.querySelector(".book-description").innerHTML = resp.data.description;
-    page.querySelector("#player-controls").style = "display: none";
     page.querySelector(".toggle-favorite-btn").onclick = function () {
       toggleFavorite(this, resp.data.bid);
     };
     page.querySelector(".search-series").style = "display: none";
     page.querySelector(".open-book-dir").style = "display: none";
     page.querySelector(".open-in-browser").style = "display: none";
-    page.querySelector("#player").classList.add("not-available");
+    page.querySelector("#player").classList.add("hidden");
+    page.querySelector("#sources").classList.remove("hidden");
 
     showSources(resp.data);
 
@@ -83,6 +85,9 @@ function showSources(book) {
   textSources.innerHTML = "";
   for (let source of book.audio_sources) {
     let card = createSourceCard(source);
+    card.querySelector(".source-card").onclick = () => {
+      selectAudioBook(source.sid);
+    };
     audioSources.appendChild(card);
   }
   for (let source of book.text_sources) {
@@ -110,6 +115,34 @@ function createSourceCard(source) {
   return card;
 }
 
+function selectAudioBook(sid) {
+  pywebview.api.select_audio_source(sid);
+  selected_source = opened_book.audio_sources.find(
+    (source) => source.sid === sid,
+  );
+  showPlayer(selected_source);
+}
+function showPlayer(source) {
+  document.querySelector("#player").classList.remove("hidden");
+  document.querySelector("#sources").classList.add("hidden");
+  var container = document.querySelector("#player #chapters-container");
+  container.innerHTML = "";
+  var i = 0;
+  for (let chapter of source.chapters) {
+    let el = chapterTemplate.content.cloneNode(true);
+    el.querySelector(".chapter").setAttribute("data-index", i++);
+    el.querySelector(".title").innerHTML = chapter.title;
+    el.querySelector(".total-time").innerHTML = timeView(
+      chapter.end_time - chapter.start_time,
+    );
+    container.appendChild(el);
+  }
+}
+
 function showBookStateAction() {
   document.querySelector(".book-state-action").classList.toggle("showen");
+}
+
+function timeView(time) {
+  return `${String(Math.floor(time / 60)).padStart(2, "0")}:${String(time % 60).padStart(2, "0")}`;
 }

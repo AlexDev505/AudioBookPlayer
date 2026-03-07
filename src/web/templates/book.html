@@ -35,9 +35,23 @@
             <div class="icon-btn toggle-favorite-btn"></div>
         </div>
     </div>
-    <div id="book-player">
+    <div id="book-main">
         <div class="book-preview"></div>
-        <div id="player">
+        <div id="sources" class="book-main-content">
+            <div id="audio-sources">
+                <div class="sources-container-title">
+                    {{ gettext("book.audio_sources") }}
+                </div>
+                <div class="sources-container"></div>
+            </div>
+            <div id="text-sources">
+                <div class="sources-container-title">
+                    {{ gettext("book.text_sources") }}
+                </div>
+                <div class="sources-container"></div>
+            </div>
+        </div>
+        <div id="player" class="book-main-content">
             <audio id="audio-player"></audio>
             <div id="player-controls">
                 <div class="button-group">
@@ -59,21 +73,7 @@
                         <span>15 {{ gettext("s") }}</span>
                     </div>
                 </div>
-                <div id="items-container"></div>
-            </div>
-            <div id="sources">
-                <div id="audio-sources">
-                    <div class="sources-container-title">
-                        {{ gettext("book.audio_sources") }}
-                    </div>
-                    <div class="sources-container"></div>
-                </div>
-                <div id="text-sources">
-                    <div class="sources-container-title">
-                        {{ gettext("book.text_sources") }}
-                    </div>
-                    <div class="sources-container"></div>
-                </div>
+                <div id="chapters-container"></div>
             </div>
         </div>
     </div>
@@ -116,4 +116,21 @@
 </template>
 <template class="book-mark-as-completed"
     >{{ gettext("book.status.mark_as_completed") }}
+</template>
+<template id="chapter-template">
+    <div
+        class="chapter"
+        data-index=""
+        onclick="selectChapter(this)"
+        onmousedown="bookItemOnmousedown(event, this)"
+        onmousemove="bookItemOnmousemove(event, this)"
+        onmouseup="bookItemOnmouseup(event, this)"
+        onmouseout="bookItemOnmouseup(event, this)"
+    >
+        <span class="title"></span>
+        <span class="time">
+            <span class="cur-time">00:00</span> /
+            <span class="total-time"></span>
+        </span>
+    </div>
 </template>

@@ -30,14 +30,14 @@ def create_starting_window() -> webview.Window:
     logger.info("launching starting window...")
 
     window = webview.create_window(
-            "ABPLayer",
-            app,
-            width=210,
-            height=240,
-            frameless=True,
-            easy_drag=True,
-            background_color="#202225",
-        )
+        "ABPLayer",
+        app,
+        width=210,
+        height=240,
+        frameless=True,
+        easy_drag=True,
+        background_color="#202225",
+    )
 
     # Adding event handlers
     window.events.loaded += _on_loaded
@@ -69,7 +69,7 @@ def start_app(window: webview.Window) -> None:
         f"sqlite://{os.environ['DATABASE_PATH']}",
         check_same_thread=False,
     )
-    Database().create_tables()
+    Database().create_library()
 
     window.run_js("setStatus('запуск...')")
 

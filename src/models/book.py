@@ -59,6 +59,7 @@ class BookSource(ABC):
     url: ty.Annotated[Field[str], Index("source_url", unique=True)]
     cover: Field[str]
 
+    selected: Field[bool] = Field(False)
     status: Field[BookStatus] = Field(BookStatus.NEW)
     files: Field[BookFiles] = Field(field(default_factory=dict))
     """ Dict like {file_name: hash} """
@@ -91,6 +92,7 @@ class BookSource(ABC):
             url=self.url,
             domain=self.domain,
             cover=self.cover,
+            selected=self.selected,
             status=self.status.value,
             progress_percent=self.progress_percent,
             files=self.files,

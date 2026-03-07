@@ -1,33 +1,13 @@
 from __future__ import annotations
 
-import asyncio
-import typing as ty
-from dataclasses import dataclass
-from functools import partial
-
-import aiohttp
-import requests
 from loguru import logger
 
 from database import Database
-from drivers.base_driver import (
-    BaseDriver,
-    DriverNotAuthenticated,
-    LicensedDriver,
-)
 from models.book import BookStatus
 from tools import pretty_view
 
-from .exceptions import (
-    BookNotFound,
-    ConnectionFailedError,
-    NoSuitableDriver,
-    NotAuthenticated,
-)
+from .exceptions import BookNotFound
 from .js_api import JSApi
-
-if ty.TYPE_CHECKING:
-    from models.book import BookPreview, RawBook
 
 
 class LibraryApi(JSApi):
@@ -82,3 +62,6 @@ class LibraryApi(JSApi):
         )
 
         return [book.asdict() for book in books]
+
+    def select_audio_source(self, sid: int):
+        Database().select_audio_source(sid)

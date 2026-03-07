@@ -5,7 +5,6 @@ import typing as ty
 from functools import reduce
 
 from aiodbcore import SyncDBCore
-from aiodbcore.operators import ContainedCmpOperator
 
 from models.book import (
     AudioBook,
@@ -23,6 +22,20 @@ if ty.TYPE_CHECKING:
 class Database(SyncDBCore[Book | TextBook | AudioBook]):
     def create_library(self):
         self.create_tables()
+        for table in {AudioBook, TextBook}:
+            self.provider.execute(
+                f"""
+                CREATE TRIGGER IF NOT EXISTS only_one_selected_{table.__name__}
+                        BEFORE UPDATE OF selected
+                            ON {table.__name__}
+                        WHEN hex(NEW.selected) = hex("true")
+                BEGIN
+                    UPDATE {table.__name__}
+                    SET selected = CAST ('false' AS BLOB)
+                    WHERE related_book = OLD.related_book;
+                END;
+                """
+            )
 
     def get_library(
         self,
@@ -131,4 +144,14 @@ class Database(SyncDBCore[Book | TextBook | AudioBook]):
                     tuple(urls),
                 )
             }
+        )
+
+    def select_audio_source(self, sid: int):
+        self.update(
+            AudioBook, {AudioBook.selected: True}, where=AudioBook.id == sid
+        )
+
+    def select_text_source(self, sid: int):
+        self.update(
+            TextBook, {TextBook.selected: True}, where=TextBook.id == sid
         )
