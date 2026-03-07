@@ -58,28 +58,20 @@ function showBooks(response) {
   for (let book of response.data) {
     let el = bookCardTemplate.content.cloneNode(true);
     el.querySelector(".book-card").setAttribute("data-bid", book.bid);
-    el.querySelector(".book-cover").src = book.cover;
+    el.querySelector(".cover").src = book.cover;
     el.querySelector(".book-title").textContent = book.title;
-    el.querySelector(".book-adding-date .content").textContent =
-      book.adding_date;
+    el.querySelector(".adding-date .content").textContent = book.adding_date;
     el.querySelector(".book-description").textContent = book.description;
-    el.querySelector(".book-text-sources-count").textContent =
+    el.querySelector(".text-sources-count").textContent =
       book.text_sources_count ? book.text_sources_count : "";
-    el.querySelector(".book-audio-sources-count").textContent =
+    el.querySelector(".audio-sources-count").textContent =
       book.audio_sources_count ? book.audio_sources_count : "";
-    el.querySelector(".book-author").textContent = book.author;
-    el.querySelector(".book-series").textContent =
+    el.querySelector(".author").textContent = book.author;
+    el.querySelector(".series").textContent =
       `${book.series_name}${book.number_in_series ? ` (${book.number_in_series})` : ""}`;
     if (book.favorite)
-      el.querySelector(".toggle-favorite-btn").classList.add("active");
-    if (book.downloaded) {
-      el.querySelector(".download-btn").remove();
-    } else {
-      el.querySelector(".delete-btn").remove();
-      if (book.downloading)
-        el.querySelector(".download-btn").classList.add("loading");
-    }
-    loadPreview(book);
+      el.querySelector(".toggle-favorite").classList.add("active");
+    loadCover(book);
     container.appendChild(el);
   }
 
@@ -87,12 +79,12 @@ function showBooks(response) {
   if (response.data.length < LIBRARY_FETCH_LIMIT) can_load_more = false;
 }
 
-function loadPreview(book) {
+function loadCover(book) {
   var img = new Image();
   img.src = book.cover;
   img.onload = function () {
     var el = document.querySelector(
-      `#library-container .book-card[data-bid='${book.bid}'] .book-cover`,
+      `#library-container .book-card[data-bid='${book.bid}'] .cover`,
     );
     if (!el) return;
     el.appendChild(img);
@@ -102,7 +94,7 @@ function loadPreview(book) {
     img.src = `/library/${book.local_preview}`;
     img.onerror = function () {
       document.querySelector(
-        `.book-card[data-bid='${book.bid}'] .book-cover`,
+        `.book-card[data-bid='${book.bid}'] .cover`,
       ).style = "background-image: url(static/images/book.svg)";
     };
   };

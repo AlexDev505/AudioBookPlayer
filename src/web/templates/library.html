@@ -20,13 +20,13 @@
 </template>
 <template id="book-card-template">
     <div class="book-card" data-bid="" onclick="openBookPage(this)">
-        <div class="book-cover"></div>
-        <div class="book-content">
-            <div class="book-main-info-container">
-                <div class="book-main-info">
+        <div class="cover"></div>
+        <div class="content">
+            <div class="main-info-container">
+                <div class="main-info">
                     <div class="book-title"></div>
-                    <div class="book-state">
-                        <div class="book-adding-date">
+                    <div class="tags-container">
+                        <div class="tag adding-date">
                             {{ gettext("book.added") }}
                             <span class="content"></span>
                         </div>
@@ -34,29 +34,21 @@
                 </div>
                 <div class="book-actions">
                     <div
-                        class="icon-btn toggle-favorite-btn"
+                        class="icon-btn toggle-favorite"
                         onclick="toggleFavorite(this)"
                     ></div>
                     <div
-                        class="icon-btn delete-btn"
-                        onclick="deleteBook(this)"
-                    ></div>
-                    <div
-                        class="icon-btn download-btn"
-                        onclick="startDownloading(this)"
-                    ></div>
-                    <div
-                        class="icon-btn remove-btn"
+                        class="icon-btn remove"
                         onclick="removeBook(this)"
                     ></div>
                 </div>
             </div>
-            <div class="book-description"></div>
+            <div class="book-description short"></div>
             <div class="tags-container">
-                <div class="book-text-sources-count"></div>
-                <div class="book-audio-sources-count"></div>
-                <div class="book-author"></div>
-                <div class="book-series"></div>
+                <div class="tag text-sources-count"></div>
+                <div class="tag audio-sources-count"></div>
+                <div class="tag author"></div>
+                <div class="tag series"></div>
             </div>
         </div>
     </div>

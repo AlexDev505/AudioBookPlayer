@@ -1,0 +1,42 @@
+<link
+    rel="stylesheet"
+    href="{{url_for('static', filename='css/player.css')}}"
+/>
+<script defer src="{{ url_for('static', filename='js/player.js') }}"></script>
+
+<audio id="audio-player"></audio>
+<div id="player" class="hidden">
+    <div>
+        <div
+            class="icon-btn playback-btn play"
+            onclick="player.togglePlay()"
+        ></div>
+        <div class="book-info">
+            <div class="book-title"></div>
+            <div class="listening-progres"></div>
+        </div>
+    </div>
+    <div>
+        <div id="volume-btn" class="icon-btn volume-btn"></div>
+        <input
+            id="volume-input"
+            type="range"
+            min="0"
+            max="100"
+            value="{{ volume|tojson }}"
+            data-postfix="%"
+            oninput="setVolume(this.value)"
+        />
+        <div id="speed-btn" class="icon-btn speed-btn"></div>
+        <input
+            id="speed-input"
+            type="range"
+            min="0.1"
+            max="2"
+            value="{{ speed|tojson }}"
+            step="0.1"
+            data-prefix="x"
+            oninput="setSpeed(this.value)"
+        />
+    </div>
+</div>

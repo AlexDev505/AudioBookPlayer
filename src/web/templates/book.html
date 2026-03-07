@@ -4,22 +4,24 @@
 <div id="book-page-content">
     <div id="book-loading"></div>
 
-    <div id="book-header">
+    <div class="header">
         <div>
             <div class="book-title"></div>
-            <div class="book-state">
-                <div class="book-status"></div>
+            <div class="tags-container">
+                <div class="tag status"></div>
                 <div
                     class="book-state-btn"
                     onclick="showBookStateAction()"
                 ></div>
                 <div class="book-state-action"></div>
-                <div class="book-adding-date">
+                <div class="tag adding-date">
                     {{ gettext("book.added") }} <span class="content"></span>
                 </div>
             </div>
         </div>
         <div class="book-actions">
+            <div class="icon-btn delete"></div>
+            <div class="icon-btn download"></div>
             <div
                 class="icon-btn open-in-browser hidden-text-button"
                 onclick="window.open(this.dataset.url, '_blank')"
@@ -32,12 +34,12 @@
             <div class="icon-btn open-book-dir hidden-text-button">
                 <span>показать файлы</span>
             </div>
-            <div class="icon-btn toggle-favorite-btn"></div>
+            <div class="icon-btn toggle-favorite"></div>
         </div>
     </div>
     <div id="book-main">
-        <div class="book-preview"></div>
-        <div id="sources" class="book-main-content">
+        <div class="book-cover"></div>
+        <div id="sources" class="content">
             <div id="audio-sources">
                 <div class="sources-container-title">
                     {{ gettext("book.audio_sources") }}
@@ -51,42 +53,39 @@
                 <div class="sources-container"></div>
             </div>
         </div>
-        <div id="player" class="book-main-content">
-            <audio id="audio-player"></audio>
-            <div id="player-controls">
-                <div class="button-group">
-                    <div
-                        class="iconned-btn button angle-left-button"
-                        onclick="rewind()"
-                    >
-                        <span>15 {{ gettext("s") }}</span>
-                    </div>
-                    <div
-                        id="toggle-playback-btn"
-                        class="iconned-btn button play-button"
-                        onclick="togglePlayback()"
-                    ></div>
-                    <div
-                        class="iconned-btn right button angle-right-button"
-                        onclick="forward()"
-                    >
-                        <span>15 {{ gettext("s") }}</span>
-                    </div>
+        <div id="player-controls" class="content">
+            <div class="button-group">
+                <div
+                    class="iconned-btn button angle-left-button"
+                    onclick="rewind()"
+                >
+                    <span>15 {{ gettext("s") }}</span>
                 </div>
-                <div id="chapters-container"></div>
+                <div
+                    class="iconned-btn button playback-btn play"
+                    onclick="togglePlayback()"
+                ></div>
+                <div
+                    class="iconned-btn right button angle-right-button"
+                    onclick="forward()"
+                >
+                    <span>15 {{ gettext("s") }}</span>
+                </div>
             </div>
+            <div id="chapters-container"></div>
         </div>
     </div>
     <div id="book-info">
         <div class="tags-container">
-            <div class="book-author"></div>
-            <div class="book-reader"></div>
-            <div class="book-duration"></div>
-            <div class="book-series"></div>
-            <div class="book-driver"></div>
+            <div class="tag author"></div>
+            <div class="tag narrator"></div>
+            <div class="tag publication"></div>
+            <div class="tag duration"></div>
+            <div class="tag series"></div>
+            <div class="tag driver"></div>
         </div>
     </div>
-    <div class="book-description"></div>
+    <div class="book-description full"></div>
 </div>
 
 <template id="source-card-template">
@@ -94,9 +93,9 @@
         <div>
             <div class="source-title"></div>
             <div class="source-info tags-container">
-                <div class="source-domain driver"></div>
-                <div class="source-duration book-duration"></div>
-                <div class="source-status book-status"></div>
+                <div class="source-domain tag driver"></div>
+                <div class="source-duration tag duration"></div>
+                <div class="source-status tag status"></div>
             </div>
         </div>
         <div class="icon-btn open-in-browser"></div>
@@ -122,10 +121,10 @@
         class="chapter"
         data-index=""
         onclick="selectChapter(this)"
-        onmousedown="bookItemOnmousedown(event, this)"
-        onmousemove="bookItemOnmousemove(event, this)"
-        onmouseup="bookItemOnmouseup(event, this)"
-        onmouseout="bookItemOnmouseup(event, this)"
+        onmousedown="bookChapterOnmousedown(event, this)"
+        onmousemove="bookChapterOnmousemove(event, this)"
+        onmouseup="bookChapterOnmouseup(event, this)"
+        onmouseout="bookChapterOnmouseup(event, this)"
     >
         <span class="title"></span>
         <span class="time">

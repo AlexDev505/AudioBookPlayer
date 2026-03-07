@@ -1,0 +1,98 @@
+.playback-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 0 10px 0 10px;
+}
+.playback-btn.play::before {
+    background-image: url(../images/play.svg);
+}
+.playback-btn.pause::before {
+    background-image: url(../images/pause.svg);
+}
+
+#small-player {
+    display: none;
+    justify-content: space-between;
+    padding: 5px 15px;
+    max-height: 55px;
+    height: 55px;
+    order: 2;
+    background-color: var(--side-menu-bg);
+}
+#small-player.visible {
+    display: flex;
+}
+#small-player.visible ~ .page {
+    max-height: calc(100% - 65px);
+}
+#small-player.visible ~ .page #book-page-content .book-description {
+    max-height: 22%;
+}
+#small-player > div {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+#small-player > div > *:not(:first-child) {
+    margin-left: 5px;
+}
+#small-player .icon-btn::after {
+    width: 1.5em;
+    height: 1.5em;
+    transition: background-image 0.15s ease-in-out;
+    transform-origin: center;
+}
+.small-playback-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 55px;
+    width: 55px;
+    background-position: center;
+    background-size: cover;
+    border-radius: 5px;
+}
+#small-player .small-playback-control::after {
+    width: 80%;
+    height: 80%;
+    opacity: 0.9;
+}
+.small-playback-control.play::after {
+    background-image: url(../images/play.svg);
+}
+.small-playback-control.pause::after {
+    background-image: url(../images/pause.svg);
+}
+.book-info {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    cursor: pointer;
+}
+.volume-btn::after {
+    content: url(../images/volume.svg);
+}
+.volume-btn.muted::after {
+    content: url(../images/mute.svg);
+}
+.volume-btn.low::after {
+    content: url(../images/low_volume.svg);
+}
+.volume-btn.medium::after {
+    content: url(../images/medium_volume.svg);
+}
+.speed-btn::after {
+    content: url(../images/watch.svg);
+}
+#volume-input,
+#speed-input {
+    width: 0;
+    transition: all 0.1s ease-in-out;
+}
+#volume-input.showed,
+#speed-input.showed {
+    width: 80px;
+}

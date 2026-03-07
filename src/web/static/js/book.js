@@ -14,6 +14,7 @@ page("book-page").unLoad = function () {
 page("book-page").onHide = function () {};
 
 function loadBookData(bid) {
+  document.querySelector("#book-loading").classList.remove("hidden");
   pywebview.api.book_by_bid(parseInt(bid), true).then((resp) => {
     if (resp.status != "ok") {
       return showError(resp.message);
@@ -21,37 +22,43 @@ function loadBookData(bid) {
     opened_book = resp.data;
     let page = document.querySelector("#book-page-content");
     page.querySelector(".book-title").innerHTML = resp.data.title;
-    page.querySelector(".book-adding-date .content").innerHTML =
+    page.querySelector(".adding-date .content").innerHTML =
       resp.data.adding_date;
     showBookState(resp.data);
-    page.querySelector(".book-preview").style =
+    page.querySelector(".book-cover").style =
       `background-image: url('${resp.data.cover}'), url('/library/${resp.data.local_cover}');`;
-    page.querySelector(".book-author").innerHTML = resp.data.author;
+    page.querySelector(".author").innerHTML = resp.data.author;
     if (resp.data.series_name) {
-      page.querySelector(".book-series").innerHTML =
+      page.querySelector(".series").innerHTML =
         `${resp.data.series_name} (${resp.data.number_in_series})`;
-      page.querySelector(".book-series").style = "display: flex";
-    } else page.querySelector(".book-series").style = "display: none";
+      page.querySelector(".series").classList.remove("hidden");
+    } else page.querySelector(".series").classList.add("hidden");
     page.querySelector(".book-description").innerHTML = resp.data.description;
-    page.querySelector(".toggle-favorite-btn").onclick = function () {
+    page.querySelector(".toggle-favorite").onclick = function () {
       toggleFavorite(this, resp.data.bid);
     };
-    page.querySelector(".search-series").style = "display: none";
-    page.querySelector(".open-book-dir").style = "display: none";
-    page.querySelector(".open-in-browser").style = "display: none";
-    page.querySelector("#player").classList.add("hidden");
+    page.querySelector(".search-series").classList.add("hidden");
+    page.querySelector(".open-book-dir").classList.add("hidden");
+    page.querySelector(".open-in-browser").classList.add("hidden");
+    page.querySelector("#player-controls").classList.add("hidden");
     page.querySelector("#sources").classList.remove("hidden");
+    document
+      .querySelector("#book-page-content .download")
+      .classList.add("hidden");
+    document
+      .querySelector("#book-page-content .delete")
+      .classList.add("hidden");
 
     showSources(resp.data);
 
-    page.querySelector("#book-loading").style = "display: none;";
+    page.querySelector("#book-loading").classList.add("hidden");
   });
 }
 function showBookState(book) {
   let status = document.querySelector(
     `template.book-status[data-status="${book.status}"]`,
   ).innerHTML;
-  document.querySelector("#book-page-content .book-status").innerHTML = status;
+  document.querySelector("#book-page-content .status").innerHTML = status;
   let el = document.querySelector("#book-page-content .book-state-action");
   if (book.status == "completed") {
     el.classList.add("completed");
@@ -123,9 +130,17 @@ function selectAudioBook(sid) {
   showPlayer(selected_source);
 }
 function showPlayer(source) {
-  document.querySelector("#player").classList.remove("hidden");
+  document.querySelector("#player-controls").classList.remove("hidden");
   document.querySelector("#sources").classList.add("hidden");
-  var container = document.querySelector("#player #chapters-container");
+  document.querySelector("#book-info .narrator").innerHTML = source.narrator;
+  document.querySelector("#book-info .duration").innerHTML = source.duration;
+  document.querySelector("#book-info .driver").innerHTML = source.domain;
+  document
+    .querySelector("#book-page-content .download")
+    .classList.remove("hidden");
+  var container = document.querySelector(
+    "#player-controls #chapters-container",
+  );
   container.innerHTML = "";
   var i = 0;
   for (let chapter of source.chapters) {
@@ -146,3 +161,7 @@ function showBookStateAction() {
 function timeView(time) {
   return `${String(Math.floor(time / 60)).padStart(2, "0")}:${String(time % 60).padStart(2, "0")}`;
 }
+
+function bookChapterOnmousedown(event, el) {}
+function bookChapterOnmousemove(event, el) {}
+function bookChapterOnmouseup(event, el) {}

@@ -24,12 +24,6 @@
     width: 100%;
     font-size: medium;
 }
-.search-btn::after {
-    background-image: url(../images/search.svg);
-}
-.search-btn.loading::after {
-    background-image: url(../images/loading.gif);
-}
 
 #no-search-result {
     height: 0;
@@ -56,13 +50,6 @@
 #search-results-container.shown:empty ~ #no-search-result {
     flex: 1 1 auto;
 }
-.search-result-item {
-    position: relative;
-    width: 100%;
-    height: fit-content;
-    flex: 0 0 100%;
-    max-width: 100%;
-}
 @container results-container (min-width: 740px) {
     .search-result-item {
         flex: 0 0 50%;
@@ -81,7 +68,15 @@
         max-width: 25%;
     }
 }
-.search-result-item-card {
+
+#search-page .search-result-item {
+    position: relative;
+    width: 100%;
+    height: fit-content;
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+#search-page .search-result-item-card {
     max-height: 100px;
     cursor: pointer;
     overflow: hidden;
@@ -92,67 +87,61 @@
     background-color: var(--cards-bg);
     border-radius: 4px;
 }
-.search-result-item-card > :not(:first-child) {
+#search-page .search-result-item-card > :not(:first-child) {
     margin-left: 8px;
 }
-.item-cover {
+#search-page .item-cover {
     min-height: 100px;
     min-width: 70px;
     border-radius: 4px;
     background-size: cover;
     background-image: none;
 }
-.item-title {
+#search-page .item-title {
     font-size: large;
     font-weight: bold;
 }
-.item-info {
+#search-page .item-info {
     display: flex;
     flex-flow: wrap;
     margin-top: 4px;
 }
-.item-info > * {
+#search-page .item-info > * {
     display: flex;
     align-items: center;
     margin-right: 8px;
     font-size: small;
 }
-.item-info > *::before {
+#search-page .item-info > *::before {
     min-height: 1.2em;
     min-width: 1.2em;
     max-height: 1.2em;
     max-width: 1.2em;
     margin-right: 4px;
 }
-.item-author::before {
+#search-page .item-author::before {
     content: url(../images/person.svg);
 }
-.item-narrators:empty {
-    display: none;
-}
-.item-narrators::before {
+#search-page .item-narrators::before {
     content: url(../images/mic.svg);
 }
-.item-publications:empty {
+#search-page .item-narrators:empty {
     display: none;
 }
-.item-publications::before {
+#search-page .item-publications::before {
     content: url(../images/book.svg);
 }
-.item-durations:empty {
-    display: none;
-}
-.item-durations::before {
+#search-page .item-durations::before {
     content: url(../images/clock.svg);
 }
-.item-series-name:empty {
+#search-page .item-series-name:empty {
     display: none;
 }
-.item-series-name::before {
+#search-page .item-series-name::before {
     content: url(../images/tag.svg);
 }
 
-.add-book-btn {
+#search-page .add-book-btn {
     display: flex;
     align-items: center;
     justify-content: end;
@@ -171,29 +160,29 @@
         all 0.2s ease-in-out,
         color 0.2s cubic-bezier(1, 0, 0, 1);
 }
-.search-result-item-card:hover ~ .add-book-btn,
-.add-book-btn.added:hover,
-.add-book-btn.loading {
+#search-page .search-result-item-card:hover ~ .add-book-btn,
+#search-page .add-book-btn.added:hover,
+#search-page .add-book-btn.loading {
     opacity: 1;
 }
-.add-book-btn:not(.added):not(.loading):hover {
+#search-page .add-book-btn:not(.added):not(.loading):hover {
     opacity: 1;
     border-bottom-left-radius: 15px;
     max-width: 100%;
     color: inherit;
 }
-.add-book-btn::after {
+#search-page .add-book-btn::after {
     position: absolute;
     right: 4px;
     background-image: url(../images/plus.svg);
 }
-.add-book-btn.loading::after {
+#search-page .add-book-btn.loading::after {
     background-image: url(../images/loading.gif);
 }
-.add-book-btn.added::after {
+#search-page .add-book-btn.added::after {
     background-image: url(../images/check.svg);
 }
-.add-book-btn span {
+#search-page .add-book-btn span {
     color: inherit;
     font-weight: bold;
     text-wrap: nowrap;

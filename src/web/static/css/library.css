@@ -52,7 +52,7 @@
     background-position: center;
 }
 
-.book-card {
+#library-page .book-card {
     display: flex;
     max-height: 200px;
     padding: 10px;
@@ -62,28 +62,28 @@
     transition: box-shadow 0.2s ease-in-out;
     cursor: pointer;
 }
-.book-card:hover {
+#library-page .book-card:hover {
     box-shadow: -1px 1px 5px 1px rgba(0, 0, 0, 0.1);
 }
-.book-cover {
+#library-page .book-card .cover {
     min-width: 130px;
     min-height: 180px;
     width: 130px;
     height: 180px;
 }
-.book-cover:empty {
+#library-page .book-card .cover:empty {
     background-position: center;
     background-size: 3em;
     background-repeat: no-repeat;
     background-image: url("../images/loading.gif");
 }
-.book-cover img {
+#library-page .book-card .cover img {
     width: inherit;
     height: inherit;
     border-radius: 4px;
     object-fit: cover;
 }
-.book-content {
+#library-page .book-card .content {
     display: flex;
     justify-content: space-between;
     flex-direction: column;
@@ -92,161 +92,7 @@
     margin-left: 10px;
     overflow: hidden;
 }
-.book-main-info-container {
+#library-page .book-card .main-info-container {
     display: flex;
     justify-content: space-between;
-}
-.book-title {
-    font-size: larger;
-    font-weight: bold;
-    line-height: 1;
-}
-.book-state {
-    position: relative;
-    display: flex;
-    font-size: small;
-    text-wrap: nowrap;
-    flex-wrap: wrap;
-}
-.book-state > * {
-    display: flex;
-    align-items: center;
-    margin-bottom: 2px;
-}
-.book-state > *::before {
-    content: "";
-    width: 1em;
-    height: 1em;
-    margin-right: 4px;
-}
-.book-listening-progress {
-    margin-right: 8px;
-}
-.book-listening-progress::before {
-    background-image: url(../images/clock.svg);
-}
-.book-adding-date .content {
-    margin-left: 4px;
-}
-.book-adding-date::before {
-    background-image: url(../images/calendar.svg);
-}
-.book-actions {
-    display: flex;
-}
-.book-actions > * {
-    padding: 4px;
-    border-radius: 4px;
-}
-.book-actions > *:not(:first-child):not(:last-child) {
-    margin-left: 12px;
-    margin-right: 12px;
-}
-.book-actions > *:hover:not(.disabled)::after {
-    transform: scale(1.1);
-}
-.book-actions > *:active:not(.disabled) {
-    margin-bottom: -4px;
-}
-.book-actions .icon-btn::after {
-    width: 1.5em;
-    height: 1.5em;
-    transition: background-image 0.15s ease-in-out;
-    transform-origin: center;
-}
-.toggle-favorite-btn::after {
-    background-image: url(../images/star.svg);
-}
-.toggle-favorite-btn.active::after {
-    background-image: url(../images/star_fill.svg);
-}
-.download-btn::after {
-    background-image: url(../images/download.svg);
-}
-.remove-btn::after {
-    background-image: url(../images/cross.svg);
-}
-.delete-btn::after {
-    background-image: url(../images/trash.svg);
-}
-.book-actions > .loading::after {
-    background-image: url(../images/loading.gif);
-}
-.book-description {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -line-clamp: 5;
-    -webkit-line-clamp: 5;
-    -webkit-box-orient: vertical;
-}
-.tags-container {
-    display: flex;
-    text-wrap: nowrap;
-    flex-wrap: wrap;
-    font-size: small;
-}
-.tags-container > div {
-    display: flex;
-    align-items: center;
-    margin-right: 8px;
-}
-.tags-container > div::before {
-    width: 1em;
-    height: 1em;
-    margin-right: 4px;
-}
-.book-text-sources-count:empty {
-    display: none;
-}
-.book-text-sources-count::before {
-    content: url(../images/book.svg);
-}
-.book-audio-sources-count:empty {
-    display: none;
-}
-.book-audio-sources-count::before {
-    content: url(../images/mic.svg);
-}
-.book-author:empty {
-    display: none;
-}
-.book-author::before {
-    content: url(../images/person.svg);
-}
-.book-series:empty {
-    display: none;
-}
-.book-series::before {
-    content: url(../images/tag.svg);
-}
-.book-narrator:empty {
-    display: none;
-}
-.book-narrator::before {
-    content: url(../images/mic.svg);
-}
-.book-publication:empty {
-    display: none;
-}
-.book-publication::before {
-    content: url(../images/book.svg);
-}
-.book-duration:empty {
-    display: none;
-}
-.book-duration::before {
-    content: url(../images/clock.svg);
-}
-.book-status:empty {
-    display: none;
-}
-.book-status::before {
-    content: url(../images/tag.svg);
-}
-.driver:empty {
-    display: none;
-}
-.driver::before {
-    content: url(../images/hdd.svg);
 }
