@@ -164,3 +164,13 @@ function openLibraryPage(favorite = false) {
 function openLibraryDir() {
   pywebview.api.open_library_dir();
 }
+
+function scaleOninputDecorator(func) {
+  return function () {
+    this.setAttribute(
+      "data-value",
+      `${this.dataset.prefix ? this.dataset.prefix : ""}${this.value}${this.dataset.postfix ? this.dataset.postfix : ""}`,
+    );
+    func.apply(this);
+  };
+}

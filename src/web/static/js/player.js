@@ -1,7 +1,16 @@
 var player = null;
 
+const volumeBtn = document.getElementById("volume-btn");
+volumeBtn.onclick = function () {
+  toggleVolumeSpeed("volume-input");
+};
+document.getElementById("speed-btn").onclick = function () {
+  toggleVolumeSpeed("speed-input");
+};
+
 document.addEventListener("DOMContentLoaded", (event) => {
   player = new window.Plyr("#audio-player", { storage: true, controls: [] });
+
   for (let scale of document.querySelectorAll('input[type="range"]')) {
     scale.oninput = scaleOninputDecorator(scale.oninput);
     scale.oninput();
@@ -78,6 +87,15 @@ document.addEventListener("DOMContentLoaded", (event) => {
   });
 });
 
+function toggleVolumeSpeed(section) {
+  if (section == "volume-input")
+    document.getElementById("speed-input").classList.remove("showed");
+  if (section == "speed-input")
+    document.getElementById("volume-input").classList.remove("showed");
+  let el = document.getElementById(section);
+  if (el.classList.contains("showed")) el.classList.remove("showed");
+  else el.classList.add("showed");
+}
 function setVolume(value) {
   player.volume = value / 100;
   volumeBtn.classList.remove("muted");
