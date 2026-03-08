@@ -14,7 +14,12 @@ function setPlaybackBtnState(state) {
   smallPlaybackBtn.classList.remove("play");
   smallPlaybackBtn.classList.remove("pause");
   smallPlaybackBtn.classList.add(state);
-  if (!opened_book || player.current_book.bid != opened_book.bid) return;
+  if (
+    !opened_book ||
+    !player.current_book ||
+    player.current_book.bid != opened_book.bid
+  )
+    return;
   let bigPlaybackBtn = document.querySelector("#player-controls .playback-btn");
   bigPlaybackBtn.classList.remove("play");
   bigPlaybackBtn.classList.remove("pause");
@@ -44,14 +49,15 @@ document.addEventListener("DOMContentLoaded", (event) => {
     setPlaybackBtnState("play");
   });
   player.on("play", (event) => {
-    if (player.current_book.status != "in-progress") {
+    if (player.current_book.status != "in_progress") {
       pywebview.api.mark_audio_book_as_in_progress(player.current_source.sid);
-      player.current_book.status = "started";
-      player.current_source.status = "started";
+      player.current_book.status = "in_progress";
+      player.current_source.status = "in_progress";
     }
     setPlaybackBtnState("pause");
   });
   player.on("timeupdate", (event) => {
+    if (!player.current_book) return;
     let progress_percent = Math.floor(
       (player.previous_chapters_duration + player.currentTime) /
         (player.total_duration / 100),
@@ -65,10 +71,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
     showListeningProgress(player.current_book.bid, progress_percent);
     if (Math.abs(player.currentTime - last_stop_flag_time) > 15) {
+      player.current_source.progress.chapter_index =
+        player.current_chapter_index;
+      player.current_source.progress.time = Math.floor(player.currentTime);
       pywebview.api.set_listening_progress(
         player.current_source.sid,
-        player.current_chapter_index,
-        Math.floor(player.currentTime),
+        player.current_source.progress.chapter_index,
+        player.current_source.progress.time,
       );
       last_stop_flag_time = player.currentTime;
     }

@@ -42,20 +42,39 @@ function loadBookData(bid) {
     page.querySelector(".open-in-browser").classList.add("hidden");
     page.querySelector("#player-controls").classList.add("hidden");
     page.querySelector("#sources").classList.remove("hidden");
-    document
-      .querySelector("#book-page-content .download")
-      .classList.add("hidden");
-    document
-      .querySelector("#book-page-content .delete")
-      .classList.add("hidden");
+    document.querySelector("#book-page .download").classList.add("hidden");
+    document.querySelector("#book-page .delete").classList.add("hidden");
 
-    showSources(resp.data);
-
+    var selected_audio_book = opened_book.audio_sources.find(
+      (source) => source.selected === true,
+    );
     if (player.current_book && player.current_book.bid == resp.data.bid) {
-      selected_source = player.current_source;
-      showPlayer(selected_source);
-      if (player.playing) setPlaybackBtnState("pause");
+      selected_audio_book = player.current_source;
     }
+    if (selected_audio_book) {
+      selected_source = selected_audio_book;
+      showPlayer(selected_source);
+      if (
+        player.current_book &&
+        player.current_book.bid == resp.data.bid &&
+        player.playing
+      )
+        setPlaybackBtnState("pause");
+    } else _showSources(resp.data);
+
+    if (resp.data.audio_sources_count == 1 && !selected_audio_book) {
+      selectAudioBook(resp.data.audio_sources[0].sid);
+    }
+
+    document
+      .querySelector("#book-page #read-btn")
+      .classList.toggle("hidden", !resp.data.text_sources_count);
+    document
+      .querySelector("#book-page #show-sources-btn")
+      .classList.toggle(
+        "hidden",
+        resp.data.audio_sources_count <= 1 && resp.data.text_sources_count <= 1,
+      );
 
     page.querySelector("#book-loading").classList.add("hidden");
   });
@@ -89,7 +108,14 @@ function showBookState(book) {
   }
   el.innerHTML = actionText;
 }
-function showSources(book) {
+function showSources() {
+  if (player.current_book && player.current_book.bid == opened_book.bid) {
+    clearPlayingBook();
+  }
+  _showSources(opened_book);
+  document.querySelector("#player-controls").classList.add("hidden");
+}
+function _showSources(book) {
   let audioSources = document.querySelector(
     "#audio-sources .sources-container",
   );
@@ -107,6 +133,7 @@ function showSources(book) {
     let card = createSourceCard(source);
     textSources.appendChild(card);
   }
+  document.querySelector("#sources").classList.remove("hidden");
 }
 function createSourceCard(source) {
   let status = document.querySelector(

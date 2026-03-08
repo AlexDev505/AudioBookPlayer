@@ -153,6 +153,7 @@ input[type="range"]::after {
     border: 1px solid var(--side-menu-bg);
     border-radius: 4px;
     transition: all 0.15s ease-in-out;
+    cursor: pointer;
 }
 .button:not(.loading):hover {
     transform: scale(1.05);

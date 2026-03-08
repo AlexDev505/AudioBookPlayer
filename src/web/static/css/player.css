@@ -27,12 +27,6 @@
     order: 2;
     background-color: var(--side-menu-bg);
 }
-/*#player.visible ~ .page {
-    max-height: calc(100% - 65px);
-}*/
-/*#small-player.visible ~ .page #book-page-content .book-description {
-    max-height: 22%;
-}*/
 #player > div {
     height: 100%;
     display: flex;
