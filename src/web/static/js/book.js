@@ -122,8 +122,9 @@ function createSourceCard(source) {
     ? source.duration
     : source.total_pages;
   card.querySelector(".source-status").innerHTML = status;
-  card.querySelector(".open-in-browser").onclick = () => {
+  card.querySelector(".open-in-browser").onclick = (event) => {
     window.open(source.url, "_blank");
+    event.stopPropagation();
   };
   return card;
 }

@@ -83,7 +83,7 @@
     border-radius: 4px;
     object-fit: cover;
 }
-#library-page .book-card .content {
+#library-page .book-card > .content {
     display: flex;
     justify-content: space-between;
     flex-direction: column;

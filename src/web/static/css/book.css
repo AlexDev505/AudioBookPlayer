@@ -281,28 +281,28 @@ GLOBAL BOOK STYLES
     transition: background-image 0.15s ease-in-out;
     transform-origin: center;
 }
-.book-actions .icon-btn.toggle-favorite::after {
+.icon-btn.toggle-favorite::after {
     background-image: url(../images/star.svg);
 }
-.book-actions .icon-btn.toggle-favorite.active::after {
+.icon-btn.toggle-favorite.active::after {
     background-image: url(../images/star_fill.svg);
 }
-.book-actions .icon-btn.download::after {
+.icon-btn.download::after {
     background-image: url(../images/download.svg);
 }
-.book-actions .icon-btn.remove::after {
+.icon-btn.remove::after {
     background-image: url(../images/cross.svg);
 }
-.book-actions .icon-btn.delete::after {
+.icon-btn.delete::after {
     background-image: url(../images/trash.svg);
 }
-.book-actions .icon-btn.open-in-browser::after {
+.icon-btn.open-in-browser::after {
     background-image: url(../images/box-arrow-up-right.svg);
 }
-.book-actions .icon-btn.search-series::after {
+.icon-btn.search-series::after {
     background-image: url(../images/tag.svg);
 }
-.book-actions .icon-btn.open-book-dir::after {
+.icon-btn.open-book-dir::after {
     background-image: url(../images/folder.svg);
 }
 
