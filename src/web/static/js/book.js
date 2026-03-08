@@ -26,7 +26,7 @@ function loadBookData(bid) {
       resp.data.adding_date;
     showBookState(resp.data);
     page.querySelector(".book-cover").style =
-      `background-image: url('${resp.data.cover}'), url('/library/${resp.data.local_cover}');`;
+      `background-image: url('${resp.data.cover}'), url('/library/${encodeURIComponent(resp.data.local_cover)}');`;
     page.querySelector(".author").innerHTML = resp.data.author;
     if (resp.data.series_name) {
       page.querySelector(".series").innerHTML =
@@ -50,6 +50,12 @@ function loadBookData(bid) {
       .classList.add("hidden");
 
     showSources(resp.data);
+
+    if (player.current_book && player.current_book.bid == resp.data.bid) {
+      selected_source = player.current_source;
+      showPlayer(selected_source);
+      if (player.playing) setPlaybackBtnState("pause");
+    }
 
     page.querySelector("#book-loading").classList.add("hidden");
   });
@@ -131,10 +137,19 @@ function selectAudioBook(sid) {
 }
 function showPlayer(source) {
   document.querySelector("#player-controls").classList.remove("hidden");
+  document
+    .querySelector("#player-controls .playback-btn")
+    .classList.remove("pause");
+  document
+    .querySelector("#player-controls .playback-btn")
+    .classList.add("play");
   document.querySelector("#sources").classList.add("hidden");
   document.querySelector("#book-info .narrator").innerHTML = source.narrator;
   document.querySelector("#book-info .duration").innerHTML = source.duration;
   document.querySelector("#book-info .driver").innerHTML = source.domain;
+  showListeningProgress(opened_book.bid, source.progress_percent);
+  document.querySelector("#book-main .book-cover").style =
+    `background-image: url('${source.cover}'), url('/library/${encodeURIComponent(opened_book.dir_path + "\\" + source.local_cover)}');`;
   document
     .querySelector("#book-page-content .download")
     .classList.remove("hidden");
@@ -152,16 +167,81 @@ function showPlayer(source) {
     );
     container.appendChild(el);
   }
+  container.scrollTo(0, 0);
+  selectChapterEl(source.progress.chapter_index);
+  let duration =
+    source.chapters[source.progress.chapter_index].end_time -
+    source.chapters[source.progress.chapter_index].start_time;
+  showChapterPlaybackTime(
+    source.progress.time / (duration / 100),
+    Math.floor(source.progress.time),
+  );
+}
+function selectChapterEl(chapter_index) {
+  let cur_chapter = document.querySelector("#player-controls .chapter.current");
+  let new_chapter = document.querySelector(
+    `#player-controls .chapter[data-index="${chapter_index}"]`,
+  );
+  if (cur_chapter) cur_chapter.classList.remove("current");
+  new_chapter.classList.add("current");
+  if (chapter_index >= 1) {
+    document
+      .querySelector(
+        `#player-controls .chapter[data-index="${chapter_index - 1}"]`,
+      )
+      .scrollIntoView();
+  }
+}
+function showChapterPlaybackTime(percents, time) {
+  let el = document.querySelector("#book-page .chapter.current");
+  if (el.dataset.seeking) return;
+  el.style.setProperty("--current-item-percents", `${percents}%`);
+  document.querySelector("#book-page .chapter.current .cur-time").innerText =
+    timeView(time);
 }
 
 function showBookStateAction() {
   document.querySelector(".book-state-action").classList.toggle("showen");
 }
 
-function timeView(time) {
-  return `${String(Math.floor(time / 60)).padStart(2, "0")}:${String(time % 60).padStart(2, "0")}`;
+function togglePlayback() {
+  if (
+    !player.current_source ||
+    (selected_source && player.current_source.sid != selected_source.sid)
+  ) {
+    initPlayer(opened_book, selected_source);
+    return player.play();
+  }
+  player.togglePlay();
 }
-
-function bookChapterOnmousedown(event, el) {}
-function bookChapterOnmousemove(event, el) {}
-function bookChapterOnmouseup(event, el) {}
+function bookChapterOnmousedown(event, el) {
+  if (player.current_book.bid != opened_book.bid) return;
+  if (!el.classList.contains("current")) return;
+  if (!player.playing) return;
+  el.dataset.seeking = "1";
+  let percents = event.offsetX / (el.offsetWidth / 100);
+  el.style.setProperty("--current-item-percents", `${percents}%`);
+  document.querySelector(".chapter.current .cur-time").innerText = timeView(
+    Math.floor((player.duration / 100) * percents),
+  );
+}
+function bookChapterOnmousemove(event, el) {
+  if (!el.dataset.seeking) return;
+  let percents = event.offsetX / (el.offsetWidth / 100);
+  el.style.setProperty("--current-item-percents", `${percents}%`);
+  document.querySelector(".chapter.current .cur-time").innerText = timeView(
+    Math.floor((player.duration / 100) * percents),
+  );
+}
+function bookChapterOnmouseup(event, el) {
+  if (!el.dataset.seeking) return;
+  delete el.dataset.seeking;
+  if (event.type == "mouseout") return;
+  let percents = event.offsetX / (el.offsetWidth / 100);
+  let time = (player.duration / 100) * percents;
+  el.style.setProperty("--current-item-percents", `${percents}%`);
+  document.querySelector(".chapter.current .cur-time").innerText = timeView(
+    Math.floor(time),
+  );
+  player.currentTime = time;
+}

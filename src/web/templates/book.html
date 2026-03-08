@@ -9,6 +9,7 @@
             <div class="book-title"></div>
             <div class="tags-container">
                 <div class="tag status"></div>
+                <div class="tag progress"></div>
                 <div
                     class="book-state-btn"
                     onclick="showBookStateAction()"
@@ -101,20 +102,26 @@
         <div class="icon-btn open-in-browser"></div>
     </div>
 </template>
-<template class="book-status" data-status="new"
-    >{{ gettext("book.status.new") }}
+<template class="book-status" data-status="new">
+    {{ gettext("book.status.new") }}
 </template>
-<template class="book-status" data-status="in-progress"
-    >{{ gettext("book.status.in_progress") }}
+<template class="book-status" data-status="in_progress">
+    {{ gettext("book.status.in_progress") }}
 </template>
-<template class="book-status" data-status="completed"
-    >{{ gettext("book.status.completed") }}
+<template class="book-status" data-status="completed">
+    {{ gettext("book.status.completed") }}
 </template>
-<template class="book-mark-as-new"
-    >{{ gettext("book.status.mark_as_new") }}
+<template class="book-progress" data-source="audio">
+    {{ gettext("book.progress.listened") }}
 </template>
-<template class="book-mark-as-completed"
-    >{{ gettext("book.status.mark_as_completed") }}
+<template class="book-progress" data-source="text">
+    {{ gettext("book.progress.read") }}
+</template>
+<template class="book-mark-as-new">
+    {{ gettext("book.status.mark_as_new") }}
+</template>
+<template class="book-mark-as-completed">
+    {{ gettext("book.status.mark_as_completed") }}
 </template>
 <template id="chapter-template">
     <div

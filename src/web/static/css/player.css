@@ -5,10 +5,16 @@
     width: 100%;
     margin: 0 10px 0 10px;
 }
-.playback-btn.play::before {
+.playback-btn::after {
+    content: "";
+}
+.playback-btn::before {
+    content: none !important;
+}
+.playback-btn.play::after {
     background-image: url(../images/play.svg);
 }
-.playback-btn.pause::before {
+.playback-btn.pause::after {
     background-image: url(../images/pause.svg);
 }
 

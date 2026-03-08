@@ -20,8 +20,6 @@ function delay(time) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
 
-var player = null;
-
 if (platform == "Windows") {
   for (size_grip of document.getElementsByClassName("size-grip")) {
     size_grip.addEventListener("mousedown", (event) => {

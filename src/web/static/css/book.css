@@ -249,7 +249,7 @@ GLOBAL BOOK STYLES
     display: -webkit-box;
     overflow: hidden;
     text-overflow: ellipsis;
-    -line-clamp: 5;
+    line-clamp: 5;
     -webkit-line-clamp: 5;
     -webkit-box-orient: vertical;
 }
@@ -327,7 +327,7 @@ GLOBAL BOOK STYLES
 .tag:empty {
     display: none;
 }
-.tag.adding-date .content {
+.tag .content {
     margin-left: 4px;
 }
 .tag.adding-date::before {
@@ -356,6 +356,9 @@ GLOBAL BOOK STYLES
 }
 .tag.status::before {
     content: url(../images/tag.svg);
+}
+.tag.progress::before {
+    content: url(../images/clock.svg);
 }
 .tag.driver::before {
     content: url(../images/hdd.svg);

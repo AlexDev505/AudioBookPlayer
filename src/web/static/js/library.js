@@ -18,6 +18,8 @@ page("library-page").onOpen = function () {
 page("library-page").onHide = function () {};
 page("library-page").unLoad = function () {
   library_filters = {};
+  books_count = 0;
+  can_load_more = true;
   document.getElementById("library-container").innerHTML = "";
 };
 
@@ -104,5 +106,6 @@ function openBookPage(card) {
   if (window.event.srcElement.classList.contains("icon-btn")) return;
   addUrlParams({ bid: card.dataset.bid });
   if (Page.last == page("book-page")) Page.last = null;
-  page("book-page").open();
+  if (!page("book-page").shown) page("book-page").open();
+  else page("book-page").onOpen();
 }

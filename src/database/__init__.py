@@ -11,6 +11,7 @@ from models.book import (
     Book,
     BookSource,
     BookStatus,
+    ListeningProgress,
     SourceType,
     TextBook,
 )
@@ -31,8 +32,20 @@ class Database(SyncDBCore[Book | TextBook | AudioBook]):
                         WHEN hex(NEW.selected) = hex("true")
                 BEGIN
                     UPDATE {table.__name__}
-                    SET selected = CAST ('false' AS BLOB)
-                    WHERE related_book = OLD.related_book;
+                       SET selected = CAST ('false' AS BLOB)
+                     WHERE related_book = OLD.related_book;
+                END;
+                """
+            )
+            self.provider.execute(
+                f"""
+                CREATE TRIGGER IF NOT EXISTS status_sync_{table.__name__}
+                         AFTER UPDATE OF status
+                            ON {table.__name__}
+                BEGIN
+                    UPDATE Book
+                       SET status = NEW.status
+                     WHERE id = NEW.related_book;
                 END;
                 """
             )
@@ -154,4 +167,28 @@ class Database(SyncDBCore[Book | TextBook | AudioBook]):
     def select_text_source(self, sid: int):
         self.update(
             TextBook, {TextBook.selected: True}, where=TextBook.id == sid
+        )
+
+    def _set_status(
+        self, sid: int, source_type: SourceType, status: BookStatus
+    ):
+        self.update(
+            source_type.value,
+            {source_type.value.status: status},
+            where=source_type.value.id == sid,
+        )
+
+    def mark_as_in_progress(self, sid: int, source_type: SourceType):
+        self._set_status(sid, source_type, BookStatus.IN_PROGRESS)
+
+    def mark_as_completed(self, sid: int, source_type: SourceType):
+        self._set_status(sid, source_type, BookStatus.COMPLETED)
+
+    def set_listening_progress(
+        self, sid: int, chapter_index: int, progress: int
+    ):
+        self.update(
+            AudioBook,
+            {AudioBook.progress: ListeningProgress(chapter_index, progress)},
+            where=AudioBook.id == sid,
         )

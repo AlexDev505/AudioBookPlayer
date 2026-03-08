@@ -14,8 +14,6 @@ from aiodbcore.models import Field, Index
 
 from tools import normalize_author, normalize_string
 
-type BookFiles = dict[str, str]
-
 DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 
@@ -61,7 +59,7 @@ class BookSource(ABC):
 
     selected: Field[bool] = Field(False)
     status: Field[BookStatus] = Field(BookStatus.NEW)
-    files: Field[BookFiles] = Field(field(default_factory=dict))
+    files: Field[dict[str, str]] = Field(field(default_factory=dict))
     """ Dict like {file_name: hash} """
 
     @property
@@ -76,7 +74,7 @@ class BookSource(ABC):
 
     @property
     def cover_path(self) -> Path:
-        return Path("cover.jpg")
+        return self.dir_path / "cover.jpg"
 
     @property
     def is_downloaded(self) -> bool:
@@ -92,10 +90,12 @@ class BookSource(ABC):
             url=self.url,
             domain=self.domain,
             cover=self.cover,
+            local_cover=str(self.cover_path),
             selected=self.selected,
             status=self.status.value,
             progress_percent=self.progress_percent,
-            files=self.files,
+            downloaded=self.is_downloaded,
+            files=list(self.files.keys()),
         )
 
     def __repr__(self):
@@ -375,6 +375,7 @@ class Book(BookData):
             bid=self.id,
             cover=self.cover,
             local_cover=str(self.cover_path),
+            dir_path=str(self.dir_path),
             adding_date=self.adding_date.strftime(DATETIME_FORMAT),
             favorite=self.favorite,
             status=self.status.value,

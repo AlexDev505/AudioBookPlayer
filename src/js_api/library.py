@@ -3,7 +3,7 @@ from __future__ import annotations
 from loguru import logger
 
 from database import Database
-from models.book import BookStatus
+from models.book import BookStatus, SourceType
 from tools import pretty_view
 
 from .exceptions import BookNotFound
@@ -65,3 +65,16 @@ class LibraryApi(JSApi):
 
     def select_audio_source(self, sid: int):
         Database().select_audio_source(sid)
+
+    def mark_audio_book_as_in_progress(self, sid: int):
+        Database().mark_as_in_progress(sid, SourceType.AudioBook)
+
+    def mark_audio_book_as_completed(self, sid: int):
+        Database().mark_as_completed(sid, SourceType.AudioBook)
+
+    def set_listening_progress(
+        self, sid: int, chapter_index: int, progress: int
+    ):
+        Database().set_listening_progress(
+            sid, int(chapter_index), int(progress)
+        )
