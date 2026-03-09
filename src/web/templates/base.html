@@ -26,7 +26,6 @@
             var dark_theme = {{ (true if dark_theme else false)|tojson }}
             var platform = {{ platform|tojson }}
         </script>
-        <script type="module" src="/static/js/plyr/plyr.js"></script>
         <script
             defer
             src="{{ url_for('static', filename='js/base.js') }}"
@@ -140,6 +139,9 @@
                 </div>
                 <div class="page" id="licensed-page" style="display: none">
                     {% include "licensed.html" %}
+                </div>
+                <div class="page" id="reader-page" style="display: none">
+                    {% include "reader.html" %}
                 </div>
             </div>
         </div>

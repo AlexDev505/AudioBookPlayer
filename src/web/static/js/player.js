@@ -33,14 +33,14 @@ function showListeningProgress(bid, percents) {
     document.querySelector("#player .progress").innerHTML =
       `${percents}% ${progress_text}`;
   if (opened_book && opened_book.bid == bid)
-    document.querySelector("#book-page .progress").innerHTML =
+    document.querySelector("#book-page .progress .content").innerHTML =
       `${percents}% ${progress_text}`;
 }
 
 document.addEventListener("DOMContentLoaded", (event) => {
   player = new window.Plyr("#audio-player", { storage: true, controls: [] });
 
-  for (let scale of document.querySelectorAll('input[type="range"]')) {
+  for (let scale of document.querySelectorAll('#player input[type="range"]')) {
     scale.oninput = scaleOninputDecorator(scale.oninput);
     scale.oninput();
   }

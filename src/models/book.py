@@ -115,12 +115,8 @@ class BookSource(ABC):
 class TextBook(BookSource):
     publication: Field[str]
     file_url: Field[str]
-    total_pages: Field[int]
-    read_pages: Field[int] = Field(0)
-
-    @property
-    def progress_percent(self) -> int:
-        return int(round(self.read_pages / self.total_pages * 100))
+    progress_percent: Field[int] = Field(0)  # type: ignore
+    progress: Field[str] = Field("")
 
     @property
     def dir_path(self) -> Path:
@@ -132,8 +128,7 @@ class TextBook(BookSource):
             dict(
                 publication=self.publication,
                 file_url=self.file_url,
-                total_pages=self.total_pages,
-                read_pages=self.read_pages,
+                progress=self.progress,
             )
         )
         return res
@@ -299,8 +294,6 @@ class RawBook[SourceT: BookSource](BookData):
         elif isinstance(self.source, TextBook):
             if self.source.publication:
                 publications.add(self.source.publication)
-            if self.source.total_pages:
-                durations.add(self.source.total_pages)
         return BookPreview(
             title=self.title,
             author=self.author,

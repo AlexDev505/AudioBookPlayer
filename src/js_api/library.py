@@ -78,3 +78,9 @@ class LibraryApi(JSApi):
         Database().set_listening_progress(
             sid, int(chapter_index), int(progress)
         )
+
+    def select_text_source(self, sid: int):
+        Database().select_text_source(sid)
+
+    def set_reading_progress(self, sid: int, cfi: str, percent: int):
+        Database().set_reading_progress(sid, cfi, percent)

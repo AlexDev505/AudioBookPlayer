@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-03-05 13:19+0700\n"
+"POT-Creation-Date: 2026-03-09 21:58+0700\n"
 "PO-Revision-Date: 2025-03-14 02:08+0700\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -25,8 +25,8 @@ msgstr ""
 #: ../../src/drivers/drivers/knigavuhe.py:88
 #: ../../src/drivers/drivers/knigavuhe.py:144
 #: ../../src/drivers/drivers/readli.py:39
-#: ../../src/drivers/drivers/readli.py:97
-#: ../../src/drivers/drivers/readli.py:118
+#: ../../src/drivers/drivers/readli.py:87
+#: ../../src/drivers/drivers/readli.py:108
 msgid "unknown_author"
 msgstr "Неизвестный автор"
 
@@ -66,69 +66,93 @@ msgstr "Нет подходящего драйвера"
 msgid "unexpected_error"
 msgstr "Непредвиденная ошибка"
 
-#: ../../src/web/templates/base.html:68
+#: ../../src/web/templates/base.html:67
 msgid "base.hide_menu"
 msgstr "скрыть меню"
 
-#: ../../src/web/templates/base.html:76
+#: ../../src/web/templates/base.html:75
 msgid "base.library"
 msgstr "мои книги"
 
-#: ../../src/web/templates/base.html:83
+#: ../../src/web/templates/base.html:82
 msgid "base.favorite"
 msgstr "избранные"
 
-#: ../../src/web/templates/base.html:90
+#: ../../src/web/templates/base.html:89
 msgid "base.search_book"
 msgstr "новая книга"
 
-#: ../../src/web/templates/base.html:97
+#: ../../src/web/templates/base.html:96
 msgid "base.downloads"
 msgstr "загрузки"
 
-#: ../../src/web/templates/base.html:106
+#: ../../src/web/templates/base.html:105
 msgid "base.licensed"
 msgstr "подписки"
 
-#: ../../src/web/templates/base.html:113
+#: ../../src/web/templates/base.html:112
 msgid "base.books_folder"
 msgstr "папка с книгами"
 
-#: ../../src/web/templates/base.html:120
+#: ../../src/web/templates/base.html:119
 msgid "base.settings"
 msgstr "настройки"
 
-#: ../../src/web/templates/base.html:155
+#: ../../src/web/templates/base.html:158
 msgid "notifications.error"
 msgstr "Ошибка"
 
-#: ../../src/web/templates/book.html:18 ../../src/web/templates/library.html:30
+#: ../../src/web/templates/book.html:19 ../../src/web/templates/library.html:30
 msgid "book.added"
 msgstr "Добавлена"
 
-#: ../../src/web/templates/book.html:48 ../../src/web/templates/book.html:59
-msgid "s"
-msgstr "с"
-
-#: ../../src/web/templates/book.html:67
+#: ../../src/web/templates/book.html:46
 msgid "book.audio_sources"
 msgstr "Озвучки"
 
-#: ../../src/web/templates/book.html:73
+#: ../../src/web/templates/book.html:52
 msgid "book.text_sources"
 msgstr "Электронные книги"
 
-#: ../../src/web/templates/book.html:106
+#: ../../src/web/templates/book.html:63 ../../src/web/templates/book.html:73
+msgid "s"
+msgstr "с"
+
+#: ../../src/web/templates/book.html:78
+msgid "book.show_sources"
+msgstr "Показать все источники"
+
+#: ../../src/web/templates/book.html:84
+msgid "book.read"
+msgstr "Читать"
+
+#: ../../src/web/templates/book.html:112
 msgid "book.status.new"
 msgstr "новая книга"
 
-#: ../../src/web/templates/book.html:109
+#: ../../src/web/templates/book.html:115
 msgid "book.status.in_progress"
 msgstr "в процессе"
 
-#: ../../src/web/templates/book.html:112
+#: ../../src/web/templates/book.html:118
 msgid "book.status.completed"
 msgstr "прочитана"
+
+#: ../../src/web/templates/book.html:121
+msgid "book.progress.listened"
+msgstr "прослушано"
+
+#: ../../src/web/templates/book.html:124
+msgid "book.progress.read"
+msgstr "прочитано"
+
+#: ../../src/web/templates/book.html:127
+msgid "book.status.mark_as_new"
+msgstr "Отметить как новую"
+
+#: ../../src/web/templates/book.html:130
+msgid "book.status.mark_as_completed"
+msgstr "Отметить как прочитанную"
 
 #: ../../src/web/templates/library.html:17
 msgid "library"
@@ -261,9 +285,6 @@ msgstr "Добавлена"
 
 #~ msgid "licensed.login"
 #~ msgstr "войти в аккаунт"
-
-#~ msgid "book.mark_as_finished"
-#~ msgstr "Отметить как прослушанную"
 
 #~ msgid "downloading.initializing"
 #~ msgstr "инициализация"

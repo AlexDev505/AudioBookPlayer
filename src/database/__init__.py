@@ -192,3 +192,10 @@ class Database(SyncDBCore[Book | TextBook | AudioBook]):
             {AudioBook.progress: ListeningProgress(chapter_index, progress)},
             where=AudioBook.id == sid,
         )
+
+    def set_reading_progress(self, sid: int, cfi: str, percent: int):
+        self.update(
+            TextBook,
+            {TextBook.progress: cfi, TextBook.progress_percent: percent},
+            where=TextBook.id == sid,
+        )

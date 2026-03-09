@@ -27,7 +27,7 @@ body {
     cursor: pointer;
 }
 
-input[type="range"] {
+input[type="range"]:not(.nav-slider) {
     position: relative;
     display: flex;
     align-items: center;
@@ -40,7 +40,7 @@ input[type="range"] {
     overflow: hidden;
     background: var(--ui-element-bg);
 }
-input[type="range"]::-webkit-slider-thumb {
+input[type="range"]:not(.nav-slider)::-webkit-slider-thumb {
     appearance: none;
     background-color: var(--dim-fg);
     border: none;
@@ -48,7 +48,7 @@ input[type="range"]::-webkit-slider-thumb {
     width: 0px;
     box-shadow: -40px 0 0 40px var(--dim-fg);
 }
-input[type="range"]::after {
+input[type="range"]:not(.nav-slider)::after {
     content: attr(data-value);
     position: absolute;
 }

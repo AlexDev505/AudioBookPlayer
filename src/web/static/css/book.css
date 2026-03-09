@@ -30,7 +30,15 @@
     justify-content: space-between;
     height: fit-content;
 }
+#book-page .header .book-state-btn {
+    height: 100%;
+    position: relative;
+}
 #book-page .header .book-state-btn::before {
+    content: "";
+    display: block;
+    width: 1em;
+    height: 1em;
     background-image: url(../images/angle_down.svg);
     background-repeat: no-repeat;
     background-position: center;
@@ -40,6 +48,7 @@
 #book-page .book-state-action {
     z-index: 2;
     position: absolute;
+    right: 0;
     top: 100%;
     background-color: var(--cards-bg);
     padding: 5px;

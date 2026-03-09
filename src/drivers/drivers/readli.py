@@ -44,15 +44,6 @@ class Readli(BaseDriver[TextBook]):
         )
 
         description = find_in_soup(soup, "article")
-        total_pages = int(
-            find_in_soup(
-                soup,
-                ".button-pages__right",
-                modification=lambda x: x.removesuffix(
-                    "стр."
-                ),  # Do not translate
-            )
-        )
         cover = soup.select_one(".book-image img").attrs["src"]
         for pattern in [
             r'<a class="download__link" href="(.+?)">fb2</a>'
@@ -76,7 +67,6 @@ class Readli(BaseDriver[TextBook]):
                 cover=cover,
                 publication="",
                 file_url=file_url,
-                total_pages=total_pages,
             ),
         )
 

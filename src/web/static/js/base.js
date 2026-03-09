@@ -106,9 +106,9 @@ class Page {
     }
     this.constructor.current = this;
     addUrlParams({ page: this.el.id });
-    if (this.onOpen && !restore) this.onOpen(this.el);
     this.el.style = "display: block";
     this.shown = true;
+    if (this.onOpen && !restore) this.onOpen(this.el);
   }
   hide() {
     this.constructor.current = null;

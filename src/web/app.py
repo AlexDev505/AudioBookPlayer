@@ -1,7 +1,11 @@
 import os
 import sys
+import zipfile
+from io import BytesIO
+from urllib.parse import unquote
 
-from flask import Flask, render_template, send_from_directory
+import requests
+from flask import Flask, render_template, send_file, send_from_directory
 
 import temp_file
 
@@ -42,6 +46,21 @@ def start_app():
 @app.route("/library/<path:file_path>")
 def library_cdn(file_path: str):
     return send_from_directory(os.environ["books_folder"], file_path)
+
+
+@app.route("/text_book_content/<string:url>")
+def text_book_content_cdn(url: str):
+    resp = requests.get(unquote(url))
+    buffer = BytesIO(resp.content)
+    buffer.seek(0)
+
+    with zipfile.ZipFile(buffer) as zip_file:
+        file_name = zip_file.namelist()[0]
+        content = zip_file.read(file_name)
+
+    return send_file(
+        BytesIO(content), as_attachment=True, download_name=file_name
+    )
 
 
 if __name__ == "__main__":

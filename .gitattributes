@@ -2,4 +2,5 @@ installer.nsi linguist-generated
 updater.nsi linguist-generated
 installer x32.nsi linguist-generated
 updater x32.nsi linguist-generated
-/ABPlayer/web/static/js/plyr/** linguist-vendored
+/src/web/static/js/plyr/** linguist-vendored
+/src/web/static/js/foliate-js/** linguist-vendored

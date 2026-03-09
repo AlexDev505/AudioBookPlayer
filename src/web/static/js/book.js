@@ -51,6 +51,7 @@ function loadBookData(bid) {
     if (player.current_book && player.current_book.bid == resp.data.bid) {
       selected_audio_book = player.current_source;
     }
+    console.log(selected_audio_book);
     if (selected_audio_book) {
       selected_source = selected_audio_book;
       showPlayer(selected_source);
@@ -131,6 +132,9 @@ function _showSources(book) {
   }
   for (let source of book.text_sources) {
     let card = createSourceCard(source);
+    card.querySelector(".source-card").onclick = () => {
+      selectTextBook(source.sid);
+    };
     textSources.appendChild(card);
   }
   document.querySelector("#sources").classList.remove("hidden");
@@ -147,7 +151,7 @@ function createSourceCard(source) {
   card.querySelector(".source-domain").innerHTML = source.domain;
   card.querySelector(".source-duration").innerHTML = source.duration
     ? source.duration
-    : source.total_pages;
+    : "";
   card.querySelector(".source-status").innerHTML = status;
   card.querySelector(".open-in-browser").onclick = (event) => {
     window.open(source.url, "_blank");
@@ -161,6 +165,7 @@ function selectAudioBook(sid) {
   selected_source = opened_book.audio_sources.find(
     (source) => source.sid === sid,
   );
+  selected_source.selected = true;
   showPlayer(selected_source);
 }
 function showPlayer(source) {
@@ -272,4 +277,25 @@ function bookChapterOnmouseup(event, el) {
     Math.floor(time),
   );
   player.currentTime = time;
+}
+
+function readBook() {
+  if (player.current_book && player.current_book.bid == opened_book.bid) {
+    clearPlayingBook();
+  }
+  var selected_text_source = opened_book.text_sources.find(
+    (source) => source.selected === true,
+  );
+  if (opened_book.text_sources_count == 1)
+    return selectTextBook(opened_book.text_sources[0].sid);
+  if (!selected_text_source) return showSources();
+  _readBook(selected_text_source);
+}
+function selectTextBook(sid) {
+  pywebview.api.select_text_source(sid);
+  var selected_text_source = opened_book.text_sources.find(
+    (source) => source.sid === sid,
+  );
+  selected_text_source.selected = true;
+  _readBook(selected_text_source);
 }

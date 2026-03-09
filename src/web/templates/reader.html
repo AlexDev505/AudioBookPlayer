@@ -1,0 +1,79 @@
+<link
+    rel="stylesheet"
+    href="{{url_for('static', filename='css/reader.css')}}"
+/>
+<script defer src="{{ url_for('static', filename='js/reader.js') }}"></script>
+
+<div id="reader-page-content">
+    <input type="file" id="file-input" hidden />
+    <div id="drop-target" class="filter hidden">
+        <div>
+            <svg
+                class="icon empty-state-icon"
+                width="72"
+                height="72"
+                aria-hidden="true"
+            >
+                <path
+                    d="M36 18s-6-6-12-6-15 6-15 6v42s9-6 15-6 12 6 12 6c4-4 8-6 12-6s12 2 15 6V18c-6-4-12-6-15-6-4 0-8 2-12 6m0 0v42"
+                />
+            </svg>
+            <h1>Drop a book here!</h1>
+            <p>
+                Or <button id="file-button">choose a file</button> to open it.
+            </p>
+        </div>
+    </div>
+    <div id="dimming-overlay" aria-hidden="true"></div>
+    <div id="side-bar">
+        <div id="side-bar-header">
+            <img id="side-bar-cover" />
+            <div>
+                <h1 id="side-bar-title"></h1>
+                <p id="side-bar-author"></p>
+            </div>
+        </div>
+        <div id="toc-view"></div>
+    </div>
+    <div id="header-bar" class="toolbar">
+        <button id="side-bar-button" aria-label="Show sidebar">
+            <svg class="icon" width="24" height="24" aria-hidden="true">
+                <path d="M 4 6 h 16 M 4 12 h 16 M 4 18 h 16" />
+            </svg>
+        </button>
+        <div id="menu-button" class="menu-container">
+            <button aria-label="Show settings" aria-haspopup="true">
+                <svg class="icon" width="24" height="24" aria-hidden="true">
+                    <path
+                        d="M5 12.7a7 7 0 0 1 0-1.4l-1.8-2 2-3.5 2.7.5a7 7 0 0 1 1.2-.7L10 3h4l.9 2.6 1.2.7 2.7-.5 2 3.4-1.8 2a7 7 0 0 1 0 1.5l1.8 2-2 3.5-2.7-.5a7 7 0 0 1-1.2.7L14 21h-4l-.9-2.6a7 7 0 0 1-1.2-.7l-2.7.5-2-3.4 1.8-2Z"
+                    />
+                    <circle cx="12" cy="12" r="3" />
+                </svg>
+            </button>
+        </div>
+    </div>
+    <div id="nav-bar" class="toolbar">
+        <button id="left-button" aria-label="Go left">
+            <svg class="icon" width="24" height="24" aria-hidden="true">
+                <path d="M 15 6 L 9 12 L 15 18" />
+            </svg>
+        </button>
+        <input
+            id="progress-slider"
+            type="range"
+            min="0"
+            max="1"
+            step="any"
+            list="tick-marks"
+            class="nav-slider"
+        />
+        <datalist id="tick-marks"></datalist>
+        <button id="right-button" aria-label="Go right">
+            <svg class="icon" width="24" height="24" aria-hidden="true">
+                <path d="M 9 6 L 15 12 L 9 18" />
+            </svg>
+        </button>
+    </div>
+</div>
+
+<script type="module" src="/static/js/foliate-js/reader.js"></script>
