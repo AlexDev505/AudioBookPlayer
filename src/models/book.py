@@ -14,6 +14,7 @@ from aiodbcore.models import Field, Index
 
 from tools import normalize_author, normalize_string
 
+# Will be used for datetime formatting in UI
 DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 
@@ -147,14 +148,14 @@ class AudioBook(BookSource):
     def progress_percent(self) -> int:
         if self.status == BookStatus.COMPLETED:
             return 100
-        total = sum([chapter.duration for chapter in self.chapters])
+        total = sum(chapter.duration for chapter in self.chapters)
         if not total:
             return 0
         cur = (
             sum(
                 [
-                    item.duration
-                    for i, item in enumerate(self.chapters)
+                    chapter.duration
+                    for i, chapter in enumerate(self.chapters)
                     if i < self.progress.chapter_index
                 ]
             )

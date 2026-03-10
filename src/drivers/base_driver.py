@@ -20,6 +20,9 @@ from .tools import NotImplementedVariable, get_base_generics
 if ty.TYPE_CHECKING:
     from models.book import BookPreview, RawBook
 
+    class SessionRequired[**P, R](ty.Protocol):
+        async def __call__(self, *args: P.args, **kwargs: P.kwargs) -> R: ...
+
 
 class BaseDriver[SourceT: BookSource](ABC):
     drivers: list[ty.Type[BaseDriver]] = []
@@ -38,6 +41,7 @@ class BaseDriver[SourceT: BookSource](ABC):
     request_kwargs: ty.Dict[str, ty.Any] = dict(
         ssl=ssl.create_default_context(cafile=certifi.where())
     )
+    """ kwargs passed to every request made by the driver """
     __session: aiohttp.ClientSession | None = None
 
     def __init_subclass__(cls, **__):
@@ -105,9 +109,11 @@ class BaseDriver[SourceT: BookSource](ABC):
         return self.__session
 
     @staticmethod
-    def _ensure_session(func):
+    def _ensure_session[**P, R](
+        func: SessionRequired[P, R],
+    ) -> SessionRequired[P, R]:
         @wraps(func)
-        async def _wrapper(self, *args, **kwargs):
+        async def _wrapper(self, *args: P.args, **kwargs: P.kwargs):
             await self._session.__aenter__()
             try:
                 with suppress(CancelledError):

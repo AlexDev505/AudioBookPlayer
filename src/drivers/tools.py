@@ -12,8 +12,6 @@ from pathlib import Path
 from bs4 import BeautifulSoup, Tag
 from loguru import logger
 
-from models.book import BookSource
-
 
 class NotImplementedVariable:
     """
@@ -136,6 +134,12 @@ class BaseProgressHandler[Statuses: Enum](ABC):
     def init_status(
         self, status: Statuses, total_count: int | None = None
     ) -> None:
+        """
+        Initialize the status of the progress handler.
+        :param total_count: maximum value for counter
+            if `None`, the progress is non-countable and calling of
+            `progress` and `set_done_count` methods will raise a `RuntimeError`
+        """
         self._status = status
         self._total_count = total_count
         self._done_count = None if total_count is None else 0

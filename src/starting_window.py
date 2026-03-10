@@ -55,6 +55,7 @@ def start_app(window: webview.Window) -> None:
     logger.debug("starting app...")
     start_time = time.time()
 
+    # Remove updater file if it exists
     updater_path = os.path.join(
         os.environ["APP_DIR"],
         f"ABPlayerSetup.{os.environ['VERSION']}"
@@ -63,24 +64,27 @@ def start_app(window: webview.Window) -> None:
     if os.path.isfile(updater_path):
         os.remove(updater_path)
 
+    # Configuration initialization
     config.init()
     locales.set_language(os.environ["language"])
+
+    # DB initialization
     Database.init(
         f"sqlite://{os.environ['DATABASE_PATH']}",
         check_same_thread=False,
     )
     Database().create_library()
 
+    # Wait for... nothing)
     window.run_js("setStatus('запуск...')")
-
     if (sub := time.time() - start_time) < 2:
         logger.trace(f"sleeping {round(2 - sub, 2)}s （*＾-＾*）")
         time.sleep(2 - sub)
 
     import main_window as main
 
-    if os.environ["PLATFORM"] == "Windows":
+    if os.environ["PLATFORM"] == "Android":
+        main.main_window_on_place(window)
+    else:
         main.main_window()
         window.destroy()
-    else:
-        main.main_window_on_place(window)

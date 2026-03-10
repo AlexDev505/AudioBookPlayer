@@ -24,6 +24,7 @@ class Database(SyncDBCore[Book | TextBook | AudioBook]):
     def create_library(self):
         self.create_tables()
         for table in {AudioBook, TextBook}:
+            # Trigger that ensures only one audio/text source is selected per book
             self.provider.execute(
                 f"""
                 CREATE TRIGGER IF NOT EXISTS only_one_selected_{table.__name__}
@@ -37,6 +38,7 @@ class Database(SyncDBCore[Book | TextBook | AudioBook]):
                 END;
                 """
             )
+            # Trigger that syncs book status with audio/text source status
             self.provider.execute(
                 f"""
                 CREATE TRIGGER IF NOT EXISTS status_sync_{table.__name__}
@@ -81,9 +83,8 @@ class Database(SyncDBCore[Book | TextBook | AudioBook]):
             offset=offset,
         )
         for book in books:
-            sources = self.get_book_sources(book.id)
-            book.add_audio_sources(*sources[SourceType.AudioBook])
-            book.add_text_sources(*sources[SourceType.TextBook])
+            book.add_audio_sources(*self.get_audio_books(book.id))
+            book.add_text_sources(*self.get_text_books(book.id))
         return books
 
     def get_book_by_bid(
@@ -91,34 +92,32 @@ class Database(SyncDBCore[Book | TextBook | AudioBook]):
     ) -> Book | None:
         book = self.fetchone(Book, where=Book.id == bid)
         if with_sources and book:
-            sources = self.get_book_sources(book.id)
-            book.add_audio_sources(*sources[SourceType.AudioBook])
-            book.add_text_sources(*sources[SourceType.TextBook])
+            book.add_audio_sources(*self.get_audio_books(book.id))
+            book.add_text_sources(*self.get_text_books(book.id))
         return book
-
-    def get_books_by_bid(self, *bids: int) -> list[Book]:
-        return self.fetchall(Book, where=Book.id.contained(bids))
 
     def get_book_by_hash(self, hash: str) -> Book | None:
         return self.fetchone(Book, where=Book.hash == hash)
 
-    def get_book_sources(
-        self, bid: int
-    ) -> dict[SourceType, ty.Sequence[BookSource]]:
-        results: dict[SourceType, ty.Sequence[BookSource]] = {}
-        for source_type in SourceType:
-            sources = self.fetchall(
-                source_type.value, where=source_type.value.related_book == bid
-            )
-            results[source_type] = sources
-        return results
+    def get_audio_books(self, bid: int) -> list[AudioBook]:
+        return self.fetchall(AudioBook, where=AudioBook.related_book == bid)
+
+    def get_text_books(self, bid: int) -> list[TextBook]:
+        return self.fetchall(TextBook, where=TextBook.related_book == bid)
 
     def get_source_by_sid[SourceT: BookSource](
         self, sid: int, source_type: type[SourceT]
     ) -> SourceT | None:
         return self.fetchone(source_type, where=source_type.id == sid)
 
-    def check_is_sources_exists(self, books: dict[str, list[str]]) -> list[str]:
+    def check_are_sources_exists(
+        self, books: dict[str, list[str]]
+    ) -> list[str]:
+        """
+        :param books: dict like {book_hash: [source_url, ...], ...}
+        :returns: list of book hashes that have at least one source
+            that does not exist in the database
+        """
         return [
             hash
             for hash, urls in books.items()
@@ -142,6 +141,9 @@ class Database(SyncDBCore[Book | TextBook | AudioBook]):
         ]
 
     def check_not_exists_sources(self, urls: set[str]) -> set[str]:
+        """
+        :returns: set of urls that do not exist in the database
+        """
         return urls.difference(
             {
                 url[0]
@@ -177,6 +179,9 @@ class Database(SyncDBCore[Book | TextBook | AudioBook]):
             {source_type.value.status: status},
             where=source_type.value.id == sid,
         )
+
+    def mark_as_new(self, sid: int, source_type: SourceType):
+        self._set_status(sid, source_type, BookStatus.NEW)
 
     def mark_as_in_progress(self, sid: int, source_type: SourceType):
         self._set_status(sid, source_type, BookStatus.IN_PROGRESS)

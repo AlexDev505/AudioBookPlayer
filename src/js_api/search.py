@@ -170,7 +170,7 @@ class SearchApi(JSApi):
         :returns: list of hashes of books that
          all sources already added to library.
         """
-        exists_book_hashes = Database().check_is_sources_exists(books)
+        exists_book_hashes = Database().check_are_sources_exists(books)
         logger.opt(colors=True).debug(
             f"<y>{len(exists_book_hashes)}/{len(books)}</y> books exists"
         )
