@@ -28,7 +28,7 @@ from .tools import (
 )
 
 if ty.TYPE_CHECKING:
-    from models.book import BookFiles, BookSource, RawBook
+    from models.book import BookSource, RawBook
 
 
 class DownloadProcessStatus(Enum):
@@ -265,7 +265,7 @@ class BaseDownloader[SourceT: BookSource](ABC):
         self._process_handler.init_status(DownloadProcessStatus.FINISHED)
         logger.debug("finished")
 
-    def _final_files(self, downloaded_files: dict[int, Path]) -> BookFiles:
+    def _final_files(self, downloaded_files: dict[int, Path]) -> dict[str, str]:
         files = dict[str, str]()
         for file_index in range(len(downloaded_files)):
             if self._terminated:
