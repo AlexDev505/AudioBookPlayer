@@ -114,6 +114,13 @@ class Reader {
     this.view = document.createElement("foliate-view");
     document.querySelector("#reader-page-content").append(this.view);
     await this.view.open(file);
+    if (current_text_book.progress) {
+      await this.view.init({ lastLocation: current_text_book.progress });
+      delay(500).then(() => {
+        this.view.goTo(current_text_book.progress);
+        this.loaded = true;
+      });
+    }
     this.view.addEventListener("load", this.#onLoad.bind(this));
     this.view.addEventListener("relocate", this.#onRelocate.bind(this));
 
@@ -193,13 +200,6 @@ class Reader {
         const annotation = this.annotationsByValue.get(e.detail.value);
         if (annotation.note) alert(annotation.note);
       });
-    }
-    await delay(500);
-    if (current_text_book.progress && !this.loaded) {
-      console.log("goto " + current_text_book.progress);
-      await this.view.goTo(current_text_book.progress);
-      this.loaded = true;
-      return;
     }
   }
   #handleKeydown(event) {
