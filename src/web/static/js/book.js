@@ -37,6 +37,7 @@ function loadBookData(bid) {
     page.querySelector(".toggle-favorite").onclick = function () {
       toggleFavorite(this, resp.data.bid);
     };
+    page.querySelector("#book-page .progress").classList.add("hidden");
     page.querySelector(".search-series").classList.add("hidden");
     page.querySelector(".open-book-dir").classList.add("hidden");
     page.querySelector(".open-in-browser").classList.add("hidden");

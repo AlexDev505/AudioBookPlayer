@@ -32,9 +32,11 @@ function showListeningProgress(bid, percents) {
   if (player.current_book && player.current_book.bid == bid)
     document.querySelector("#player .progress").innerHTML =
       `${percents}% ${progress_text}`;
-  if (opened_book && opened_book.bid == bid)
+  if (opened_book && opened_book.bid == bid) {
     document.querySelector("#book-page .progress .content").innerHTML =
       `${percents}% ${progress_text}`;
+    document.querySelector("#book-page .progress").classList.remove("hidden");
+  }
 }
 
 document.addEventListener("DOMContentLoaded", (event) => {
