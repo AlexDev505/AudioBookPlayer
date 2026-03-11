@@ -20,12 +20,12 @@ def _on_closed():
     logger.info("application closed\n\n")
 
 
-def _on_shown(window: webview.Window):
+def _on_shown():
     logger.info("main window launched")
-    js_api.init(window)
 
 
 def _init_main_window(window: webview.Window):
+    js_api.init(window)
     window.events.loaded += _on_loaded
     window.events.closing += _on_closing
     window.events.closed += _on_closed
@@ -66,7 +66,6 @@ def main_window_on_place(window: webview.Window):
     window.events.shown._items.clear()
 
     _init_main_window(window)
-    js_api.init(window)
 
     window.load_url("/")
 

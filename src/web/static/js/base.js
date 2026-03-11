@@ -135,6 +135,16 @@ function openPageFromUrlParams() {
 window.addEventListener("pywebviewready", function () {
   openPageFromUrlParams();
   pywebview.state.menu_opened = !sideMenu.classList.contains("collapsed");
+  pywebview.state.volume = player.volume;
+  pywebview.state.speed = player.speed;
+  document
+    .querySelector("#volume-input")
+    .addEventListener("input", function () {
+      pywebview.state.volume = this.value / 100;
+    });
+  document.querySelector("#speed-input").addEventListener("input", function () {
+    pywebview.state.speed = Number(this.value);
+  });
   // pywebview.api.check_for_updates().then(checkForUpdates);
   // pywebview.api.get_downloads().then(showDownloads);
   // pywebview.api.get_available_drivers().then(loadAvailableDrivers);

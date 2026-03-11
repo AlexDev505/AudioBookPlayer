@@ -22,8 +22,8 @@ class WindowControlsApi(JSApi):
         data["is_main_menu_opened"] = self._window.state.menu_opened
         # is_filter_menu_opened = self._window.evaluate_js("filter_menu_opened")
         # required_drivers = self._window.evaluate_js("required_drivers")
-        data["volume"] = self._window.evaluate_js("player.volume") * 100
-        data["speed"] = self._window.evaluate_js("player.speed")
+        data["volume"] = self._window.state.volume * 100
+        data["speed"] = self._window.state.speed
         # last_listened_book_bid = self._window.evaluate_js(
         #     "(player.current_book)?player.current_book.bid:null"
         # )
