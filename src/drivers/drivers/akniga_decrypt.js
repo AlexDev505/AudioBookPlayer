@@ -1,5 +1,3 @@
-//8bb04d23f037f7e9229393de28501f6e
-
 var CryptoJS =
   CryptoJS ||
   (function (u, p) {
@@ -1042,9 +1040,3 @@ function _0x2fe8(_0x32da26, _0x1338e4) {
       }
     },
   }));
-
-// console.log(
-//   plh.getHres(
-//     '{"ct":"hTs\\/+K5tbN5IQXgytNzcJnTAH5RLrCky63MrZn\\/erzd5mTkv8OYOnLpMlP82c1lrdM4uY3loQwuVoo51revhIQoXy9dI15z9JuQaPNzQIpMmkZZUMaQL9cbTv\\/ZAfn5U","iv":"0ec99b21982405242af434e478c4160f","s":"80a94e1e6be40681"}',
-//   ),
-// );

@@ -23,7 +23,7 @@ if getattr(sys, "frozen", False):
 else:
     DRIVERS_DIR = os.path.dirname(__file__)
 
-DECRYPT_SCRIPT = os.path.join(DRIVERS_DIR, "aboba.js")
+DECRYPT_SCRIPT = os.path.join(DRIVERS_DIR, "akniga_decrypt.js")
 
 """
 On the AKniga website, book information is loaded dynamically via JavaScript.
@@ -33,86 +33,22 @@ Therefore, to get complete book data, we need a JavaScript execution environment
 
 class BaseJsApi(ABC):
     @abstractmethod
-    def get_book_data(self, url: str) -> dict:
-        """
-        Method that returns dynamically loaded book data.
-        {
-            "author": <str>,
-            "titleonly": <str>,  # clean book title
-            "items": [{
-                "file": <int>,  # file number
-                "title": <str>,  # chapter title
-                "time_from_start": <str>,  # start time
-                "time_finish": <str>,  # end time
-            }, ...],
-            "m3u8": <str>,  # link to m3u8 file
-        }
-        """
-
-    @abstractmethod
     def decrypt_hres(self, hres: str) -> str:
-        """ """
+        """ Decrypts URL to audio file """
 
 
 class PyWebViewJsApi(BaseJsApi):
     """
-    JavaScript execution environment using Pywebview.
-    Creates a hidden window, loads the book page there, and retrieves data from it.
+    JavaScript execution environment using Pywebview
+    Uses already running pywebview window to execute JavaScript
     """
 
-    def __init__(self):
-        self._window: webview.Window | None = None
-        self._result = {}
-        self._active = False
-
-    def get_book_data(self, url: str) -> dict:
-        self._window = webview.create_window("", url=url, hidden=True)
-        # Execute `self._get_book_data` after the page loads
-        self._window.events.loaded += self._get_book_data
-        self._active = True
-        if (
-            len(webview.windows) == 1
-        ):  # Currently, there are no running pywebview windows
-            webview.start()
-        else:
-            while self._active:
-                time.sleep(1)
-        return self._result
-
-    def _get_book_data(self) -> None:
-        for i in range(5):
-            self._result = self._window.evaluate_js(
-                """
-                function get_data() {
-                    return {
-                        "author": bookData[page_bid].author,
-                        "titleonly": bookData[page_bid].titleonly,
-                        "items": bookData[page_bid].items,
-                        "m3u8": hls[page_bid].url
-                    }
-                }
-                get_data()
-                """
-            )
-            if self._result:
-                break
-            time.sleep(5)
-        else:
-            logger.error(
-                f"getting book data failed. url={self._window.get_current_url}"
-            )
-            self._window.load_url(self._window.get_current_url())
-            return
-
-        self._window.destroy()
-        self._active = False
-
     def decrypt_hres(self, hres: str) -> str:
-        self._window = webview.windows[0]
+        _window = webview.windows[0]
         with open(DECRYPT_SCRIPT, encoding="utf-8") as f:
             script = f.read()
         script += f"\n\nplh.getHres('{hres}')"
-        return self._window.evaluate_js(script)
+        return _window.evaluate_js(script)
 
 
 class AKniga(BaseDriver[AudioBook]):
