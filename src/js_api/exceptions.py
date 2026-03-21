@@ -44,7 +44,7 @@ class BookAlreadyAdded(JSApiError):
     explain = "Book already added to library"
 
 
-class BookNotFound(JSApiError):
+class NotFound(JSApiError):
     code = 4
     message = _("book.not_found")
 

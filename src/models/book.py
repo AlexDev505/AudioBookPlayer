@@ -3,9 +3,11 @@ from __future__ import annotations
 import os
 import typing as ty
 from abc import ABC, abstractmethod
+from contextlib import suppress
 from dataclasses import asdict, dataclass, field
 from datetime import datetime
 from enum import Enum
+from functools import wraps
 from hashlib import md5
 from pathlib import Path
 from urllib.parse import urlparse
@@ -87,7 +89,7 @@ class BookSource(ABC):
 
     def asdict(self) -> dict[str, ty.Any]:
         return dict(
-            sid=self.id,
+            sid=str(SourceId.from_source(self)),
             url=self.url,
             domain=self.domain,
             cover=self.cover,
@@ -183,6 +185,44 @@ class AudioBook(BookSource):
 class SourceType(Enum):
     AudioBook = AudioBook
     TextBook = TextBook
+
+
+@dataclass
+class SourceId[T: BookSource]:
+    sid: int
+    stype: ty.Type[T]
+
+    @classmethod
+    def from_source(cls, source: T) -> SourceId[T]:
+        return cls(source.id, source.__class__)
+
+    @classmethod
+    def from_str(cls, s: str) -> SourceId | None:
+        with suppress(ValueError, KeyError):
+            stype, sid = s.split("-")
+            return cls(int(sid), ty.cast(ty.Type[T], SourceType[stype].value))
+
+    @classmethod
+    def convert_param[SELF, **P, R](
+        cls, func: ty.Callable[ty.Concatenate[SELF, SourceId, P], R]
+    ) -> ty.Callable[ty.Concatenate[SELF, str, P], R]:
+        @wraps(func)
+        def _wrapper(
+            self: SELF, sid: str, *args: P.args, **kwargs: P.kwargs
+        ) -> R:
+            if not (source_id := cls.from_str(sid)):
+                raise ValueError(f"Invalid source id: {source_id}")
+            return func(self, source_id, *args, **kwargs)
+
+        return _wrapper
+
+    def __hash__(self):
+        return hash(str(self))
+
+    def __repr__(self) -> str:
+        return f"{self.stype.__name__}-{self.sid}"
+
+    __str__ = __repr__
 
 
 @dataclass(kw_only=True)

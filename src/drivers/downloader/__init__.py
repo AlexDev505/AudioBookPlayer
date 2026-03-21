@@ -4,7 +4,7 @@ import subprocess
 import sys
 import time
 
-from models.book import BookSource, SourceType
+from models.book import BookSource, SourceId, SourceType
 
 from ..base_downloader import BaseDownloadingProgressHandler
 from .downloader_client import Client
@@ -23,18 +23,16 @@ _starting = False
 _first = True
 
 
-def download(
-    source: BookSource, process_handler: BaseDownloadingProgressHandler
-):
+def download(sid: SourceId, process_handler: BaseDownloadingProgressHandler):
     if not client.is_connected:
         run_client_server()
-    client.download(source, process_handler)
+    client.download(sid, process_handler)
 
 
-def terminate(sid: int, stype: SourceType):
+def terminate(sid: SourceId):
     if not client.is_connected:
         run_client_server()
-    client.terminate(sid, stype)
+    client.terminate(sid)
 
 
 def shutdown():

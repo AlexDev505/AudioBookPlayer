@@ -9,24 +9,22 @@ from loguru import logger
 from websockets.exceptions import ConnectionClosedOK
 from websockets.sync.client import connect
 
-from models.book import SourceType
+from models.book import SourceId
 
 from ..base_downloader import (
     BaseDownloadingProgressHandler,
     DownloadProcessStatus,
 )
-from .utils import get_downloading_id
 
 if ty.TYPE_CHECKING:
     from websockets.sync.client import ClientConnection
-
-    from models.book import BookSource
 
 
 class Client:
     def __init__(self):
         self.websocket: ClientConnection | None = None
         self.process_handlers: dict[str, BaseDownloadingProgressHandler] = {}
+        self.queue: dict[SourceId, BaseDownloadingProgressHandler] = {}
         self._t: threading.Thread | None = None
 
     def connect(self):
@@ -54,15 +52,16 @@ class Client:
                 with suppress(orjson.JSONDecodeError):
                     data = orjson.loads(message)
                     event = data["event"]
-                    process_handler = self.process_handlers[
-                        data["downloading_id"]
-                    ]
+                    process_handler = self.process_handlers[data["sid"]]
                     if event == "init_status":
                         process_handler.init_status(
                             DownloadProcessStatus(data["status"]),
                             data["total_size"],
                         )
                         process_handler.set_done_count(data["done_count"])
+                        self._downloading_status_changed(
+                            data["sid"], process_handler
+                        )
                     elif event == "progress":
                         process_handler.set_done_count(data["done_count"])
         except ConnectionClosedOK:
@@ -80,20 +79,46 @@ class Client:
         self.websocket.send(orjson.dumps(data))
 
     def download(
-        self,
-        source: BookSource,
-        process_handler: BaseDownloadingProgressHandler,
+        self, sid: SourceId, process_handler: BaseDownloadingProgressHandler
     ):
-        downloading_id = get_downloading_id(
-            sid := source.id, stype := SourceType(source.__class__)
-        )
-        self.process_handlers[downloading_id] = process_handler
-        self._send("download", sid=sid, stype=stype.name)
+        if len(self.process_handlers) >= 5:
+            self.queue[sid] = process_handler
+            logger.opt(colors=True).debug(f"added to download queue: {sid}")
+            return
+        self.process_handlers[str(sid)] = process_handler
+        self._send("download", sid=str(sid))
 
-    def terminate(self, sid: int, stype: SourceType) -> None:
-        self._send("terminate", sid=sid, stype=stype.name)
+    def terminate(self, sid: SourceId) -> None:
+        if sid in self.queue:
+            del self.queue[sid]
+        else:
+            self._send("terminate", sid=str(sid))
 
     def shutdown(self) -> None:
         if self.websocket:
             logger.debug("shutdowning")
             self.websocket.close()
+
+    def get_downloads(self) -> list[SourceId]:
+        sids = [
+            *ty.cast(
+                ty.Iterable[SourceId],
+                map(SourceId.from_str, self.process_handlers.keys()),
+            ),
+            *self.queue.keys(),
+        ]
+        for sid in sids:
+            self._send("download", sid=str(sid))
+
+        return sids
+
+    def _downloading_status_changed(
+        self, sid: str, dph: BaseDownloadingProgressHandler
+    ) -> None:
+        if dph.status in {
+            DownloadProcessStatus.FINISHED,
+            DownloadProcessStatus.TERMINATED,
+        }:
+            del self.process_handlers[sid]
+            if self.queue:
+                self.download(*self.queue.popitem())

@@ -12,6 +12,7 @@ from models.book import (
     BookSource,
     BookStatus,
     ListeningProgress,
+    SourceId,
     SourceType,
     TextBook,
 )
@@ -106,9 +107,9 @@ class Database(SyncDBCore[Book | TextBook | AudioBook]):
         return self.fetchall(TextBook, where=TextBook.related_book == bid)
 
     def get_source_by_sid[SourceT: BookSource](
-        self, sid: int, source_type: type[SourceT]
+        self, sid: SourceId[SourceT]
     ) -> SourceT | None:
-        return self.fetchone(source_type, where=source_type.id == sid)
+        return self.fetchone(sid.stype, where=sid.stype.id == sid.sid)
 
     def check_are_sources_exists(
         self, books: dict[str, list[str]]
@@ -161,46 +162,37 @@ class Database(SyncDBCore[Book | TextBook | AudioBook]):
             }
         )
 
-    def select_audio_source(self, sid: int):
+    def select_source(self, sid: SourceId):
         self.update(
-            AudioBook, {AudioBook.selected: True}, where=AudioBook.id == sid
+            sid.stype, {sid.stype.selected: True}, where=sid.stype.id == sid.sid
         )
 
-    def select_text_source(self, sid: int):
+    def _set_status(self, sid: SourceId, status: BookStatus):
         self.update(
-            TextBook, {TextBook.selected: True}, where=TextBook.id == sid
+            sid.stype, {sid.stype.status: status}, where=sid.stype.id == sid.sid
         )
 
-    def _set_status(
-        self, sid: int, source_type: SourceType, status: BookStatus
-    ):
-        self.update(
-            source_type.value,
-            {source_type.value.status: status},
-            where=source_type.value.id == sid,
-        )
+    def mark_as_new(self, sid: SourceId):
+        self._set_status(sid, BookStatus.NEW)
 
-    def mark_as_new(self, sid: int, source_type: SourceType):
-        self._set_status(sid, source_type, BookStatus.NEW)
+    def mark_as_in_progress(self, sid: SourceId):
+        self._set_status(sid, BookStatus.IN_PROGRESS)
 
-    def mark_as_in_progress(self, sid: int, source_type: SourceType):
-        self._set_status(sid, source_type, BookStatus.IN_PROGRESS)
-
-    def mark_as_completed(self, sid: int, source_type: SourceType):
-        self._set_status(sid, source_type, BookStatus.COMPLETED)
+    def mark_as_completed(self, sid: SourceId):
+        self._set_status(sid, BookStatus.COMPLETED)
 
     def set_listening_progress(
-        self, sid: int, chapter_index: int, progress: int
+        self, sid: SourceId, chapter_index: int, progress: int
     ):
         self.update(
             AudioBook,
             {AudioBook.progress: ListeningProgress(chapter_index, progress)},
-            where=AudioBook.id == sid,
+            where=AudioBook.id == sid.sid,
         )
 
-    def set_reading_progress(self, sid: int, cfi: str, percent: int):
+    def set_reading_progress(self, sid: SourceId, cfi: str, percent: int):
         self.update(
             TextBook,
             {TextBook.progress: cfi, TextBook.progress_percent: percent},
-            where=TextBook.id == sid,
+            where=TextBook.id == sid.sid,
         )

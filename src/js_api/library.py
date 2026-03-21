@@ -1,12 +1,15 @@
 from __future__ import annotations
 
+from contextlib import suppress
+
 from loguru import logger
 
+import drivers
 from database import Database
-from models.book import BookStatus, SourceType
-from tools import pretty_view
+from models.book import BookStatus, SourceId
+from tools import convert_from_bytes, pretty_view
 
-from .exceptions import BookNotFound
+from .exceptions import NotFound
 from .js_api import JSApi
 
 
@@ -21,7 +24,7 @@ class LibraryApi(JSApi):
         if book := Database().get_book_by_bid(bid, with_sources=listening_data):
             logger.opt(colors=True).debug(f"book found: {book:styled}")
             return book.asdict(with_sources=listening_data)
-        raise BookNotFound(bid=bid)
+        raise NotFound(bid=bid)
 
     def get_library(
         self,
@@ -63,24 +66,70 @@ class LibraryApi(JSApi):
 
         return [book.asdict() for book in books]
 
-    def select_audio_source(self, sid: int):
-        Database().select_audio_source(sid)
+    @SourceId.convert_param
+    def select_source(self, sid: SourceId):
+        Database().select_source(sid)
 
-    def mark_audio_book_as_in_progress(self, sid: int):
-        Database().mark_as_in_progress(sid, SourceType.AudioBook)
+    @SourceId.convert_param
+    def mark_audio_book_as_in_progress(self, sid: SourceId):
+        Database().mark_as_in_progress(sid)
 
-    def mark_audio_book_as_completed(self, sid: int):
-        Database().mark_as_completed(sid, SourceType.AudioBook)
+    @SourceId.convert_param
+    def mark_audio_book_as_completed(self, sid: SourceId):
+        Database().mark_as_completed(sid)
 
+    @SourceId.convert_param
     def set_listening_progress(
-        self, sid: int, chapter_index: int, progress: int
+        self, sid: SourceId, chapter_index: int, progress: int
     ):
         Database().set_listening_progress(
             sid, int(chapter_index), int(progress)
         )
 
-    def select_text_source(self, sid: int):
-        Database().select_text_source(sid)
-
-    def set_reading_progress(self, sid: int, cfi: str, percent: int):
+    @SourceId.convert_param
+    def set_reading_progress(self, sid: SourceId, cfi: str, percent: int):
         Database().set_reading_progress(sid, cfi, percent)
+
+    @SourceId.convert_param
+    def download_book(self, sid: SourceId):
+        drivers.download(sid, DownloadingProcessHandler(self, sid))
+
+    @SourceId.convert_param
+    def terminate_download(self, sid: SourceId):
+        drivers.terminate(sid)
+
+
+class DownloadingProcessHandler(drivers.BaseDownloadingProgressHandler):
+    def __init__(self, js_api: JSApi, sid: SourceId):
+        self.js_api = js_api
+        self.sid = sid
+        super().__init__()
+
+    def init_status(self, status, total_count=None):
+        super().init_status(status, total_count)
+        total_count = (
+            convert_from_bytes(total_count) if total_count else total_count
+        )
+        self.js_api.evaluate_js(
+            f"initStatus({self.sid}, '{status.value}', '{total_count}')"
+        )
+        if status is drivers.DownloadProcessStatus.FINISHED:
+            logger.opt(colors=True).info(
+                f"downloading finished: <y>{self.sid}</y>"
+            )
+        elif status is drivers.DownloadProcessStatus.TERMINATED:
+            logger.opt(colors=True).info(
+                f"downloading terminated: <y>{self.sid}</y>"
+            )
+
+    def show_progress(self) -> None:
+        done_count = (
+            convert_from_bytes(self.done_count)
+            if self.done_count
+            else self.done_count
+        )
+        with suppress(Exception):
+            self.js_api.evaluate_js(
+                f"downloadingCallback({self.sid}, "
+                f"'{done_count}', {self.done_count}, {self.total_count})"
+            )

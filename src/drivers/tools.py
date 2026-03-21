@@ -122,8 +122,8 @@ class BaseProgressHandler[Statuses: Enum](ABC):
 
     def __init__(self):
         self._status: Statuses | None = self.DEFAULT_STATUS
-        self._total_count: int | None = None
-        self._done_count: int | None = None
+        self.total_count: int | None = None
+        self.done_count: int | None = None
         create_instance_id(self)
         logger.opt(colors=True).trace(f"{self:colored} created")
 
@@ -141,23 +141,23 @@ class BaseProgressHandler[Statuses: Enum](ABC):
             `progress` and `set_done_count` methods will raise a `RuntimeError`
         """
         self._status = status
-        self._total_count = total_count
-        self._done_count = None if total_count is None else 0
+        self.total_count = total_count
+        self.done_count = None if total_count is None else 0
         logger.opt(colors=True).trace(
             f"{self:colored} - <y>{status.value}</y>"
             + (f" total_size=<y>{total_count}</y>" if total_count else "")
         )
 
     def progress(self, count: int) -> None:
-        if self._done_count is None:
+        if self.done_count is None:
             raise RuntimeError(f"{self:colored} has a non-countable status")
-        self._done_count += count
+        self.done_count += count
         self.show_progress()
 
     def set_done_count(self, count: int) -> None:
-        if self._total_count is None:
+        if self.total_count is None:
             raise RuntimeError(f"{self:colored} has a non-countable status")
-        self._done_count = count
+        self.done_count = count
         self.show_progress()
 
     @abstractmethod

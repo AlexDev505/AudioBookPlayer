@@ -20,11 +20,11 @@ from models.book import Book, RawBook
 from tools import pretty_view
 
 from .exceptions import (
-    BookNotFound,
     CanceledError,
     ConnectionFailedError,
     NoSuitableDriver,
     NotAuthenticated,
+    NotFound,
 )
 from .js_api import JSApi
 
@@ -178,7 +178,7 @@ class SearchApi(JSApi):
 
     def add_book_to_library(self, hash: str):
         if not (book_preview := self._search_results.get(hash)):
-            raise BookNotFound()
+            raise NotFound(hash=hash)
 
         book_create = False
         db = Database()
