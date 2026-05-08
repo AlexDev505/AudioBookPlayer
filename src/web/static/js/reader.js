@@ -16,7 +16,7 @@ async function _readBook(source) {
   current_text_book = source;
   document.querySelector("#book-loading").classList.remove("hidden");
   const response = await fetch(
-    `/text_book_content/${encodeURIComponent(encodeURIComponent(source.file_url))}`,
+    `/library/${encodeURIComponent(source.files[0])}`,
   );
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
@@ -25,7 +25,7 @@ async function _readBook(source) {
   const type =
     response.headers.get("content-type") || "application/octet-stream";
   const contentDisposition = response.headers.get("Content-Disposition");
-  let filename = "downloaded_file"; // Default name
+  let filename = "downloaded_file";
   if (contentDisposition && contentDisposition.indexOf("attachment") !== -1) {
     const matches = /filename="?([^"]+)"?/.exec(contentDisposition);
     if (matches && matches[1]) {

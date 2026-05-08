@@ -8,23 +8,33 @@ function showDownloads(resp) {
   }
 }
 
-function startDownloading(button, sid, title) {
-  console.log(button);
+const start_downloading_callback = (resp) => {
+  if (resp.status != "ok") {
+    button.classList.remove("loading");
+    showError(resp.message);
+    removeDownloadingCard(sid);
+  } else {
+    initStatus(sid, "waiting", 0);
+    downloads.push(sid);
+  }
+};
+function startDownloadingAudioBook(button, sid, title) {
   if (button) {
     if (button.classList.contains("loading")) return;
     button.classList.add("loading");
   }
   createDownloadingCard(sid, title);
-  pywebview.api.download_book(sid, title).then((resp) => {
-    if (resp.status != "ok") {
-      button.classList.remove("loading");
-      showError(resp.message);
-      removeDownloadingCard(sid);
-    } else {
-      initStatus(sid, "waiting", 0);
-      downloads.push(sid);
-    }
-  });
+  pywebview.api
+    .download_audio_book(sid, title)
+    .then(start_downloading_callback);
+}
+function startDownloadingTextBook(button, sid, title) {
+  if (button) {
+    if (button.classList.contains("loading")) return;
+    button.classList.add("loading");
+  }
+  createDownloadingCard(sid, title);
+  pywebview.api.download_text_book(sid, title).then(start_downloading_callback);
 }
 
 function createDownloadingCard(sid, title) {
@@ -105,6 +115,22 @@ function donwnloadingEnded(sid) {
     notification.querySelector(".book-title").innerHTML = title.innerHTML;
     createNotification(notification, 60, true);
   }
-  // TODO: update book page
-  // if (opened_book && opened_book.bid == bid) loadBookData(bid);
+  if (sid.includes("AudioBook")) {
+    if (opened_book && selected_source && selected_source.sid == sid)
+      loadBookData(opened_book.bid);
+  } else {
+    if (opened_book) {
+      var selected_text_source = opened_book.text_sources.find(
+        (source) => source.selected === true,
+      );
+      if (selected_text_source && selected_text_source.sid == sid) {
+        pywebview.api.book_by_bid(opened_book.bid, true).then((resp) => {
+          console.log(resp);
+          _readBook(
+            resp.data.text_sources.find((source) => source.selected === true),
+          );
+        });
+      }
+    }
+  }
 }

@@ -42,18 +42,24 @@ function loadBookData(bid) {
     page.querySelector(".open-book-dir").classList.add("hidden");
     page.querySelector(".open-in-browser").classList.add("hidden");
     page.querySelector("#player-controls").classList.add("hidden");
-    page.querySelector("#sources").classList.remove("hidden");
+    page.querySelector("#sources").classList.add("hidden");
+    page.querySelector("#text-source-loading").classList.add("hidden");
     document.querySelector("#book-page .download").classList.add("hidden");
     document.querySelector("#book-page .delete").classList.add("hidden");
+    document.querySelector("#read-btn").classList.remove("loading");
 
     var selected_audio_book = opened_book.audio_sources.find(
       (source) => source.selected === true,
     );
-    if (player.current_book && player.current_book.bid == resp.data.bid) {
+    var selected_text_book = opened_book.text_sources.find(
+      (source) => source.selected === true,
+    );
+    if (player.current_book && player.current_book.bid == resp.data.bid)
       selected_audio_book = player.current_source;
-    }
-    console.log(selected_audio_book);
-    if (selected_audio_book) {
+    if (selected_text_book && downloads.includes(selected_text_book.sid)) {
+      document.querySelector("#text-source-loading").classList.remove("hidden");
+      document.querySelector("#read-btn").classList.add("loading");
+    } else if (selected_audio_book) {
       selected_source = selected_audio_book;
       showPlayer(selected_source);
       if (
@@ -190,16 +196,13 @@ function showPlayer(source) {
   } else {
     var btn = document.querySelector("#book-page-content .download");
     btn.onclick = (event) => {
-      startDownloading(
+      startDownloadingAudioBook(
         event.target,
         source.sid,
         `${opened_book.title} - ${source.narrator}`,
       );
     };
-    btn.classList.toggle(
-      "loading",
-      Boolean(downloads.indexOf(selected_source.sid) > -1),
-    );
+    btn.classList.toggle("loading", downloads.includes(source.sid));
   }
   btn.classList.remove("hidden");
   var container = document.querySelector(
@@ -305,6 +308,7 @@ function readBook() {
   if (opened_book.text_sources_count == 1)
     return selectTextBook(opened_book.text_sources[0].sid);
   if (!selected_text_source) return showSources();
+  if (!checkIsTextBookDownloaded(selected_text_source)) return;
   _readBook(selected_text_source);
 }
 function selectTextBook(sid) {
@@ -313,5 +317,18 @@ function selectTextBook(sid) {
     (source) => source.sid === sid,
   );
   selected_text_source.selected = true;
+  if (!checkIsTextBookDownloaded(selected_text_source)) return;
   _readBook(selected_text_source);
+}
+function checkIsTextBookDownloaded(source) {
+  if (source.downloaded) return true;
+  document.querySelector("#player-controls").classList.add("hidden");
+  document.querySelector("#sources").classList.add("hidden");
+  document.querySelector("#text-source-loading").classList.remove("hidden");
+  startDownloadingTextBook(
+    document.querySelector("#read-btn"),
+    source.sid,
+    `${opened_book.title} - ${source.publication}`,
+  );
+  return false;
 }

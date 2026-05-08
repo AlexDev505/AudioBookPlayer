@@ -100,17 +100,21 @@ class LibraryApi(JSApi):
         Database().set_reading_progress(sid, cfi, percent)
 
     @SourceId.convert_param
-    def download_book(self, sid: SourceId[AudioBook], title: str):
+    def download_audio_book(self, sid: SourceId[AudioBook], title: str):
         if not (source := Database().get_source_by_sid(sid)):
-            return self.error(NotFound(sid=sid))
+            raise NotFound(sid=sid)
 
         try:
             resp = requests.head(source.chapters[0].url)
             if resp.status_code == 410:
                 self.fix_chapters(sid, source.url)
         except requests.exceptions.ConnectionError:
-            return self.error(ConnectionFailedError())
+            raise ConnectionFailedError()
 
+        drivers.download(sid, DownloadingProcessHandler(self, sid, title))
+
+    @SourceId.convert_param
+    def download_text_book(self, sid: SourceId[TextBook], title: str):
         drivers.download(sid, DownloadingProcessHandler(self, sid, title))
 
     @SourceId.convert_param
@@ -124,6 +128,9 @@ class LibraryApi(JSApi):
                 list[DownloadingProcessHandler], drivers.get_downloads()
             )
         ]
+
+    @SourceId.convert_param
+    def delete_book(self, sid: SourceId): ...
 
     @staticmethod
     def fix_cover(sid: SourceId[BookSource], source_url: str):
