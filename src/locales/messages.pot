@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-03-09 21:58+0700\n"
+"POT-Creation-Date: 2026-05-09 00:51+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,8 +17,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: ../../src/drivers/drivers/akniga.py:169
-#: ../../src/drivers/drivers/akniga.py:304
+#: ../../src/drivers/drivers/akniga.py:105
+#: ../../src/drivers/drivers/akniga.py:240
 #: ../../src/drivers/drivers/knigavuhe.py:35
 #: ../../src/drivers/drivers/knigavuhe.py:88
 #: ../../src/drivers/drivers/knigavuhe.py:144
@@ -150,6 +150,54 @@ msgstr ""
 
 #: ../../src/web/templates/book.html:130
 msgid "book.status.mark_as_completed"
+msgstr ""
+
+#: ../../src/web/templates/downloads.html:11
+msgid "downloads"
+msgstr ""
+
+#: ../../src/web/templates/downloads.html:14
+msgid "no_downloads"
+msgstr ""
+
+#: ../../src/web/templates/downloads.html:22
+msgid "downloading.status.initializing"
+msgstr ""
+
+#: ../../src/web/templates/downloads.html:36
+msgid "downloading.status.waiting"
+msgstr ""
+
+#: ../../src/web/templates/downloads.html:39
+msgid "downloading.status.preparing"
+msgstr ""
+
+#: ../../src/web/templates/downloads.html:42
+msgid "downloading.status.downloading"
+msgstr ""
+
+#: ../../src/web/templates/downloads.html:45
+msgid "downloading.status.finishing"
+msgstr ""
+
+#: ../../src/web/templates/downloads.html:48
+msgid "downloading.status.finished"
+msgstr ""
+
+#: ../../src/web/templates/downloads.html:51
+msgid "downloading.status.terminating"
+msgstr ""
+
+#: ../../src/web/templates/downloads.html:54
+msgid "downloading.status.terminated"
+msgstr ""
+
+#: ../../src/web/templates/downloads.html:57
+msgid "book"
+msgstr ""
+
+#: ../../src/web/templates/downloads.html:59
+msgid "book.downloaded"
 msgstr ""
 
 #: ../../src/web/templates/library.html:17

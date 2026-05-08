@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-03-09 21:58+0700\n"
+"POT-Creation-Date: 2026-05-09 00:51+0700\n"
 "PO-Revision-Date: 2025-03-14 02:08+0700\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -19,8 +19,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: ../../src/drivers/drivers/akniga.py:169
-#: ../../src/drivers/drivers/akniga.py:304
+#: ../../src/drivers/drivers/akniga.py:105
+#: ../../src/drivers/drivers/akniga.py:240
 #: ../../src/drivers/drivers/knigavuhe.py:35
 #: ../../src/drivers/drivers/knigavuhe.py:88
 #: ../../src/drivers/drivers/knigavuhe.py:144
@@ -154,6 +154,54 @@ msgstr "Отметить как новую"
 msgid "book.status.mark_as_completed"
 msgstr "Отметить как прочитанную"
 
+#: ../../src/web/templates/downloads.html:11
+msgid "downloads"
+msgstr "Загрузки"
+
+#: ../../src/web/templates/downloads.html:14
+msgid "no_downloads"
+msgstr "Нет загрузок"
+
+#: ../../src/web/templates/downloads.html:22
+msgid "downloading.status.initializing"
+msgstr "инициализация"
+
+#: ../../src/web/templates/downloads.html:36
+msgid "downloading.status.waiting"
+msgstr "ожидание"
+
+#: ../../src/web/templates/downloads.html:39
+msgid "downloading.status.preparing"
+msgstr "подготовка"
+
+#: ../../src/web/templates/downloads.html:42
+msgid "downloading.status.downloading"
+msgstr "скачивание"
+
+#: ../../src/web/templates/downloads.html:45
+msgid "downloading.status.finishing"
+msgstr "завершение"
+
+#: ../../src/web/templates/downloads.html:48
+msgid "downloading.status.finished"
+msgstr "скачивание завершено"
+
+#: ../../src/web/templates/downloads.html:51
+msgid "downloading.status.terminating"
+msgstr "прервывание"
+
+#: ../../src/web/templates/downloads.html:54
+msgid "downloading.status.terminated"
+msgstr "прервано"
+
+#: ../../src/web/templates/downloads.html:57
+msgid "book"
+msgstr "Книга"
+
+#: ../../src/web/templates/downloads.html:59
+msgid "book.downloaded"
+msgstr "скачана"
+
 #: ../../src/web/templates/library.html:17
 msgid "library"
 msgstr "Библиотека"
@@ -194,22 +242,10 @@ msgstr "Добавлена"
 #~ msgid "update.file_not_found"
 #~ msgstr "Файл обновления не найден"
 
-#~ msgid "wait_for_downloading_end"
-#~ msgstr "Дождитесь окончания скачивания книги"
-
 #~ msgid "online_listening_not_provided"
 #~ msgstr ""
 #~ "Онлайн прослушивание пока что недоступно\n"
 #~ "Скачайте книгу, чтобы начать прослушивание"
-
-#~ msgid "book.download"
-#~ msgstr "Скачать"
-
-#~ msgid "downloads"
-#~ msgstr "Загрузки"
-
-#~ msgid "no_downloads"
-#~ msgstr "нет активных загрузок"
 
 #~ msgid "filters.query"
 #~ msgstr "найти в библиотеке"
@@ -285,30 +321,6 @@ msgstr "Добавлена"
 
 #~ msgid "licensed.login"
 #~ msgstr "войти в аккаунт"
-
-#~ msgid "downloading.initializing"
-#~ msgstr "инициализация"
-
-#~ msgid "downloading.waiting"
-#~ msgstr "ожидание"
-
-#~ msgid "downloading.preparing"
-#~ msgstr "подготовка"
-
-#~ msgid "downloading.downloading"
-#~ msgstr "скачивание"
-
-#~ msgid "downloading.ending"
-#~ msgstr "завершение"
-
-#~ msgid "downloading.finished"
-#~ msgstr "скачивание завершено"
-
-#~ msgid "downloading.terminating"
-#~ msgstr "остановка"
-
-#~ msgid "book.downloaded"
-#~ msgstr "скачана"
 
 #~ msgid "book.book_deleted_but_files_already_exists"
 #~ msgstr "удалена из библиотеки, но скачанные файлы остались"
