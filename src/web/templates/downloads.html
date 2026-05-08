@@ -1,1 +1,60 @@
-Downloads
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/downloads.css') }}"
+/>
+<script
+    defer
+    src="{{ url_for('static', filename='js/downloads.js') }}"
+></script>
+
+<div id="downloads-page-content">
+    <div id="downloads-title">{{ gettext("downloads") }}</div>
+
+    <div id="downloads-container"></div>
+    <div id="no-downloads">{{ gettext("no_downloads") }}</div>
+</div>
+
+<template id="download-card-template">
+    <div class="download-card" data-sid="">
+        <div>
+            <div class="book-title"></div>
+            <div class="status">
+                {{ gettext("downloading.status.initializing") }}...
+            </div>
+            <div class="progress-info">
+                <div class="percents"></div>
+                <div class="data-size"></div>
+            </div>
+        </div>
+        <div>
+            <div class="icon-btn cancel-btn"></div>
+        </div>
+        <div class="progress-bar"></div>
+    </div>
+</template>
+<template class="downloading-status" data-status="waiting">
+    {{ gettext("downloading.status.waiting") }}...
+</template>
+<template class="downloading-status" data-status="preparing">
+    {{ gettext("downloading.status.preparing") }}...
+</template>
+<template class="downloading-status" data-status="downloading">
+    {{ gettext("downloading.status.downloading") }}...
+</template>
+<template class="downloading-status" data-status="finishing">
+    {{ gettext("downloading.status.finishing") }}...
+</template>
+<template class="downloading-status" data-status="finished">
+    {{ gettext("downloading.status.finished") }}...
+</template>
+<template class="downloading-status" data-status="terminating">
+    {{ gettext("downloading.status.terminating") }}...
+</template>
+<template class="downloading-status" data-status="terminated">
+    {{ gettext("downloading.status.terminated") }}...
+</template>
+<template id="downloading-finished-notification">
+    {{ gettext("book") }}
+    <b>«<span class="book-title"></span>»</b>
+    {{ gettext("book.downloaded") }}
+</template>

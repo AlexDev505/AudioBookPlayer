@@ -215,6 +215,7 @@ class BaseDownloader[SourceT: BookSource](ABC):
                     logger.opt(colors=True).debug(
                         f"downloading failed {type(err).__name__}: {err}"
                     )
+                    logger.exception(err)
                     await asyncio.sleep(5)
                     logger.opt(colors=True).trace(
                         f"retrying download file <y>{file.index}</y>"
@@ -239,7 +240,7 @@ class BaseDownloader[SourceT: BookSource](ABC):
             if content_length := response.headers.get("content-length"):
                 logger.opt(colors=True, lazy=True).trace(
                     "{url}: <y>{size}</y>",
-                    url=file.url,
+                    url=lambda file=file: file.url,
                     size=partial(convert_from_bytes, int(content_length)),
                 )
             async for chunk in response.content.iter_chunked(64 * 1024):

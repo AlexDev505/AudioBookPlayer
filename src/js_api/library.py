@@ -1,15 +1,18 @@
 from __future__ import annotations
 
+import asyncio
+import typing as ty
 from contextlib import suppress
 
+import requests
 from loguru import logger
 
 import drivers
 from database import Database
-from models.book import BookStatus, SourceId
+from models.book import AudioBook, BookSource, BookStatus, SourceId, TextBook
 from tools import convert_from_bytes, pretty_view
 
-from .exceptions import NotFound
+from .exceptions import ConnectionFailedError, NotFound
 from .js_api import JSApi
 
 
@@ -71,47 +74,104 @@ class LibraryApi(JSApi):
         Database().select_source(sid)
 
     @SourceId.convert_param
-    def mark_audio_book_as_in_progress(self, sid: SourceId):
+    def mark_as_new(self, sid: SourceId):
+        Database().mark_as_new(sid)
+
+    @SourceId.convert_param
+    def mark_as_in_progress(self, sid: SourceId):
         Database().mark_as_in_progress(sid)
 
     @SourceId.convert_param
-    def mark_audio_book_as_completed(self, sid: SourceId):
+    def mark_as_completed(self, sid: SourceId):
         Database().mark_as_completed(sid)
 
     @SourceId.convert_param
     def set_listening_progress(
-        self, sid: SourceId, chapter_index: int, progress: int
+        self, sid: SourceId[AudioBook], chapter_index: int, progress: int
     ):
         Database().set_listening_progress(
             sid, int(chapter_index), int(progress)
         )
 
     @SourceId.convert_param
-    def set_reading_progress(self, sid: SourceId, cfi: str, percent: int):
+    def set_reading_progress(
+        self, sid: SourceId[TextBook], cfi: str, percent: int
+    ):
         Database().set_reading_progress(sid, cfi, percent)
 
     @SourceId.convert_param
-    def download_book(self, sid: SourceId):
-        drivers.download(sid, DownloadingProcessHandler(self, sid))
+    def download_book(self, sid: SourceId[AudioBook], title: str):
+        if not (source := Database().get_source_by_sid(sid)):
+            return self.error(NotFound(sid=sid))
+
+        try:
+            resp = requests.head(source.chapters[0].url)
+            if resp.status_code == 410:
+                self.fix_chapters(sid, source.url)
+        except requests.exceptions.ConnectionError:
+            return self.error(ConnectionFailedError())
+
+        drivers.download(sid, DownloadingProcessHandler(self, sid, title))
 
     @SourceId.convert_param
     def terminate_download(self, sid: SourceId):
         drivers.terminate(sid)
 
+    def get_downloads(self) -> list[tuple[str, str]]:
+        return [
+            (str(dph.sid), dph.title)
+            for dph in ty.cast(
+                list[DownloadingProcessHandler], drivers.get_downloads()
+            )
+        ]
+
+    @staticmethod
+    def fix_cover(sid: SourceId[BookSource], source_url: str):
+        logger.opt(colors=True).debug(
+            f"request: <r>fix cover</r> | <y>{sid}</y>"
+        )
+        if not (driver := drivers.BaseDriver.get_suitable_driver(source_url)):
+            return
+        try:
+            new_data = asyncio.run(driver().get_book(source_url))
+        except requests.exceptions.ConnectionError:
+            return
+        Database().fix_cover(sid, new_data.source.cover)
+        logger.opt(colors=True).info(
+            f"new book <y>{sid}</y> cover: {new_data.source.cover}"
+        )
+
+    @staticmethod
+    def fix_chapters(sid: SourceId[AudioBook], source_url: str):
+        logger.opt(colors=True).debug(
+            f"request: <r>fix chapters</r> | <y>{sid}</y>"
+        )
+        if not (driver := drivers.BaseDriver.get_suitable_driver(source_url)):
+            raise
+        new_data = asyncio.run(driver().get_book(source_url))
+        Database().fix_chapters(sid, new_data.source.chapters)
+        logger.opt(colors=True).info(f"source <y>{sid}</y> chapters are fixed")
+
 
 class DownloadingProcessHandler(drivers.BaseDownloadingProgressHandler):
-    def __init__(self, js_api: JSApi, sid: SourceId):
+    def __init__(self, js_api: JSApi, sid: SourceId, title: str):
         self.js_api = js_api
         self.sid = sid
+        self.title = title
         super().__init__()
 
     def init_status(self, status, total_count=None):
         super().init_status(status, total_count)
         total_count = (
-            convert_from_bytes(total_count) if total_count else total_count
+            convert_from_bytes(total_count)
+            if (
+                status is drivers.DownloadProcessStatus.DOWNLOADING
+                and total_count
+            )
+            else total_count
         )
         self.js_api.evaluate_js(
-            f"initStatus({self.sid}, '{status.value}', '{total_count}')"
+            f"initStatus('{self.sid}', '{status.value}', '{total_count}')"
         )
         if status is drivers.DownloadProcessStatus.FINISHED:
             logger.opt(colors=True).info(
@@ -125,11 +185,14 @@ class DownloadingProcessHandler(drivers.BaseDownloadingProgressHandler):
     def show_progress(self) -> None:
         done_count = (
             convert_from_bytes(self.done_count)
-            if self.done_count
+            if (
+                self.status is drivers.DownloadProcessStatus.DOWNLOADING
+                and self.done_count
+            )
             else self.done_count
         )
         with suppress(Exception):
             self.js_api.evaluate_js(
-                f"downloadingCallback({self.sid}, "
+                f"downloadingCallback('{self.sid}', "
                 f"'{done_count}', {self.done_count}, {self.total_count})"
             )

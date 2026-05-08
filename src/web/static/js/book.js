@@ -93,7 +93,7 @@ function showBookState(book) {
       "template.book-mark-as-new",
     ).innerHTML;
     el.onclick = () => {
-      pywebview.api.mark_book_as_new(book.bid);
+      pywebview.api.mark_as_new(selected_source.sid);
       book.status = "new";
       showBookState(book);
     };
@@ -103,7 +103,7 @@ function showBookState(book) {
       "template.book-mark-as-completed",
     ).innerHTML;
     el.onclick = () => {
-      pywebview.api.mark_book_as_completed(book.bid);
+      pywebview.api.mark_as_completed(selected_source.sid);
       book.status = "completed";
       showBookState(book);
     };
@@ -162,7 +162,7 @@ function createSourceCard(source) {
 }
 
 function selectAudioBook(sid) {
-  pywebview.api.select_audio_source(sid);
+  pywebview.api.select_source(sid);
   selected_source = opened_book.audio_sources.find(
     (source) => source.sid === sid,
   );
@@ -184,9 +184,24 @@ function showPlayer(source) {
   showListeningProgress(opened_book.bid, source.progress_percent);
   document.querySelector("#book-main .book-cover").style =
     `background-image: url('${source.cover}'), url('/library/${encodeURIComponent(opened_book.dir_path + "\\" + source.local_cover)}');`;
-  document
-    .querySelector("#book-page-content .download")
-    .classList.remove("hidden");
+  if (source.downloaded) {
+    var btn = document.querySelector("#book-page-content .delete");
+    btn.onclick = (event) => {};
+  } else {
+    var btn = document.querySelector("#book-page-content .download");
+    btn.onclick = (event) => {
+      startDownloading(
+        event.target,
+        source.sid,
+        `${opened_book.title} - ${source.narrator}`,
+      );
+    };
+    btn.classList.toggle(
+      "loading",
+      Boolean(downloads.indexOf(selected_source.sid) > -1),
+    );
+  }
+  btn.classList.remove("hidden");
   var container = document.querySelector(
     "#player-controls #chapters-container",
   );
@@ -293,7 +308,7 @@ function readBook() {
   _readBook(selected_text_source);
 }
 function selectTextBook(sid) {
-  pywebview.api.select_text_source(sid);
+  pywebview.api.select_source(sid);
   var selected_text_source = opened_book.text_sources.find(
     (source) => source.sid === sid,
   );

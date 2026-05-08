@@ -75,10 +75,10 @@ class MergedM3U8Downloader(BaseAudioDownloader):
     async def _seq_downloaded(self, file: File) -> None:
         logger.trace(
             f"need {self._next_seq_index} seq - got {file.index} "
-            f"{bool(self.downloaded_files.get(file.index))}"
+            f"{bool(self._downloaded_files.get(file.index))}"
         )
         if file.index != self._next_seq_index or not (
-            ts_path := self.downloaded_files.get(file.index)
+            ts_path := self._downloaded_files.get(file.index)
         ):
             return
         self._ts_file_paths.append(ts_path)
@@ -132,7 +132,7 @@ class MergedM3U8Downloader(BaseAudioDownloader):
                 )
             )
         await asyncio.gather(*self._merging_tasks)
-        self.downloaded_files = dict(enumerate(self._real_item_paths))
+        self._downloaded_files = dict(enumerate(self._real_item_paths))
         await super()._finish()
 
     def _merge_ts_files(

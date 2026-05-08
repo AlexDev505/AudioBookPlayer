@@ -11,6 +11,7 @@ from models.book import (
     Book,
     BookSource,
     BookStatus,
+    Chapter,
     ListeningProgress,
     SourceId,
     SourceType,
@@ -182,7 +183,7 @@ class Database(SyncDBCore[Book | TextBook | AudioBook]):
         self._set_status(sid, BookStatus.COMPLETED)
 
     def set_listening_progress(
-        self, sid: SourceId, chapter_index: int, progress: int
+        self, sid: SourceId[AudioBook], chapter_index: int, progress: int
     ):
         self.update(
             AudioBook,
@@ -190,9 +191,25 @@ class Database(SyncDBCore[Book | TextBook | AudioBook]):
             where=AudioBook.id == sid.sid,
         )
 
-    def set_reading_progress(self, sid: SourceId, cfi: str, percent: int):
+    def set_reading_progress(
+        self, sid: SourceId[TextBook], cfi: str, percent: int
+    ):
         self.update(
             TextBook,
             {TextBook.progress: cfi, TextBook.progress_percent: percent},
             where=TextBook.id == sid.sid,
+        )
+
+    def fix_cover(self, sid: SourceId, cover: str):
+        self.update(
+            sid.stype,
+            {sid.stype.cover: cover},
+            where=sid.stype.id == sid.sid,
+        )
+
+    def fix_chapters(self, sid: SourceId[AudioBook], chapters: list[Chapter]):
+        self.update(
+            AudioBook,
+            {AudioBook.chapters: chapters},
+            where=AudioBook.id == sid.sid,
         )

@@ -56,9 +56,10 @@ class Client:
                     if event == "init_status":
                         process_handler.init_status(
                             DownloadProcessStatus(data["status"]),
-                            data["total_size"],
+                            data["total_count"],
                         )
-                        process_handler.set_done_count(data["done_count"])
+                        if data["done_count"] is not None:
+                            process_handler.set_done_count(data["done_count"])
                         self._downloading_status_changed(
                             data["sid"], process_handler
                         )
@@ -99,18 +100,15 @@ class Client:
             logger.debug("shutdowning")
             self.websocket.close()
 
-    def get_downloads(self) -> list[SourceId]:
-        sids = [
-            *ty.cast(
-                ty.Iterable[SourceId],
-                map(SourceId.from_str, self.process_handlers.keys()),
-            ),
-            *self.queue.keys(),
-        ]
-        for sid in sids:
+    def get_downloads(self) -> list[BaseDownloadingProgressHandler]:
+        downloads = {
+            **self.process_handlers,
+            **self.queue,
+        }
+        for sid in downloads:
             self._send("download", sid=str(sid))
 
-        return sids
+        return list(downloads.values())
 
     def _downloading_status_changed(
         self, sid: str, dph: BaseDownloadingProgressHandler

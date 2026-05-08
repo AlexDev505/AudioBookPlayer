@@ -45,6 +45,9 @@
     height: 100%;
     cursor: pointer;
 }
+#book-page .header .progress .content {
+    margin: 0;
+}
 #book-page .book-state-action {
     z-index: 2;
     position: absolute;

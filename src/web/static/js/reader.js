@@ -38,6 +38,7 @@ async function _readBook(source) {
   document.querySelector("#file-input").files = container.files;
   document.querySelector("#file-input").onchange();
   page("reader-page").open();
+  pywebview.api.mark_as_in_progress(source.sid);
 }
 
 var last_progress_update = 0;

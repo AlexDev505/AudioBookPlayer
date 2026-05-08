@@ -87,18 +87,29 @@ class BookSource(ABC):
     def domain(self) -> str:
         return urlparse(self.url).netloc.split(".")[0]
 
-    def asdict(self) -> dict[str, ty.Any]:
+    def asdict(self, root_path: Path | None = None) -> dict[str, ty.Any]:
         return dict(
             sid=str(SourceId.from_source(self)),
             url=self.url,
             domain=self.domain,
             cover=self.cover,
-            local_cover=str(self.cover_path),
+            local_cover=str(
+                self.cover_path
+                if not root_path
+                else root_path / self.cover_path
+            ),
             selected=self.selected,
             status=self.status.value,
             progress_percent=self.progress_percent,
             downloaded=self.is_downloaded,
-            files=list(self.files.keys()),
+            files=[
+                str(
+                    self.dir_path / f
+                    if not root_path
+                    else root_path / self.dir_path / f
+                )
+                for f in self.files
+            ],
         )
 
     def __repr__(self):
@@ -125,8 +136,8 @@ class TextBook(BookSource):
     def dir_path(self) -> Path:
         return Path(".")
 
-    def asdict(self):
-        res = super().asdict()
+    def asdict(self, root_path: Path | None = None) -> dict[str, ty.Any]:
+        res = super().asdict(root_path)
         res.update(
             dict(
                 publication=self.publication,
@@ -169,8 +180,8 @@ class AudioBook(BookSource):
     def dir_path(self) -> Path:
         return Path(".", self.narrator)
 
-    def asdict(self):
-        res = super().asdict()
+    def asdict(self, root_path: Path | None = None):
+        res = super().asdict(root_path)
         res.update(
             dict(
                 narrator=self.narrator,
@@ -211,7 +222,7 @@ class SourceId[T: BookSource]:
             self: SELF, sid: str, *args: P.args, **kwargs: P.kwargs
         ) -> R:
             if not (source_id := cls.from_str(sid)):
-                raise ValueError(f"Invalid source id: {source_id}")
+                raise ValueError(f"Invalid source id: {sid}")
             return func(self, source_id, *args, **kwargs)
 
         return _wrapper
@@ -419,9 +430,13 @@ class Book(BookData):
         if with_sources:
             res.update(
                 audio_sources=[
-                    source.asdict() for source in self._audio_sources
+                    source.asdict(self.book_path)
+                    for source in self._audio_sources
                 ],
-                text_sources=[source.asdict() for source in self._text_sources],
+                text_sources=[
+                    source.asdict(self.book_path)
+                    for source in self._text_sources
+                ],
             )
         return res
 

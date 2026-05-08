@@ -4,19 +4,10 @@ import subprocess
 import sys
 import time
 
-from models.book import BookSource, SourceId, SourceType
+from models.book import SourceId
 
 from ..base_downloader import BaseDownloadingProgressHandler
 from .downloader_client import Client
-
-if getattr(sys, "frozen", False):
-    FROZEN = True
-    ROOT_DIR = getattr(sys, "_MEIPASS")
-else:
-    FROZEN = False
-    ROOT_DIR = os.path.dirname(__file__)
-
-os.environ["FFMPEG_PATH"] = f'"{os.path.join(ROOT_DIR, r"bin\ffmpeg.exe")}"'
 
 client = Client()
 _starting = False
@@ -33,6 +24,10 @@ def terminate(sid: SourceId):
     if not client.is_connected:
         run_client_server()
     client.terminate(sid)
+
+
+def get_downloads() -> list[BaseDownloadingProgressHandler]:
+    return client.get_downloads()
 
 
 def shutdown():
@@ -52,8 +47,8 @@ def run_client_server():
         return
     _starting = True
     if _first:
-        _run_server()
         _first = False
+        _run_server()
     while not client.is_connected:
         client.connect()
     client.run()
@@ -62,7 +57,7 @@ def run_client_server():
 
 def _run_server():
     cmd = [sys.executable, "--run-downloader"]
-    if not FROZEN:
+    if not getattr(sys, "frozen", False):
         cmd.insert(1, "run.py")
     subprocess.Popen(cmd)
 

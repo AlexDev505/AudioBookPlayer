@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import os
 import threading
 import typing as ty
 from contextlib import suppress
@@ -94,7 +95,7 @@ async def download(ws: ServerConnection, sid: SourceId) -> None:
         book.to_raw_book(source), ServerDPH(ws, sid)
     )
     if await downloader.download_book():
-        db.save(downloader)
+        db.save(source)
         logger.info(f"downloading finished: {sid}")
     del downloading_tasks[sid]
 
@@ -137,7 +138,7 @@ async def handler(websocket: ServerConnection):
             except (orjson.JSONDecodeError, AssertionError):
                 pass
             except Exception as e:
-                logger.trace(e)
+                logger.exception(e)
     except ConnectionClosedOK:
         pass
     except ConnectionClosedError:
@@ -162,6 +163,10 @@ async def shutdown():
 
 
 async def run_server():
+    Database.init(
+        f"sqlite://{os.environ['DATABASE_PATH']}",
+        check_same_thread=False,
+    )
     global server
     server = asyncio.Future()
     threading.current_thread().name = "DownloaderServer"

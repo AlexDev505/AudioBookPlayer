@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   });
   player.on("play", (event) => {
     if (player.current_book.status != "in_progress") {
-      pywebview.api.mark_audio_book_as_in_progress(player.current_source.sid);
+      pywebview.api.mark_as_in_progress(player.current_source.sid);
       player.current_book.status = "in_progress";
       player.current_source.status = "in_progress";
     }
@@ -97,9 +97,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       player.current_source.progress_percent = "100";
       if (opened_book && player.current_book.bid == opened_book.bid)
         showBookState(player.current_book);
-      return pywebview.api.mark_audio_book_as_completed(
-        player.current_source.sid,
-      );
+      return pywebview.api.mark_as_completed(player.current_source.sid);
     }
     _selectChapter(next_chapter_index);
     player.play();
@@ -157,7 +155,7 @@ function _loadChapterSource(chapter_index) {
       title: "",
       sources: [
         {
-          src: `/library/${encodeURIComponent(player.chapters.files[chapter.file_index])}`,
+          src: `/library/${encodeURIComponent(player.current_source.files[chapter.file_index])}`,
           type: "audio/mp3",
         },
       ],
