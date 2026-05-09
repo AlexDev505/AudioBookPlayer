@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import os
 import typing as ty
 from contextlib import suppress
 
@@ -12,7 +13,7 @@ from database import Database
 from models.book import AudioBook, BookSource, BookStatus, SourceId, TextBook
 from tools import convert_from_bytes, pretty_view
 
-from .exceptions import ConnectionFailedError, NotFound
+from .exceptions import BookNotDownloaded, ConnectionFailedError, NotFound
 from .js_api import JSApi
 
 
@@ -22,6 +23,10 @@ class LibraryApi(JSApi):
 
         self._library_search_query: str | None = None
         self._matched_books_bids: list[int] | None = None
+        self._removed_books: dict[int, list[SourceId]] = {}
+        """ {bid: [sid, ...], ...} """
+        self._removed_sources_files: dict[SourceId, tuple[str, list[str]]] = {}
+        """ {sid: (dir_path, [relative_file_path, ...]), ...} """
 
     def book_by_bid(self, bid: int, listening_data: bool = True):
         if book := Database().get_book_by_bid(bid, with_sources=listening_data):
@@ -130,7 +135,50 @@ class LibraryApi(JSApi):
         ]
 
     @SourceId.convert_param
-    def delete_book(self, sid: SourceId): ...
+    def delete_source_files(self, sid: SourceId):
+        db = Database()
+        if not (source := db.get_source_by_sid(sid)):
+            if sid in self._removed_sources_files:
+                logger.debug("deleting residual book files")
+                self._delete_source_files(*self._removed_sources_files[sid])
+                del self._removed_sources_files[sid]
+                logger.opt(colors=True).info(
+                    f"source files are deleted: <y>{sid}</y>"
+                )
+                return
+            raise NotFound(sid=sid)
+
+        if not source.is_downloaded:
+            raise BookNotDownloaded(sid=sid)
+        if not (book := db.get_book_by_bid(source.related_book)):
+            raise NotFound(bid=source.related_book)
+
+        self._delete_source_files(
+            str(book.dir_path / source.dir_path), list(source.files)
+        )
+        db.clear_source_files(sid)
+        logger.opt(colors=True).info(f"source files are deleted: <y>{sid}</y>")
+
+    def remove_book(self, bid: int):
+        db = Database()
+        if not (book := db.get_book_by_bid(bid)):
+            raise NotFound(bid=bid)
+
+        if sources := {
+            SourceId.from_source(source): (source.dir_path, list(source.files))
+            for source in book.iter_sources()
+            if source.is_downloaded
+        }:
+            self._removed_books[bid] = list(sources.keys())
+            self._removed_sources_files.update(
+                {
+                    sid: (str(book.dir_path / source_path), files)
+                    for sid, (source_path, files) in sources.items()
+                }
+            )
+
+        db.remove_book(bid)
+        logger.opt(colors=True).info(f"book removed: <y>{book:colored}</y>")
 
     @staticmethod
     def fix_cover(sid: SourceId[BookSource], source_url: str):
@@ -158,6 +206,21 @@ class LibraryApi(JSApi):
         new_data = asyncio.run(driver().get_book(source_url))
         Database().fix_chapters(sid, new_data.source.chapters)
         logger.opt(colors=True).info(f"source <y>{sid}</y> chapters are fixed")
+
+    @staticmethod
+    def _delete_source_files(dir_path: str, files: list[str]):
+        files.extend(["cover.jpg"])
+        for file in files:
+            file_path = os.path.join(dir_path, file)
+            try:
+                logger.opt(colors=True).trace(f"deleting <y>{file_path}</y>")
+                os.remove(file_path)
+            except PermissionError:
+                logger.error(f"file locked. {file_path}")
+            except IOError as err:
+                logger.exception(err)
+
+        os.removedirs(dir_path)
 
 
 class DownloadingProcessHandler(drivers.BaseDownloadingProgressHandler):

@@ -192,7 +192,9 @@ function showPlayer(source) {
     `background-image: url('${source.cover}'), url('/library/${encodeURIComponent(opened_book.dir_path + "\\" + source.local_cover)}');`;
   if (source.downloaded) {
     var btn = document.querySelector("#book-page-content .delete");
-    btn.onclick = (event) => {};
+    btn.onclick = (event) => {
+      deleteSourceFiles(event.target, source.sid);
+    };
   } else {
     var btn = document.querySelector("#book-page-content .download");
     btn.onclick = (event) => {
@@ -331,4 +333,13 @@ function checkIsTextBookDownloaded(source) {
     `${opened_book.title} - ${source.publication}`,
   );
   return false;
+}
+
+function deleteSourceFiles(btn, sid) {
+  btn.classList.add("loading");
+  pywebview.api.delete_source_files(sid).then((resp) => {
+    if (resp.status != "ok") return showError(resp.message);
+    if (opened_book && selected_source.sid == sid)
+      loadBookData(opened_book.bid);
+  });
 }

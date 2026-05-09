@@ -200,11 +200,19 @@ class Database(SyncDBCore[Book | TextBook | AudioBook]):
             where=TextBook.id == sid.sid,
         )
 
+    def remove_book(self, bid: int):
+        self.delete(TextBook, where=TextBook.related_book == bid)
+        self.delete(AudioBook, where=AudioBook.related_book == bid)
+        self.delete(Book, where=Book.id == bid)
+
+    def clear_source_files(self, sid: SourceId):
+        self.update(
+            sid.stype, {sid.stype.files: []}, where=sid.stype.id == sid.sid
+        )
+
     def fix_cover(self, sid: SourceId, cover: str):
         self.update(
-            sid.stype,
-            {sid.stype.cover: cover},
-            where=sid.stype.id == sid.sid,
+            sid.stype, {sid.stype.cover: cover}, where=sid.stype.id == sid.sid
         )
 
     def fix_chapters(self, sid: SourceId[AudioBook], chapters: list[Chapter]):

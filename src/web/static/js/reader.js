@@ -5,6 +5,7 @@ const unLoad = () => {
   document.querySelector("#toc-view").innerHTML = "";
   let el = document.querySelector("foliate-view");
   if (el) el.remove();
+  window.reader.view.close();
   current_text_book = null;
 };
 
@@ -26,7 +27,7 @@ async function _readBook(source) {
     response.headers.get("content-type") || "application/octet-stream";
   const contentDisposition = response.headers.get("Content-Disposition");
   let filename = "downloaded_file";
-  if (contentDisposition && contentDisposition.indexOf("attachment") !== -1) {
+  if (contentDisposition) {
     const matches = /filename="?([^"]+)"?/.exec(contentDisposition);
     if (matches && matches[1]) {
       filename = matches[1];

@@ -8,7 +8,7 @@ function showDownloads(resp) {
   }
 }
 
-const start_downloading_callback = (resp) => {
+const start_downloading_callback = (sid, resp) => {
   if (resp.status != "ok") {
     button.classList.remove("loading");
     showError(resp.message);
@@ -26,7 +26,7 @@ function startDownloadingAudioBook(button, sid, title) {
   createDownloadingCard(sid, title);
   pywebview.api
     .download_audio_book(sid, title)
-    .then(start_downloading_callback);
+    .then((resp) => start_downloading_callback(sid, resp));
 }
 function startDownloadingTextBook(button, sid, title) {
   if (button) {
@@ -34,7 +34,9 @@ function startDownloadingTextBook(button, sid, title) {
     button.classList.add("loading");
   }
   createDownloadingCard(sid, title);
-  pywebview.api.download_text_book(sid, title).then(start_downloading_callback);
+  pywebview.api
+    .download_text_book(sid, title)
+    .then((resp) => start_downloading_callback(sid, resp));
 }
 
 function createDownloadingCard(sid, title) {

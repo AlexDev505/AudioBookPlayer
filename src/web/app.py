@@ -46,7 +46,9 @@ def start_app():
 @app.route("/library/<path:file_path>")
 def library_cdn(file_path: str):
     return send_from_directory(
-        os.environ["books_folder"], unquote(file_path).replace("\\", "/")
+        os.environ["books_folder"],
+        file_path := unquote(file_path).replace("\\", "/"),
+        download_name=file_path.split("/")[-1],
     )
 
 

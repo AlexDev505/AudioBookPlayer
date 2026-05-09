@@ -134,7 +134,7 @@ class TextBook(BookSource):
 
     @property
     def dir_path(self) -> Path:
-        return Path(".")
+        return Path(".", self.publication)
 
     def asdict(self, root_path: Path | None = None) -> dict[str, ty.Any]:
         res = super().asdict(root_path)
