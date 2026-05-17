@@ -60,6 +60,7 @@ function showBooks(response) {
   for (let book of response.data) {
     let el = bookCardTemplate.content.cloneNode(true);
     el.querySelector(".book-card").setAttribute("data-bid", book.bid);
+    el.querySelector(".remove").setAttribute("data-bid", book.bid);
     el.querySelector(".cover").src = book.cover;
     el.querySelector(".book-title").textContent = book.title;
     el.querySelector(".adding-date .content").textContent = book.adding_date;

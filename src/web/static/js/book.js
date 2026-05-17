@@ -343,3 +343,10 @@ function deleteSourceFiles(btn, sid) {
       loadBookData(opened_book.bid);
   });
 }
+function removeBook(btn) {
+  let bid = Number(btn.dataset.bid);
+  pywebview.api.remove_book(bid).then((resp) => {
+    if (resp.status != "ok") return showError(resp.message);
+  });
+  document.querySelector(`.book-card[data-bid='${bid}']`).remove();
+}
