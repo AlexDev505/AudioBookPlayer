@@ -40,33 +40,33 @@ class ConnectionFailedError(JSApiError):
 
 class BookAlreadyAdded(JSApiError):
     code = 3
-    message = _("book.already_exists")
+    msg = _("book.already_exists")
     explain = "Book already added to library"
 
 
 class NotFound(JSApiError):
     code = 4
-    message = _("book.not_found")
+    msg = _("book.not_found")
 
 
 class BookAlreadyDownloaded(JSApiError):
     code = 5
-    message = _("book.already_downloaded")
+    msg = _("book.already_downloaded")
 
 
 class BookNotDownloaded(JSApiError):
     code = 6
-    message = _("book.not_downloaded")
+    msg = _("book.not_downloaded")
 
 
 class WaitForDownloadingEnd(JSApiError):
     code = 9
-    message = _("book.wait_for_similar_book_downloading")
+    msg = _("book.wait_for_similar_book_downloading")
 
 
 class NotAuthenticated(JSApiError):
     code = 10
-    message = _("driver.not_authenticated")
+    msg = _("driver.not_authenticated")
     explain = "Driver {driver} not authenticated"
 
     def __init__(self, driver: str):
@@ -75,7 +75,7 @@ class NotAuthenticated(JSApiError):
 
 class NoSuitableDriver(JSApiError):
     code = 11
-    message = _("no_suitable_driver")
+    msg = _("no_suitable_driver")
     explain = "No suitable driver found for {book_url}"
 
     def __init__(self, book_url: str):
@@ -84,5 +84,5 @@ class NoSuitableDriver(JSApiError):
 
 class CanceledError(JSApiError):
     code = 12
-    message = ""
+    msg = ""
     explain = "Operation cancelled"

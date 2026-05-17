@@ -105,10 +105,12 @@ class AKniga(BaseDriver[AudioBook]):
         author = book_data.get("author") or _("unknown_author")
         title = book_data["titleonly"]
         description = (
-            soup.select_one("div.description__article-main")
+            soup.select_one(
+                "div.description__article-main:not(.caption__article--about-block-samebook)"
+            )
             .text.replace(
                 soup.select_one(
-                    "div.description__article-main "
+                    "div.description__article-main:not(.caption__article--about-block-samebook) "
                     "> div.content__main__book--item--caption"
                 ).text,
                 "",

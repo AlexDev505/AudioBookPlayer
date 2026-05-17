@@ -180,6 +180,13 @@ class LibraryApi(JSApi):
         db.remove_book(bid)
         logger.opt(colors=True).info(f"book removed: <y>{book:colored}</y>")
 
+    def open_book_dir(self, bid: int):
+        if not (book := Database().get_book_by_bid(bid)):
+            raise NotFound(bid=bid)
+        if not os.path.exists(book.dir_path):
+            raise BookNotDownloaded(bid=bid)
+        os.startfile(book.dir_path)
+
     @staticmethod
     def fix_cover(sid: SourceId[BookSource], source_url: str):
         logger.opt(colors=True).debug(

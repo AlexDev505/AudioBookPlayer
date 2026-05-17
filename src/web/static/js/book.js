@@ -39,7 +39,6 @@ function loadBookData(bid) {
     };
     page.querySelector("#book-page .progress").classList.add("hidden");
     page.querySelector(".search-series").classList.add("hidden");
-    page.querySelector(".open-book-dir").classList.add("hidden");
     page.querySelector(".open-in-browser").classList.add("hidden");
     page.querySelector("#player-controls").classList.add("hidden");
     page.querySelector("#sources").classList.add("hidden");
@@ -189,7 +188,12 @@ function showPlayer(source) {
   document.querySelector("#book-info .driver").innerHTML = source.domain;
   showListeningProgress(opened_book.bid, source.progress_percent);
   document.querySelector("#book-main .book-cover").style =
-    `background-image: url('${source.cover}'), url('/library/${encodeURIComponent(opened_book.dir_path + "\\" + source.local_cover)}');`;
+    `background-image: url('${source.cover}'), url('/library/${encodeURIComponent(source.local_cover)}');`;
+  let openInBrowserBtn = document.querySelector(
+    "#book-page-content .open-in-browser",
+  );
+  openInBrowserBtn.classList.remove("hidden");
+  openInBrowserBtn.dataset.url = source.url;
   if (source.downloaded) {
     var btn = document.querySelector("#book-page-content .delete");
     btn.onclick = (event) => {
@@ -349,4 +353,9 @@ function removeBook(btn) {
     if (resp.status != "ok") return showError(resp.message);
   });
   document.querySelector(`.book-card[data-bid='${bid}']`).remove();
+}
+function openBookDir() {
+  pywebview.api.open_book_dir(opened_book.bid).then((resp) => {
+    if (resp.status != "ok") return showError(resp.message);
+  });
 }
