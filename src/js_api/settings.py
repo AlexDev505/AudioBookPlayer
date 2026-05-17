@@ -1,5 +1,6 @@
 import importlib
 import os
+from pathlib import Path
 
 from loguru import logger
 
@@ -9,6 +10,15 @@ from .js_api import JSApi
 
 
 class WindowControlsApi(JSApi):
+    @staticmethod
+    def open_library_dir():
+        logger.opt(colors=True).debug("request: <r>open library dir</r>")
+        try:
+            os.startfile(os.environ["books_folder"])
+        except FileNotFoundError:
+            Path(os.environ["books_folder"]).mkdir(parents=True, exist_ok=True)
+            os.startfile(os.environ["books_folder"])
+
     def save_session(self) -> None:
         logger.debug("saving session data")
         data = {}
