@@ -34,7 +34,7 @@ Therefore, to get complete book data, we need a JavaScript execution environment
 class BaseJsApi(ABC):
     @abstractmethod
     def decrypt_hres(self, hres: str) -> str:
-        """ Decrypts URL to audio file """
+        """Decrypts URL to audio file"""
 
 
 class PyWebViewJsApi(BaseJsApi):
@@ -233,26 +233,21 @@ class AKniga(BaseDriver[AudioBook]):
     def _parse_book_card(self, card: Tag) -> BookPreview | None:
         with suppress(AttributeError, KeyError, TypeError):
             url = card.select_one("div.article--cover > a").attrs["href"]
-            cover = card.select_one("div.article--cover > a > img").attrs["src"]
+            cover = card.select_one("div.article--cover > a img").attrs["src"]
             author = find_in_soup(
                 card,
-                r'span.link__action--author> svg:has(use[xlink\:href="#author"]) ~ a',
+                "span.link__action--author> a[href*='author']",
                 _("unknown_author"),
             )
             try:
-                title = card.select_one("div.article--cover > a > img").attrs[
+                title = card.select_one("div.article--cover > a img").attrs[
                     "alt"
                 ]
             except AttributeError:
-                title = (
-                    card.select_one(".caption__article-main")
-                    .text.replace(f"{author} - ", "")
-                    .strip()
-                )
+                title = card.select_one(".caption__article-main").text
+            title = title.replace(f"{author} – ", "").strip()
             narrator = find_in_soup(
-                card,
-                "span.link__action--author> "
-                r'svg:has(use[xlink\:href="#performer"]) ~ a',
+                card, "span.link__action--author> a[href*='performer']"
             )
             duration = find_in_soup(card, "span.link__action--label--time")
             series_name = number_in_series = ""
