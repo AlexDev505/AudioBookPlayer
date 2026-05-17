@@ -227,14 +227,12 @@ msgid "book.add_to_library"
 msgstr "в библиотеку"
 
 #: ../../src/web/templates/search.html:55
-#, fuzzy
 msgid "book.added_to_library"
-msgstr "в библиотеку"
+msgstr "Добавлена в библиотеку"
 
 #: ../../src/web/templates/search.html:56
-#, fuzzy
 msgid "source.added"
-msgstr "Добавлена"
+msgstr "Источников добавлено"
 
 #~ msgid "canceled"
 #~ msgstr "Операция отменена"
