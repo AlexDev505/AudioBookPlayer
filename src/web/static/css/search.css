@@ -119,23 +119,20 @@
     max-width: 1.2em;
     margin-right: 4px;
 }
+#search-page .item-info > *:empty {
+    display: none;
+}
 #search-page .item-author::before {
     content: url(../images/person.svg);
 }
 #search-page .item-narrators::before {
     content: url(../images/mic.svg);
 }
-#search-page .item-narrators:empty {
-    display: none;
-}
 #search-page .item-publications::before {
     content: url(../images/book.svg);
 }
 #search-page .item-durations::before {
     content: url(../images/clock.svg);
-}
-#search-page .item-series-name:empty {
-    display: none;
 }
 #search-page .item-series-name::before {
     content: url(../images/tag.svg);
