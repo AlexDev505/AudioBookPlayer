@@ -2,10 +2,10 @@
 
 
 a = Analysis(
-    ['E:\\projects\\AudioBookPlayer\\build\\..\\ABPlayer\\run.py'],
+    ['E:\\projects\\worktrees\\AudioBookPlayer\\jade-thorn\\AudioBookPlayer\\build\\..\\ABPlayer\\run.py'],
     pathex=[],
     binaries=[],
-    datas=[('E:\\projects\\AudioBookPlayer\\build\\..\\ABPlayer\\web\\static', 'static'), ('E:\\projects\\AudioBookPlayer\\build\\..\\ABPlayer\\web\\templates', 'templates'), ('E:\\projects\\AudioBookPlayer\\build\\..\\ABPlayer\\drivers\\bin', 'bin'), ('E:\\projects\\AudioBookPlayer\\build\\..\\ABPlayer\\locales\\en\\LC_MESSAGES\\base.mo', 'locales/en/LC_MESSAGES'), ('E:\\projects\\AudioBookPlayer\\build\\..\\ABPlayer\\locales\\ru\\LC_MESSAGES\\base.mo', 'locales/ru/LC_MESSAGES')],
+    datas=[('E:\\projects\\worktrees\\AudioBookPlayer\\jade-thorn\\AudioBookPlayer\\build\\..\\ABPlayer\\web\\static', 'static'), ('E:\\projects\\worktrees\\AudioBookPlayer\\jade-thorn\\AudioBookPlayer\\build\\..\\ABPlayer\\web\\templates', 'templates'), ('E:\\projects\\worktrees\\AudioBookPlayer\\jade-thorn\\AudioBookPlayer\\build\\..\\ABPlayer\\drivers\\bin', 'bin'), ('E:\\projects\\worktrees\\AudioBookPlayer\\jade-thorn\\AudioBookPlayer\\build\\..\\ABPlayer\\locales\\en\\LC_MESSAGES\\base.mo', 'locales/en/LC_MESSAGES'), ('E:\\projects\\worktrees\\AudioBookPlayer\\jade-thorn\\AudioBookPlayer\\build\\..\\ABPlayer\\locales\\ru\\LC_MESSAGES\\base.mo', 'locales/ru/LC_MESSAGES')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

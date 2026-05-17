@@ -39,7 +39,7 @@ ssh.connect(
     username="alexdev-py",
     password=os.environ["SOURCEFORGE_PASS"],
 )
-scp = SCPClient(ssh.get_transport(), progress=progress)
+scp = SCPClient(ssh.get_transport(), progress=progress, socket_timeout=120)
 scp.put(
     f"updates/{__version__}",
     recursive=True,
