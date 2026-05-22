@@ -114,6 +114,10 @@ def init_library(window: webview.Window) -> None:
                         incorrect_books_ids.append(book.id)
                     else:
                         correct_books_urls.append(book.url)
+                    if not book.url:
+                        book.url = f"file://{book.abp_file_path}"
+                        db.save(book)
+                        updates = True
             offset += 20
             books = db.get_libray(20, offset)
 
