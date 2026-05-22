@@ -251,6 +251,7 @@ class Book:
                     series_name=series_name,
                     number_in_series=number_in_series,
                     duration=duration_sec_to_str(int(total_duration)),
+                    url=f"file://{os.path.join(root, '.abp')}",
                     adding_date=datetime.now(),
                     items=items,
                     files=files,
