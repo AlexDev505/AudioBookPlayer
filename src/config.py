@@ -79,7 +79,9 @@ def update_config(*, update_env=True, **fields: str) -> None:
         "Configuration update. "
         + ", ".join((f"<le>{k}</le>=<y>{v}</y>" for k, v in fields.items()))
     )
-    fields = {field: fields.get(field, os.environ[field]) for field in FIELDS}
+    fields = {
+        field: fields.get(field, os.getenv(field, "")) for field in FIELDS
+    }
     with open(os.environ["CONFIG_PATH"], "wb") as file:
         file.write(orjson.dumps(fields))
     if update_env:

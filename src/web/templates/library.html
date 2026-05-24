@@ -53,3 +53,20 @@
         </div>
     </div>
 </template>
+<template id="book-removed-notification">
+    {{ gettext("book") }}
+    <b>«<span class="book-title"></span>»</b>
+    <span>{{ gettext("book.deleted_from_library") }}</span>
+    <span class="files-already-exists">
+        {{ gettext("book.deleted_but_files_already_exists") }}
+        <span
+            style="margin-top: 2px; text-decoration: underline; cursor: pointer"
+            onclick="
+                deleteBook(this.dataset.bid);
+                closeNotification(this.closest('.notification'));
+            "
+        >
+            {{ gettext("book.delete_files") }}
+        </span>
+    </span>
+</template>

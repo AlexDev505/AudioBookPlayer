@@ -15,6 +15,7 @@ from websockets.exceptions import (
     ConnectionClosedOK,
 )
 
+import local_storage
 from database import Database
 from models.book import SourceId
 
@@ -96,6 +97,7 @@ async def download(ws: ServerConnection, sid: SourceId) -> None:
     )
     if await downloader.download_book():
         db.save(source)
+        local_storage.save(book, source)
         logger.info(f"downloading finished: {sid}")
     del downloading_tasks[sid]
 

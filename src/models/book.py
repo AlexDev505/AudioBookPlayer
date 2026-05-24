@@ -85,6 +85,8 @@ class BookSource(ABC):
 
     @property
     def domain(self) -> str:
+        if self.url.startswith("file://"):
+            return _("book.self_loaded")
         return urlparse(self.url).netloc.split(".")[0]
 
     def asdict(self, root_path: Path | None = None) -> dict[str, ty.Any]:
@@ -286,9 +288,9 @@ class BookData:
     @property
     def cover_path(self) -> Path:
         """
-        :returns: Absolute path to the book cover file
+        :returns: Relative path to the book cover file
         """
-        return self.dir_path / "cover.jpg"
+        return self.book_path / "cover.jpg"
 
 
 @dataclass(kw_only=True)
@@ -333,8 +335,8 @@ class RawBook[SourceT: BookSource](BookData):
     source: SourceT
 
     @property
-    def dir_path(self) -> Path:
-        return super().dir_path / self.source.dir_path
+    def book_path(self) -> Path:
+        return super().book_path / self.source.dir_path
 
     def to_preview(self) -> BookPreview:
         narrators, publications, durations = set(), set(), set()
@@ -420,7 +422,6 @@ class Book(BookData):
             bid=self.id,
             cover=self.cover,
             local_cover=str(self.cover_path),
-            dir_path=str(self.dir_path),
             adding_date=self.adding_date.strftime(DATETIME_FORMAT),
             favorite=self.favorite,
             status=self.status.value,

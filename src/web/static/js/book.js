@@ -194,6 +194,8 @@ function showPlayer(source) {
   );
   openInBrowserBtn.classList.remove("hidden");
   openInBrowserBtn.dataset.url = source.url;
+  document.querySelector("#book-page .download").classList.add("hidden");
+  document.querySelector("#book-page .delete").classList.add("hidden");
   if (source.downloaded) {
     var btn = document.querySelector("#book-page-content .delete");
     btn.onclick = (event) => {
@@ -351,8 +353,23 @@ function removeBook(btn) {
   let bid = Number(btn.dataset.bid);
   pywebview.api.remove_book(bid).then((resp) => {
     if (resp.status != "ok") return showError(resp.message);
+    var bookRemoved = document
+      .getElementById("book-removed-notification")
+      .content.cloneNode(true);
+    bookRemoved.querySelector(".book-title").textContent = resp.data.title;
+    if (!resp.data.can_delete)
+      bookRemoved.querySelector(".files-already-exists").remove();
+    else
+      bookRemoved.querySelector(".files-already-exists span").dataset.bid =
+        resp.data.bid;
+    createNotification(bookRemoved, resp.data.can_delete ? 0 : 5, true);
   });
   document.querySelector(`.book-card[data-bid='${bid}']`).remove();
+}
+function deleteBook(bid) {
+  pywebview.api.delete_files_of_removed_book(Number(bid)).then((resp) => {
+    if (resp.status != "ok") return showError(resp.message);
+  });
 }
 function openBookDir() {
   pywebview.api.open_book_dir(opened_book.bid).then((resp) => {

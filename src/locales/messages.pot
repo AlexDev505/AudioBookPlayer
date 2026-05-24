@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-09 00:51+0700\n"
+"POT-Creation-Date: 2026-05-24 17:01+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Generated-By: Babel 2.18.0\n"
 
 #: ../../src/drivers/drivers/akniga.py:105
-#: ../../src/drivers/drivers/akniga.py:240
+#: ../../src/drivers/drivers/akniga.py:242
 #: ../../src/drivers/drivers/knigavuhe.py:35
 #: ../../src/drivers/drivers/knigavuhe.py:88
 #: ../../src/drivers/drivers/knigavuhe.py:144
@@ -64,6 +64,10 @@ msgstr ""
 msgid "unexpected_error"
 msgstr ""
 
+#: ../../src/models/book.py:89
+msgid "book.self_loaded"
+msgstr ""
+
 #: ../../src/web/templates/base.html:67
 msgid "base.hide_menu"
 msgstr ""
@@ -104,51 +108,55 @@ msgstr ""
 msgid "book.added"
 msgstr ""
 
-#: ../../src/web/templates/book.html:46
+#: ../../src/web/templates/book.html:49
 msgid "book.audio_sources"
 msgstr ""
 
-#: ../../src/web/templates/book.html:52
+#: ../../src/web/templates/book.html:55
 msgid "book.text_sources"
 msgstr ""
 
-#: ../../src/web/templates/book.html:63 ../../src/web/templates/book.html:73
+#: ../../src/web/templates/book.html:66 ../../src/web/templates/book.html:76
 msgid "s"
 msgstr ""
 
-#: ../../src/web/templates/book.html:78
+#: ../../src/web/templates/book.html:81
 msgid "book.show_sources"
 msgstr ""
 
-#: ../../src/web/templates/book.html:84
+#: ../../src/web/templates/book.html:85
+msgid "book.text_source_loading"
+msgstr ""
+
+#: ../../src/web/templates/book.html:90
 msgid "book.read"
 msgstr ""
 
-#: ../../src/web/templates/book.html:112
+#: ../../src/web/templates/book.html:118
 msgid "book.status.new"
 msgstr ""
 
-#: ../../src/web/templates/book.html:115
+#: ../../src/web/templates/book.html:121
 msgid "book.status.in_progress"
 msgstr ""
 
-#: ../../src/web/templates/book.html:118
+#: ../../src/web/templates/book.html:124
 msgid "book.status.completed"
 msgstr ""
 
-#: ../../src/web/templates/book.html:121
+#: ../../src/web/templates/book.html:127
 msgid "book.progress.listened"
 msgstr ""
 
-#: ../../src/web/templates/book.html:124
+#: ../../src/web/templates/book.html:130
 msgid "book.progress.read"
 msgstr ""
 
-#: ../../src/web/templates/book.html:127
+#: ../../src/web/templates/book.html:133
 msgid "book.status.mark_as_new"
 msgstr ""
 
-#: ../../src/web/templates/book.html:130
+#: ../../src/web/templates/book.html:136
 msgid "book.status.mark_as_completed"
 msgstr ""
 
@@ -193,6 +201,7 @@ msgid "downloading.status.terminated"
 msgstr ""
 
 #: ../../src/web/templates/downloads.html:57
+#: ../../src/web/templates/library.html:57
 msgid "book"
 msgstr ""
 
@@ -206,6 +215,18 @@ msgstr ""
 
 #: ../../src/web/templates/library.html:19
 msgid "library.favorite"
+msgstr ""
+
+#: ../../src/web/templates/library.html:59
+msgid "book.deleted_from_library"
+msgstr ""
+
+#: ../../src/web/templates/library.html:61
+msgid "book.deleted_but_files_already_exists"
+msgstr ""
+
+#: ../../src/web/templates/library.html:69
+msgid "book.delete_files"
 msgstr ""
 
 #: ../../src/web/templates/search.html:9
@@ -229,6 +250,105 @@ msgid "book.added_to_library"
 msgstr ""
 
 #: ../../src/web/templates/search.html:56
+#: ../../src/web/templates/settings.html:107
 msgid "source.added"
+msgstr ""
+
+#: ../../src/web/templates/settings.html:11
+msgid "settings.section.interface"
+msgstr ""
+
+#: ../../src/web/templates/settings.html:20
+msgid "settings.dark_theme"
+msgstr ""
+
+#: ../../src/web/templates/settings.html:27
+msgid "settings.language"
+msgstr ""
+
+#: ../../src/web/templates/settings.html:50
+msgid "settings.section.storage"
+msgstr ""
+
+#: ../../src/web/templates/settings.html:55
+msgid "settings.books_folder"
+msgstr ""
+
+#: ../../src/web/templates/settings.html:58
+msgid "settings.open"
+msgstr ""
+
+#: ../../src/web/templates/settings.html:61
+msgid "settings.change"
+msgstr ""
+
+#: ../../src/web/templates/settings.html:75
+msgid "about.version"
+msgstr ""
+
+#: ../../src/web/templates/settings.html:80
+msgid "about.developer"
+msgstr ""
+
+#: ../../src/web/templates/settings.html:84
+#: ../../src/web/templates/settings.html:87
+msgid "about.localization_by.name"
+msgstr ""
+
+#: ../../src/web/templates/settings.html:86
+msgid "about.localization_by.url"
+msgstr ""
+
+#: ../../src/web/templates/settings.html:95
+msgid "about.project_page"
+msgstr ""
+
+#: ../../src/web/templates/settings.html:101
+msgid "settings.books_folder.changed"
+msgstr ""
+
+#: ../../src/web/templates/settings.html:103
+msgid "settings.books_folder.books_added"
+msgstr ""
+
+#: ../../src/web/templates/settings.html:110
+msgid "settings.books_folder.old_library_actions"
+msgstr ""
+
+#: ../../src/web/templates/settings.html:118
+msgid "settings.books_folder.move_to_new_folder"
+msgstr ""
+
+#: ../../src/web/templates/settings.html:127
+msgid "settings.books_folder.remove_old_books"
+msgstr ""
+
+#: ../../src/web/templates/settings.html:132
+msgid "settings.books_folder.moving_files"
+msgstr ""
+
+#: ../../src/web/templates/settings.html:133
+#: ../../src/web/templates/settings.html:144
+msgid "it_can_take_some_time"
+msgstr ""
+
+#: ../../src/web/templates/settings.html:136
+msgid "settings.books_folder.moving_finished"
+msgstr ""
+
+#: ../../src/web/templates/settings.html:138
+msgid "settings.books_folder.books_moved"
+msgstr ""
+
+#: ../../src/web/templates/settings.html:143
+msgid "settings.books_folder.removing_books"
+msgstr ""
+
+#: ../../src/web/templates/settings.html:147
+msgid "settings.books_folder.removing_finished"
+msgstr ""
+
+#: ../../src/web/templates/settings.html:149
+msgid "settings.books_folder.books_removed"
 msgstr ""
 

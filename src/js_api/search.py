@@ -197,17 +197,6 @@ class SearchApi(JSApi):
         if book_create and added_sources:
             book.description = added_sources[0].description
             db.insert(book)
-            logger.opt(colors=True).debug(
-                f"book added to library: {book:colored}"
-            )
-            logger.opt(lazy=True).trace(
-                "book: {data}",
-                data=partial(
-                    pretty_view,
-                    book.asdict(),
-                    multiline=not os.getenv("NO_MULTILINE", False),
-                ),
-            )
         elif not added_sources:
             raise ty.cast(
                 BaseException,
@@ -220,17 +209,6 @@ class SearchApi(JSApi):
         for raw_book in added_sources:
             raw_book.source.related_book = book.id
             db.insert(raw_book.source)
-            logger.opt(colors=True).debug(
-                f"source added to library: {raw_book.source:colored}"
-            )
-            logger.opt(lazy=True).trace(
-                "source: {data}",
-                data=partial(
-                    pretty_view,
-                    raw_book.source.asdict(),
-                    multiline=not os.getenv("NO_MULTILINE", False),
-                ),
-            )
 
         return dict(
             book_created=book_create,

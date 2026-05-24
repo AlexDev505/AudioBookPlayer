@@ -108,7 +108,7 @@ function initPlayer(book, source) {
   let playerEl = document.getElementById("player");
   playerEl.classList.remove("hidden");
   playerEl.querySelector(".playback-btn").style =
-    `background-image: url('${source.cover}'), url('/library/${encodeURIComponent(book.dir_path + "\\" + source.local_cover)}');`;
+    `background-image: url('${source.cover}'), url('/library/${encodeURIComponent(source.local_cover)}');`;
   playerEl.querySelector(".book-title").innerHTML = book.title;
   showListeningProgress(book.bid, source.progress_percent);
   playerEl.querySelector(".book-info").dataset.bid = book.bid;

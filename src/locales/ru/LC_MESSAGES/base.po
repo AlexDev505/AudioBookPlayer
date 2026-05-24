@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-09 00:51+0700\n"
+"POT-Creation-Date: 2026-05-24 17:01+0700\n"
 "PO-Revision-Date: 2025-03-14 02:08+0700\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Generated-By: Babel 2.18.0\n"
 
 #: ../../src/drivers/drivers/akniga.py:105
-#: ../../src/drivers/drivers/akniga.py:240
+#: ../../src/drivers/drivers/akniga.py:242
 #: ../../src/drivers/drivers/knigavuhe.py:35
 #: ../../src/drivers/drivers/knigavuhe.py:88
 #: ../../src/drivers/drivers/knigavuhe.py:144
@@ -66,6 +66,10 @@ msgstr "Нет подходящего драйвера"
 msgid "unexpected_error"
 msgstr "Непредвиденная ошибка"
 
+#: ../../src/models/book.py:89
+msgid "book.self_loaded"
+msgstr "Личная библиотека"
+
 #: ../../src/web/templates/base.html:67
 msgid "base.hide_menu"
 msgstr "скрыть меню"
@@ -106,51 +110,55 @@ msgstr "Ошибка"
 msgid "book.added"
 msgstr "Добавлена"
 
-#: ../../src/web/templates/book.html:46
+#: ../../src/web/templates/book.html:49
 msgid "book.audio_sources"
 msgstr "Озвучки"
 
-#: ../../src/web/templates/book.html:52
+#: ../../src/web/templates/book.html:55
 msgid "book.text_sources"
 msgstr "Электронные книги"
 
-#: ../../src/web/templates/book.html:63 ../../src/web/templates/book.html:73
+#: ../../src/web/templates/book.html:66 ../../src/web/templates/book.html:76
 msgid "s"
 msgstr "с"
 
-#: ../../src/web/templates/book.html:78
+#: ../../src/web/templates/book.html:81
 msgid "book.show_sources"
 msgstr "Показать все источники"
 
-#: ../../src/web/templates/book.html:84
+#: ../../src/web/templates/book.html:85
+msgid "book.text_source_loading"
+msgstr "Загрузка электронной книги"
+
+#: ../../src/web/templates/book.html:90
 msgid "book.read"
 msgstr "Читать"
 
-#: ../../src/web/templates/book.html:112
+#: ../../src/web/templates/book.html:118
 msgid "book.status.new"
 msgstr "новая книга"
 
-#: ../../src/web/templates/book.html:115
+#: ../../src/web/templates/book.html:121
 msgid "book.status.in_progress"
 msgstr "в процессе"
 
-#: ../../src/web/templates/book.html:118
+#: ../../src/web/templates/book.html:124
 msgid "book.status.completed"
 msgstr "прочитана"
 
-#: ../../src/web/templates/book.html:121
+#: ../../src/web/templates/book.html:127
 msgid "book.progress.listened"
 msgstr "прослушано"
 
-#: ../../src/web/templates/book.html:124
+#: ../../src/web/templates/book.html:130
 msgid "book.progress.read"
 msgstr "прочитано"
 
-#: ../../src/web/templates/book.html:127
+#: ../../src/web/templates/book.html:133
 msgid "book.status.mark_as_new"
 msgstr "Отметить как новую"
 
-#: ../../src/web/templates/book.html:130
+#: ../../src/web/templates/book.html:136
 msgid "book.status.mark_as_completed"
 msgstr "Отметить как прочитанную"
 
@@ -195,6 +203,7 @@ msgid "downloading.status.terminated"
 msgstr "прервано"
 
 #: ../../src/web/templates/downloads.html:57
+#: ../../src/web/templates/library.html:57
 msgid "book"
 msgstr "Книга"
 
@@ -209,6 +218,18 @@ msgstr "Библиотека"
 #: ../../src/web/templates/library.html:19
 msgid "library.favorite"
 msgstr "Библиотека: Избранное"
+
+#: ../../src/web/templates/library.html:59
+msgid "book.deleted_from_library"
+msgstr "удалена из библиотеки"
+
+#: ../../src/web/templates/library.html:61
+msgid "book.deleted_but_files_already_exists"
+msgstr "но скачанные файлы остались"
+
+#: ../../src/web/templates/library.html:69
+msgid "book.delete_files"
+msgstr "удалить оставшиеся файлы"
 
 #: ../../src/web/templates/search.html:9
 msgid "search_for_book"
@@ -231,157 +252,104 @@ msgid "book.added_to_library"
 msgstr "Добавлена в библиотеку"
 
 #: ../../src/web/templates/search.html:56
+#: ../../src/web/templates/settings.html:107
 msgid "source.added"
 msgstr "Источников добавлено"
 
-#~ msgid "canceled"
-#~ msgstr "Операция отменена"
+#: ../../src/web/templates/settings.html:11
+msgid "settings.section.interface"
+msgstr "Интерфейс"
 
-#~ msgid "update.file_not_found"
-#~ msgstr "Файл обновления не найден"
+#: ../../src/web/templates/settings.html:20
+msgid "settings.dark_theme"
+msgstr "Тёмная тема"
 
-#~ msgid "online_listening_not_provided"
-#~ msgstr ""
-#~ "Онлайн прослушивание пока что недоступно\n"
-#~ "Скачайте книгу, чтобы начать прослушивание"
+#: ../../src/web/templates/settings.html:27
+msgid "settings.language"
+msgstr "Язык (Language)"
 
-#~ msgid "filters.query"
-#~ msgstr "найти в библиотеке"
+#: ../../src/web/templates/settings.html:50
+msgid "settings.section.storage"
+msgstr "Хранилище"
 
-#~ msgid "filters.reverse_order"
-#~ msgstr "в обратном порядке"
+#: ../../src/web/templates/settings.html:55
+msgid "settings.books_folder"
+msgstr "Папка для книг"
 
-#~ msgid "filters.authors"
-#~ msgstr "Авторы"
+#: ../../src/web/templates/settings.html:58
+msgid "settings.open"
+msgstr "Открыть"
 
-#~ msgid "filters.series"
-#~ msgstr "Циклы"
+#: ../../src/web/templates/settings.html:61
+msgid "settings.change"
+msgstr "Изменить"
 
-#~ msgid "library.all"
-#~ msgstr "все"
+#: ../../src/web/templates/settings.html:75
+msgid "about.version"
+msgstr "Версия"
 
-#~ msgid "library.new"
-#~ msgstr "новые"
+#: ../../src/web/templates/settings.html:80
+msgid "about.developer"
+msgstr "Разработчик"
 
-#~ msgid "library.in_process"
-#~ msgstr "в процессе"
+#: ../../src/web/templates/settings.html:84
+#: ../../src/web/templates/settings.html:87
+msgid "about.localization_by.name"
+msgstr ""
 
-#~ msgid "library.listened"
-#~ msgstr "прослушанные"
+#: ../../src/web/templates/settings.html:86
+msgid "about.localization_by.url"
+msgstr ""
 
-#~ msgid "licensed-drivers"
-#~ msgstr "Лицензированные источники"
+#: ../../src/web/templates/settings.html:95
+msgid "about.project_page"
+msgstr "Страница проекта"
 
-#~ msgid "interface"
-#~ msgstr "Интерфейс"
+#: ../../src/web/templates/settings.html:101
+msgid "settings.books_folder.changed"
+msgstr "Папка с книгами изменена"
 
-#~ msgid "dark_theme"
-#~ msgstr "Тёмная тема"
+#: ../../src/web/templates/settings.html:103
+msgid "settings.books_folder.books_added"
+msgstr "Книг добавлено"
 
-#~ msgid "language"
-#~ msgstr "Язык (Language)"
+#: ../../src/web/templates/settings.html:110
+msgid "settings.books_folder.old_library_actions"
+msgstr "но скачанные ранее файлы остались на месте"
 
-#~ msgid "storage"
-#~ msgstr "Хранилище"
+#: ../../src/web/templates/settings.html:118
+msgid "settings.books_folder.move_to_new_folder"
+msgstr "Перенести всё в новое место"
 
-#~ msgid "books_folder"
-#~ msgstr "Папка для книг"
+#: ../../src/web/templates/settings.html:127
+msgid "settings.books_folder.remove_old_books"
+msgstr "Удалить старые книги из библиотеки"
 
-#~ msgid "open"
-#~ msgstr "Открыть"
+#: ../../src/web/templates/settings.html:132
+msgid "settings.books_folder.moving_files"
+msgstr "Перенос файлов"
 
-#~ msgid "change"
-#~ msgstr "Изменить"
+#: ../../src/web/templates/settings.html:133
+#: ../../src/web/templates/settings.html:144
+msgid "it_can_take_some_time"
+msgstr "это может занять некоторое время"
 
-#~ msgid "version"
-#~ msgstr "Версия"
+#: ../../src/web/templates/settings.html:136
+msgid "settings.books_folder.moving_finished"
+msgstr "Перенос завершен"
 
-#~ msgid "developer"
-#~ msgstr "Разработчик"
+#: ../../src/web/templates/settings.html:138
+msgid "settings.books_folder.books_moved"
+msgstr "Книг перенесено"
 
-#~ msgid "localization_by_name"
-#~ msgstr ""
+#: ../../src/web/templates/settings.html:143
+msgid "settings.books_folder.removing_books"
+msgstr "Удаление книг"
 
-#~ msgid "localization_by_url"
-#~ msgstr ""
+#: ../../src/web/templates/settings.html:147
+msgid "settings.books_folder.removing_finished"
+msgstr "Удаление завершено"
 
-#~ msgid "project_page"
-#~ msgstr "Страница проекта"
-
-#~ msgid "licensed.authed"
-#~ msgstr "авторизован"
-
-#~ msgid "licensed.not_authed"
-#~ msgstr "не авторизован"
-
-#~ msgid "licensed.logout"
-#~ msgstr "выйти из аккаунта"
-
-#~ msgid "licensed.login"
-#~ msgstr "войти в аккаунт"
-
-#~ msgid "book.book_deleted_but_files_already_exists"
-#~ msgstr "удалена из библиотеки, но скачанные файлы остались"
-
-#~ msgid "book.delete_files"
-#~ msgstr "удалить оставшиеся файлы"
-
-#~ msgid "book.deleted_from_library"
-#~ msgstr "удалена из библиотеки"
-
-#~ msgid "book.files_deleted"
-#~ msgstr "Файлы книги %s удалены"
-
-#~ msgid "books_folder.changed"
-#~ msgstr "Папка с книгами изменена"
-
-#~ msgid "books_folder.books_added"
-#~ msgstr "Книг добавлено"
-
-#~ msgid "books_folder.downloaded_books_in_old_folder"
-#~ msgstr "но скачанные ранее файлы остались на месте"
-
-#~ msgid "books_folder.move_to_new_folder"
-#~ msgstr "Перенести всё в новое место"
-
-#~ msgid "books_folder.delete_old_books"
-#~ msgstr "Удалить старые книги из библиотеки"
-
-#~ msgid "books_folder.moving_files"
-#~ msgstr "Перенос файлов..."
-
-#~ msgid "it_can_take_some_time"
-#~ msgstr "это может занять некоторое время"
-
-#~ msgid "books_folder.moving_finished"
-#~ msgstr "Перенос завершен"
-
-#~ msgid "books_folder.books_moved"
-#~ msgstr "Книг перенесено"
-
-#~ msgid "books_folder.deleting_files"
-#~ msgstr "удалить оставшиеся файлы"
-
-#~ msgid "books_folder.deleting_finished"
-#~ msgstr "Удаление завершено"
-
-#~ msgid "books_folder.books_deleted"
-#~ msgstr "Книг удалено"
-
-#~ msgid "update.available"
-#~ msgstr "Доступно обновление"
-
-#~ msgid "update.changelog"
-#~ msgstr "список изменений"
-
-#~ msgid "update.install"
-#~ msgstr "установить"
-
-#~ msgid "update.new_testing_version"
-#~ msgstr "Доступна новая версия для тестирования"
-
-#~ msgid "update.no_suggest_tests"
-#~ msgstr "не предлагать участие в тестировании"
-
-#~ msgid "update.downloading"
-#~ msgstr "загрузка"
+#: ../../src/web/templates/settings.html:149
+msgid "settings.books_folder.books_removed"
+msgstr "Книг удалено"

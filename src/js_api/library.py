@@ -4,11 +4,13 @@ import asyncio
 import os
 import typing as ty
 from contextlib import suppress
+from pathlib import Path
 
 import requests
 from loguru import logger
 
 import drivers
+import local_storage
 from database import Database
 from models.book import AudioBook, BookSource, BookStatus, SourceId, TextBook
 from tools import convert_from_bytes, pretty_view
@@ -25,12 +27,12 @@ class LibraryApi(JSApi):
         self._matched_books_bids: list[int] | None = None
         self._removed_books: dict[int, list[SourceId]] = {}
         """ {bid: [sid, ...], ...} """
-        self._removed_sources_files: dict[SourceId, tuple[str, list[str]]] = {}
+        self._removed_sources_files: dict[SourceId, tuple[Path, list[str]]] = {}
         """ {sid: (dir_path, [relative_file_path, ...]), ...} """
 
     def book_by_bid(self, bid: int, listening_data: bool = True):
         if book := Database().get_book_by_bid(bid, with_sources=listening_data):
-            logger.opt(colors=True).debug(f"book found: {book:styled}")
+            logger.opt(colors=True).debug(f"book found: {book:colored}")
             return book.asdict(with_sources=listening_data)
         raise NotFound(bid=bid)
 
@@ -80,29 +82,41 @@ class LibraryApi(JSApi):
 
     @SourceId.convert_param
     def mark_as_new(self, sid: SourceId):
-        Database().mark_as_new(sid)
+        self._set_status(sid, BookStatus.NEW)
 
     @SourceId.convert_param
     def mark_as_in_progress(self, sid: SourceId):
-        Database().mark_as_in_progress(sid)
+        self._set_status(sid, BookStatus.IN_PROGRESS)
 
     @SourceId.convert_param
     def mark_as_completed(self, sid: SourceId):
-        Database().mark_as_completed(sid)
+        self._set_status(sid, BookStatus.COMPLETED)
+
+    def _set_status(self, sid: SourceId, status: BookStatus):
+        if not (dir_path := Database().get_dir_path(sid)):
+            raise NotFound(sid=sid)
+        Database().set_status(sid, status)
+        local_storage.set_status(dir_path, status)
 
     @SourceId.convert_param
     def set_listening_progress(
         self, sid: SourceId[AudioBook], chapter_index: int, progress: int
     ):
-        Database().set_listening_progress(
+        if not (dir_path := Database().get_dir_path(sid)):
+            raise NotFound(sid=sid)
+        lp = Database().set_listening_progress(
             sid, int(chapter_index), int(progress)
         )
+        local_storage.set_listening_progress(dir_path, lp)
 
     @SourceId.convert_param
     def set_reading_progress(
         self, sid: SourceId[TextBook], cfi: str, percent: int
     ):
+        if not (dir_path := Database().get_dir_path(sid)):
+            raise NotFound(sid=sid)
         Database().set_reading_progress(sid, cfi, percent)
+        local_storage.set_reading_progress(dir_path, cfi, percent)
 
     @SourceId.convert_param
     def download_audio_book(self, sid: SourceId[AudioBook], title: str):
@@ -138,14 +152,6 @@ class LibraryApi(JSApi):
     def delete_source_files(self, sid: SourceId):
         db = Database()
         if not (source := db.get_source_by_sid(sid)):
-            if sid in self._removed_sources_files:
-                logger.debug("deleting residual book files")
-                self._delete_source_files(*self._removed_sources_files[sid])
-                del self._removed_sources_files[sid]
-                logger.opt(colors=True).info(
-                    f"source files are deleted: <y>{sid}</y>"
-                )
-                return
             raise NotFound(sid=sid)
 
         if not source.is_downloaded:
@@ -153,15 +159,15 @@ class LibraryApi(JSApi):
         if not (book := db.get_book_by_bid(source.related_book)):
             raise NotFound(bid=source.related_book)
 
-        self._delete_source_files(
-            str(book.dir_path / source.dir_path), list(source.files)
+        local_storage.delete(
+            book.dir_path / source.dir_path, list(source.files)
         )
         db.clear_source_files(sid)
         logger.opt(colors=True).info(f"source files are deleted: <y>{sid}</y>")
 
     def remove_book(self, bid: int):
         db = Database()
-        if not (book := db.get_book_by_bid(bid)):
+        if not (book := db.get_book_by_bid(bid, with_sources=True)):
             raise NotFound(bid=bid)
 
         if sources := {
@@ -172,13 +178,26 @@ class LibraryApi(JSApi):
             self._removed_books[bid] = list(sources.keys())
             self._removed_sources_files.update(
                 {
-                    sid: (str(book.dir_path / source_path), files)
+                    sid: (book.dir_path / source_path, files)
                     for sid, (source_path, files) in sources.items()
                 }
             )
+            for sid in sources:
+                if path := db.get_dir_path(sid):
+                    local_storage.mark_as_ignore(path)
 
         db.remove_book(bid)
         logger.opt(colors=True).info(f"book removed: <y>{book:colored}</y>")
+        return dict(
+            bid=bid, title=book.title, can_delete=bid in self._removed_books
+        )
+
+    def delete_files_of_removed_book(self, bid: int):
+        for sid in self._removed_books.pop(bid, []):
+            local_storage.delete(*self._removed_sources_files.pop(sid))
+            logger.opt(colors=True).info(
+                f"source files are deleted: <y>{sid}</y>"
+            )
 
     def open_book_dir(self, bid: int):
         if not (book := Database().get_book_by_bid(bid)):
@@ -213,21 +232,6 @@ class LibraryApi(JSApi):
         new_data = asyncio.run(driver().get_book(source_url))
         Database().fix_chapters(sid, new_data.source.chapters)
         logger.opt(colors=True).info(f"source <y>{sid}</y> chapters are fixed")
-
-    @staticmethod
-    def _delete_source_files(dir_path: str, files: list[str]):
-        files.extend(["cover.jpg"])
-        for file in files:
-            file_path = os.path.join(dir_path, file)
-            try:
-                logger.opt(colors=True).trace(f"deleting <y>{file_path}</y>")
-                os.remove(file_path)
-            except PermissionError:
-                logger.error(f"file locked. {file_path}")
-            except IOError as err:
-                logger.exception(err)
-
-        os.removedirs(dir_path)
 
 
 class DownloadingProcessHandler(drivers.BaseDownloadingProgressHandler):

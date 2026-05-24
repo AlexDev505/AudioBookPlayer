@@ -1,1 +1,152 @@
-Settings
+<link
+    rel="stylesheet"
+    href="{{url_for('static', filename='css/settings.css')}}"
+/>
+<script defer src="{{ url_for('static', filename='js/settings.js') }}"></script>
+
+<div id="settings-page-content">
+    <div id="settings-container">
+        <div class="settings-section">
+            <div class="settings-section-title">
+                {{ gettext("settings.section.interface") }}
+            </div>
+            <div class="settings-section-container">
+                <div class="settings-section-item" id="color-scheme-setting">
+                    <div
+                        class="checkbox {{ 'checked' if dark_theme else '' }}"
+                        onclick="toggleDarkTheme()"
+                        id="dark-theme-checkbox"
+                    >
+                        {{ gettext("settings.dark_theme") }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="settings-section">
+            <div class="settings-section-title">
+                {{ gettext("settings.language") }}
+            </div>
+            <div class="settings-section-container">
+                <div class="settings-section-item" id="language-setting">
+                    <div
+                        class="checkbox lang-checkbox {{ 'checked' if lang == 'ru' else '' }}"
+                        data-lang="ru"
+                        onclick="setLanguage(this)"
+                    >
+                        Русский
+                    </div>
+                    <div
+                        class="checkbox lang-checkbox {{ 'checked' if lang == 'en' else '' }}"
+                        data-lang="en"
+                        onclick="setLanguage(this)"
+                    >
+                        English
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="settings-section">
+            <div class="settings-section-title">
+                {{ gettext("settings.section.storage") }}
+            </div>
+            <div class="settings-section-container">
+                <div class="settings-section-item" id="library-dir-setting">
+                    <div class="settings-section-item-title">
+                        {{ gettext("settings.books_folder") }}
+                    </div>
+                    <div class="button" onclick="openLibraryDir()">
+                        {{ gettext("settings.open") }}
+                    </div>
+                    <div class="button" onclick="changeLibraryDir()">
+                        {{ gettext("settings.change") }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="about-app">
+        <hr />
+        <div id="app-main-info">
+            <div id="app-icon"></div>
+            <div>
+                <div id="app-title">Audio Book Player</div>
+                <div id="app-version">
+                    {{ gettext("about.version") }}: {{ app_version }}
+                </div>
+            </div>
+        </div>
+        <div id="developer-link">
+            {{ gettext("about.developer") }}:
+            <a href="https://github.com/AlexDev505" target="_blank"
+                >AlexDev505</a
+            >
+            {% if gettext("about.localization_by.name") !=
+            "about.localization_by.name" %} Localization by:
+            <a href="{{ gettext('about.localization_by.url') }}" target="_blank"
+                >{{ gettext('about.localization_by.name') }}</a
+            >
+            {% endif %}
+        </div>
+        <a
+            id="project-link"
+            href="https://github.com/AlexDev505/AudioBookPlayer"
+            target="_blank"
+            >{{ gettext("about.project_page") }}</a
+        >
+    </div>
+</div>
+
+<template id="dir-changed-notification">
+    <div><b>{{ gettext("settings.books_folder.changed") }}</b></div>
+    <div>
+        {{ gettext("settings.books_folder.books_added") }}:
+        <span class="books-count"></span>
+    </div>
+    <div>
+        {{ gettext("source.added") }}: <span class="sources-count"></span>
+    </div>
+    <div class="old-library-actions">
+        {{ gettext("settings.books_folder.old_library_actions") }}
+        <div
+            style="margin-top: 2px; text-decoration: underline; cursor: pointer"
+            onclick="
+                migrateOldLibrary();
+                closeNotification(this.closest('.notification'));
+            "
+        >
+            {{ gettext("settings.books_folder.move_to_new_folder") }}
+        </div>
+        <div
+            style="margin-top: 2px; text-decoration: underline; cursor: pointer"
+            onclick="
+                removeOldLibrary();
+                closeNotification(this.closest('.notification'));
+            "
+        >
+            {{ gettext("settings.books_folder.remove_old_books") }}
+        </div>
+    </div>
+</template>
+<template id="moving-files-notification">
+    <div><b>{{ gettext("settings.books_folder.moving_files") }}...</b></div>
+    <div>{{ gettext("it_can_take_some_time") }}</div>
+</template>
+<template id="moving-finished-notification">
+    <div><b>{{ gettext("settings.books_folder.moving_finished") }}</b></div>
+    <div>
+        {{ gettext("settings.books_folder.books_moved") }}:
+        <span class="count"></span>
+    </div>
+</template>
+<template id="removing-books-notification">
+    <div><b>{{ gettext("settings.books_folder.removing_books") }}...</b></div>
+    <div>{{ gettext("it_can_take_some_time") }}</div>
+</template>
+<template id="removing-finished-notification">
+    <div><b>{{ gettext("settings.books_folder.removing_finished") }}</b></div>
+    <div>
+        {{ gettext("settings.books_folder.books_removed") }}:
+        <span class="count"></span>
+    </div>
+</template>

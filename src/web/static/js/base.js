@@ -45,25 +45,18 @@ function createNotification(content, timeout = 0, closable = true) {
     document.querySelector(".notification").remove();
   }
   var notifications = document.getElementById("notifications");
-  var notification = document.importNode(notificationTemplate.content, true);
+  var notification =
+    notificationTemplate.content.firstElementChild.cloneNode(true);
   notification.querySelector(".notification-content").appendChild(content);
-  notification.querySelector(".cross-btn").onclick = function () {
-    this.parentElement.remove();
-    notifications_count -= 1;
+  notification.querySelector(".cross-btn").onclick = (e) => {
+    closeNotification(e.target.closest(".notification"));
   };
-  notifications.appendChild(notification);
-  if (timeout)
-    setTimeout(
-      function (notification) {
-        if (!notification.isConnected) return;
-        notification.remove();
-        notifications_count -= 1;
-      },
-      timeout * 1000,
-      notification,
-    );
   if (!closable)
-    notification.querySelector(".cross-btn").style.display = "none";
+    notification
+      .querySelector(".cross-btn")
+      .setAttribute("style", "display: none");
+  notifications.appendChild(notification);
+  if (timeout) setTimeout(closeNotification, timeout * 1000, notification);
   return notification;
 }
 function showError(text) {
@@ -72,6 +65,12 @@ function showError(text) {
     .content.cloneNode(true);
   errorNotification.querySelector(".content").innerText = text;
   createNotification(errorNotification, 30, true);
+}
+function closeNotification(notification) {
+  a = notification;
+  if (!notification.isConnected) return;
+  notification.remove();
+  notifications_count -= 1;
 }
 
 var sideMenu = document.getElementById("side-menu");

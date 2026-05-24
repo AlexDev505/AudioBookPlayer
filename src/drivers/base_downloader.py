@@ -295,7 +295,7 @@ class BaseDownloader[SourceT: BookSource](ABC):
             async with aiohttp.ClientSession() as session:
                 async with session.get(self._book.source.cover) as response:
                     if response.status == 200:
-                        cover_path = self._book.cover_path
+                        cover_path = self._book.dir_path / "cover.jpg"
                         logger.opt(colors=True).trace(
                             f"saving cover to <y>{cover_path}</y>"
                         )
