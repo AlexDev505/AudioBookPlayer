@@ -42,11 +42,11 @@ input[type="range"]:not(.nav-slider) {
 }
 input[type="range"]:not(.nav-slider)::-webkit-slider-thumb {
     appearance: none;
-    background-color: var(--dim-fg);
+    background-color: var(--player-cur-item-bg);
     border: none;
     height: 35px;
     width: 0px;
-    box-shadow: -40px 0 0 40px var(--dim-fg);
+    box-shadow: -40px 0 0 40px var(--player-cur-item-bg);
 }
 input[type="range"]:not(.nav-slider)::after {
     content: attr(data-value);
