@@ -247,7 +247,7 @@
     position: absolute;
     height: 100%;
     width: var(--current-item-percents);
-    background-color: var(--dim-fg);
+    background-color: var(--player-cur-item-bg);
 }
 
 #book-page #book-info {
