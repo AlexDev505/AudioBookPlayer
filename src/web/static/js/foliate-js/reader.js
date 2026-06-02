@@ -6,7 +6,7 @@ import { Overlayer } from "./overlayer.js";
 const getCSS = ({ spacing, justify, hyphenate }) => `
     @namespace epub "http://www.idpf.org/2007/ops";
     html {
-        color-scheme: light dark;
+        color-scheme: ${dark_theme ? "dark" : "light"};
     }
     @media (prefers-color-scheme: dark) {
         a:link {
