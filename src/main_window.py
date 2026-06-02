@@ -43,7 +43,7 @@ def main_window() -> webview.Window:
     temp_data = {}
     assert (
         window := webview.create_window(
-            "ABPLayer",
+            "DiBooks",
             app,
             width=temp_data.get("width", 1000),
             height=temp_data.get("height", 650),

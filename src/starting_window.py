@@ -33,7 +33,7 @@ def create_starting_window() -> webview.Window:
     logger.info("launching starting window...")
 
     window = webview.create_window(
-        "ABPLayer",
+        "DiBooks",
         app,
         width=210,
         height=240,
