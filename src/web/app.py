@@ -32,6 +32,7 @@ def index():
         dark_theme=bool(int(os.environ["dark_theme"])),
         lang=os.environ["language"],
         is_main_menu_opened=temp_data.get("is_main_menu_opened", True),
+        is_filter_menu_opened=temp_data.get("is_filter_menu_opened", True),
         volume=temp_data.get("volume", 50),
         speed=temp_data.get("speed", 1),
         gettext=_,

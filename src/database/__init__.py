@@ -5,6 +5,7 @@ import typing as ty
 from functools import lru_cache, partial, reduce
 
 from aiodbcore import SyncDBCore
+from aiodbcore.models import Field
 from loguru import logger
 
 from models.book import (
@@ -122,6 +123,38 @@ class Database(SyncDBCore[Book | TextBook | AudioBook]):
 
     def get_book_by_hash(self, hash: str) -> Book | None:
         return self.fetchone(Book, where=Book.hash == hash)
+
+    def _get_unique_values(self, field: Field) -> list[str]:
+        return [
+            obj[0]
+            for obj in self.provider.fetchall(
+                *self._prepare_select_query(
+                    Book.__name__, fields=(f"DISTINCT {field}",), order_by=field
+                )
+            )
+            if obj[0]
+        ]
+
+    def get_all_authors(self) -> list[str]:
+        return self._get_unique_values(Book.author)
+
+    def get_all_series(self) -> list[str]:
+        return self._get_unique_values(Book.series_name)
+
+    @lru_cache
+    def get_books_keywords(self) -> dict[int, list[str]]:
+        result = {}
+        for book in self.provider.fetchall(
+            *self._prepare_select_query(
+                Book.__name__,
+                fields=(Book.id, Book.title, Book.author, Book.series_name),
+            )
+        ):
+            result[book[0]] = []
+            for field in book[1:]:
+                if field:
+                    result[book[0]].extend(field.lower().split())
+        return result
 
     def get_audio_books(self, bid: int) -> list[AudioBook]:
         return self.fetchall(AudioBook, where=AudioBook.related_book == bid)

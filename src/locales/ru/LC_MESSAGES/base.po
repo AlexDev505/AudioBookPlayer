@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-05-24 17:01+0700\n"
+"POT-Creation-Date: 2026-06-07 14:04+0700\n"
 "PO-Revision-Date: 2025-03-14 02:08+0700\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -70,43 +70,43 @@ msgstr "Непредвиденная ошибка"
 msgid "book.self_loaded"
 msgstr "Личная библиотека"
 
-#: ../../src/web/templates/base.html:67
+#: ../../src/web/templates/base.html:68
 msgid "base.hide_menu"
 msgstr "скрыть меню"
 
-#: ../../src/web/templates/base.html:75
+#: ../../src/web/templates/base.html:76
 msgid "base.library"
 msgstr "мои книги"
 
-#: ../../src/web/templates/base.html:82
+#: ../../src/web/templates/base.html:83
 msgid "base.favorite"
 msgstr "избранные"
 
-#: ../../src/web/templates/base.html:89
+#: ../../src/web/templates/base.html:90
 msgid "base.search_book"
 msgstr "новая книга"
 
-#: ../../src/web/templates/base.html:96
+#: ../../src/web/templates/base.html:97
 msgid "base.downloads"
 msgstr "загрузки"
 
-#: ../../src/web/templates/base.html:105
+#: ../../src/web/templates/base.html:106
 msgid "base.licensed"
 msgstr "подписки"
 
-#: ../../src/web/templates/base.html:112
+#: ../../src/web/templates/base.html:113
 msgid "base.books_folder"
 msgstr "папка с книгами"
 
-#: ../../src/web/templates/base.html:119
+#: ../../src/web/templates/base.html:120
 msgid "base.settings"
 msgstr "настройки"
 
-#: ../../src/web/templates/base.html:158
+#: ../../src/web/templates/base.html:159
 msgid "notifications.error"
 msgstr "Ошибка"
 
-#: ../../src/web/templates/book.html:19 ../../src/web/templates/library.html:30
+#: ../../src/web/templates/book.html:19 ../../src/web/templates/library.html:65
 msgid "book.added"
 msgstr "Добавлена"
 
@@ -203,7 +203,7 @@ msgid "downloading.status.terminated"
 msgstr "прервано"
 
 #: ../../src/web/templates/downloads.html:57
-#: ../../src/web/templates/library.html:57
+#: ../../src/web/templates/library.html:92
 msgid "book"
 msgstr "Книга"
 
@@ -211,23 +211,39 @@ msgstr "Книга"
 msgid "book.downloaded"
 msgstr "скачана"
 
-#: ../../src/web/templates/library.html:17
+#: ../../src/web/templates/library.html:16
+msgid "filters.query"
+msgstr "найти в библиотеке"
+
+#: ../../src/web/templates/library.html:28
+msgid "filters.reverse_order"
+msgstr "в обратном порядке"
+
+#: ../../src/web/templates/library.html:32
+msgid "filters.author"
+msgstr "Авторы"
+
+#: ../../src/web/templates/library.html:36
+msgid "filters.series"
+msgstr "Циклы"
+
+#: ../../src/web/templates/library.html:52
 msgid "library"
 msgstr "Библиотека"
 
-#: ../../src/web/templates/library.html:19
+#: ../../src/web/templates/library.html:54
 msgid "library.favorite"
 msgstr "Библиотека: Избранное"
 
-#: ../../src/web/templates/library.html:59
+#: ../../src/web/templates/library.html:94
 msgid "book.deleted_from_library"
 msgstr "удалена из библиотеки"
 
-#: ../../src/web/templates/library.html:61
+#: ../../src/web/templates/library.html:96
 msgid "book.deleted_but_files_already_exists"
 msgstr "но скачанные файлы остались"
 
-#: ../../src/web/templates/library.html:69
+#: ../../src/web/templates/library.html:104
 msgid "book.delete_files"
 msgstr "удалить оставшиеся файлы"
 

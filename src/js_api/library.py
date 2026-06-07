@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import difflib
 import os
 import typing as ty
 from contextlib import suppress
@@ -76,6 +77,25 @@ class LibraryApi(JSApi):
 
         return [book.asdict() for book in books]
 
+    def search_in_library(self, query: str):
+        self._library_search_query = query
+
+        search_array = Database().get_books_keywords()
+        logger.opt(colors=True).trace(f"search array: {search_array}")
+        search_words = query.lower().split()
+        logger.opt(colors=True).trace(f"search words: {search_words}")
+        matched_books_bids = []  # Идентификаторы найденных книг
+        # Поиск
+        for i, array in search_array.items():
+            for search_word in search_words:
+                if difflib.get_close_matches(search_word, array):
+                    matched_books_bids.append(i)
+                    break
+        logger.opt(colors=True).debug(
+            f"matched books bids: {pretty_view(matched_books_bids)}"
+        )
+        self._matched_books_bids = matched_books_bids
+
     def toggle_favorite(self, bid: int):
         book = Database().get_book_by_bid(bid)
         if not book:
@@ -128,6 +148,16 @@ class LibraryApi(JSApi):
             raise NotFound(sid=sid)
         Database().set_reading_progress(sid, cfi, percent)
         local_storage.set_reading_progress(dir_path, cfi, percent)
+
+    def get_all_authors(self) -> list[str]:
+        authors = Database().get_all_authors()
+        logger.opt(colors=True).debug(f"authors found: <y>{len(authors)}</y>")
+        return authors
+
+    def get_all_series(self) -> list[str]:
+        series = Database().get_all_series()
+        logger.opt(colors=True).debug(f"series found: <y>{len(series)}</y>")
+        return series
 
     @SourceId.convert_param
     def download_audio_book(self, sid: SourceId[AudioBook], title: str):

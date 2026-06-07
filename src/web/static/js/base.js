@@ -134,6 +134,9 @@ function openPageFromUrlParams() {
 window.addEventListener("pywebviewready", function () {
   openPageFromUrlParams();
   pywebview.state.menu_opened = !sideMenu.classList.contains("collapsed");
+  pywebview.state.filter_menu_opened = !document
+    .querySelector("#filter-menu")
+    .classList.contains("collapsed");
   pywebview.state.volume = player.volume;
   pywebview.state.speed = player.speed;
   document
