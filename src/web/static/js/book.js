@@ -34,6 +34,7 @@ function loadBookData(bid) {
       page.querySelector(".series").classList.remove("hidden");
     } else page.querySelector(".series").classList.add("hidden");
     page.querySelector(".book-description").innerHTML = resp.data.description;
+    page.querySelector(".toggle-favorite").dataset.bid = resp.data.bid;
     page.querySelector(".toggle-favorite").onclick = function () {
       toggleFavorite(this, resp.data.bid);
     };
@@ -374,5 +375,21 @@ function deleteBook(bid) {
 function openBookDir() {
   pywebview.api.open_book_dir(opened_book.bid).then((resp) => {
     if (resp.status != "ok") return showError(resp.message);
+  });
+}
+
+function toggleFavorite(btn) {
+  if (btn.classList.contains("disabled")) return;
+  btn.classList.add("disabled");
+  let current_state = btn.classList.toggle("active");
+  let bid = Number(btn.dataset.bid);
+  pywebview.api.toggle_favorite(bid).then((response) => {
+    btn.classList.remove("disabled");
+    if (response.status != "ok") {
+      btn.classList.toggle("active");
+      showError(response.message);
+      return;
+    }
+    if (current_state != response.data) btn.classList.toggle("active");
   });
 }

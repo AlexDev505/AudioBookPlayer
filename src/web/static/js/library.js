@@ -61,6 +61,7 @@ function showBooks(response) {
     let el = bookCardTemplate.content.cloneNode(true);
     el.querySelector(".book-card").setAttribute("data-bid", book.bid);
     el.querySelector(".remove").setAttribute("data-bid", book.bid);
+    el.querySelector(".toggle-favorite").setAttribute("data-bid", book.bid);
     el.querySelector(".cover").src = book.cover;
     el.querySelector(".book-title").textContent = book.title;
     el.querySelector(".adding-date .content").textContent = book.adding_date;

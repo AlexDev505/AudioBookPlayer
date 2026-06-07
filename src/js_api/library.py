@@ -64,7 +64,7 @@ class LibraryApi(JSApi):
             reverse=reverse,
             author=author,
             series=series,
-            favorite=favorite,
+            favorite=favorite if favorite else None,
             status=BookStatus(status) if status else None,
             bids=self._matched_books_bids,
         )
@@ -75,6 +75,17 @@ class LibraryApi(JSApi):
         )
 
         return [book.asdict() for book in books]
+
+    def toggle_favorite(self, bid: int):
+        book = Database().get_book_by_bid(bid)
+        if not book:
+            raise NotFound(bid=bid)
+        book.favorite = not book.favorite
+        Database().save(book)
+        logger.opt(colors=True).debug(
+            f"{book:colored} favorite: <y>{book.favorite}</y>"
+        )
+        return book.favorite
 
     @SourceId.convert_param
     def select_source(self, sid: SourceId):

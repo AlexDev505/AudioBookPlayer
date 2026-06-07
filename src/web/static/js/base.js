@@ -157,15 +157,15 @@ function openLibraryPage(favorite = false) {
   if (favorite == true) addUrlParams({ favorite: 1 });
   else if (favorite == false && urlParams.get("favorite"))
     removeUrlParams(["favorite"]);
+
   if (
     library_page.shown ||
     (Page.last == library_page && favorite != library_filters.favorite)
   ) {
     library_page.unLoad(library_page.el);
     library_page.onOpen(library_page.el);
-  } else {
-    library_page.open();
   }
+  if (!library_page.shown) library_page.open();
 }
 
 function openLibraryDir() {
