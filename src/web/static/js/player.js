@@ -105,6 +105,17 @@ document.addEventListener("DOMContentLoaded", (event) => {
 });
 
 function initPlayer(book, source) {
+  pywebview.state.last_listened_book_bid = book.bid;
+  pywebview.api.get_playback_settings(book.bid).then((resp) => {
+    if (resp.data.volume !== undefined) {
+      document.querySelector("#volume-input").value = resp.data.volume;
+      document.querySelector("#volume-input").oninput();
+    }
+    if (resp.data.speed !== undefined) {
+      document.querySelector("#speed-input").value = resp.data.speed;
+      document.querySelector("#speed-input").oninput();
+    }
+  });
   let playerEl = document.getElementById("player");
   playerEl.classList.remove("hidden");
   playerEl.querySelector(".playback-btn").style =
@@ -246,6 +257,13 @@ function setVolume(value) {
 function setSpeed(value) {
   player.speed = Number(value);
 }
+function savePlaybackSettings() {
+  pywebview.api.save_playback_settings(
+    player.current_book.bid,
+    Number(player.volume * 100),
+    Number(player.speed),
+  );
+}
 function clearPlayingBook() {
   if (!player.current_book) return;
   document.querySelector("#player").classList.add("hidden");
@@ -254,4 +272,16 @@ function clearPlayingBook() {
 }
 function timeView(time) {
   return `${String(Math.floor(time / 60)).padStart(2, "0")}:${String(time % 60).padStart(2, "0")}`;
+}
+
+function loadLastListenedBook() {
+  if (!last_listened_book_bid) return;
+  pywebview.api.book_by_bid(last_listened_book_bid, true).then((resp) => {
+    if (resp.status != "ok") return showError(resp.message);
+    var selected_audio_book = resp.data.audio_sources.find(
+      (source) => source.selected === true,
+    );
+    if (!selected_audio_book) return;
+    initPlayer(resp.data, selected_audio_book);
+  });
 }

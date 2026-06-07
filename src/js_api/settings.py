@@ -180,6 +180,22 @@ class WindowControlsApi(JSApi):
 
         return dict(removed_books_count=removed_books_count)
 
+    def get_playback_settings(self, bid: int):
+        temp_data = temp_file.load()
+        return dict(
+            volume=temp_data.get(f"volume_{bid}"),
+            speed=temp_data.get(f"speed_{bid}"),
+        )
+
+    def save_playback_settings(self, bid: int, volume: int, speed: float):
+        data = {
+            "volume": volume,
+            "speed": speed,
+            f"volume_{bid}": volume,
+            f"speed_{bid}": speed,
+        }
+        temp_file.update(**data)
+
     def save_session(self) -> None:
         logger.debug("saving session data")
         data = {}
@@ -192,14 +208,12 @@ class WindowControlsApi(JSApi):
             data["height"] = int(self._window.height / scale_k)
         data["is_main_menu_opened"] = self._window.state.menu_opened
         data["is_filter_menu_opened"] = self._window.state.menu_opened
-        # is_filter_menu_opened = self._window.evaluate_js("filter_menu_opened")
-        # required_drivers = self._window.evaluate_js("required_drivers")
         data["volume"] = self._window.state.volume * 100
         data["speed"] = self._window.state.speed
-        # last_listened_book_bid = self._window.evaluate_js(
-        #     "(player.current_book)?player.current_book.bid:null"
-        # )
+        if last_listened_book_bid := self._window.state.last_listened_book_bid:
+            data["last_listened_book_bid"] = last_listened_book_bid
+            data[f"volume_{last_listened_book_bid}"] = data["volume"]
+            data[f"speed_{last_listened_book_bid}"] = data["speed"]
+
         temp_file.update(**data)
-        # if last_listened_book_bid is None:
-        #     temp_file.delete_items("last_listened_book_bid")
         logger.trace("session data saved")

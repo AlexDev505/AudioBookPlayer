@@ -139,6 +139,7 @@ window.addEventListener("pywebviewready", function () {
     .classList.contains("collapsed");
   pywebview.state.volume = player.volume;
   pywebview.state.speed = player.speed;
+  pywebview.state.last_listened_book_bid = last_listened_book_bid;
   document
     .querySelector("#volume-input")
     .addEventListener("input", function () {
@@ -150,9 +151,7 @@ window.addEventListener("pywebviewready", function () {
   pywebview.api.get_downloads().then(showDownloads);
   // pywebview.api.check_for_updates().then(checkForUpdates);
   // pywebview.api.get_available_drivers().then(loadAvailableDrivers);
-  // toggleDarkThemeCheckBox(dark_theme);
-  // toggleLanguageButton(lang);
-  // loadLastListenedBook();
+  loadLastListenedBook();
 });
 
 function openLibraryPage(favorite = false) {

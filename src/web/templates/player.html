@@ -27,6 +27,7 @@
             value="{{ volume|tojson }}"
             data-postfix="%"
             oninput="setVolume(this.value)"
+            onchange="savePlaybackSettings()"
         />
         <div id="speed-btn" class="icon-btn speed-btn"></div>
         <input
@@ -38,6 +39,7 @@
             step="0.1"
             data-prefix="x"
             oninput="setSpeed(this.value)"
+            onchange="savePlaybackSettings()"
         />
     </div>
 </div>

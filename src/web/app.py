@@ -33,6 +33,7 @@ def index():
         lang=os.environ["language"],
         is_main_menu_opened=temp_data.get("is_main_menu_opened", True),
         is_filter_menu_opened=temp_data.get("is_filter_menu_opened", True),
+        last_listened_book_bid=temp_data.get("last_listened_book_bid"),
         volume=temp_data.get("volume", 50),
         speed=temp_data.get("speed", 1),
         gettext=_,
