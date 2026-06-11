@@ -1,0 +1,401 @@
+# Armenian translations for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-11-01 00:37+0700\n"
+"PO-Revision-Date: 2025-03-14 02:08+0700\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: hy\n"
+"Language-Team: hy <LL@li.org>\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../abplayer/drivers/akniga.py:109 ../../abplayer/drivers/akniga.py:245
+#: ../../abplayer/drivers/izibuk.py:24 ../../abplayer/drivers/izibuk.py:82
+#: ../../abplayer/drivers/izibuk.py:132 ../../abplayer/drivers/knigavuhe.py:33
+#: ../../abplayer/drivers/knigavuhe.py:84
+#: ../../abplayer/drivers/knigavuhe.py:157
+#: ../../abplayer/drivers/librivox.py:71 ../../abplayer/drivers/librivox.py:157
+#: ../../abplayer/drivers/yakniga.py:159
+msgid "unknown_author"
+msgstr "Անհայտ հեղինակ"
+
+#: ../../abplayer/js_api/books.py:724
+msgid "no_suitable_driver"
+msgstr "Համապատասխան դրայվեր չկա"
+
+#: ../../abplayer/js_api/books.py:729
+msgid "book.already_exists"
+msgstr "Գիրքն արդեն ավելացված է գրադարանում"
+
+#: ../../abplayer/js_api/books.py:734
+msgid "book.not_found"
+msgstr "Գիրքը չի գտնվել"
+
+#: ../../abplayer/js_api/books.py:739
+msgid "book.already_downloaded"
+msgstr "Գիրքը ներբեռնվում է կամ արդեն ներբեռնված է"
+
+#: ../../abplayer/js_api/books.py:744
+msgid "book.not_downloaded"
+msgstr "Գիրքը ներբեռնված չէ"
+
+#: ../../abplayer/js_api/books.py:749
+msgid "book.wait_for_similar_book_downloading"
+msgstr "Սպասեք նմանատիպ գրքի ներբեռնման ավարտին"
+
+#: ../../abplayer/js_api/books.py:754
+msgid "driver.not_authenticated"
+msgstr ""
+
+#: ../../abplayer/js_api/js_api.py:73
+msgid "connection_issues"
+msgstr "Կապի խնդիրներ"
+
+#: ../../abplayer/js_api/settings.py:412
+msgid "canceled"
+msgstr "Գործողությունը չեղարկվեց"
+
+#: ../../abplayer/js_api/settings.py:417
+msgid "update.file_not_found"
+msgstr "Թարմացման ֆայլը չի գտնվել"
+
+#: ../../abplayer/web/templates/base.html:67
+msgid "base.hide_menu"
+msgstr "թաքցնել մենյուն"
+
+#: ../../abplayer/web/templates/base.html:75
+msgid "base.library"
+msgstr "իմ գրքերը"
+
+#: ../../abplayer/web/templates/base.html:82
+msgid "base.favorite"
+msgstr "ընտրյալներ"
+
+#: ../../abplayer/web/templates/base.html:89
+msgid "base.search_book"
+msgstr "նոր գիրք"
+
+#: ../../abplayer/web/templates/base.html:96
+msgid "base.downloads"
+msgstr "ներբեռնումներ"
+
+#: ../../abplayer/web/templates/base.html:105
+msgid "base.licensed"
+msgstr "բաժանորդագրություններ"
+
+#: ../../abplayer/web/templates/base.html:112
+msgid "base.books_folder"
+msgstr "գրքերի պանակ"
+
+#: ../../abplayer/web/templates/base.html:119
+msgid "base.settings"
+msgstr "կարգավորումներ"
+
+#: ../../abplayer/web/templates/book.html:45
+#: ../../abplayer/web/templates/book.html:56
+msgid "s"
+msgstr "ս"
+
+#: ../../abplayer/web/templates/book.html:62
+msgid "wait_for_downloading_end"
+msgstr "Սպասեք գրքի ներբեռնման ավարտին"
+
+#: ../../abplayer/web/templates/book.html:65
+msgid "online_listening_not_provided"
+msgstr ""
+"Առցանց ունկնդրումը դեռևս հասանելի չէ\n"
+"Ներբեռնեք գիրքը՝ ունկնդրումը սկսելու համար"
+
+#: ../../abplayer/web/templates/book.html:67
+msgid "book.download"
+msgstr "Ներբեռնել"
+
+#: ../../abplayer/web/templates/downloads.html:7
+msgid "downloads"
+msgstr "Ներբեռնումներ"
+
+#: ../../abplayer/web/templates/downloads.html:10
+msgid "no_downloads"
+msgstr "ակտիվ ներբեռնումներ չկան"
+
+#: ../../abplayer/web/templates/library.html:15
+msgid "filters.query"
+msgstr "որոնել գրադարանում"
+
+#: ../../abplayer/web/templates/library.html:25
+msgid "filters.reverse_order"
+msgstr "հակառակ հերթականությամբ"
+
+#: ../../abplayer/web/templates/library.html:29
+msgid "filters.authors"
+msgstr "Հեղինակներ"
+
+#: ../../abplayer/web/templates/library.html:33
+msgid "filters.series"
+msgstr "Շարքեր"
+
+#: ../../abplayer/web/templates/js/library.js:166
+#: ../../abplayer/web/templates/library.html:41
+msgid "library"
+msgstr "Գրադարան"
+
+#: ../../abplayer/web/templates/library.html:49
+msgid "library.all"
+msgstr "բոլորը"
+
+#: ../../abplayer/web/templates/library.html:56
+msgid "library.new"
+msgstr "նորերը"
+
+#: ../../abplayer/web/templates/library.html:63
+msgid "library.in_process"
+msgstr "ընթացքում"
+
+#: ../../abplayer/web/templates/library.html:70
+msgid "library.listened"
+msgstr "ունկնդրվածները"
+
+#: ../../abplayer/web/templates/licensed.html:7
+msgid "licensed-drivers"
+msgstr "Լիցենզավորված աղբյուրներ"
+
+#: ../../abplayer/web/templates/search.html:7
+msgid "search_for_book"
+msgstr "Գրքի որոնում"
+
+#: ../../abplayer/web/templates/search.html:12
+msgid "begin_typing"
+msgstr "սկսեք գրել կամ տեղադրեք հղում"
+
+#: ../../abplayer/web/templates/settings.html:9
+msgid "interface"
+msgstr "Ինտերֆեյս"
+
+#: ../../abplayer/web/templates/settings.html:17
+msgid "dark_theme"
+msgstr "Մուգ ոճ"
+
+#: ../../abplayer/web/templates/settings.html:23
+msgid "language"
+msgstr "Լեզու (Language)"
+
+#: ../../abplayer/web/templates/settings.html:44
+msgid "storage"
+msgstr "Պահոց"
+
+#: ../../abplayer/web/templates/settings.html:48
+msgid "books_folder"
+msgstr "Գրքերի պանակ"
+
+#: ../../abplayer/web/templates/settings.html:51
+msgid "open"
+msgstr "Բացել"
+
+#: ../../abplayer/web/templates/settings.html:54
+msgid "change"
+msgstr "Փոխել"
+
+#: ../../abplayer/web/templates/settings.html:68
+msgid "version"
+msgstr "Տարբերակ"
+
+#: ../../abplayer/web/templates/settings.html:73
+msgid "developer"
+msgstr "Մշակող"
+
+#: ../../abplayer/web/templates/settings.html:77
+#: ../../abplayer/web/templates/settings.html:80
+msgid "localization_by_name"
+msgstr "Winrus-web"
+
+#: ../../abplayer/web/templates/settings.html:79
+msgid "localization_by_url"
+msgstr "https://github.com/Winrus-web"
+
+#: ../../abplayer/web/templates/settings.html:88
+msgid "project_page"
+msgstr "Նախագծի էջ"
+
+#: ../../abplayer/web/templates/js/base.js:228
+msgid "licensed.authed"
+msgstr "մուտքագրված"
+
+#: ../../abplayer/web/templates/js/base.js:228
+msgid "licensed.not_authed"
+msgstr "մուտքագրված չէ"
+
+#: ../../abplayer/web/templates/js/base.js:229
+msgid "licensed.logout"
+msgstr "դուրս գալ հաշվից"
+
+#: ../../abplayer/web/templates/js/base.js:229
+msgid "licensed.login"
+msgstr "մուտք գործել հաշիվ"
+
+#: ../../abplayer/web/templates/js/book.js:26
+#: ../../abplayer/web/templates/js/library.js:277
+msgid "book.added"
+msgstr "Ավելացված է"
+
+#: ../../abplayer/web/templates/js/book.js:194
+#: ../../abplayer/web/templates/js/book.js:197
+#: ../../abplayer/web/templates/js/book.js:230
+#: ../../abplayer/web/templates/js/book.js:392
+#: ../../abplayer/web/templates/js/library.js:276
+msgid "book.listening_progress"
+msgstr "ունկնդրված"
+
+#: ../../abplayer/web/templates/js/book.js:398
+msgid "book.mark_as_new"
+msgstr "Նշել որպես նոր"
+
+#: ../../abplayer/web/templates/js/book.js:407
+msgid "book.mark_as_finished"
+msgstr "Նշել որպես ունկնդրված"
+
+#: ../../abplayer/web/templates/js/downloads.js:39
+msgid "downloading.initializing"
+msgstr "մեկնարկում"
+
+#: ../../abplayer/web/templates/js/downloads.js:57
+msgid "downloading.waiting"
+msgstr "սպասում"
+
+#: ../../abplayer/web/templates/js/downloads.js:58
+msgid "downloading.preparing"
+msgstr "պատրաստում"
+
+#: ../../abplayer/web/templates/js/downloads.js:59
+msgid "downloading.downloading"
+msgstr "ներբեռնում"
+
+#: ../../abplayer/web/templates/js/downloads.js:60
+msgid "downloading.ending"
+msgstr "ավարտում"
+
+#: ../../abplayer/web/templates/js/downloads.js:61
+msgid "downloading.finished"
+msgstr "ներբեռնումն ավարտված է"
+
+#: ../../abplayer/web/templates/js/downloads.js:62
+msgid "downloading.terminating"
+msgstr "կանգնեցում"
+
+#: ../../abplayer/web/templates/js/downloads.js:91
+msgid "book.downloaded"
+msgstr "ներբեռնված է"
+
+#: ../../abplayer/web/templates/js/library.js:165
+msgid "library.favorite"
+msgstr "Գրադարան․ Ընտրյալներ"
+
+#: ../../abplayer/web/templates/js/library.js:363
+msgid "book.book_deleted_but_files_already_exists"
+msgstr "հեռացվել է գրադարանից, սակայն ներբեռնված ֆայլերը մնացել են"
+
+#: ../../abplayer/web/templates/js/library.js:364
+msgid "book.delete_files"
+msgstr "ջնջել մնացած ֆայլերը"
+
+#: ../../abplayer/web/templates/js/library.js:370
+msgid "book.deleted_from_library"
+msgstr "հեռացվել է գրադարանից"
+
+#: ../../abplayer/web/templates/js/library.js:399
+
+msgid "book.files_deleted"
+msgstr "%s գրքի ֆայլերը ջնջված են"
+
+#: ../../abplayer/web/templates/js/search.js:129
+msgid "book.add_to_library"
+msgstr "ավելացնել գրադարան"
+
+#: ../../abplayer/web/templates/js/search.js:133
+msgid "search.empty"
+msgstr "Ոչինչ չի գտնվել"
+
+#: ../../abplayer/web/templates/js/settings.js:34
+msgid "books_folder.changed"
+msgstr "Գրքերի պանակը փոխված է"
+
+#: ../../abplayer/web/templates/js/settings.js:34
+msgid "books_folder.books_added"
+msgstr "Գրքեր ավելացված են"
+
+#: ../../abplayer/web/templates/js/settings.js:38
+msgid "books_folder.downloaded_books_in_old_folder"
+msgstr "սակայն նախկինում ներբեռնված ֆայլերը մնացել են տեղում"
+
+#: ../../abplayer/web/templates/js/settings.js:39
+msgid "books_folder.move_to_new_folder"
+msgstr "Տեղափոխել ամեն ինչ նոր տեղ"
+
+#: ../../abplayer/web/templates/js/settings.js:40
+msgid "books_folder.delete_old_books"
+msgstr "Հեռացնել հին գրքերը գրադարանից"
+
+#: ../../abplayer/web/templates/js/settings.js:46
+msgid "books_folder.moving_files"
+msgstr "Ֆայլերի տեղափոխում..."
+
+#: ../../abplayer/web/templates/js/settings.js:46
+#: ../../abplayer/web/templates/js/settings.js:54
+#: ../../abplayer/web/templates/js/settings.js:85
+msgid "it_can_take_some_time"
+msgstr "դա կարող է որոշ ժամանակ տևել"
+
+#: ../../abplayer/web/templates/js/settings.js:50
+msgid "books_folder.moving_finished"
+msgstr "Տեղափոխումն ավարտված է"
+
+#: ../../abplayer/web/templates/js/settings.js:50
+msgid "books_folder.books_moved"
+msgstr "Տեղափոխված գրքեր"
+
+#: ../../abplayer/web/templates/js/settings.js:54
+msgid "books_folder.deleting_files"
+msgstr "ջնջել մնացած ֆայլերը"
+
+#: ../../abplayer/web/templates/js/settings.js:58
+msgid "books_folder.deleting_finished"
+msgstr "Հեռացումն ավարտված է"
+
+#: ../../abplayer/web/templates/js/settings.js:58
+msgid "books_folder.books_deleted"
+msgstr "Հեռացված գրքեր"
+
+#: ../../abplayer/web/templates/js/settings.js:70
+msgid "update.available"
+msgstr "Հասանելի է թարմացում"
+
+#: ../../abplayer/web/templates/js/settings.js:71
+#: ../../abplayer/web/templates/js/settings.js:77
+msgid "update.changelog"
+msgstr "փոփոխությունների ցանկ"
+
+#: ../../abplayer/web/templates/js/settings.js:72
+#: ../../abplayer/web/templates/js/settings.js:78
+msgid "update.install"
+msgstr "տեղադրել"
+
+#: ../../abplayer/web/templates/js/settings.js:76
+msgid "update.new_testing_version"
+msgstr "Հասանելի է նոր թեստային տարբերակ"
+
+#: ../../abplayer/web/templates/js/settings.js:79
+msgid "update.no_suggest_tests"
+msgstr "չառաջարկել մասնակցել թեստավորմանը"
+
+#: ../../abplayer/web/templates/js/settings.js:85
+msgid "update.downloading"
+msgstr "ներբեռնում"

@@ -4,7 +4,10 @@ __pycache__/
 .env
 /build/installers/
 /build/updaters/
-/build/updates/
+/build/updates/**/*
+!/build/updates/updates.json
+!/build/updates/**/
+!/build/updates/**/update.json
 /build/ABPlayer*/
 /build/ABPlayerUpdater*
 AudioBookPlayerAppData.lnk

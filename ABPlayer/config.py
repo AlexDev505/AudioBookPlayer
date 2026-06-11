@@ -8,9 +8,7 @@ from loguru import logger
 from tools import pretty_view
 
 FIELDS = {
-    "books_folder": os.path.join(
-        os.environ["USERPROFILE"], "documents", "Аудио книги"
-    ),
+    "books_folder": os.path.join(os.environ["USERPROFILE"], "documents", "Аудио книги"),
     "dark_theme": "1",
     "language": "ru",
 }
@@ -25,9 +23,7 @@ def init() -> None:
     else:
         config = _load_config()
         config = _validate_config(config)
-        logger.opt(lazy=True).trace(
-            "config: {data}", data=partial(pretty_view, config)
-        )
+        logger.opt(lazy=True).trace("config: {data}", data=partial(pretty_view, config))
         _add_to_env(config)
 
 
@@ -90,7 +86,7 @@ def _validate_config(config: dict) -> dict:
             config["books_folder"] = FIELDS["books_folder"]
             Path(FIELDS["books_folder"]).mkdir(parents=True, exist_ok=True)
             need_update_config = True
-        if config.get("language") not in {"ru", "en"}:
+        if config.get("language") not in {"ru", "en", "hy"}:
             config["language"] = FIELDS["language"]
             need_update_config = True
 
