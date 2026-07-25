@@ -1,0 +1,458 @@
+{
+    "version": "3.6.0",
+    "arch": "x32",
+    "update": {
+        "remove": [],
+        "new": [
+            "ABPlayer x32\\ABPlayer x32.exe",
+            "ABPlayer x32\\_internal\\base_library.zip",
+            "ABPlayer x32\\_internal\\locales\\en\\LC_MESSAGES\\base.mo",
+            "ABPlayer x32\\_internal\\locales\\hy\\LC_MESSAGES\\base.mo",
+            "ABPlayer x32\\_internal\\locales\\ru\\LC_MESSAGES\\base.mo",
+            "ABPlayer x32\\_internal\\static\\css\\book.css",
+            "ABPlayer x32\\_internal\\templates\\settings.html"
+        ]
+    },
+    "files": {
+        "ABPlayer x32": {
+            "ABPlayer x32.exe": "ecfb921d3bd74e90bc8fbf07272d06aa"
+        },
+        "ABPlayer x32\\_internal": {
+            "81d243bd2c585b0f4821__mypyc.cp312-win32.pyd": "73ca4f3f1480bfad922eef2b033ee5a0",
+            "api-ms-win-crt-convert-l1-1-0.dll": "5760bec3a8c82192d724254b80997b83",
+            "api-ms-win-crt-filesystem-l1-1-0.dll": "2ab82a2368023085ffb3e2c4df1483d3",
+            "api-ms-win-crt-heap-l1-1-0.dll": "4bce918c3f34c152ea99591b7501c932",
+            "api-ms-win-crt-locale-l1-1-0.dll": "53d8e61ba651a14e136c3ac3d30dfb35",
+            "api-ms-win-crt-math-l1-1-0.dll": "6db484b0d207fd72b5db5ca490bd4ca5",
+            "api-ms-win-crt-runtime-l1-1-0.dll": "8c137389afccacccbe5864fba3464f48",
+            "api-ms-win-crt-stdio-l1-1-0.dll": "549f6735f986e1ddc0c85a3502052fec",
+            "api-ms-win-crt-string-l1-1-0.dll": "8f0cb5ca0c982efcec40241f81f9cc11",
+            "api-ms-win-crt-time-l1-1-0.dll": "b3f20781c32907a02b16c8e8e2a32e74",
+            "api-ms-win-crt-utility-l1-1-0.dll": "ead03b9a61a23ff6275ca364a1c6536f",
+            "base_library.zip": "20af8bde554e12225e2a10ac30cc80b6",
+            "libcrypto-3.dll": "6a0059679746758aeae70c68128d6125",
+            "libffi-8.dll": "74d2b5e0120a6faae57042a9894c4430",
+            "libssl-3.dll": "4d465b99ecdd48ee5bd7da05261895b3",
+            "pyexpat.pyd": "e5931829327b6ce66e329777fc91aa6c",
+            "python3.dll": "4945b93f8dd31e0b888d740a8e4cc654",
+            "python312.dll": "7b82b2c836d5eb583b08f2545448f4e4",
+            "select.pyd": "5b8da401e5e45118f4194ded80457fd0",
+            "sqlite3.dll": "b34a9f6eca7f42b4464f1099e593bc60",
+            "ucrtbase.dll": "f0270079e98f80cd59ee4c45fe9c7697",
+            "unicodedata.pyd": "6448a6918f0df053e35c21f4b31993d1",
+            "VCRUNTIME140.dll": "656ffcbfe10e81b64a59f7bfc86581ea",
+            "_asyncio.pyd": "45a6e30198ece1dc464a170a07379021",
+            "_bz2.pyd": "adfc86be452499e216b2929a7c18dd74",
+            "_cffi_backend.cp312-win32.pyd": "b8d48f13fac9d2921ac3234147c31d3a",
+            "_ctypes.pyd": "33ff9cb7552d6eeee148c0fbd81d642b",
+            "_decimal.pyd": "8489b11f716d3c6002173648f3d26cb3",
+            "_elementtree.pyd": "deb34e986e1be121154f2fec953605c3",
+            "_hashlib.pyd": "4d501424d232a736c466e4ab1acfc4e9",
+            "_lzma.pyd": "017792b6a7b2ea92801d6a4a22cc0aac",
+            "_multiprocessing.pyd": "aa2bcbc455c7954b33e2b7cafe0b2129",
+            "_overlapped.pyd": "0287bde7314fb8c972f5aeaa51b54499",
+            "_queue.pyd": "afebd7071c45feb3f206d4ebeb720449",
+            "_socket.pyd": "cef898778bfa3710b449b36486bebb19",
+            "_sqlite3.pyd": "f76e5cf650e2d507072de34252d43c02",
+            "_ssl.pyd": "0808962ae6ea3dd0347ded3a79bc5435",
+            "_uuid.pyd": "b97484afab5612fff295c59ddeb7071b",
+            "_wmi.pyd": "33e7c8aff00646bb1012f2e3f8503121",
+            "_zoneinfo.pyd": "c31f8121df3ba5fae43a3d29bd45464e"
+        },
+        "ABPlayer x32\\_internal\\aiohttp": {
+            "_http_parser.cp312-win32.pyd": "a096cd9e9bc65a7b811f775f0c329985",
+            "_http_writer.cp312-win32.pyd": "e8e614e026d9d071a27d6705a56dd7c0"
+        },
+        "ABPlayer x32\\_internal\\aiohttp\\_websocket": {
+            "mask.cp312-win32.pyd": "5a45532b010ea2c743d69dc469cb8f0e",
+            "reader_c.cp312-win32.pyd": "177cc6a6adac851ed459114df8b89df4"
+        },
+        "ABPlayer x32\\_internal\\attrs-26.1.0.dist-info\\licenses": {
+            "LICENSE": "5e55731824cf9205cfabeab9a0600887"
+        },
+        "ABPlayer x32\\_internal\\bcrypt": {
+            "_bcrypt.pyd": "134cc785fe6fe44294773bc800c7f0b5"
+        },
+        "ABPlayer x32\\_internal\\bin": {
+            "akniga_decrypt.js": "74ccb9eb0ecbbf120c93319cf39d36e7",
+            "ffmpeg.exe": "8fa4cce0b142c970f17e94872937673f"
+        },
+        "ABPlayer x32\\_internal\\certifi": {
+            "cacert.pem": "3ff2cb6c83e4cd529491f71cd24ac916"
+        },
+        "ABPlayer x32\\_internal\\charset_normalizer": {
+            "cd.cp312-win32.pyd": "5e4573cb75e1b8eea1125d5fd9fffeb8",
+            "md.cp312-win32.pyd": "f4b5b2a5d6a75822487a3c2e8b9ba5ca"
+        },
+        "ABPlayer x32\\_internal\\click-8.4.1.dist-info\\licenses": {
+            "LICENSE.txt": "1fa98232fd645608937a0fdc82e999b8"
+        },
+        "ABPlayer x32\\_internal\\clr_loader\\ffi\\dlls\\amd64": {
+            "ClrLoader.dll": "b1e06e1d60d22eb8f4a8b4661e58e107"
+        },
+        "ABPlayer x32\\_internal\\clr_loader\\ffi\\dlls\\x86": {
+            "ClrLoader.dll": "29a1cd01e705b5da2217fa9dbbce09ab"
+        },
+        "ABPlayer x32\\_internal\\Crypto\\Cipher": {
+            "_ARC4.pyd": "ab6e6384cbb1472193fd0293e07bb190",
+            "_chacha20.pyd": "ef9e8e7d6df06c2c6bf4bc8e4831183e",
+            "_pkcs1_decode.pyd": "f9f545ad6ca461e63c4954c097c7091b",
+            "_raw_aes.pyd": "64413ccb41b34d5f3e891123f8f48c8e",
+            "_raw_aesni.pyd": "26917ee9a1aae86a45fda073b8d5b0bf",
+            "_raw_arc2.pyd": "c9c7c966b8901fd5ec927decbbbc2cf9",
+            "_raw_blowfish.pyd": "d047be1bf0d33d2ec7f23ca57cbf7f7b",
+            "_raw_cast.pyd": "9382d56cadf92b6e86d98fd2ff265499",
+            "_raw_cbc.pyd": "46ee17c96ea9d978de53e467982a703d",
+            "_raw_cfb.pyd": "3978fa72d9c17bd8770a5642094218bb",
+            "_raw_ctr.pyd": "2724c07c3c5db5c4c8a55e8433828e11",
+            "_raw_des.pyd": "fe2421ad60f51b574eab4dc47a45d053",
+            "_raw_des3.pyd": "5b5f3a54f0891fc388daaf3f3e4c5579",
+            "_raw_ecb.pyd": "2898ad856a6af7d097f5360c14dfe002",
+            "_raw_eksblowfish.pyd": "b28c88c31dec6f2d6cc2f36fd4e29af5",
+            "_raw_ocb.pyd": "ac9caaae20556dbb6e033ef8e61464da",
+            "_raw_ofb.pyd": "10e91e45b05879ddaa840001f2d281db",
+            "_Salsa20.pyd": "d179e5ab546f9d68d865d4ea41499db5"
+        },
+        "ABPlayer x32\\_internal\\Crypto\\Hash": {
+            "_BLAKE2b.pyd": "adb5064e58546007762e3ea28d290abd",
+            "_BLAKE2s.pyd": "86cb4356dc39186a3e674d033637ee14",
+            "_ghash_clmul.pyd": "51942ba502348647a2e115b808051c62",
+            "_ghash_portable.pyd": "98f18e767fc5c80b5d55a7b898a167a8",
+            "_keccak.pyd": "ce1dfcc0f28a04d9d8ed017fe54bf099",
+            "_MD2.pyd": "e5ac97b54f0a8534d106ebdcda5c303a",
+            "_MD4.pyd": "d3afa5eca88c607cb58f62084bdaad84",
+            "_MD5.pyd": "363ab0ca4788b093434a7882d8321acb",
+            "_poly1305.pyd": "3c33a2d7ee791e86aef826ba66c642d2",
+            "_RIPEMD160.pyd": "2bff65d5d7ab477c7bf01019dfd5ee16",
+            "_SHA1.pyd": "b5739ecb0e0c8526e9c446d4362e7c86",
+            "_SHA224.pyd": "17213b7663eda7255d1146c79bf9d8ce",
+            "_SHA256.pyd": "32e91e5c37caa3da1499ff7d520c8686",
+            "_SHA384.pyd": "1cab3d78df0c05398cf9da03d1f1aef5",
+            "_SHA512.pyd": "86227d3b0771b64b9e22c4be678431bf"
+        },
+        "ABPlayer x32\\_internal\\Crypto\\Math": {
+            "_modexp.pyd": "c22c2dbdad048359c1ee77876c605268"
+        },
+        "ABPlayer x32\\_internal\\Crypto\\Protocol": {
+            "_scrypt.pyd": "f86e73ddde08a2ee839fe1cd8500813f"
+        },
+        "ABPlayer x32\\_internal\\Crypto\\PublicKey": {
+            "_ec_ws.pyd": "ff7f37e9740f79672a698542d539b17f",
+            "_ed25519.pyd": "a4a5b5a55919977ec6b5ef0a250639fe",
+            "_ed448.pyd": "cc74fd90c9db7a858a588da728bf6153",
+            "_x25519.pyd": "cf8d7db375c66e5be85c8eb62076477c"
+        },
+        "ABPlayer x32\\_internal\\Crypto\\Util": {
+            "_cpuid_c.pyd": "a24e4cb20c34859f1cb08a2381c3101b",
+            "_strxor.pyd": "e06cca482ace443890f203478ed8e4a1"
+        },
+        "ABPlayer x32\\_internal\\cryptography\\hazmat\\bindings": {
+            "_rust.pyd": "c95e3d66ec94936a2e47130bf1330a71"
+        },
+        "ABPlayer x32\\_internal\\cryptography-48.0.1.dist-info\\licenses": {
+            "LICENSE": "8c3617db4fb6fae01f1d253ab91511e4",
+            "LICENSE.APACHE": "4e168cce331e5c827d4c2b68a6200e1b",
+            "LICENSE.BSD": "5ae30ba4123bc4f2fa49aa0b0dce887b"
+        },
+        "ABPlayer x32\\_internal\\flask-3.0.1.dist-info": {
+            "LICENSE.rst": "ffeffa59c90c9c4a033c7574f8f3fb75"
+        },
+        "ABPlayer x32\\_internal\\frozenlist": {
+            "_frozenlist.cp312-win32.pyd": "8d2e352dc0a5b73ae99b938ba03ff7d0"
+        },
+        "ABPlayer x32\\_internal\\itsdangerous-2.2.0.dist-info": {
+            "LICENSE.txt": "4cda9a0ebd516714f360b0e9418cfb37"
+        },
+        "ABPlayer x32\\_internal\\locales\\en\\LC_MESSAGES": {
+            "base.mo": "2438e23c5581f3d7682af11f65715d15"
+        },
+        "ABPlayer x32\\_internal\\locales\\hy\\LC_MESSAGES": {
+            "base.mo": "df41ecf5e488f0ec0c6b4ebcfca89ffe"
+        },
+        "ABPlayer x32\\_internal\\locales\\ru\\LC_MESSAGES": {
+            "base.mo": "91d13b9077e1bd5badf875febd03b931"
+        },
+        "ABPlayer x32\\_internal\\markupsafe": {
+            "_speedups.cp312-win32.pyd": "681890fa9d914a6c5c009a5d51e34d94"
+        },
+        "ABPlayer x32\\_internal\\markupsafe-3.0.3.dist-info\\licenses": {
+            "LICENSE.txt": "779964cd6648aa66466fb0d1a9629339"
+        },
+        "ABPlayer x32\\_internal\\multidict": {
+            "_multidict.cp312-win32.pyd": "1d631b3a4d99965d31b820e072c60fc4"
+        },
+        "ABPlayer x32\\_internal\\orjson": {
+            "orjson.cp312-win32.pyd": "760c7b361e89a37bc68654e700450528"
+        },
+        "ABPlayer x32\\_internal\\propcache": {
+            "_helpers_c.cp312-win32.pyd": "e9302838bc46fa503af6f68647d511c8"
+        },
+        "ABPlayer x32\\_internal\\pythonnet\\runtime": {
+            "Microsoft.Win32.Primitives.dll": "76b8d417c2f6416fa81eacc45977cea2",
+            "netstandard.dll": "0adf6f32f4d14f9b0be9aa94f7efb279",
+            "Python.Runtime.deps.json": "d63944302c0d2bc558a94c6056a61787",
+            "Python.Runtime.dll": "edf72c42a4f3844f079fa1ff0d597c00",
+            "Python.Runtime.xml": "8f8630bf19ea74ab70047e9419e7f7e9",
+            "System.AppContext.dll": "8cc4c7dfeb41b6c227488ce52d1a8e74",
+            "System.Collections.Concurrent.dll": "559c98eb9633c7ba1bc813f8e6e0e9a5",
+            "System.Collections.dll": "1d8aafeca1ea565b257384d3f64864b0",
+            "System.Collections.NonGeneric.dll": "45ff71114047dbf934c90e17677fa994",
+            "System.Collections.Specialized.dll": "b52c339601cb264f83df72d802e98687",
+            "System.ComponentModel.dll": "632cc8ad69b76fd9bb5847de1e1439f7",
+            "System.ComponentModel.EventBasedAsync.dll": "6067ecbab3c6dddb6bf7c49c7948caa8",
+            "System.ComponentModel.Primitives.dll": "2f39655ccfc010e32a7240d9bf5d0852",
+            "System.ComponentModel.TypeConverter.dll": "d1699287934da769fc31e07f80762511",
+            "System.Console.dll": "ea9376c17ee0148f0503028ad4501a92",
+            "System.Data.Common.dll": "d712a5a82a446086443ce00b610d8a5d",
+            "System.Diagnostics.Contracts.dll": "99373ab10858746aad424f28b48277f5",
+            "System.Diagnostics.Debug.dll": "8b8c402311d7ab87e588675e736414fd",
+            "System.Diagnostics.FileVersionInfo.dll": "0d9a641105098d642567b22101a4de0b",
+            "System.Diagnostics.Process.dll": "d86b0aca05321569d9383dc7c4e9e934",
+            "System.Diagnostics.StackTrace.dll": "fa98a0f020248c2be1dd40c07092f22a",
+            "System.Diagnostics.TextWriterTraceListener.dll": "a964808487e671bb369dbc0e4dc5a947",
+            "System.Diagnostics.Tools.dll": "27c7d752c11c3f43f28eb31968e73e2b",
+            "System.Diagnostics.TraceSource.dll": "37be4cce0ed037f8d9a7a3940bd2a2e1",
+            "System.Diagnostics.Tracing.dll": "60f59659db517c2f4dd4c5c583d43097",
+            "System.Drawing.Primitives.dll": "29b0a1554e54611ebba7911049f26fd3",
+            "System.Dynamic.Runtime.dll": "c5cadb1409f25b6a1c7a6dd4c2df236b",
+            "System.Globalization.Calendars.dll": "ac2f4b435ddf0600d7a866f42f3b40d9",
+            "System.Globalization.dll": "ae023bb0beee5189a07c7fd4e0cf3fca",
+            "System.Globalization.Extensions.dll": "c7c93de0627833900b8379fd181b7351",
+            "System.IO.Compression.dll": "33b8972fa6b00b8922210ca95e5745d1",
+            "System.IO.Compression.ZipFile.dll": "bb1a520f25bb93ace4dd0a060fba677d",
+            "System.IO.dll": "809fdbd7422a3e02c89244dc530a3367",
+            "System.IO.FileSystem.dll": "bfceb4faca75681137455cd70f8038b6",
+            "System.IO.FileSystem.DriveInfo.dll": "2fcb2158fc41d97e2bb71953664b99b9",
+            "System.IO.FileSystem.Primitives.dll": "51b07204081bde29a1f84a3b48554186",
+            "System.IO.FileSystem.Watcher.dll": "3772a3a7e55178ec90ecb607aba28511",
+            "System.IO.IsolatedStorage.dll": "ab8d293bcd7a13e83565b4afa8438988",
+            "System.IO.MemoryMappedFiles.dll": "34e21101faf71a27c6819cc051debc9d",
+            "System.IO.Pipes.dll": "58a2e5ac0510b9223236b9317c505b58",
+            "System.IO.UnmanagedMemoryStream.dll": "d74405753f829e75e89bba5ebc296112",
+            "System.Linq.dll": "5e33930fe2e0867cb1f9fabeddfbd7b1",
+            "System.Linq.Expressions.dll": "3b49bf361f3116de28176b40845bc199",
+            "System.Linq.Parallel.dll": "8be0caa60074176fa1e7e63c0aeb6c01",
+            "System.Linq.Queryable.dll": "e04cdb6229d83768285acb08d870f23a",
+            "System.Net.Http.dll": "665e355cbed5fe5f7bebc3cb23e68649",
+            "System.Net.NameResolution.dll": "2eec710dbaacd32bedfca09eca8de52d",
+            "System.Net.NetworkInformation.dll": "f39a35095cfd0019d6d4bb8461750bf0",
+            "System.Net.Ping.dll": "2a459c2c395f54352a16de4aa0e5407f",
+            "System.Net.Primitives.dll": "562f67001889cdbc2531947636418ee5",
+            "System.Net.Requests.dll": "28141960a88365df6a60b0c6ff831b0b",
+            "System.Net.Security.dll": "8d00682e84d1d773d2160b63c0380ba6",
+            "System.Net.Sockets.dll": "8c9d9f45b85526e491f6555b1566a41c",
+            "System.Net.WebHeaderCollection.dll": "7da1fee108a0750f47b70f25fe2cc55a",
+            "System.Net.WebSockets.Client.dll": "e06bae626965fbdb0bae5437498b5155",
+            "System.Net.WebSockets.dll": "2e6378feaeee2f745417fc025c7850f9",
+            "System.ObjectModel.dll": "55d9528d161567a19dbb71244b3ae3ce",
+            "System.Reflection.dll": "1a3da139180e9fab380033d8d1fe3995",
+            "System.Reflection.Extensions.dll": "defaadd4a92d4d348b0827ab8159d2fe",
+            "System.Reflection.Primitives.dll": "cf318475e6a7a56789abb0f98c37abe1",
+            "System.Resources.Reader.dll": "f1cc91d25b52c7504dc5beab5d0f498c",
+            "System.Resources.ResourceManager.dll": "9e71dfce86f14beeb8f3e9f00d0a472e",
+            "System.Resources.Writer.dll": "05d1b950c470ea8b0aa357f9a59cf264",
+            "System.Runtime.CompilerServices.VisualC.dll": "9f31b6954fd453f13b5f39da36f2e8eb",
+            "System.Runtime.dll": "0e35085c130d2d91e5241334be7ef0da",
+            "System.Runtime.Extensions.dll": "b0346a4c5fa0fac135509a0e7d3c4449",
+            "System.Runtime.Handles.dll": "65fbba7a86b3e175200ae44727ab40e5",
+            "System.Runtime.InteropServices.dll": "d7e74ea95786a02687ce43c356abdc95",
+            "System.Runtime.InteropServices.RuntimeInformation.dll": "05af54a1c6450b98ad0fb0e857b6a523",
+            "System.Runtime.Numerics.dll": "6ccca0ba6a7b9caf8b8d3b0287dbed8b",
+            "System.Runtime.Serialization.Formatters.dll": "a42c32f4e98a9656fc2fed72d30e9380",
+            "System.Runtime.Serialization.Json.dll": "e1e2239979b853157ba75310fea7e65d",
+            "System.Runtime.Serialization.Primitives.dll": "3373a24450373caf0cbb756e10097fd4",
+            "System.Runtime.Serialization.Xml.dll": "9087373eee85190daf8915e614b1e4bd",
+            "System.Security.Claims.dll": "99604779c668d9b8ef913854b9a24f9d",
+            "System.Security.Cryptography.Algorithms.dll": "e4a1681e09aec6efb00fb2a9355a1296",
+            "System.Security.Cryptography.Csp.dll": "f554762fc38f81cb22d1dc8ab5cd40d5",
+            "System.Security.Cryptography.Encoding.dll": "7ab10b31c5ce290672b319d403751e95",
+            "System.Security.Cryptography.Primitives.dll": "a60084f9988c7907f7092c143c8d3818",
+            "System.Security.Cryptography.X509Certificates.dll": "06d000552ed6785988ae188fc35d1b86",
+            "System.Security.Principal.dll": "6dcd91b6a029794728f4edeb2bf2e42d",
+            "System.Security.SecureString.dll": "4523f60270149bad67f6ae63375d2cdb",
+            "System.Text.Encoding.dll": "7f65ccbf58c39f3853bb8dc4137dfd12",
+            "System.Text.Encoding.Extensions.dll": "d40515a84448b91315f956e6d1a6c64b",
+            "System.Text.RegularExpressions.dll": "7d317d88f9860a18ecf7fb90b33995d3",
+            "System.Threading.dll": "11d674cfc81b7102c0bc6ffe58f6ac5e",
+            "System.Threading.Overlapped.dll": "1a890c488cf2ecd406b804e7e3c5b7f0",
+            "System.Threading.Tasks.dll": "0ad301ee2b7282b87dcd0d862efe14dc",
+            "System.Threading.Tasks.Parallel.dll": "9088029e38b2a393f22afd9e576ce86e",
+            "System.Threading.Thread.dll": "fdb3a743b2dae5924cba88a5c865128d",
+            "System.Threading.ThreadPool.dll": "18ce4ecc42fc8d999ef091d812472cf0",
+            "System.Threading.Timer.dll": "824053272b268c577e9adf17ed398142",
+            "System.ValueTuple.dll": "c8456355b990c6347ab2f3621e2010be",
+            "System.Xml.ReaderWriter.dll": "090ff56c4fe2eeff2e16f03099ad71e1",
+            "System.Xml.XDocument.dll": "37e21b63959f243a157534133f85c5af",
+            "System.Xml.XmlDocument.dll": "328d12af9613b0f3f25320b85dcccbf4",
+            "System.Xml.XmlSerializer.dll": "d9f02d9f7da653f82e75112a2ab99ce6",
+            "System.Xml.XPath.dll": "415e3ab72f17f10d646b3e2c7a76f612",
+            "System.Xml.XPath.XDocument.dll": "a5f541655a9edc24f4b5184a40e40227"
+        },
+        "ABPlayer x32\\_internal\\setuptools\\_vendor\\importlib_metadata-8.7.1.dist-info\\licenses": {
+            "LICENSE": "cf73015ea0156450506e8000d1f7fa37"
+        },
+        "ABPlayer x32\\_internal\\setuptools\\_vendor\\jaraco\\text": {
+            "Lorem ipsum.txt": "4ce7501f6608f6ce4011d627979e1ae4"
+        },
+        "ABPlayer x32\\_internal\\static\\css": {
+            "base.css": "be14f2af74a14f68e2e98081872836e3",
+            "book.css": "00f31aead287a90adb5551147b175f95",
+            "dark_theme.css": "1b1693093ec1e3e97dcda3153856c8e4",
+            "downloads.css": "ef7e42727d47692983b04088144846d2",
+            "library.css": "01968ad0f3fcbde15f705e44f71a4f1a",
+            "licensed.css": "c7a6b05d84e070a0625b45c0f611f34f",
+            "light_theme.css": "1cdc9db905995abf5604987b1047a994",
+            "search.css": "30cd0761cb823e19459f7664d3181e71",
+            "settings.css": "a1fce73e62302bac927c90bddf7e7bd8"
+        },
+        "ABPlayer x32\\_internal\\static\\images": {
+            "angle_down.svg": "4f61c0af5dd936ce651018c3b92fdfe5",
+            "angle_left.svg": "54f2901167749c8ad17ade962cc61e5d",
+            "angle_right.svg": "14a948ae0fc9061804a2621015657429",
+            "book.svg": "22a57cb5b72181668e88424ad984a1af",
+            "box-arrow-up-right.svg": "3bbce06b57d7227711597f79088b45ec",
+            "calendar.svg": "66350c4fbda8188b5752b593dc2ec0a1",
+            "check.svg": "4ccaffb5db36cec08e7d6e7641fcb89e",
+            "clock.svg": "7a7f3e52f6c2bb0c440ba83061fc1d63",
+            "cross.svg": "1d2b9a17789a070fb2a1d911609c3874",
+            "dash.svg": "0700cb43032cbf0379bec89972fe561b",
+            "double_angle_left.svg": "22f4a4d51b99f38880b94b9ff6828f59",
+            "double_angle_right.svg": "760c3a833ab30520154c2eacbbc05427",
+            "download.svg": "08ed6bd3ecbc443837b937fd092006ee",
+            "filter.svg": "d1a4c0a0fca73b54d4faba45f42c8ef8",
+            "folder.svg": "f49eb64ca3f072442749644cbe0a528c",
+            "hdd.svg": "f6fc3b89499a7ed7b7cd30f6732abc42",
+            "hide_menu.svg": "1c99167f177eb34158eb899bb4bcfccd",
+            "icon.ico": "c26c52dfb5ea537c08742087a4d5a76e",
+            "icon.png": "40a66aa7aab0dae5b993e31f22a61b38",
+            "licensed.svg": "b95e4a3296c6bba537db29f7a0e188ac",
+            "line.svg": "6568765186e2c85849da3613b76ba931",
+            "loading.gif": "76a00c2e06534ae4d26099ca44a5e1a0",
+            "loading_app.gif": "254d5b0619a720f1fc681aaab0c791c6",
+            "low_volume.svg": "cce0ff8dd8ce267b258da1925728c16c",
+            "medium_volume.svg": "d8801d6d97ebb3eae0a0eafe1b6f7ef3",
+            "menu.svg": "5a9c6a2081ce069f6a1838f15993f0f0",
+            "mic.svg": "ad851b4fb39bc3f9d213da427829126b",
+            "mute.svg": "bbedd08f278f3b8314790e44e29acce6",
+            "overlay.svg": "e3c535f655f6882c71745acec2c79291",
+            "pause.svg": "034805543c8ecea0997b105438010100",
+            "person.svg": "860546f55938aabab0b1a37cfdba40ae",
+            "play.svg": "f26204503ab91ca29237d1bccb3098ac",
+            "plus.svg": "74c4f1e480009dbb45921b5d23cc5b1c",
+            "resize_bottom_right.svg": "4d7c303d31d212985a8ad33cde3f63b2",
+            "search.svg": "b98fb67f15c1233868a44a81b041adff",
+            "settings.svg": "7674dc2a84a2870c9925318e575dc7a9",
+            "sort_down.svg": "96fef511567e325001693b352a69bdd8",
+            "sort_up.svg": "c0a7f5471cbc6bb8fac7c5ec692adf3f",
+            "square.svg": "b224aeb54be1ab932d49ff2de15bc036",
+            "star.svg": "7b43fadc2b44a35ea4fddec423617fb8",
+            "star_fill.svg": "08dcd4b59c028a645c53130170a443ea",
+            "tag.svg": "aaf826c57f16c3108c88060d6d8226ee",
+            "trash.svg": "d7749085d1b4a50def7db433417750fc",
+            "volume.svg": "523e97fc834eebb8e34ebaf5d76c1fce",
+            "watch.svg": "50f5d12c21ed049daf63ee5ac276f805",
+            "window.svg": "84a5f105d9992d0fab1d4e900d48eb5f",
+            "x.svg": "cf0a106d1404cf3fbbba5971377e99c9"
+        },
+        "ABPlayer x32\\_internal\\static\\js\\plyr": {
+            "captions.js": "eb722e67730ea8361827a6097505fe5e",
+            "console.js": "552b0233b9c16efa18606b258e6aa37a",
+            "controls.js": "bb7fa030f4be74b8d59af1dcfd3f341b",
+            "fullscreen.js": "0d0b7afad8126372b99d300ee63a1edf",
+            "html5.js": "31cd2aa8bf1adc4db242efb8a09385a9",
+            "LICENSE.md": "1e3a7477e41fc3aa1c67935f620c5d1d",
+            "listeners.js": "bd3f6e511cdcf6b184ea1f4766ccfd8a",
+            "media.js": "be9a3b76841ff18e2fc19c3657f15f8a",
+            "plyr.js": "6179dba90f828d6fac1c2f2c9e97021c",
+            "source.js": "3f42159705d5a240999ffda9b64e9f9c",
+            "storage.js": "d68842dc2e2870fdf2890c67c36f3494",
+            "support.js": "daafe0988bfc27112d7b9faf4a7f44cd",
+            "ui.js": "67b1da26a27d5c6eb9ef85303832bb88"
+        },
+        "ABPlayer x32\\_internal\\static\\js\\plyr\\config": {
+            "defaults.js": "aaf217158a87d58d19829a94dc279002",
+            "states.js": "20489ed7b7a4a32e20325d8487c26135",
+            "types.js": "b657436922e5568e7f06cd42d8446b7a"
+        },
+        "ABPlayer x32\\_internal\\static\\js\\plyr\\plugins": {
+            "ads.js": "1518045c5e4014db5040d0e43fc52c4e",
+            "preview-thumbnails.js": "056bf0c4b2ad866e99e615433804b8eb",
+            "vimeo.js": "f8cde7d7ccc667a5262479922761497b",
+            "youtube.js": "3d19a6113cee304ed794f9f6b08cef19"
+        },
+        "ABPlayer x32\\_internal\\static\\js\\plyr\\utils": {
+            "animation.js": "359e1ace29269d9c5a728c4111f17ae4",
+            "arrays.js": "d8bbf79a66485907ba1974f90aca713f",
+            "browser.js": "eb2a8835ffaf64d11b7d42baa27599f4",
+            "elements.js": "daa1d25a79739c47439ccc604976443f",
+            "events.js": "0b68fd27c109e91209403b428b8d131f",
+            "fetch.js": "ee2c32a0b03ef5023f718ebc816823c2",
+            "i18n.js": "a7dae80f5c925b0726f82ef38fc8d2dc",
+            "is.js": "2a5d9594da6a7e997bbc279bdf33222b",
+            "load-image.js": "0d75c3ba8c391b94ef167ab1b6e20021",
+            "load-script.js": "4c564a6d85701251a4a8d040493b718b",
+            "load-sprite.js": "9dfb236aa884cb087237c90cef64b6e7",
+            "numbers.js": "e50c7afd265ebd9fb48804481d0834b9",
+            "objects.js": "c397bc494c7e28c6bf10f393bf62697e",
+            "promise.js": "294906167375d54836437a72b49ae77f",
+            "strings.js": "7cbdfbf16c5b7e5bf523e91398638858",
+            "style.js": "6f536761b7d483936ee0a9a025c92e12",
+            "time.js": "27f7676264584a365db7c70fae2b35c1",
+            "urls.js": "c31dd63d0ec076581e68e1e6dbf89236"
+        },
+        "ABPlayer x32\\_internal\\templates": {
+            "base.html": "e2657d5e7b7abf7af96a06192804889b",
+            "book.html": "ebd826d755ad8c34dc099a04e287e88c",
+            "downloads.html": "341aa15cfa0350d75f608a0cbed4e6b0",
+            "library.html": "e13697384e1bb086b41d48d9d0b8a39c",
+            "licensed.html": "ca5208a7144fc01209624f3d25cb5359",
+            "search.html": "f5adf645787c6a982fd5d04d4bb2d5d8",
+            "settings.html": "9eb9d2180976544fd7cdae752978c5c5",
+            "starting_window.html": "4219c9d8b598160b6ffd57cd944e3c23"
+        },
+        "ABPlayer x32\\_internal\\templates\\js": {
+            "base.js": "95fc72d9362455afc51178d7e6566675",
+            "book.js": "d433721fb9dc40becb0fdf031646dd37",
+            "downloads.js": "fbf8e2d3ce1898d05354b872ca7ffe3c",
+            "library.js": "e8a8f4b7dfba05dc291c77197d66ebb6",
+            "licensed.js": "82dd9b1d6ef690c16098e9c331dfcf24",
+            "search.js": "7b7f39a9bf89b5a027603280014da2f2",
+            "settings.js": "c98a8b6a226125f72d7ee7d263c6abd3"
+        },
+        "ABPlayer x32\\_internal\\websockets": {
+            "speedups.cp312-win32.pyd": "eb525b1aa580c4019bcbf441dc771025"
+        },
+        "ABPlayer x32\\_internal\\websockets-15.0.1.dist-info": {
+            "LICENSE": "e44c4765ccf7b55945354fbdc20f4db9"
+        },
+        "ABPlayer x32\\_internal\\webview\\js": {
+            "api.js": "1c3d5c8624b15391910ce925fc57cfba",
+            "customize.js": "a63dbd8ed7b972cb3df70eae12506d30",
+            "finish.js": "6e675984a2dbe8f8a760b026ca90c297",
+            "state.js": "72b09eaa481e7d0d67c831b98f51944b"
+        },
+        "ABPlayer x32\\_internal\\webview\\js\\lib": {
+            "dom_json.js": "beb9e8c97e79720cbc6197549bd1ff57",
+            "polyfill.js": "1a39f00d8ed373bd66c0959fb2d98faf"
+        },
+        "ABPlayer x32\\_internal\\webview\\lib": {
+            "Microsoft.Web.WebView2.Core.dll": "c334bf0e13293444c1abe63572578fff",
+            "Microsoft.Web.WebView2.WinForms.dll": "a934654c9f25d855091fe5b970f8e95d",
+            "pywebview-android.jar": "30b2d1c7cdb93e37bbf7bb9b3a7929f0",
+            "WebBrowserInterop.x64.dll": "3e8485e5896d6d89912ab66fd0038e46",
+            "WebBrowserInterop.x86.dll": "e9024eeed33115fecc30c1816bee370f"
+        },
+        "ABPlayer x32\\_internal\\webview\\lib\\runtimes\\win-arm64\\native": {
+            "WebView2Loader.dll": "30bb2f281192e98dfaba9f2b6f59fe3f"
+        },
+        "ABPlayer x32\\_internal\\webview\\lib\\runtimes\\win-x64\\native": {
+            "WebView2Loader.dll": "c732e408181c4d36a170323e8481c6ae"
+        },
+        "ABPlayer x32\\_internal\\webview\\lib\\runtimes\\win-x86\\native": {
+            "WebView2Loader.dll": "23e935db8eacb60046ef670b961d5ab6"
+        },
+        "ABPlayer x32\\_internal\\werkzeug-3.1.8.dist-info\\licenses": {
+            "LICENSE.txt": "5dc88300786f1c214c1e9827a5229462"
+        }
+    }
+}
