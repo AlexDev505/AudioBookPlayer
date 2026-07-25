@@ -13,6 +13,7 @@ from .izibuk import Izibuk
 from .knigavuhe import KnigaVUhe
 from .librivox import LibriVox
 from .yakniga import Yakniga
+from .uknig import Uknig
 
 if getattr(sys, "frozen", False):
     FROZEN = True

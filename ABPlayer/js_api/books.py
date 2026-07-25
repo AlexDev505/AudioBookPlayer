@@ -156,6 +156,7 @@ class BooksApi(JSApi):
                 f"getting book ({url}) raises {type(err).__name__}: {err}"
             )
             logger.exception(err)
+            return UnableToFetchBook()
         except DriverNotAuthenticated:
             self.logout_driver(driver.driver_name)
             return NotAuthenticated()
@@ -781,3 +782,8 @@ class WaitForDownloadingEnd(JSApiError):
 class NotAuthenticated(JSApiError):
     code = 10
     message = _("driver.not_authenticated")
+
+
+class UnableToFetchBook(JSApiError):
+    code = 11
+    message = _("book.unable_to_fetch_book")

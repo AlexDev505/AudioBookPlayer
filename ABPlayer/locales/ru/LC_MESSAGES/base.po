@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-01 00:37+0700\n"
+"POT-Creation-Date: 2026-07-25 15:16+0800\n"
 "PO-Revision-Date: 2025-03-14 02:08+0700\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -17,55 +17,60 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.17.0\n"
+"Generated-By: Babel 2.18.0\n"
 
-#: ../../abplayer/drivers/akniga.py:109 ../../abplayer/drivers/akniga.py:245
-#: ../../abplayer/drivers/izibuk.py:24 ../../abplayer/drivers/izibuk.py:82
-#: ../../abplayer/drivers/izibuk.py:132 ../../abplayer/drivers/knigavuhe.py:33
+#: ../../abplayer/drivers/akniga.py:99 ../../abplayer/drivers/akniga.py:227
+#: ../../abplayer/drivers/izibuk.py:25 ../../abplayer/drivers/izibuk.py:83
+#: ../../abplayer/drivers/izibuk.py:133 ../../abplayer/drivers/knigavuhe.py:33
 #: ../../abplayer/drivers/knigavuhe.py:84
 #: ../../abplayer/drivers/knigavuhe.py:157
-#: ../../abplayer/drivers/librivox.py:71 ../../abplayer/drivers/librivox.py:157
-#: ../../abplayer/drivers/yakniga.py:159
+#: ../../abplayer/drivers/librivox.py:71 ../../abplayer/drivers/librivox.py:158
+#: ../../abplayer/drivers/uknig.py:25 ../../abplayer/drivers/uknig.py:76
+#: ../../abplayer/drivers/uknig.py:123 ../../abplayer/drivers/yakniga.py:159
 msgid "unknown_author"
 msgstr "Неизвестный автор"
 
-#: ../../abplayer/js_api/books.py:724
+#: ../../abplayer/js_api/books.py:754
 msgid "no_suitable_driver"
 msgstr "Нет подходящего драйвера"
 
-#: ../../abplayer/js_api/books.py:729
+#: ../../abplayer/js_api/books.py:759
 msgid "book.already_exists"
 msgstr "Книга уже добавлена в библиотеку"
 
-#: ../../abplayer/js_api/books.py:734
+#: ../../abplayer/js_api/books.py:764
 msgid "book.not_found"
 msgstr "Книга не найдена"
 
-#: ../../abplayer/js_api/books.py:739
+#: ../../abplayer/js_api/books.py:769
 msgid "book.already_downloaded"
 msgstr "Книга скачивается или уже скачана"
 
-#: ../../abplayer/js_api/books.py:744
+#: ../../abplayer/js_api/books.py:774
 msgid "book.not_downloaded"
 msgstr "Книга не скачана"
 
-#: ../../abplayer/js_api/books.py:749
+#: ../../abplayer/js_api/books.py:779
 msgid "book.wait_for_similar_book_downloading"
 msgstr "Дождитесь окончания скачивания книги похожей книги"
 
-#: ../../abplayer/js_api/books.py:754
+#: ../../abplayer/js_api/books.py:784
 msgid "driver.not_authenticated"
-msgstr ""
+msgstr "Нет авторизации"
+
+#: ../../abplayer/js_api/books.py:789
+msgid "book.unable_to_fetch_book"
+msgstr "Не удалось получить данные книги"
 
 #: ../../abplayer/js_api/js_api.py:73
 msgid "connection_issues"
 msgstr "Проблемы с соединением"
 
-#: ../../abplayer/js_api/settings.py:412
+#: ../../abplayer/js_api/settings.py:415
 msgid "canceled"
 msgstr "Операция отменена"
 
-#: ../../abplayer/js_api/settings.py:417
+#: ../../abplayer/js_api/settings.py:420
 msgid "update.file_not_found"
 msgstr "Файл обновления не найден"
 
@@ -189,40 +194,40 @@ msgstr "Тёмная тема"
 msgid "language"
 msgstr "Язык (Language)"
 
-#: ../../abplayer/web/templates/settings.html:44
+#: ../../abplayer/web/templates/settings.html:51
 msgid "storage"
 msgstr "Хранилище"
 
-#: ../../abplayer/web/templates/settings.html:48
+#: ../../abplayer/web/templates/settings.html:55
 msgid "books_folder"
 msgstr "Папка для книг"
 
-#: ../../abplayer/web/templates/settings.html:51
+#: ../../abplayer/web/templates/settings.html:58
 msgid "open"
 msgstr "Открыть"
 
-#: ../../abplayer/web/templates/settings.html:54
+#: ../../abplayer/web/templates/settings.html:61
 msgid "change"
 msgstr "Изменить"
 
-#: ../../abplayer/web/templates/settings.html:68
+#: ../../abplayer/web/templates/settings.html:75
 msgid "version"
 msgstr "Версия"
 
-#: ../../abplayer/web/templates/settings.html:73
+#: ../../abplayer/web/templates/settings.html:80
 msgid "developer"
 msgstr "Разработчик"
 
-#: ../../abplayer/web/templates/settings.html:77
-#: ../../abplayer/web/templates/settings.html:80
+#: ../../abplayer/web/templates/settings.html:84
+#: ../../abplayer/web/templates/settings.html:87
 msgid "localization_by_name"
 msgstr ""
 
-#: ../../abplayer/web/templates/settings.html:79
+#: ../../abplayer/web/templates/settings.html:86
 msgid "localization_by_url"
 msgstr ""
 
-#: ../../abplayer/web/templates/settings.html:88
+#: ../../abplayer/web/templates/settings.html:95
 msgid "project_page"
 msgstr "Страница проекта"
 
@@ -247,19 +252,19 @@ msgstr "войти в аккаунт"
 msgid "book.added"
 msgstr "Добавлена"
 
-#: ../../abplayer/web/templates/js/book.js:194
-#: ../../abplayer/web/templates/js/book.js:197
-#: ../../abplayer/web/templates/js/book.js:230
-#: ../../abplayer/web/templates/js/book.js:392
+#: ../../abplayer/web/templates/js/book.js:200
+#: ../../abplayer/web/templates/js/book.js:203
+#: ../../abplayer/web/templates/js/book.js:246
+#: ../../abplayer/web/templates/js/book.js:413
 #: ../../abplayer/web/templates/js/library.js:276
 msgid "book.listening_progress"
 msgstr "прослушано"
 
-#: ../../abplayer/web/templates/js/book.js:398
+#: ../../abplayer/web/templates/js/book.js:419
 msgid "book.mark_as_new"
 msgstr "Отметить как новую"
 
-#: ../../abplayer/web/templates/js/book.js:407
+#: ../../abplayer/web/templates/js/book.js:428
 msgid "book.mark_as_finished"
 msgstr "Отметить как прослушанную"
 
