@@ -203,6 +203,7 @@
     height: 100%;
     width: var(--current-item-percents);
     background-color: var(--dim-fg);
+    pointer-events: none;
 }
 
 #book-info {
