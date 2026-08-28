@@ -1,6 +1,7 @@
 const smallPlayer = document.getElementById("small-player");
 opened_book = null;
 last_stop_flag_time = 0;
+let last_smtc_update_time = 0;
 
 page("book-page").onShow = function (el) {
   addUrlParams({ page: el.id });
@@ -149,39 +150,82 @@ function loadBookData(bid) {
   });
 }
 
+
+
 document.addEventListener("DOMContentLoaded", (event) => {
-  player = new window.Plyr("#audio-player", { storage: true, controls: [] });
+
+  const audioElement = document.querySelector("#audio-player");
+
+  player = new window.Plyr(audioElement, { storage: true, controls: [] });
+
+  
+
+  function updateSMTC() {
+    if (!player.current_book) return;
+
+    const position =
+      player.previous_items_duration + player.currentTime;
+
+    const duration = player.total_duration;
+
+    pywebview.api.update_playback(
+      position,
+      duration,
+      player.playing
+    );
+  }
+
   for (let scale of document.querySelectorAll('input[type="range"]')) {
     scale.oninput = scaleOninputDecorator(scale.oninput);
     scale.oninput();
   }
+
   player.on("pause", (event) => {
-    let smallPlaybackControl = smallPlayer.querySelector(
-      ".small-playback-control",
-    );
-    smallPlaybackControl.classList.add("play");
-    smallPlaybackControl.classList.remove("pause");
-    if (opened_book && player.current_book.bid != opened_book.bid) return;
-    let bigPlaybackControl = document.getElementById("toggle-playback-btn");
-    bigPlaybackControl.classList.add("play-button");
-    bigPlaybackControl.classList.remove("pause-button");
+      let smallPlaybackControl = smallPlayer.querySelector(
+          ".small-playback-control"
+      );
+
+      smallPlaybackControl.classList.add("play");
+      smallPlaybackControl.classList.remove("pause");
+
+      updateSMTC()
+
+      if (opened_book && player.current_book.bid != opened_book.bid) return;
+
+      let bigPlaybackControl = document.getElementById("toggle-playback-btn");
+      bigPlaybackControl.classList.add("play-button");
+      bigPlaybackControl.classList.remove("pause-button");
   });
+
   player.on("play", (event) => {
-    if (player.current_book.status != "started") {
-      pywebview.api.mark_as_started(player.current_book.bid);
-      player.current_book.status = "started";
-    }
-    let smallPlaybackControl = smallPlayer.querySelector(
-      ".small-playback-control",
-    );
-    smallPlaybackControl.classList.remove("play");
-    smallPlaybackControl.classList.add("pause");
-    if (opened_book && player.current_book.bid != opened_book.bid) return;
-    let bigPlaybackControl = document.getElementById("toggle-playback-btn");
-    bigPlaybackControl.classList.remove("play-button");
-    bigPlaybackControl.classList.add("pause-button");
+      if (player.current_book.status != "started") {
+          pywebview.api.mark_as_started(player.current_book.bid);
+          player.current_book.status = "started";
+      }
+      
+      updateSMTC();
+
+      let smallPlaybackControl = smallPlayer.querySelector(
+          ".small-playback-control"
+      );
+      smallPlaybackControl.classList.remove("play");
+      smallPlaybackControl.classList.add("pause");
+
+      if (opened_book && player.current_book.bid != opened_book.bid) return;
+
+      let bigPlaybackControl = document.getElementById("toggle-playback-btn");
+      bigPlaybackControl.classList.remove("play-button");
+      bigPlaybackControl.classList.add("pause-button");
   });
+
   player.on("timeupdate", (event) => {
+
+    if (player.playing && performance.now() - last_smtc_update_time >= 1000) {
+        last_smtc_update_time = performance.now();
+
+        updateSMTC();
+    }
+
     let listening_progress = Math.floor(
       (player.previous_items_duration + player.currentTime) /
         (player.total_duration / 100),
@@ -223,6 +267,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       return pywebview.api.mark_as_finished(player.current_book.bid);
     }
     _selectItem(next_item);
+    updateSMTC();
     player.play();
   });
 });
@@ -253,6 +298,10 @@ function initBook(book) {
   for (let item of book.items)
     total_duration += item.end_time - item.start_time;
   player.total_duration = total_duration;
+
+  pywebview.api.set_media_metadata(book.name, book.author)
+  
+  
   _selectItem(book.stop_flag.item);
   if (book.stop_flag.time) {
     player.play();

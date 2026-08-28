@@ -4,6 +4,12 @@ from js_api import JSApi
 from loguru import logger
 from web.app import app
 
+from importlib.metadata import version
+
+import webview
+
+
+# Привязываем функцию к событию 'shown' (окно появилось, движок готов к тонкой настройке)
 
 def main_window() -> webview.Window:
     """
@@ -19,12 +25,15 @@ def main_window() -> webview.Window:
 
     def _on_shown():
         logger.debug("main window launched")
+
         js_api.init(window)
+        
 
     logger.info("launching main window...")
 
     js_api = JSApi()
     temp_data = temp_file.load()
+    
     window = webview.create_window(
         "ABPLayer",
         app,
@@ -36,10 +45,11 @@ def main_window() -> webview.Window:
         background_color="#202225",
         js_api=js_api,
     )
-
+    
     # Adding event handlers
     window.events.loaded += _on_loaded
     window.events.closed += _on_closed
     window.events.shown += _on_shown
+    
 
     return window

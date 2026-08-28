@@ -9,7 +9,6 @@ import webview
 from loguru import logger
 from tools import pretty_view
 
-
 class JSApi:
     sections: list[ty.Type[JSApi]] = []
 
@@ -17,13 +16,18 @@ class JSApi:
         """
         Registers methods for further invocation from the JS environment.
         """
-        for section in self.sections:
-            section = section()
+        self._sections = []
+        for section_class in self.sections:
+            section = section_class()
+            self._sections.append(section)
+
             for name in dir(section):
                 if not name.startswith("_"):
-                    func = section.__getattribute__(name)
-                    if (ismethod(func) or isfunction(func)) and name not in dir(
-                        JSApi
+                    func = getattr(section, name)
+
+                    if (
+                        (ismethod(func) or isfunction(func))
+                        and name not in dir(JSApi)
                     ):
                         window.expose(func)
 

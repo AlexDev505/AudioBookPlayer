@@ -2,6 +2,7 @@ import os
 import time
 from functools import partial
 
+
 import config
 import locales
 import webview
@@ -12,6 +13,8 @@ from loguru import logger
 from models.book import Book
 from tools import pretty_view
 from web.app import app
+
+
 
 
 def create_starting_window() -> webview.Window:
@@ -38,6 +41,8 @@ def create_starting_window() -> webview.Window:
         easy_drag=True,
         background_color="#202225",
     )
+    
+    
 
     # Adding event handlers
     window.events.loaded += _on_loaded
