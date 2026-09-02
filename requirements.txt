@@ -13,11 +13,10 @@ requests-ratelimiter==0.7.0
 aiohttp==3.11.14
 aiofiles==24.1.0
 websockets==15.0.1
-winrt-runtime
-winrt-Windows.Media
-winrt-Windows.Media.Core
-winrt-Windows.Storage.Streams
-winrt-Windows.Foundation
-winrt-Windows.Media.Playback
-comtypes
+winrt-runtime==3.2.1
+winrt-Windows.Media==3.2.1
+winrt-Windows.Media.Core==3.2.1
+winrt-Windows.Storage.Streams==3.2.1
+winrt-Windows.Foundation==3.2.1
+winrt-Windows.Media.Playback==3.2.1
 winrt-Windows.Media.Interop==3.2.1

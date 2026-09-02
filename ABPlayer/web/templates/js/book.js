@@ -206,8 +206,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
       }
       
       updateSMTC();
-
-      console.log(player)
       let smallPlaybackControl = smallPlayer.querySelector(
           ".small-playback-control"
       );
@@ -228,8 +226,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
         updateSMTC();
     }
-
-    console.log(navigator.mediaSession)
 
     let listening_progress = Math.floor(
       (player.previous_items_duration + player.currentTime) /

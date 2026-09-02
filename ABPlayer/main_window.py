@@ -4,10 +4,6 @@ from js_api import JSApi
 from loguru import logger
 from web.app import app
 
-from importlib.metadata import version
-
-from winrt.windows.media.playback import MediaPlaybackCommandManager
-
 def main_window() -> webview.Window:
     """
     Creates the main application window.
@@ -42,8 +38,6 @@ def main_window() -> webview.Window:
         background_color="#202225",
         js_api=js_api,
     )
-    
-    MediaPlaybackCommandManager.is_enabled=False
     
     # Adding event handlers
     window.events.loaded += _on_loaded

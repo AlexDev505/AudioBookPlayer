@@ -25,8 +25,6 @@ parser.add_argument("--only-stable", action="store_true", default=False)
 parser.add_argument("--manual-update", type=str, default="")
 args = parser.parse_args()
 
-from pathlib import Path
-
 # if you run the application with a shortcut,
 # the working directory will be "./_internal/yarl"
 # moving to root dir necessary for correct work of updater

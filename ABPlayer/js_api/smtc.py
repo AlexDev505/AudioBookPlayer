@@ -8,12 +8,12 @@ from winrt.windows.media import (
     interop,
 )
 
-
 from winrt.windows.storage.streams import RandomAccessStreamReference
 from winrt.windows.foundation import Uri
 
 from datetime import timedelta
 
+from loguru import logger
 
 from .js_api import  JSApi
 
@@ -30,7 +30,8 @@ class MediaControls:
     ):
         self.hwnd = self._normalize_hwnd(hwnd)
 
-        print(f"MediaControls HWND: {hex(self.hwnd)}")
+        
+        logger.info(f"MediaControls HWND: {hex(self.hwnd)}")
 
         self.on_play = on_play
         self.on_pause = on_pause
@@ -44,8 +45,8 @@ class MediaControls:
 
         self.smtc = interop.get_for_window(self.hwnd)
 
-        print("WinRT SMTC:", self.smtc)
-        print("WinRT IsEnabled:", self.smtc.is_enabled)
+        logger.info("WinRT SMTC:", self.smtc)
+        logger.info("WinRT IsEnabled:", self.smtc.is_enabled)
 
         self._button_token = None
 
@@ -71,15 +72,8 @@ class MediaControls:
             )
 
     def _configure(self):
-        print("Configuring SMTC")
-    
-
+        logger.info("Configuring SMTC")
         self.smtc.is_enabled = True
-
-        print(
-            "IsEnabled after:",
-            self.smtc.is_enabled,
-        )
         
         self.smtc.is_play_enabled = True
         self.smtc.is_pause_enabled = True
@@ -295,7 +289,7 @@ class MediaControls:
                     self._button_token
                 )
             except Exception as e:
-                print(
+                logger.info(
                     "Failed to remove ButtonPressed:",
                     e,
                 )
