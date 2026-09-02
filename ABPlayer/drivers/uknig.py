@@ -138,12 +138,10 @@ class Uknig(Driver):
             number = find_in_soup(
                 card,
                 ".number-in-series",
-                modification=lambda x: (
-                    x.strip().removeprefix("#")
-                ),
+                modification=lambda x: (x.strip().removeprefix("#")),
             )
             element = card.select_one("div>a[href*='/books']:not(:has(img))")
-            url = element.attrs['href']
+            url = element.attrs["href"]
             name = element.text.strip()
             preview = card.select_one("img").attrs["data-original"]
             author = find_in_soup(card, "a[href*='/authors']", author)

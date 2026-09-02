@@ -62,7 +62,8 @@ last_build_file_path = os.path.join("last_build")
 save_update = not DEV
 if not DEV and os.path.exists(update_dir_path):
     save_update = (
-        input("update with this version already exists, rewrite it? [y/N]: ") == "y"
+        input("update with this version already exists, rewrite it? [y/N]: ")
+        == "y"
     )
 
 # CHANGE VERSIONS IN BUILD
@@ -187,7 +188,8 @@ if save_update:
             [
                 os.path.join(root, file_name)
                 for file_name, file_hash in files.items()
-                if file_hash != last_update["files"].get(root, {}).get(file_name, "")
+                if file_hash
+                != last_update["files"].get(root, {}).get(file_name, "")
             ]
         )
 

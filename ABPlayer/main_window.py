@@ -4,6 +4,7 @@ from js_api import JSApi
 from loguru import logger
 from web.app import app
 
+
 def main_window() -> webview.Window:
     """
     Creates the main application window.
@@ -20,13 +21,12 @@ def main_window() -> webview.Window:
         logger.debug("main window launched")
 
         js_api.init(window)
-        
 
     logger.info("launching main window...")
 
     js_api = JSApi()
     temp_data = temp_file.load()
-    
+
     window = webview.create_window(
         "ABPLayer",
         app,
@@ -38,11 +38,10 @@ def main_window() -> webview.Window:
         background_color="#202225",
         js_api=js_api,
     )
-    
+
     # Adding event handlers
     window.events.loaded += _on_loaded
     window.events.closed += _on_closed
     window.events.shown += _on_shown
-    
 
     return window

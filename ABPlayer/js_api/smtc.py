@@ -1,25 +1,23 @@
+import os
+from datetime import timedelta
 from typing import Callable, Optional
 
+from loguru import logger
+from winrt.windows.foundation import Uri
 from winrt.windows.media import (
     MediaPlaybackStatus,
     MediaPlaybackType,
-    SystemMediaTransportControlsTimelineProperties,
     SystemMediaTransportControlsButton,
+    SystemMediaTransportControlsTimelineProperties,
     interop,
 )
-
+from winrt.windows.storage import StorageFile
 from winrt.windows.storage.streams import RandomAccessStreamReference
-from winrt.windows.foundation import Uri
 
-from datetime import timedelta
-
-from loguru import logger
-
-from .js_api import  JSApi
+from .js_api import JSApi
 
 
 class MediaControls:
-
     def __init__(
         self,
         hwnd,
@@ -30,17 +28,16 @@ class MediaControls:
     ):
         self.hwnd = self._normalize_hwnd(hwnd)
 
-        
         logger.info(f"MediaControls HWND: {hex(self.hwnd)}")
 
         self.on_play = on_play
         self.on_pause = on_pause
         self.on_next = on_next
         self.on_previous = on_previous
-        
+
         self._position = 0.0
         self._duration = 0.0
-        
+
         # Getting SMTC with Windows Media Interop
 
         self.smtc = interop.get_for_window(self.hwnd)
@@ -51,7 +48,6 @@ class MediaControls:
         self._button_token = None
 
         self._configure()
-
 
     @staticmethod
     def _normalize_hwnd(hwnd) -> int:
@@ -67,26 +63,19 @@ class MediaControls:
         try:
             return int(hwnd)
         except (TypeError, ValueError):
-            raise TypeError(
-                f"Cannot convert HWND to integer: {hwnd!r}"
-            )
+            raise TypeError(f"Cannot convert HWND to integer: {hwnd!r}")
 
     def _configure(self):
         logger.info("Configuring SMTC")
         self.smtc.is_enabled = True
-        
         self.smtc.is_play_enabled = True
         self.smtc.is_pause_enabled = True
         self.smtc.is_next_enabled = True
         self.smtc.is_previous_enabled = True
 
-
-        self._button_token = (
-            self.smtc.add_button_pressed(
-                self._on_button_pressed
-            )
+        self._button_token = self.smtc.add_button_pressed(
+            self._on_button_pressed
         )
-
 
     def _on_button_pressed(self, sender, args):
         button = args.button
@@ -116,28 +105,18 @@ class MediaControls:
         self.smtc.playback_status = value
 
     def play(self):
-        self.smtc.playback_status = (
-            MediaPlaybackStatus.PLAYING
-        )
+        self.smtc.playback_status = MediaPlaybackStatus.PLAYING
 
     def pause(self):
         self.smtc.playback_status = MediaPlaybackStatus.PAUSED
 
-        self.set_timeline(
-            position=self._position,
-            duration=self._duration,
-        )
+        self.set_timeline(position=self._position, duration=self._duration)
 
     def stop(self):
-        self.smtc.playback_status = (
-            MediaPlaybackStatus.STOPPED
-        )
+        self.smtc.playback_status = MediaPlaybackStatus.STOPPED
 
     def close(self):
-        self.smtc.playback_status = (
-            MediaPlaybackStatus.CLOSED
-        )
-
+        self.smtc.playback_status = MediaPlaybackStatus.CLOSED
 
     @property
     def is_enabled(self):
@@ -179,24 +158,19 @@ class MediaControls:
     def is_previous_enabled(self, value):
         self.smtc.is_previous_enabled = bool(value)
 
-    
     def update_playback(
         self,
         position: float,
         duration: float,
         playing: bool,
     ):
-        
-        self.set_timeline(
-            position=position,
-            duration=duration,
-        )
+        self.set_timeline(position=position, duration=duration)
 
         if playing:
             self.play()
         else:
             self.pause()
-    
+
     def set_metadata(self, title, artist="", album="", thumbnail=""):
         updater = self.smtc.display_updater
 
@@ -205,17 +179,23 @@ class MediaControls:
         updater.music_properties.title = title
         updater.music_properties.artist = artist
         updater.music_properties.album_title = album
-        thumbnail_uri = Uri(thumbnail)
-        updater.thumbnail = RandomAccessStreamReference.create_from_uri(thumbnail_uri) 
-        
+        if thumbnail.startswith("http"):
+            updater.thumbnail = RandomAccessStreamReference.create_from_uri(
+                Uri(thumbnail)
+            )
+        else:
+            updater.thumbnail = RandomAccessStreamReference.create_from_file(
+                StorageFile.get_file_from_path_async(
+                    os.path.abspath(
+                        os.path.join(os.environ["books_folder"], thumbnail)
+                    )
+                ).get()
+            )
+
         updater.update()
 
-
     def set_timeline(
-        self,
-        position: float,
-        duration: float,
-        start_time: float = 0.0,
+        self, position: float, duration: float, start_time: float = 0.0
     ):
         self._position = position
         self._duration = duration
@@ -233,14 +213,10 @@ class MediaControls:
         position: float,
         duration: Optional[float] = None,
     ):
-
         if duration is None:
             duration = position
 
-        self.set_timeline(
-            position=position,
-            duration=duration,
-        )
+        self.set_timeline(position=position, duration=duration)
 
     def update(
         self,
@@ -265,10 +241,7 @@ class MediaControls:
                 thumbnail=thumbnail,
             )
 
-        if (
-            position is not None
-            and duration is not None
-        ):
+        if position is not None and duration is not None:
             self.set_timeline(
                 position=position,
                 duration=duration,
@@ -280,14 +253,10 @@ class MediaControls:
             else:
                 self.pause()
 
-
     def close_controls(self):
-
         if self._button_token is not None:
             try:
-                self.smtc.remove_button_pressed(
-                    self._button_token
-                )
+                self.smtc.remove_button_pressed(self._button_token)
             except Exception as e:
                 logger.info(
                     "Failed to remove ButtonPressed:",
@@ -302,9 +271,7 @@ class MediaControls:
             pass
 
 
-
 class MediaApi(JSApi):
-      
     def __init__(self) -> None:
         self.media = MediaControls(
             self._window.native.Handle.ToInt64(),
@@ -349,20 +316,12 @@ class MediaApi(JSApi):
                 }
             })()
         """)
-    
-    def sync_position(self, position: float, duration: float):
-        self.media.sync_position(
-            position=position,
-            duration=duration,
-        )
 
+    def sync_position(self, position: float, duration: float):
+        self.media.sync_position(position=position, duration=duration)
 
     def set_media_metadata(
-        self,
-        title: str,
-        artist: str = "",
-        album: str = "",
-        thumbnail: str = ""
+        self, title: str, artist: str = "", album: str = "", thumbnail: str = ""
     ):
         self.media.set_metadata(
             title=title,
@@ -370,7 +329,6 @@ class MediaApi(JSApi):
             album=album,
             thumbnail=thumbnail,
         )
-
 
     def update_playback(
         self,
@@ -383,4 +341,3 @@ class MediaApi(JSApi):
             duration=duration,
             playing=playing,
         )
-

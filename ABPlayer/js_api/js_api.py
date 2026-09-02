@@ -9,6 +9,7 @@ import webview
 from loguru import logger
 from tools import pretty_view
 
+
 class JSApi:
     sections: list[ty.Type[JSApi]] = []
 
@@ -25,9 +26,8 @@ class JSApi:
                 if not name.startswith("_"):
                     func = getattr(section, name)
 
-                    if (
-                        (ismethod(func) or isfunction(func))
-                        and name not in dir(JSApi)
+                    if (ismethod(func) or isfunction(func)) and name not in dir(
+                        JSApi
                     ):
                         window.expose(func)
 
