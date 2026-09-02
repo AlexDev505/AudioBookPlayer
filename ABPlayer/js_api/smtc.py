@@ -5,8 +5,12 @@ from winrt.windows.media import (
     MediaPlaybackType,
     SystemMediaTransportControlsTimelineProperties,
     SystemMediaTransportControlsButton,
-    interop
+    interop,
 )
+
+
+from winrt.windows.storage.streams import RandomAccessStreamReference
+from winrt.windows.foundation import Uri
 
 from datetime import timedelta
 
@@ -68,7 +72,7 @@ class MediaControls:
 
     def _configure(self):
         print("Configuring SMTC")
-
+    
 
         self.smtc.is_enabled = True
 
@@ -199,7 +203,7 @@ class MediaControls:
         else:
             self.pause()
     
-    def set_metadata(self, title, artist="", album=""):
+    def set_metadata(self, title, artist="", album="", thumbnail=""):
         updater = self.smtc.display_updater
 
         updater.type = MediaPlaybackType.MUSIC
@@ -207,7 +211,9 @@ class MediaControls:
         updater.music_properties.title = title
         updater.music_properties.artist = artist
         updater.music_properties.album_title = album
-
+        thumbnail_uri = Uri(thumbnail)
+        updater.thumbnail = RandomAccessStreamReference.create_from_uri(thumbnail_uri) 
+        
         updater.update()
 
 
@@ -247,6 +253,7 @@ class MediaControls:
         title: Optional[str] = None,
         artist: Optional[str] = None,
         album: Optional[str] = None,
+        thumbnail: Optional[str] = None,
         position: Optional[float] = None,
         duration: Optional[float] = None,
         playing: Optional[bool] = None,
@@ -255,11 +262,13 @@ class MediaControls:
             title is not None
             or artist is not None
             or album is not None
+            or thumbnail is not None
         ):
             self.set_metadata(
                 title=title,
                 artist=artist,
                 album=album,
+                thumbnail=thumbnail,
             )
 
         if (
@@ -359,11 +368,13 @@ class MediaApi(JSApi):
         title: str,
         artist: str = "",
         album: str = "",
+        thumbnail: str = ""
     ):
         self.media.set_metadata(
             title=title,
             artist=artist,
             album=album,
+            thumbnail=thumbnail,
         )
 
 
@@ -378,6 +389,4 @@ class MediaApi(JSApi):
             duration=duration,
             playing=playing,
         )
-
-        return None
 

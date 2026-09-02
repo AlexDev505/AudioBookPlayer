@@ -16,12 +16,13 @@ from web.app import app
 
 
 
-
 def create_starting_window() -> webview.Window:
     """
     Creates the application startup window.
     :returns: An instance of the window.
     """
+    # Injecting another browser flag through available pywebview setting for disabling second windows widget
+    webview.settings["REMOTE_DEBUGGING_PORT"] = "null --disable-features=ElasticOverscroll,MediaSessionService"
 
     def _on_shown():
         logger.debug("starting window launched")

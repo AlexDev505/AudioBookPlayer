@@ -6,10 +6,7 @@ from web.app import app
 
 from importlib.metadata import version
 
-import webview
-
-
-# Привязываем функцию к событию 'shown' (окно появилось, движок готов к тонкой настройке)
+from winrt.windows.media.playback import MediaPlaybackCommandManager
 
 def main_window() -> webview.Window:
     """
@@ -45,6 +42,8 @@ def main_window() -> webview.Window:
         background_color="#202225",
         js_api=js_api,
     )
+    
+    MediaPlaybackCommandManager.is_enabled=False
     
     # Adding event handlers
     window.events.loaded += _on_loaded

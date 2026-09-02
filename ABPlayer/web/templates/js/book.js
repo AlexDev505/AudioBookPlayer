@@ -154,7 +154,9 @@ function loadBookData(bid) {
 
 document.addEventListener("DOMContentLoaded", (event) => {
 
-  const audioElement = document.querySelector("#audio-player");
+  document.querySelector("#audio-player").remove()
+  const audioElement = document.createElement("audio");
+  document.querySelector("#player").prepend(audioElement)
 
   player = new window.Plyr(audioElement, { storage: true, controls: [] });
 
@@ -205,6 +207,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       
       updateSMTC();
 
+      console.log(player)
       let smallPlaybackControl = smallPlayer.querySelector(
           ".small-playback-control"
       );
@@ -225,6 +228,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
         updateSMTC();
     }
+
+    console.log(navigator.mediaSession)
 
     let listening_progress = Math.floor(
       (player.previous_items_duration + player.currentTime) /
@@ -299,7 +304,7 @@ function initBook(book) {
     total_duration += item.end_time - item.start_time;
   player.total_duration = total_duration;
 
-  pywebview.api.set_media_metadata(book.name, book.author)
+  pywebview.api.set_media_metadata(book.name, book.author, "", book.preview)
   
   
   _selectItem(book.stop_flag.item);

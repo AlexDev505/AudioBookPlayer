@@ -23,16 +23,17 @@ os.environ["ARCH"] = " x32" if platform.architecture()[0] == "32bit" else ""
 # App version
 os.environ["VERSION"] = "3.6.1"
 
-# DEV
-
-
-
 from logger import logger  # noqa
 
 
+
 def main() -> None:
+    
+    
+    
     import webview
     from starting_window import create_starting_window
+    
 
     logger.opt(colors=True).debug(
         "starting params: "
@@ -47,8 +48,9 @@ def main() -> None:
 
     create_starting_window()
     webview.start(
-        debug=True,
+        debug=bool(os.environ.get("DEBUG")),
         storage_path=os.path.join(os.environ["APP_DIR"], "WebViewCache")
+        
     )
 
 
