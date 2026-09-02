@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "ABPlayer"
-!define PRODUCT_VERSION "3.6.0"
+!define PRODUCT_VERSION "3.6.1"
 !define PRODUCT_PUBLISHER "AlexDev505"
 !define PRODUCT_WEB_SITE "https://github.com/AlexDev505/AudioBookPlayer"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\ABPlayer.exe"
@@ -441,6 +441,14 @@ Section "ABPlayer" SEC01
   File "ABPlayer x32\_internal\webview\lib\runtimes\win-x86\native\WebView2Loader.dll"
   SetOutPath "$INSTDIR x32\_internal\werkzeug-3.1.8.dist-info\licenses"
   File "ABPlayer x32\_internal\werkzeug-3.1.8.dist-info\licenses\LICENSE.txt"
+  SetOutPath "$INSTDIR x32\_internal\winrt"
+  File "ABPlayer x32\_internal\winrt\MSVCP140.dll"
+  File "ABPlayer x32\_internal\winrt\_winrt.cp312-win32.pyd"
+  File "ABPlayer x32\_internal\winrt\_winrt_windows_foundation.cp312-win32.pyd"
+  File "ABPlayer x32\_internal\winrt\_winrt_windows_media.cp312-win32.pyd"
+  File "ABPlayer x32\_internal\winrt\_winrt_windows_media_interop.cp312-win32.pyd"
+  File "ABPlayer x32\_internal\winrt\_winrt_windows_storage.cp312-win32.pyd"
+  File "ABPlayer x32\_internal\winrt\_winrt_windows_storage_streams.cp312-win32.pyd"
   
   SetOutPath "$INSTDIR"
   File "ABPlayerUpdater x32.exe"
