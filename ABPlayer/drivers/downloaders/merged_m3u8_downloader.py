@@ -45,7 +45,7 @@ class MergedM3U8Downloader(BaseDownloader):
         self._ts_file_paths: list[Path] = []
         self._current_duration: float = 0
         self._item_index: int = 0
-        self._real_item_paths: list[Path] = []
+        self._real_item_paths: dict[int, Path] = {}
         self._merging_tasks: list[asyncio.Future] = []
 
     def _prepare_files_data(self):
@@ -140,7 +140,7 @@ class MergedM3U8Downloader(BaseDownloader):
                 )
             )
         await asyncio.gather(*self._merging_tasks)
-        self.downloaded_files = dict(enumerate(self._real_item_paths))
+        self.downloaded_files = self._real_item_paths
         await super()._finish()
 
     def _merge_ts_files(
@@ -162,8 +162,8 @@ class MergedM3U8Downloader(BaseDownloader):
         )
         for ts_path in ts_file_paths:
             os.remove(ts_path)
-        self._real_item_paths.append(
-            Path(self.book.dir_path, item_file_name + ".mp3")
+        self._real_item_paths[item_index] = Path(
+            self.book.dir_path, item_file_name + ".mp3"
         )
 
     async def _terminate(self) -> None:
